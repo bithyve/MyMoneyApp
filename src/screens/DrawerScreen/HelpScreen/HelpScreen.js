@@ -12,19 +12,15 @@ import {
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
-
-
-
-export default class HomeScreen extends React.Component {
+export default class HelpScreen extends React.Component {
     render() {
         return (
             <Container>
                 <ImageBackground
-                    source={require("../../../assets/images/homescreen/homeBackgoundImage.png")}
+                    source={require("../../../../assets/images/homescreen/homeBackgoundImage.png")}
                     style={styles.container}
                 >
-
+  
                     <Header transparent>
                         <Left>
                             <Button transparent onPress={() => this.props.navigation.toggleDrawer()}>

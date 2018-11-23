@@ -42,19 +42,19 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <ImageBackground
-                source={require("../../../assets/images/login/loginBackgound.jpg")}
+                source={require("../../../assets/images/loginscreen/loginBackgound.jpg")}
                 style={styles.container}
             >
                 <View style={styles.viewAppIcon}>
                     <Image
                         style={styles.imgAppIcon}
-                        source={require("../../../assets/images/login/applogo.png")}
+                        source={require("../../../assets/images/loginscreen/applogo.png")}
                     />
                     <Text style={styles.txtTitle}>Login with</Text>
                     <Text style={styles.txtSubTitle}>FACE ID</Text>
                     <Image
                         style={styles.imgFaceId}
-                        source={require("../../../assets/images/login/faceid.png")}
+                        source={require("../../../assets/images/loginscreen/faceid.png")}
                     />
                     <Text style={styles.txtUnderLine}>                                                                     </Text>
                     <Text style={styles.txtTitle}>Use</Text>
@@ -64,7 +64,7 @@ export default class LoginScreen extends React.Component {
                         keyboardType='numeric' 
                         maxLength={1} 
                         style={styles.txtInppasscode} 
-                         />
+                         />   
                         <TextInput secureTextEntry={true}
                          keyboardType='numeric'
                           maxLength={1} 
@@ -89,7 +89,7 @@ export default class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1,   
     },
     viewAppIcon: {
         alignItems: 'center',

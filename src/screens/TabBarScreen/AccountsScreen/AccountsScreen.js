@@ -16,12 +16,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
-export default class HomeScreen extends React.Component {
+export default class AccountsScreen extends React.Component {
     render() {
         return (
             <Container>
                 <ImageBackground
-                    source={require("../../../assets/images/homescreen/homeBackgoundImage.png")}
+                    source={require("../../../../assets/images/homescreen/homeBackgoundImage.png")}
                     style={styles.container}
                 >
 
@@ -33,7 +33,7 @@ export default class HomeScreen extends React.Component {
                         </Left>
 
                         <Body>
-                            <Title>Header</Title>
+                            <Title>Anant Tapadia</Title>
                         </Body>
                         <Right>
                             <Button transparent>
@@ -45,9 +45,7 @@ export default class HomeScreen extends React.Component {
                         </Right>
                     </Header>
                     <Content>
-                        <Text>
-                            This is Content Section
-              </Text>
+
                     </Content>
 
                 </ImageBackground>
