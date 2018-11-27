@@ -12,7 +12,8 @@ import {
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
+//TODO: Custome Pages
+import { colors, images } from "../../../constants/Constants";
 
 
 
@@ -21,7 +22,7 @@ export default class AccountsScreen extends React.Component {
         return (
             <Container>
                 <ImageBackground
-                    source={require("../../../../assets/images/homescreen/homeBackgoundImage.png")}
+                    source={images.appBackgound}
                     style={styles.container}
                 >
 

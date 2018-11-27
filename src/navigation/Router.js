@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet
 } from 'react-native';
+import { colors } from "../constants/Constants";
 
 import { createStackNavigator, createDrawerNavigator, createBottomTabNavigator, } from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,8 +24,8 @@ import BackupPhraseScreen from "../screens/WalletScreen/BackupPhraseScreen/Backu
 import VerifyBackupPhraseScreen from "../screens/WalletScreen/VerifyBackupPhraseScreen/VerifyBackupPhraseScreen";
 
 
-
-
+//Password 
+import PasswordGestureScreen from "../screens/PasswordGestureScreen/PasswordGestureScreen";
 
 
 //Tabbar Bottom
@@ -66,7 +67,7 @@ const OnBoardingRouter = createStackNavigator({
       },
     }),
   },
-},   
+},
   {
     initialRouteName: 'OnBoarding'
   });
@@ -166,6 +167,7 @@ const LeftDrawerNavigator = createDrawerNavigator({
     screen: AccountSettingScreen,
     navigationOptions: {
       drawerLabel: 'Account Settings',
+       header: true ,
       drawerIcon: ({ tintColor }) => <Icon name="cog" size={17} />,
     }
   },
@@ -191,7 +193,7 @@ const LeftDrawerNavigator = createDrawerNavigator({
     }
   },
 }, {
-    drawerBackgroundColor: '#4eebfb',
+    drawerBackgroundColor: colors.appColor,
     drawerPosition: 'left',
     headerMode: 'float',
     navigationOptions: {
@@ -201,28 +203,59 @@ const LeftDrawerNavigator = createDrawerNavigator({
 
 
 export const createRootNavigator = (
-  signedIn = false
+  signedIn = false,
+  screenName = "Password"
 ) => {
-  return createStackNavigator(
-    {
-      OnBoardingNavigator: {
-        screen: OnBoardingRouter,
-        navigationOptions:
-          { header: null }
+  if (screenName == "Password" || screenName == "Home" ) {
+    return createStackNavigator(
+      {
+        PasswordGesture: {
+          screen: PasswordGestureScreen,
+          navigationOptions:  
+            { header: null }
+        },  
+        OnBoardingNavigator: {
+          screen: OnBoardingRouter,
+          navigationOptions:
+            { header: null }
+        },
+        TabbarBottom: {
+          screen: LeftDrawerNavigator,
+          navigationOptions:
+            { header: null }
+        }
       },
-      LoginNavigator: {
-        screen: LoginRouter,
-        navigationOptions:
-          { header: null }
-      },
-      TabbarBottom: {
-        screen: LeftDrawerNavigator,
-        navigationOptions:
-          { header: null }
+      {  
+        initialRouteName: signedIn ? "PasswordGesture" : "PasswordGesture"
       }
-    },
-    {
-      initialRouteName: signedIn ? "OnBoardingNavigator" : "TabbarBottom"
-    }
-  );
-};  
+    );
+  } else {
+    return createStackNavigator(
+      {
+        PasswordGesture: {
+          screen: PasswordGestureScreen,
+          navigationOptions:  
+            { header: null }
+        }, 
+        OnBoardingNavigator: {
+          screen: OnBoardingRouter,
+          navigationOptions:
+            { header: null }
+        },
+        LoginNavigator: {
+          screen: LoginRouter,
+          navigationOptions:
+            { header: null }
+        },
+        TabbarBottom: {
+          screen: LeftDrawerNavigator,
+          navigationOptions:
+            { header: null }
+        }
+      },
+      {
+        initialRouteName: signedIn ? "OnBoardingNavigator" : "PasswordGesture"
+      }
+    );
+  }
+};

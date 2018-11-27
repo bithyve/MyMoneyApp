@@ -12,15 +12,19 @@ import {
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+
+//TODO: Custome Pages
+import { colors, images } from "../../../constants/Constants";
+
 export default class LogoutScreen extends React.Component {
     render() {
         return (
             <Container>
                 <ImageBackground
-                    source={require("../../../../assets/images/homescreen/homeBackgoundImage.png")}
+                    source={images.appBackgound}
                     style={styles.container}
                 >
-  
+
                     <Header transparent>
                         <Left>
                             <Button transparent onPress={() => this.props.navigation.toggleDrawer()}>

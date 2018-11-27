@@ -29,11 +29,9 @@ export default class BackupPhraseScreen extends React.Component {
     }
 
     onCancel() {
-        console.log("CANCEL")
         this.setState({ visible: false });
     }
     onOpen() {
-        console.log("OPEN")
         this.setState({ visible: true });
     }
 

@@ -3,12 +3,12 @@ import { StyleSheet, Dimensions } from 'react-native'
 const { width, height } = Dimensions.get('window')
 
 export default {
-    container: {   
+    container: {
         flex: 1,
         backgroundColor: '#fff',
     },
     rkCard: {
-        height: 200,
+        height: 170,   
         width: '99%',
         alignSelf: 'center',
 
@@ -29,13 +29,22 @@ export default {
     cardAmount: {
         fontSize: 20
     },
+    //Amount Infomation
+    viewAmountInfo: {
+        paddingTop: 20,
+        paddingLeft: 50,
+    },
+    viewAmountSingleLine: {
+        flexDirection: 'row',
+    },
+    txtAmountTitle: {
+        color: "#ffffff"
+    },
+    txtAmount: {
+        fontWeight: 'bold'
+    },
 
-
-
-   
-
-
-
+    
     //old code
     header: {
         width,

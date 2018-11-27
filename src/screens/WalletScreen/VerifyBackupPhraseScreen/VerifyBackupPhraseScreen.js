@@ -9,12 +9,13 @@ import {
     Alert,
     StatusBar,
     TouchableOpacity,
-    Clipboard,
-    ToastAndroid,
+    AsyncStorage
 } from 'react-native';
-import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Footer } from 'native-base';
+import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Footer, CardItem } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import GridView from "react-native-super-grid";
+import Toast from 'react-native-simple-toast';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 
 
@@ -22,18 +23,23 @@ export default class VerifyBackupPhraseScreen extends React.Component {
     constructor(props) {
         super(props);
         StatusBar.setHidden(false);
+        var verifyArray = [[]];
         this.state = ({
             numanicValues: [[]],
+            verifyNumanic: [[]],
             verifyNumanicValues: [[]],
-            visible: false
-
+            visible: false,
+            btnDoneBgColor: "gray", 
+            btnDoneDisbleFlag: true
         })
-    }
+    }  
 
+
+    //TODO: Page Life Cycle
     componentWillMount() {
         const { navigation } = this.props;
         const secoundGridArray = navigation.getParam('numanicValues');
-        console.log('item id =' + secoundGridArray);
+        this.verifyArray = secoundGridArray;
         var temp = [];
         var len = secoundGridArray.length;
         if (len > 0) {
@@ -42,17 +48,38 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                 var joined = { name: data };
                 temp.push(joined);
             }
+            temp = this.shuffle(temp);
             this.setState({
                 numanicValues: temp
             })
         }
     }
 
-    //TODO: Function
+    componentDidMount() {
+        this.setState({
+            verifyNumanicValues: [],
+            verifyNumanic: []
+        });
+    }
 
+    //TODO: randomise  array show
+    shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        return array;
+    }
+
+
+
+    //TODO: function secound grid click
     click_SecoundGridItem(item) {
-
-        //First Grid add Values
+        // First Grid add Values
         var temp = [];
         var joined = { name: item };
         temp.push(joined);
@@ -63,17 +90,86 @@ export default class VerifyBackupPhraseScreen extends React.Component {
         //Secound Grid remove values
         var temp1 = [[]];
         temp1 = this.state.numanicValues;
-       
-       console.log(JSON.stringify(temp1));
+        // var index = this.functiontofindIndexByKeyValue(temp1, "name", item);
+        let selectedIndex = temp1.findIndex(filterCarObj =>
+            filterCarObj['name'] === item);
+        temp1.splice(selectedIndex, 1);
+        this.setState({
+            numanicValues: temp1
+        });
+        this.condition_DoneButtonCheckDiaEna(false);
+    }
+    //TODO: Function First Grid Click
+    click_FirstGridItem(item) {
+        // First Grid add Values
+        var temp = [];
+        var joined = { name: item };
+        temp.push(joined);
+        var joinedCat = this.state.numanicValues.concat(temp);
+        this.setState({
+            numanicValues: joinedCat
+        })
+        //Secound Grid remove values
+        var temp1 = [[]];
+        temp1 = this.state.verifyNumanicValues;
+        let selectedIndex = temp1.findIndex(filterCarObj =>
+            filterCarObj['name'] === item);
+        temp1.splice(selectedIndex, 1);
+        this.setState({
+            verifyNumanicValues: temp1
+        });
+        this.condition_DoneButtonCheckDiaEna(true);
+    }
 
-
-
-
-
-
+    condition_DoneButtonCheckDiaEna(flag) {
+        if (this.state.numanicValues.length == 0 && flag == false) {
+            this.setState({
+                btnDoneBgColor: "#F5951D",
+                btnDoneDisbleFlag: false
+            });
+        }
+        else {
+            this.setState({
+                btnDoneBgColor: "gray",
+                btnDoneDisbleFlag: true
+            });
+        }
     }
 
 
+    //TODO: funciton done
+    click_Done() {
+        var temp = [];
+        var len = this.verifyArray.length;
+        if (len > 0) {
+            for (let i = 0; i < len; i++) {
+                var data = this.verifyArray[i];
+                var joined = { name: data };
+                temp.push(joined);
+            }
+            this.setState({ verifyNumanic: temp }, function () {
+                if (JSON.stringify(this.state.verifyNumanic) === JSON.stringify(this.state.verifyNumanicValues)) {
+                    Toast.show('Thanks', Toast.SHORT);
+                    const actionToDispatch = StackActions.reset({
+                        index: 0,
+                        key: null,
+                        actions: [NavigationActions.navigate({ routeName: 'TabbarBottom' })],
+                    });
+                    this.props.navigation.dispatch(actionToDispatch);
+                    try {
+                        AsyncStorage.setItem("@loadingPage:key", "Home");
+                        AsyncStorage.setItem("@signedPage:key", "Home");
+                    } catch (error) {
+                        // Error saving data
+                    }
+                }
+                else {
+                    Toast.show('Invalid order.Try again!', Toast.SHORT);
+                }
+
+            });
+        }
+    }
 
     render() {
         return (
@@ -94,7 +190,7 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                             items={this.state.verifyNumanicValues}
                             style={styles.gridViewFirst}
                             renderItem={item => (
-                                <TouchableOpacity onPress={() => Alert.alert('hi')}>
+                                <TouchableOpacity onPress={() => this.click_FirstGridItem(item.name)}>
                                     <View style={styles.itemContainerSecound}>
                                         <Text style={styles.itemName}>{item.name}</Text>
                                     </View>
@@ -119,7 +215,7 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                     </View>
                 </Content>
                 <Footer style={styles.footer}>
-                    <Button style={styles.btnNext}>
+                    <Button style={[styles.btnNext, { backgroundColor: this.state.btnDoneBgColor }]} disabled={this.state.btnDoneDisbleFlag} onPress={() => this.click_Done()}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>DONE</Text>
                     </Button>
                 </Footer>
@@ -164,7 +260,6 @@ const styles = StyleSheet.create({
     },
     //next button style
     btnNext: {
-        backgroundColor: "#F5951D",
         width: Dimensions.get("screen").width - 50,
         height: 40,
         borderColor: "transparent",

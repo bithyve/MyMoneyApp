@@ -8,7 +8,8 @@ import {
     View,
     Alert,
     ImageBackground,
-    Dimensions
+    Dimensions,
+    StatusBar
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Item, Input } from 'native-base';
 import { RkCard } from 'react-native-ui-kitten';
@@ -16,6 +17,8 @@ import CardSilder from 'react-native-cards-slider';
 import { UltimateListView, UltimateRefreshView } from 'react-native-ultimate-listview'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+//TODO: Custome Pages
+import { colors, images } from "../../../constants/Constants";
 import styles from './Styles';
 import LoadingSpinner from './LoadingSpinner';
 import ControlTab from './ControlTab';
@@ -27,11 +30,14 @@ export default class PaymentScreen extends React.Component {
 
     constructor(props) {
         super(props)
+        StatusBar.setBackgroundColor(colors.appColor, true);
         this.state = {
             layout: 'list',
             text: ''
         }
     }
+
+
 
     //TODO: Transtion Items
     onFetch = async (page = 1, startFetch, abortFetch) => {
@@ -129,7 +135,7 @@ export default class PaymentScreen extends React.Component {
         return (
             <Container>
                 <ImageBackground
-                    source={require("../../../../assets/images/homescreen/homeBackgoundImage.png")}
+                    source={images.appBackgound}
                     style={styles.container}
                 >
                     <Header transparent>
@@ -148,7 +154,7 @@ export default class PaymentScreen extends React.Component {
                             <Button transparent>
                                 <Icon name='plus' size={25} color="#ffffff" />
                             </Button>
-                        </Right>
+                        </Right>  
                     </Header>
                     <Content>
                         <CardSilder>
@@ -187,6 +193,24 @@ export default class PaymentScreen extends React.Component {
                                 </ImageBackground>
                             </RkCard>
                         </CardSilder>
+                        <View style={styles.viewAmountInfo}>
+                            <View style={styles.viewAmountSingleLine}>
+                                <Text style={styles.txtAmountTitle}>Total Balance:</Text>
+                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 45,094.24</Text>
+                            </View>
+                            <View style={styles.viewAmountSingleLine}>
+                                <Text style={styles.txtAmountTitle}>Available to Spend :</Text>
+                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 44,094</Text>
+                            </View>
+                            <View style={styles.viewAmountSingleLine}>
+                                <Text style={styles.txtAmountTitle}>Total Invested :</Text>
+                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 15,986</Text>
+                            </View>
+                            <View style={styles.viewAmountSingleLine}>
+                                <Text style={styles.txtAmountTitle}>In Vaults :</Text>
+                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 12,950</Text>
+                            </View>
+                        </View>
                         <UltimateListView
                             ref={ref => this.listView = ref}
                             key={this.state.layout} // this is important to distinguish different FlatList, default is numColumns
@@ -196,7 +220,7 @@ export default class PaymentScreen extends React.Component {
                             numColumns={this.state.layout === 'list' ? 1 : 3} // to use grid layout, simply set gridColumn > 1
                             header={this.renderHeader}
                             paginationFetchingView={this.renderPaginationFetchingView}
-                        />   
+                        />
 
                     </Content>
                 </ImageBackground>

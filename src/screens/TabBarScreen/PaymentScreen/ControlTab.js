@@ -2,6 +2,8 @@ import React from 'react'
 import { Platform, SegmentedControlIOS } from 'react-native'
 import { Button, Text, View } from 'native-base'
 
+import {colors} from '../../../constants/Constants'
+
 export default (props) => {
   this.props = props
 
@@ -10,7 +12,7 @@ export default (props) => {
       <SegmentedControlIOS
         style={{ flex: 0.7 }}
         values={['list', 'grid']}
-        tintColor="#57a8f5"
+        tintColor = {colors.appColor}
         selectedIndex={this.props.layout === 'list' ? 0 : 1}
         onChange={this.props.onChangeLayout}
       />
