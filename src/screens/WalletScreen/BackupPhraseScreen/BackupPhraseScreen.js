@@ -18,6 +18,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Share, { ShareSheet } from 'react-native-share';
 
 
+//TODO: Custome Pages
+import { colors, images } from "../../../constants/Constants";
+
+
 export default class BackupPhraseScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -58,7 +62,7 @@ export default class BackupPhraseScreen extends React.Component {
                         <Image
                             style={styles.backupImg}
                             resizeMode='contain'
-                            source={require("../../../../assets/images/backupPhraseScreen/backupPhraseLogo.png")}
+                            source={images.backupPhraseScreen.backupPhraseLogo}
                         />
                         <Text style={styles.desc}>These 12 words are they only way to restore your MyMoney App.</Text>
                         <Text style={styles.desc}>Save them somewhere safe and secret.</Text>

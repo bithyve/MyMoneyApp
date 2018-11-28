@@ -17,6 +17,9 @@ import GridView from "react-native-super-grid";
 import Toast from 'react-native-simple-toast';
 import { StackActions, NavigationActions } from 'react-navigation';
 
+//TODO: Custome Pages
+import { colors, images } from "../../../constants/Constants";
+
 
 
 export default class VerifyBackupPhraseScreen extends React.Component {
@@ -29,10 +32,10 @@ export default class VerifyBackupPhraseScreen extends React.Component {
             verifyNumanic: [[]],
             verifyNumanicValues: [[]],
             visible: false,
-            btnDoneBgColor: "gray", 
+            btnDoneBgColor: "gray",
             btnDoneDisbleFlag: true
         })
-    }  
+    }
 
 
     //TODO: Page Life Cycle
@@ -178,8 +181,8 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                     <View style={styles.viewTitle}>
                         <Image
                             style={styles.backupImg}
-                            resizeMode='contain'
-                            source={require("../../../../assets/images/verifyBackupPhraseScreen/correctOrder.png")}
+                            resizeMode='contain'   
+                            source={images.verifyBackupPhraseScreen.verifyBackupPhraseLogo}
                         />
                         <Text style={styles.desc}>Tap the words to put them next to each other in the correct order.</Text>
 

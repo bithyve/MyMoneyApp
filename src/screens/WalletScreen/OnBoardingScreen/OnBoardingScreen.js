@@ -15,7 +15,8 @@ import { Button } from "react-native-elements";
 import Dialog, { SlideAnimation, DialogTitle, DialogContent, DialogButton } from 'react-native-popup-dialog';
 import Toast from 'react-native-simple-toast';
 
-import { colors } from "../../../constants/Constants";
+//TODO: Custome Pages
+import { colors, images } from "../../../constants/Constants";
 
 export default class OnBoardingScreen extends React.Component {
     constructor(props) {
@@ -46,7 +47,7 @@ export default class OnBoardingScreen extends React.Component {
                                 <Image
                                     style={styles.sliderIcon}
                                     resizeMode='contain'
-                                    source={require("../../../../assets/images/onBoardingScreen/bitcoin.png")}
+                                    source={images.onBoardingScreen.cardSideBitcon}
                                 />
                                 <Text style={styles.description}>
                                     The cryptotech specialists providing technology and business expertise in
@@ -59,7 +60,7 @@ export default class OnBoardingScreen extends React.Component {
                                 <Image
                                     style={styles.sliderIcon}
                                     resizeMode='contain'
-                                    source={require("../../../../assets/images/onBoardingScreen/bitcoin1.png")}
+                                    source={images.onBoardingScreen.cardSideBitcon1}
                                 />
                                 <Text style={styles.description}>
                                     Zcash is a cryptocurrency aimed at using cryptography to provide enhanced

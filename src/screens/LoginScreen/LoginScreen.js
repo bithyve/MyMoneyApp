@@ -10,16 +10,11 @@ import {
     ImageBackground,
     Alert
 } from 'react-native';
-import { RkButton } from 'react-native-ui-kitten';
-import { Container, Body, Footer } from "native-base";
-import { Button } from "react-native-elements";
-import PopupDialog, {
-    SlideAnimation,
-    DialogTitle
-} from "react-native-popup-dialog";
-const slideAnimation = new SlideAnimation({
-    slideFrom: "bottom"
-});
+
+
+//TODO: Custome Pages
+import { colors, images } from "../../constants/Constants";
+
 
 
 export default class LoginScreen extends React.Component {
@@ -31,55 +26,55 @@ export default class LoginScreen extends React.Component {
             visible: false
         };
         this.click_HomeScreenShow = this.click_HomeScreenShow.bind();
-       // this.click_HomeScreenShow();
+        // this.click_HomeScreenShow();
     }
 
     //TODO: Tabbar screen show
-    click_HomeScreenShow(){
+    click_HomeScreenShow() {
         this.props.navigation.navigate('TabbarBottom');
     }
 
     render() {
         return (
             <ImageBackground
-                source={require("../../../assets/images/loginscreen/loginBackgound.jpg")}
+                source={images.loginScreen.backgoundImage}
                 style={styles.container}
             >
                 <View style={styles.viewAppIcon}>
                     <Image
                         style={styles.imgAppIcon}
-                        source={require("../../../assets/images/loginscreen/applogo.png")}
+                        source={images.appIcon}
                     />
                     <Text style={styles.txtTitle}>Login with</Text>
                     <Text style={styles.txtSubTitle}>FACE ID</Text>
                     <Image
                         style={styles.imgFaceId}
-                        source={require("../../../assets/images/loginscreen/faceid.png")}
+                        source={images.loginScreen.faceIdImage}
                     />
                     <Text style={styles.txtUnderLine}>                                                                     </Text>
                     <Text style={styles.txtTitle}>Use</Text>
                     <Text style={[styles.txtSubTitle, { color: '#F8F8FF' }]}>PASSCODE</Text>
                     <View style={styles.viewPasscode}>
-                        <TextInput secureTextEntry={true} 
-                        keyboardType='numeric' 
-                        maxLength={1} 
-                        style={styles.txtInppasscode} 
-                         />   
                         <TextInput secureTextEntry={true}
-                         keyboardType='numeric'
-                          maxLength={1} 
-                         style={styles.txtInppasscode} 
-                          />
+                            keyboardType='numeric'
+                            maxLength={1}
+                            style={styles.txtInppasscode}
+                        />
+                        <TextInput secureTextEntry={true}
+                            keyboardType='numeric'
+                            maxLength={1}
+                            style={styles.txtInppasscode}
+                        />
                         <TextInput secureTextEntry={true} keyboardType='numeric' maxLength={1} style={styles.txtInppasscode} />
-                        <TextInput secureTextEntry={true} 
-                        keyboardType='numeric'
-                         maxLength={1}
-                          style={styles.txtInppasscode}
-                          onChangeText={() => this.props.navigation.navigate('TabbarBottom')}
-                          
-                           />
+                        <TextInput secureTextEntry={true}
+                            keyboardType='numeric'
+                            maxLength={1}
+                            style={styles.txtInppasscode}
+                            onChangeText={() => this.props.navigation.navigate('TabbarBottom')}
+
+                        />
                     </View>
-              
+
                 </View>
             </ImageBackground>
         );
@@ -89,7 +84,7 @@ export default class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,   
+        flex: 1,
     },
     viewAppIcon: {
         alignItems: 'center',

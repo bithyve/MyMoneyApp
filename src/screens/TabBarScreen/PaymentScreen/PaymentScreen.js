@@ -1,21 +1,24 @@
 import React from 'react';
 import {
-    Image,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
     View,
     Alert,
     ImageBackground,
     Dimensions,
-    StatusBar
+    StatusBar,
+    FlatList,
+    TouchableHighlight
 } from 'react-native';
-import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Item, Input } from 'native-base';
+import { Container, Header, Title, Content, Button, Left, Right, Body, Text, List, ListItem, Thumbnail } from 'native-base';
 import { RkCard } from 'react-native-ui-kitten';
-import CardSilder from 'react-native-cards-slider';
-import { UltimateListView, UltimateRefreshView } from 'react-native-ultimate-listview'
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import CardFlip from 'react-native-card-flip';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+
+
+
+
 
 //TODO: Custome Pages
 import { colors, images } from "../../../constants/Constants";
@@ -24,114 +27,86 @@ import LoadingSpinner from './LoadingSpinner';
 import ControlTab from './ControlTab';
 import FlatListItem from './FlatListItem';
 import FlatListGrid from './FlatListGrid';
+import renderIf from "../../../constants/validation/renderIf";
+
+//TODO: Json Files
+import transData from "../../../assets/jsonfiles/paymentScreen/recentTransactions.json";
+import cardsData from "../../../assets/jsonfiles/paymentScreen/cardList.json";
 
 const { width, height } = Dimensions.get('window')
+
+
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+function wp(percentage) {
+    const value = (percentage * viewportWidth) / 100;
+    return Math.round(value);
+}
+
+const slideHeight = viewportHeight * 0.36;
+const slideWidth = wp(75);
+const itemHorizontalMargin = wp(2);
+const sliderWidth = viewportWidth;
+const itemWidth = slideWidth + itemHorizontalMargin * 2;
+const SLIDER_1_FIRST_ITEM = 0;
+
 export default class PaymentScreen extends React.Component {
 
     constructor(props) {
         super(props)
         StatusBar.setBackgroundColor(colors.appColor, true);
         this.state = {
-            layout: 'list',
-            text: ''
+            recentTrans: [],
+            cardsList: [],
+            slider1ActiveSlide: SLIDER_1_FIRST_ITEM
         }
     }
 
 
-
-    //TODO: Transtion Items
-    onFetch = async (page = 1, startFetch, abortFetch) => {
-        try {
-            // This is required to determinate whether the first loading list is all loaded.
-            let pageLimit = 24
-            if (this.state.layout === 'grid') pageLimit = 60
-            const skip = (page - 1) * pageLimit
-
-            // Generate dummy data
-            let rowData = Array.from({ length: pageLimit }, (value, index) => `item -> ${index + skip}`)
-
-            // Simulate the end of the list if there is no more data returned from the server
-            if (page === 10) {
-                rowData = []
-            }
-
-            // Simulate the network loading in ES7 syntax (async/await)
-            await this.sleep(2000)
-            startFetch(rowData, pageLimit)
-        } catch (err) {
-            abortFetch() // manually stop the refresh or pagination if it encounters network error
-            console.log(err)
-        }
+    componentWillMount() {
+        this.getRecentTrans();
     }
 
-    onChangeLayout = (event) => {
-        this.setState({ text: '' })
-        switch (event.nativeEvent.selectedSegmentIndex) {
-            case 0:
-                this.setState({ layout: 'list' })
-                break
-            case 1:
-                this.setState({ layout: 'grid' })
-                break
-            default:
-                break
-        }
+    //TODO: Fun GetRecentTrans
+    getRecentTrans() {
+        this.setState({
+            recentTrans: transData.transaction,
+            cardsList: cardsData.cards
+        });
     }
 
-    onChangeScrollToIndex = (num) => {
-        this.setState({ text: num })
-        let index = num
-        if (this.state.layout === 'grid') {
-            index = num / 3
-        }
-        try {
-            this.listView.scrollToIndex({ viewPosition: 0, index: Math.floor(index) })
-        } catch (err) {
-            console.warn(err)
-        }
+    _renderItem({ item, index }) {
+        return (
+            <CardFlip style={styles.rkCard} ref={(card) => this['card' + index] = card} >
+                <TouchableHighlight style={styles.card} onPress={() => this['card' + index].flip({ direction: 'right', duration: 200 })} >
+                    <RkCard style={styles.rkCard}>
+                        <ImageBackground
+                            source={require("../../../assets/images/paymentScreen/bitcoin1.jpg")}
+                            style={styles.container}
+                        >
+                            <View rkCardHeader >
+                                <Text style={[styles.cardText, styles.cardTitle]}>{item.title}</Text>
+                            </View>
+
+                            <View rkCardContent>
+                                <Text style={[styles.cardText, styles.cardType]}> {item.desc}</Text>
+                                <Text style={[styles.cardText, styles.cardAmount]}> {item.amount}</Text>
+                            </View>
+
+                        </ImageBackground>
+                    </RkCard>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.card} onPress={() => this['card' + index].flip({ direction: 'right', duration: 200 })}>
+                    <RkCard style={[styles.rkCard, { backgroundColor: item.cardColor, alignItems: 'center', justifyContent: 'center' }]}>
+                        <Text style={{ textAlign: 'center', alignContent: 'center' }}> Card Infomation </Text>
+                        <Text style={{ textAlign: 'center', alignContent: 'center' }}> {item.title} </Text>
+                    </RkCard>
+                </TouchableHighlight>
+            </CardFlip>
+        );
     }
-
-    onPressItem = (type, index, item) => {
-        Alert.alert(type, `You're pressing on ${item}`)
-    }
-
-    sleep = time => new Promise(resolve => setTimeout(() => resolve(), time))
-
-    renderItem = (item, index, separator) => {
-        if (this.state.layout === 'list') {
-            return (
-                <FlatListItem item={item} index={index} onPress={this.onPressItem} />
-            )
-        } else if (this.state.layout === 'grid') {
-            return (
-                <FlatListGrid item={item} index={index} onPress={this.onPressItem} />
-            )
-        }
-        return null
-    }
-
-    renderControlTab = () => (
-        <ControlTab
-            layout={this.state.layout}
-            onChangeLayout={this.onChangeLayout}
-        />
-    )
-
-    renderHeader = () => (
-        <View>
-            <View style={styles.headerSegment}>
-                <Left style={{ flex: 0.15 }} />
-                {this.renderControlTab()}
-                <Right style={{ flex: 0.15 }} />
-            </View>
-        </View>
-    )
-
-    renderPaginationFetchingView = () => (
-        <LoadingSpinner height={height * 0.2} text="loading..." />
-    )
 
     render() {
+        const { slider1ActiveSlide } = this.state;
         return (
             <Container>
                 <ImageBackground
@@ -154,74 +129,81 @@ export default class PaymentScreen extends React.Component {
                             <Button transparent>
                                 <Icon name='plus' size={25} color="#ffffff" />
                             </Button>
-                        </Right>  
+                        </Right>
                     </Header>
                     <Content>
-                        <CardSilder>
-                            <RkCard style={styles.rkCard}>
-                                <ImageBackground
-                                    source={require("../../../../assets/images/paymentScreen/bitcoin1.jpg")}
-                                    style={styles.container}
-                                >
-                                    <View rkCardHeader >
-                                        <Text style={[styles.cardText, styles.cardTitle]}>Daily CBP</Text>
-                                    </View>
 
-                                    <View rkCardContent>
-                                        <Text style={[styles.cardText, styles.cardType]}> Regular Account</Text>
-                                        <Text style={[styles.cardText, styles.cardAmount]}> $ 5000.00</Text>
-                                    </View>
+                        <View>
+                            <Carousel
+                                ref={(c) => { this._carousel = c; }}
+                                data={this.state.cardsList}
+                                renderItem={this._renderItem}
+                                sliderWidth={sliderWidth}
+                                itemWidth={itemWidth}
+                                onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index })}
+                            />
+                            <Pagination
+                                dotsLength={this.state.cardsList.length}
+                                activeDotIndex={slider1ActiveSlide}
+                                containerStyle={styles.paginationContainer}
+                                dotColor={'rgba(255, 255, 255, 0.92)'}
+                                dotStyle={styles.paginationDot}
+                                inactiveDotColor={colors.black}
+                                inactiveDotOpacity={0.4}
+                                inactiveDotScale={0.6}
+                                carouselRef={this._slider1Ref}
+                                tappableDots={!!this._slider1Ref}
+                            />
+                        </View>
 
-                                </ImageBackground>
-                            </RkCard>
-
-
-                            <RkCard rkType='story' style={styles.rkCard}>
-                                <ImageBackground
-                                    source={require("../../../../assets/images/paymentScreen/bitcoin2.png")}
-                                    style={styles.cardBackImage}
-                                >
-                                    <View rkCardHeader >
-                                        <Text style={[styles.cardText, styles.cardTitle]}>React-Native</Text>
-                                    </View>
-
-                                    <View rkCardContent>
-                                        <Text style={[styles.cardText, styles.cardType]}> Regular Account</Text>
-                                        <Text style={[styles.cardText, styles.cardAmount]}> $ 45000.00</Text>
-                                    </View>
-
-                                </ImageBackground>
-                            </RkCard>
-                        </CardSilder>
                         <View style={styles.viewAmountInfo}>
                             <View style={styles.viewAmountSingleLine}>
                                 <Text style={styles.txtAmountTitle}>Total Balance:</Text>
-                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 45,094.24</Text>
+                                <Text style={[styles.txtAmountTitle, styles.txtAmount]}>$ 45,094.24</Text>
                             </View>
                             <View style={styles.viewAmountSingleLine}>
                                 <Text style={styles.txtAmountTitle}>Available to Spend :</Text>
-                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 44,094</Text>
+                                <Text style={[styles.txtAmountTitle, styles.txtAmount]}>$ 44,094</Text>
                             </View>
                             <View style={styles.viewAmountSingleLine}>
                                 <Text style={styles.txtAmountTitle}>Total Invested :</Text>
-                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 15,986</Text>
+                                <Text style={[styles.txtAmountTitle, styles.txtAmount]}>$ 15,986</Text>
                             </View>
                             <View style={styles.viewAmountSingleLine}>
                                 <Text style={styles.txtAmountTitle}>In Vaults :</Text>
-                                <Text style={[styles.txtAmountTitle,styles.txtAmount]}>$ 12,950</Text>
+                                <Text style={[styles.txtAmountTitle, styles.txtAmount]}>$ 12,950</Text>
                             </View>
                         </View>
-                        <UltimateListView
-                            ref={ref => this.listView = ref}
-                            key={this.state.layout} // this is important to distinguish different FlatList, default is numColumns
-                            onFetch={this.onFetch}
-                            keyExtractor={(item, index) => `${index} - ${item}`} // this is required when you are using FlatList
-                            item={this.renderItem} // this takes three params (item, index, separator)
-                            numColumns={this.state.layout === 'list' ? 1 : 3} // to use grid layout, simply set gridColumn > 1
-                            header={this.renderHeader}
-                            paginationFetchingView={this.renderPaginationFetchingView}
-                        />
+                        <View style={styles.viewMainRecentTran}>
+                            <View style={styles.viewTitleRecentTrans}>
+                                <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+                            </View>
+                            <View>
+                                <FlatList
+                                    data={this.state.recentTrans}
+                                    showsVerticalScrollIndicator={false}
+                                    renderItem={({ item }) =>
+                                        <List>
+                                            <ListItem thumbnail>
+                                                <Left>
+                                                    <Thumbnail source={{ uri: item.logo }} />
+                                                </Left>
+                                                <Body>
+                                                    <Text style={styles.txtTransTitle}>{item.title}</Text>
+                                                    <Text note numberOfLines={1}>{item.date}</Text>
+                                                </Body>
+                                                <Right>
+                                                    {renderIf(item.transType == "receive")(<Text style={styles.txtAmoundRec}>{item.amount}</Text>)}
+                                                    {renderIf(item.transType != "receive")(<Text style={styles.txtAmoundSent}>- {item.amount}</Text>)}
 
+                                                </Right>
+                                            </ListItem>
+                                        </List>
+                                    }
+                                    keyExtractor={item => item.email}
+                                />
+                            </View>
+                        </View>
                     </Content>
                 </ImageBackground>
             </Container >

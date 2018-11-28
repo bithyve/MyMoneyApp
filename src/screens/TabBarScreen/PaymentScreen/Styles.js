@@ -8,7 +8,7 @@ export default {
         backgroundColor: '#fff',
     },
     rkCard: {
-        height: 170,   
+        height: 170,
         width: '99%',
         alignSelf: 'center',
 
@@ -24,10 +24,14 @@ export default {
         fontSize: 25
     },
     cardType: {
-        marginTop: 75
+        marginTop: 60
     },
     cardAmount: {
         fontSize: 20
+    },
+    paginationContainer:{
+        marginTop: -20,
+        marginBottom: -35,
     },
     //Amount Infomation
     viewAmountInfo: {
@@ -43,8 +47,25 @@ export default {
     txtAmount: {
         fontWeight: 'bold'
     },
-
-    
+    //Recent Transaction
+    viewTitleRecentTrans: {
+        marginLeft: 20,
+    },
+    txtRecentTran: {
+        fontWeight: 'bold',
+        fontSize: 25
+    }, 
+    txtTransTitle:{
+        fontWeight:'bold'
+    },   
+    txtAmoundRec: {
+        color: "#228B22",
+        fontWeight:'bold'
+    },   
+    txtAmoundSent:{
+        color:"red",
+        fontWeight:'bold'
+    },
     //old code
     header: {
         width,

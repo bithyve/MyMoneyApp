@@ -167,7 +167,7 @@ const LeftDrawerNavigator = createDrawerNavigator({
     screen: AccountSettingScreen,
     navigationOptions: {
       drawerLabel: 'Account Settings',
-       header: true ,
+      header: true,
       drawerIcon: ({ tintColor }) => <Icon name="cog" size={17} />,
     }
   },
@@ -206,14 +206,14 @@ export const createRootNavigator = (
   signedIn = false,
   screenName = "Password"
 ) => {
-  if (screenName == "Password" || screenName == "Home" ) {
+  if (screenName == "Password" || screenName == "Home") {
     return createStackNavigator(
       {
         PasswordGesture: {
           screen: PasswordGestureScreen,
-          navigationOptions:  
+          navigationOptions:
             { header: null }
-        },  
+        },
         OnBoardingNavigator: {
           screen: OnBoardingRouter,
           navigationOptions:
@@ -225,7 +225,8 @@ export const createRootNavigator = (
             { header: null }
         }
       },
-      {  
+      {
+        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
         initialRouteName: signedIn ? "PasswordGesture" : "PasswordGesture"
       }
     );
@@ -234,9 +235,9 @@ export const createRootNavigator = (
       {
         PasswordGesture: {
           screen: PasswordGestureScreen,
-          navigationOptions:  
+          navigationOptions:
             { header: null }
-        }, 
+        },
         OnBoardingNavigator: {
           screen: OnBoardingRouter,
           navigationOptions:
@@ -254,6 +255,7 @@ export const createRootNavigator = (
         }
       },
       {
+        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasswordGesture"
       }
     );

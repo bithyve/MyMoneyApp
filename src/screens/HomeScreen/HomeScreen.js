@@ -20,37 +20,30 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <Container>
-                <ImageBackground
-                    source={require("../../../assets/images/homescreen/homeBackgoundImage.png")}
-                    style={styles.container}
-                >
+                <Header transparent>
+                    <Left>
+                        <Button transparent onPress={() => this.props.navigation.toggleDrawer()}>
+                            <Icon name='bars' size={25} color="#ffffff" />
+                        </Button>
+                    </Left>
 
-                    <Header transparent>
-                        <Left>
-                            <Button transparent onPress={() => this.props.navigation.toggleDrawer()}>
-                                <Icon name='bars' size={25} color="#ffffff" />
-                            </Button>
-                        </Left>
-
-                        <Body>
-                            <Title>Header</Title>
-                        </Body>
-                        <Right>
-                            <Button transparent>
-                                <Icon name='bell' size={15} color="#ffffff" />
-                            </Button>
-                            <Button transparent>
-                                <Icon name='plus' size={25} color="#ffffff" />
-                            </Button>
-                        </Right>
-                    </Header>
-                    <Content>
-                        <Text>
-                            This is Content Section
+                    <Body>
+                        <Title>Header</Title>
+                    </Body>
+                    <Right>
+                        <Button transparent>
+                            <Icon name='bell' size={15} color="#ffffff" />
+                        </Button>
+                        <Button transparent>
+                            <Icon name='plus' size={25} color="#ffffff" />
+                        </Button>
+                    </Right>
+                </Header>
+                <Content>
+                    <Text>
+                        This is Content Section
               </Text>
-                    </Content>
-
-                </ImageBackground>
+                </Content>
             </Container>
         );
     }
