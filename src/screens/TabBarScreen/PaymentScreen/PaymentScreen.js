@@ -200,7 +200,7 @@ export default class PaymentScreen extends React.Component {
                                             </ListItem>
                                         </List>
                                     }
-                                    keyExtractor={item => item.email}
+                                    keyExtractor={item => item.id}
                                 />
                             </View>
                         </View>

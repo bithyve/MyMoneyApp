@@ -1,0 +1,53 @@
+{
+    "menus": [
+        {
+            "id": 1,
+            "icon": "home",
+            "title": "Home",
+            "pageName": "Home",
+            "desc": "Regular Account"
+        },
+        {
+            "id": 2,
+            "icon": "bars",
+            "title": "Account Settings",
+            "pageName": "AccountSettingScreen",
+            "desc": "In Regualr Account"
+        },
+        {
+            "id": 3,
+            "icon": "bars",
+            "title": "Security",
+            "pageName": "SecurityScreen",
+            "desc": "IOS New Lang"
+        },
+        {
+            "id": 4,
+            "icon": "bars",
+            "title": "Help",
+            "pageName": "HelpScreen",
+            "desc": "IOS New Lang"
+        },
+        {
+            "id": 5,
+            "icon": "bars",
+            "title": "Invite",
+            "pageName": "InviteScreen",
+            "desc": "IOS New Lang"
+        },
+        {
+            "id": 6,
+            "icon": "bars",
+            "title": "Bank Accounts",
+            "pageName": "BankAccountScreen",
+            "desc": "IOS New Lang"
+        },
+        {
+            "id": 7,
+            "icon": "bars",
+            "title": "Logout",
+            "pageName": "LogoutScreen",
+            "desc": "IOS New Lang"
+        }
+    ]
+}

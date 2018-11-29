@@ -42,7 +42,7 @@ import HelpScreen from "../screens/DrawerScreen/HelpScreen/HelpScreen";
 import InviteScreen from "../screens/DrawerScreen/InviteScreen/InviteScreen";
 import BankAccountScreen from "../screens/DrawerScreen/BankAccountScreen/BankAccountScreen";
 import LogoutScreen from "../screens/DrawerScreen/LogoutScreen/LogoutScreen";
-
+import DrawerScreen from "../screens/DrawerScreen/DrawerScreen/DrawerScreen";
 
 
 //TODO: ONBoarding
@@ -162,43 +162,11 @@ const LeftDrawerNavigator = createDrawerNavigator({
       drawerIcon: ({ tintColor }) => <Icon name="home" size={17} />,
 
     }
-  },
-  AccountSetting: {
-    screen: AccountSettingScreen,
-    navigationOptions: {
-      drawerLabel: 'Account Settings',
-      header: true,
-      drawerIcon: ({ tintColor }) => <Icon name="cog" size={17} />,
-    }
-  },
-  Help: {
-    screen: HelpScreen,
-    navigationOptions: {
-      drawerLabel: 'Help',
-      drawerIcon: ({ tintColor }) => <Icon name="question" size={17} />,
-    }
-  },
-  BankAccount: {
-    screen: BankAccountScreen,
-    navigationOptions: {
-      drawerLabel: 'Bank Accounts',
-      drawerIcon: ({ tintColor }) => <Icon name="university" size={17} />,
-    }
-  },
-  Lougout: {
-    screen: LogoutScreen,
-    navigationOptions: {
-      drawerLabel: 'Logout',
-      drawerIcon: ({ tintColor }) => <Icon name="sign-out" size={17} />,
-    }
-  },
+  }
 }, {
-    drawerBackgroundColor: colors.appColor,
-    drawerPosition: 'left',
-    headerMode: 'float',
-    navigationOptions: {
-      drawerLockMode: 'locked-open',
-    },
+    initialRouteName: 'Home',
+    contentComponent: DrawerScreen,
+    drawerWidth: 300
   });
 
 
@@ -226,8 +194,8 @@ export const createRootNavigator = (
         }
       },
       {
-        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
-        initialRouteName: signedIn ? "PasswordGesture" : "PasswordGesture"
+        initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+        //initialRouteName: signedIn ? "PasswordGesture" : "PasswordGesture"
       }
     );
   } else {
@@ -255,8 +223,8 @@ export const createRootNavigator = (
         }
       },
       {
-        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
-        initialRouteName: signedIn ? "OnBoardingNavigator" : "PasswordGesture"
+        initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+        //initialRouteName: signedIn ? "OnBoardingNavigator" : "PasswordGesture"
       }
     );
   }
