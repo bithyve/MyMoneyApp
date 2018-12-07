@@ -76,9 +76,6 @@ export default class PasswordGestureScreen extends Component {
                 status: 'right',
                 message: 'Password is right, success.'
             });
-            // this.props.navigation.push('TabbarBottom');
-
-            console.log('password page pagename=' + this.state.pageName);
             const resetAction = StackActions.reset({
                 index: 0, // <-- currect active route from actions array
                 key: null,
@@ -137,3 +134,6 @@ const styles = StyleSheet.create({
         color: '#000000'
     }
 });
+
+
+

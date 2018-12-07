@@ -19,11 +19,11 @@ var errorValidationMessage = {
 //Colors
 var colors = {
     appColor: "#F5951D",
-    black:"#000000"
+    black: "#000000"
 }
 
 const assetsImages = '../assets/images/';
-       
+
 var images = {
     appBackgound: require(assetsImages + 'icon/mainBackgoundImage.png'),
     appIcon: require(assetsImages + 'appLogo.png'),
@@ -60,8 +60,9 @@ var apiary = {
 //Local Database
 var localDB = {
     dbName: 'MyMoney.db',
-    tableName: {
-        tblWallets: 'tblWallets'  
+    tableName: {   
+        tblUserDetials: 'tblUserDetails',
+        tblWallets: 'tblWallets'
     }
 }
 

@@ -26,6 +26,9 @@ import UserMobileNoScreen from "../screens/UserAccountsScreen/UserMobileNoScreen
 import BackupPhraseScreen from "../screens/WalletScreen/BackupPhraseScreen/BackupPhraseScreen";
 import VerifyBackupPhraseScreen from "../screens/WalletScreen/VerifyBackupPhraseScreen/VerifyBackupPhraseScreen";
 
+//Passcode
+import PasscodeScreen from "../screens/PasscodeScreen/PasscodeScreen";
+
 
 //Password 
 import PasswordGestureScreen from "../screens/PasswordGestureScreen/PasswordGestureScreen";
@@ -249,6 +252,11 @@ export const createRootNavigator = (
           navigationOptions:
             { header: null }
         },
+        PasscodeScreen: {
+          screen: PasscodeScreen,
+          navigationOptions:
+            { header: null }
+        },
         OnBoardingNavigator: {
           screen: OnBoardingRouter,
           navigationOptions:
@@ -315,7 +323,8 @@ export const createRootNavigator = (
       },
       {
         //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
-        initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
+        // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
+        initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
       }
     );
   } else {
@@ -323,6 +332,11 @@ export const createRootNavigator = (
       {
         PasswordGesture: {
           screen: PasswordGestureScreen,
+          navigationOptions:
+            { header: null }
+        },
+        PasscodeScreen: {
+          screen: PasscodeScreen,
           navigationOptions:
             { header: null }
         },
@@ -396,7 +410,8 @@ export const createRootNavigator = (
       },
       {
         //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"   
-        initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
+        // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
+        initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
       }
     );
   }

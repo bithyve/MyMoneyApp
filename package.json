@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@haskkor/react-native-pincode": "^1.10.6",
     "@tradle/react-native-http": "^2.0.0",
     "assert": "^1.4.1",
     "axios": "^0.18.0",
@@ -50,6 +51,7 @@
     "react-native-progress-hud": "^1.0.4",
     "react-native-qrcode": "^0.2.7",
     "react-native-randombytes": "^3.5.1",
+    "react-native-rsa": "^0.0.3",
     "react-native-safari-view": "^2.1.0",
     "react-native-scaling-drawer": "^1.0.1",
     "react-native-share": "^1.1.3",

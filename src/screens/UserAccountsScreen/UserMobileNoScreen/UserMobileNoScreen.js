@@ -5,7 +5,8 @@ import {
     Dimensions,
     TouchableOpacity,
     Platform,
-    Linking
+    Linking,
+    AsyncStorage
 } from 'react-native';
 import { Container, Content, Button, Form, Item, Label, Input, Right, Body, Text, Footer, Picker } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,17 +16,24 @@ import CountryPicker, {
     getAllCountries
 } from 'react-native-country-picker-modal'
 import SafariView from "react-native-safari-view";
+import RSAKey from 'react-native-rsa';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+
 
 
 //TODO: Custome Pages
-import { colors, images } from "../../../constants/Constants";
+import { colors, images, localDB } from "../../../constants/Constants";
+import SQLite from "react-native-sqlite-storage";
+var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
+
+
 
 import closeImgLight from "../../../assets/images/mobileNoDetailsScreen/countryPickerClose.png";
 const INDIA = ['IN']
 const DARK_COLOR = "#18171C";
 const PLACEHOLDER_COLOR = "rgba(255,255,255,0.2)";
 const LIGHT_COLOR = "#FFF";
-
 export default class UserMobileNoScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -59,6 +67,7 @@ export default class UserMobileNoScreen extends React.Component {
     }
 
 
+    //TODO: Page Life Cycle
     componentWillMount() {
         const { navigation } = this.props;
         this.setState({
@@ -88,7 +97,7 @@ export default class UserMobileNoScreen extends React.Component {
     }
 
 
-
+    //TODO: func tearmanduse
     click_tearmsOfUse() {
 
         if (Platform.OS == 'ios') {
@@ -109,6 +118,60 @@ export default class UserMobileNoScreen extends React.Component {
 
     }
 
+
+    //TODO: func click_Continue
+
+    click_Continue() {
+        // var date = new Date().getDate();
+        // var month = new Date().getMonth() + 1;
+        // var year = new Date().getFullYear();
+        // var fulldate = date + "-" + month + "-" + year;
+        // const dateTime = Date.now();
+        // const fulldate = Math.floor(dateTime / 1000);
+        // const firstName = this.state.firstName;
+        // const lastName = this.state.lastName;
+        // const email = this.state.email;
+        // const country = this.state.countryName;
+        // const mobileNumber = '+' + this.state.callingCode + this.state.mobileNo;
+        // db.transaction(function (txn) {
+        //     txn.executeSql(
+        //         "INSERT INTO " +
+        //         localDB.tableName.tblUserDetials +
+        //         " (date,firstName,lastName,email,country,mobileNo) VALUES (:date,:firstName,:lastName,:email,:country,:mobileNo)",
+        //         [
+        //             fulldate,
+        //             firstName,
+        //             lastName,
+        //             email,
+        //             country,
+        //             mobileNumber,
+        //         ]
+        //     );
+        // });
+
+
+        // const bits = 1024;
+        // const exponent = '10001'; // must be a string. This is hex string. decimal = 65537
+        // var rsa = new RSAKey();
+        // rsa.generate(bits, exponent);
+        // var publicKey = rsa.getPublicString(); // return json encoded string
+        // var privateKey = rsa.getPrivateString(); // return json encoded string  
+        // var publicJson = JSON.parse(publicKey);
+        // var privateJson = JSON.parse(privateKey);
+        // AsyncStorage.setItem("@publicKey:key", publicJson["n"]);
+        // AsyncStorage.setItem("@privateKey:key", privateJson["n"]);
+
+        const resetAction = StackActions.reset({
+            index: 0, // <-- currect active route from actions array
+            key: null,
+            actions: [
+                NavigationActions.navigate({ routeName: 'PasscodeScreen' }),
+            ],
+        });
+        this.props.navigation.dispatch(resetAction);
+
+    }
+
     render() {
         return (
             <Container >
@@ -116,7 +179,6 @@ export default class UserMobileNoScreen extends React.Component {
                     <View style={styles.whatnameTitle}>
                         <Text style={styles.txtTitle}>What is your mobile phone number?</Text>
                     </View>
-
                     <View style={styles.inputFormView} >
                         <View style={styles.countryView}>
                             <CountryPicker
@@ -130,16 +192,14 @@ export default class UserMobileNoScreen extends React.Component {
                                 cca2={this.state.cca2}
                                 translation='eng'
                             />
-
                             <Text style={styles.txtcountryName}>
                                 {this.state.countryName}
                             </Text>
-
                         </View>
                         <View style={styles.callingDetailsView}>
                             <Text style={{ alignSelf: 'center' }}>+ {this.state.callingCode}</Text>
                             <Input
-                                name={this.state.email}
+                                name={this.state.mobileNo}
                                 keyboardType={"phone-pad"}
                                 underlineColorAndroid={'gray'}
                                 onChangeText={(text) => this.validationText(text, 'mobileNo')}
@@ -154,16 +214,11 @@ export default class UserMobileNoScreen extends React.Component {
                         </View>
                     </View>
                 </Content>
-
-
                 <Footer style={{ backgroundColor: this.state.continueBtnColor }}>
                     <Button full disabled={this.state.continueBtnStatus} style={styles.btnContinue} transparent onPress={() => this.click_Continue()}>
                         <Text style={{ color: '#ffffff' }}>Continue</Text>
                     </Button>
                 </Footer>
-
-
-
             </Container>
         );
     }
