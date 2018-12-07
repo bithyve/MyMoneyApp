@@ -21,16 +21,33 @@ import Share, { ShareSheet } from 'react-native-share';
 //TODO: Custome Pages
 import { colors, images } from "../../../constants/Constants";
 
+//TODO: Wallet Function
+//import { createWallet } from "../../../bitcoin/services/wallet";
+
+
 
 export default class BackupPhraseScreen extends React.Component {
     constructor(props) {
         super(props);
         StatusBar.setHidden(false);
         this.state = ({
-            numanicValues: ['impose', 'case', 'tree', 'stay', 'cotton', 'album', 'rose', 'effort', 'transfer', 'smile', 'fold', 'tone'],
+            mnemonicValues: [],
             visible: false
         })
     }
+
+    componentWillMount() {
+        const { navigation } = this.props;
+        this.setState({
+            mnemonicValues: navigation.getParam('numanicValues')
+        })   
+    }
+
+
+
+
+
+
 
     onCancel() {
         this.setState({ visible: false });
@@ -40,8 +57,8 @@ export default class BackupPhraseScreen extends React.Component {
     }
 
     render() {
-        const textSecurityKey = this.state.numanicValues.map((type) => <Text style={styles.secrityChar}> {type} </Text>)
-        var numanicKey = this.state.numanicValues.toString();
+        const textSecurityKey = this.state.mnemonicValues.map((type, index) => <Text key={index} style={styles.secrityChar}> {type} </Text>)
+        var numanicKey = this.state.mnemonicValues.toString();
         let shareOptions = {
             title: "Numeric key",
             message: numanicKey,
@@ -85,7 +102,7 @@ export default class BackupPhraseScreen extends React.Component {
                 <Footer style={styles.footer}>
                     <Button style={styles.btnNext} onPress={() => this.props.navigation.push('VerifyBackupPhrase',
                         {
-                            numanicValues: this.state.numanicValues
+                            numanicValues: this.state.mnemonicValues
                         })}>
                         <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>NEXT</Text>
                     </Button>

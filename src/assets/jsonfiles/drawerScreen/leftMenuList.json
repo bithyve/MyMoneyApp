@@ -9,21 +9,28 @@
         },
         {
             "id": 2,
-            "icon": "bars",
+            "icon": "rupee",   
+            "title": "Sent/Receive",
+            "pageName": "SentAndReceiveeScreen",
+            "desc": "In Regualr Account"
+        },   
+        {
+            "id": 2,
+            "icon": "user-circle",
             "title": "Account Settings",
             "pageName": "AccountSettingScreen",
             "desc": "In Regualr Account"
         },
         {
             "id": 3,
-            "icon": "bars",
+            "icon": "cog",
             "title": "Security",
             "pageName": "SecurityScreen",
             "desc": "IOS New Lang"
         },
         {
             "id": 4,
-            "icon": "bars",
+            "icon": "question-circle",
             "title": "Help",
             "pageName": "HelpScreen",
             "desc": "IOS New Lang"
@@ -37,14 +44,14 @@
         },
         {
             "id": 6,
-            "icon": "bars",
+            "icon": "university",
             "title": "Bank Accounts",
             "pageName": "BankAccountScreen",
             "desc": "IOS New Lang"
-        },
+        },   
         {
             "id": 7,
-            "icon": "bars",
+            "icon": "sign-out",  
             "title": "Logout",
             "pageName": "LogoutScreen",
             "desc": "IOS New Lang"

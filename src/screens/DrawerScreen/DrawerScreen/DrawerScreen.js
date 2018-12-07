@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { ScrollView, Text, View, StyleSheet, ImageBackground, Image, FlatList } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, ImageBackground, Image, FlatList, TouchableOpacity, Dimensions,Alert } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Thumbnail } from 'native-base';
 import { DrawerActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Dialog, { SlideAnimation, DialogTitle, DialogContent, DialogButton } from 'react-native-popup-dialog';
+
+
+
 
 
 //TODO: Custome Pages
 import { colors, images } from "../../../constants/Constants";
 
+
+
 //TODO: Json Files
 import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
+
+
+
 
 
 class DrawerScreen extends Component {
@@ -21,7 +30,9 @@ class DrawerScreen extends Component {
 
         this.state = {
             menuBarList: []
+               
         }
+        this.click_Logout = this.click_Logout.bind(this);   
     }
 
     //TODO: Page Life Cycle
@@ -36,21 +47,35 @@ class DrawerScreen extends Component {
         });
     }
 
+    //TODO: Func show logout popup
+    click_Logout() {
+       Alert.alert('Working');
+       this.props.navigation.dispatch(DrawerActions.closeDrawer())
+    }
+
     //TODO:  function NavigateToScreen
     navigateToScreen = (route) => () => {
-        console.log('page name' + route);
-        const navigateAction = NavigationActions.navigate({
-            routeName: route
-        });
-        this.props.navigation.dispatch(navigateAction);
-        this.props.navigation.dispatch(DrawerActions.closeDrawer())
+        if (route == "Home") {
+            const navigateAction = NavigationActions.navigate({
+                routeName: route
+            });
+            this.props.navigation.dispatch(navigateAction);
+            this.props.navigation.dispatch(DrawerActions.closeDrawer())
+        } else if (route == "LogoutScreen") {
+            this.click_Logout();
+        }
+        else {
+            this.props.navigation.push(route);
+            this.props.navigation.dispatch(DrawerActions.closeDrawer())
+        }
+
     }
 
     render() {
         return (
             <Container>
                 <ImageBackground
-                    source={images.loginScreen.backgoundImage}
+                    source={images.appBackgound}   
                     style={styles.container}
                 >
                     <View style={styles.viewHeading}>
@@ -64,18 +89,24 @@ class DrawerScreen extends Component {
                                 data={this.state.menuBarList}
                                 showsVerticalScrollIndicator={false}
                                 renderItem={({ item }) =>
-                                    <View style={styles.menuItem}>
-                                        <Icon name={item.icon} size={30} color="#ffffff" />
-                                        <Text style={styles.txtMenuItem} onPress={this.navigateToScreen(item.pageName)}>
-                                            {item.title}
-                                        </Text>
-                                    </View>
+                                    <TouchableOpacity onPress={this.navigateToScreen(item.pageName)}>
+                                        <View style={styles.menuItem}>
+                                            <Icon name={item.icon} size={30} color="#ffffff" />
+                                            <Text style={styles.txtMenuItem} >
+                                                {item.title}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 }
                                 keyExtractor={item => item.id}
                             />
                         </View>
                     </ScrollView>
+
+                    
+
                 </ImageBackground>
+
             </Container>
         );
     }
@@ -85,7 +116,8 @@ class DrawerScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 30,
+        paddingTop: 30
+        
     },
     userProfileIcon: {
         width: 140,

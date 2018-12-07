@@ -27,7 +27,7 @@ export default class InviteScreen extends React.Component {
                     style={styles.container}
                 >
 
-                    <Header transparent>
+                    <Header transparent style={{ backgroundColor: colors.appColor }}>
                     <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
@@ -35,16 +35,9 @@ export default class InviteScreen extends React.Component {
                         </Left>
 
                         <Body>
-                            <Title>Header</Title>
+                            <Title>Invite</Title>
                         </Body>
-                        <Right>
-                            <Button transparent>
-                                <Icon name='bell' size={15} color="#ffffff" />
-                            </Button>
-                            <Button transparent>
-                                <Icon name='plus' size={25} color="#ffffff" />
-                            </Button>
-                        </Right>
+                      
                     </Header>
                     <Content>
                         <Text>

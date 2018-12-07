@@ -22,7 +22,8 @@ export default class PasswordGestureScreen extends Component {
             message: 'Please input your password.',
             status: 'normal',
             spinner: true,
-            pageName: 'OnBoardingNavigator'
+            pageName: 'OnBoardingNavigator',
+            _isMounted: false
         }
     }
 
@@ -31,6 +32,9 @@ export default class PasswordGestureScreen extends Component {
     componentWillMount() {
         console.log('call pass class');
         this.retrieveData();
+        this.setState({
+            _isMounted: true
+        });
     }
     componentDidMount() {
         setTimeout(() => {
@@ -38,6 +42,12 @@ export default class PasswordGestureScreen extends Component {
                 spinner: !this.state.spinner
             });
         }, 100);
+    }
+
+    componentWillUnmount() {
+        this.setState({
+            _isMounted: false
+        });
     }
 
     retrieveData = async () => {

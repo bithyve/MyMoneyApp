@@ -23,7 +23,7 @@ var colors = {
 }
 
 const assetsImages = '../assets/images/';
-
+       
 var images = {
     appBackgound: require(assetsImages + 'icon/mainBackgoundImage.png'),
     appIcon: require(assetsImages + 'appLogo.png'),
@@ -61,7 +61,7 @@ var apiary = {
 var localDB = {
     dbName: 'MyMoney.db',
     tableName: {
-        tblLogin: 'tblLogin'
+        tblWallets: 'tblWallets'  
     }
 }
 

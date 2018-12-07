@@ -20,6 +20,9 @@ import HomeScreen from "../screens/HomeScreen/HomeScreen";
 
 //OnBoarding
 import OnBoardingScreen from "../screens/WalletScreen/OnBoardingScreen/OnBoardingScreen";
+import UsernameScreen from "../screens/UserAccountsScreen/UsernameScreen/UsernameScreen";
+import UserEmailScreen from "../screens/UserAccountsScreen/UserEmailScreen/UserEmailScreen";
+import UserMobileNoScreen from "../screens/UserAccountsScreen/UserMobileNoScreen/UserMobileNoScreen";
 import BackupPhraseScreen from "../screens/WalletScreen/BackupPhraseScreen/BackupPhraseScreen";
 import VerifyBackupPhraseScreen from "../screens/WalletScreen/VerifyBackupPhraseScreen/VerifyBackupPhraseScreen";
 
@@ -35,7 +38,7 @@ import AccountsScreen from "../screens/TabBarScreen/AccountsScreen/AccountsScree
 import CardsScreen from "../screens/TabBarScreen/CardsScreen/CardsScreen";
 import MoreScreen from "../screens/TabBarScreen/MoreScreen/MoreScreen";
 
-//DrawerScreen
+//Left DrawerScreen
 import AccountSettingScreen from "../screens/DrawerScreen/AccountSettingScreen/AccountSettingScreen";
 import SecurityScreen from "../screens/DrawerScreen/SecurityScreen/SecurityScreen";
 import HelpScreen from "../screens/DrawerScreen/HelpScreen/HelpScreen";
@@ -43,6 +46,16 @@ import InviteScreen from "../screens/DrawerScreen/InviteScreen/InviteScreen";
 import BankAccountScreen from "../screens/DrawerScreen/BankAccountScreen/BankAccountScreen";
 import LogoutScreen from "../screens/DrawerScreen/LogoutScreen/LogoutScreen";
 import DrawerScreen from "../screens/DrawerScreen/DrawerScreen/DrawerScreen";
+import SentAndReceiveeScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/SentAndReceiveeScreen";
+import SentMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/SentMoneyScreen/SentMoneyScreen";
+import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/ReceiveMoneyScreen/ReceiveMoneyScreen";
+
+
+
+
+
+//Right DrawerScreen
+import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
 
 //TODO: ONBoarding
@@ -51,6 +64,36 @@ const OnBoardingRouter = createStackNavigator({
     screen: OnBoardingScreen,
     navigationOptions:
       { header: null }
+  },
+  UsernameScreen: {
+    screen: UsernameScreen,
+    navigationOptions: () => ({
+      title: 'User Detials',
+      headerTintColor: '#ffffff',
+      headerStyle: {
+        backgroundColor: colors.appColor,
+      },
+    }),
+  },
+  UserEmailScreen: {
+    screen: UserEmailScreen,
+    navigationOptions: () => ({
+      title: 'Email Details',
+      headerTintColor: '#ffffff',
+      headerStyle: {
+        backgroundColor: colors.appColor,
+      },
+    }),
+  },
+  UserMobileNoScreen: {
+    screen: UserMobileNoScreen,
+    navigationOptions: () => ({
+      title: 'Mobile Number Detaiils',
+      headerTintColor: '#ffffff',
+      headerStyle: {
+        backgroundColor: colors.appColor,
+      },
+    }),
   },
   BackupPhrase: {
     screen: BackupPhraseScreen,
@@ -85,6 +128,20 @@ const LoginRouter = createStackNavigator({
   {
     initialRouteName: 'Login'
   });
+
+
+//TODO: Left DrawerNavigator 
+const LeftDrawer = createStackNavigator({
+  AccountSettingScreen: {
+    screen: AccountSettingScreen,
+    navigationOptions:
+      { header: null }
+  },
+});
+
+
+
+
 
 
 
@@ -139,12 +196,12 @@ const TabNavigator = createBottomTabNavigator({
 },
   {
     tabBarOptions: {
-      activeTintColor: '#f3882a',
+      activeTintColor: '#ffffff',
       labelStyle: {
         fontSize: 12,
       },
       style: {
-        backgroundColor: '#ffffff',
+        backgroundColor: colors.appColor,
       },
     }
   }
@@ -166,7 +223,17 @@ const LeftDrawerNavigator = createDrawerNavigator({
 }, {
     initialRouteName: 'Home',
     contentComponent: DrawerScreen,
-    drawerWidth: 300
+    drawerPosition: 'left',
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    drawerToggleRoute: 'DrawerToggle',
+    contentOptions: {
+      activeTintColor: '#e91e63',
+      style: {
+        flex: 1,
+        paddingTop: 15,
+      }
+    }
   });
 
 
@@ -191,11 +258,64 @@ export const createRootNavigator = (
           screen: LeftDrawerNavigator,
           navigationOptions:
             { header: null }
-        }
+        },
+        //Drwaer Navigation
+        AccountSettingScreen: {
+          screen: AccountSettingScreen,
+          navigationOptions:
+            { header: null }
+        },
+        SecurityScreen: {
+          screen: SecurityScreen,
+          navigationOptions:
+            { header: null }
+        },
+        HelpScreen: {
+          screen: HelpScreen,
+          navigationOptions:
+            { header: null }
+        },
+        InviteScreen: {
+          screen: InviteScreen,
+          navigationOptions:
+            { header: null }
+        },
+        BankAccountScreen: {
+          screen: BankAccountScreen,
+          navigationOptions:
+            { header: null }
+        },
+        LogoutScreen: {
+          screen: LogoutScreen,
+          navigationOptions:
+            { header: null }
+        },
+        NotificationScreen: {
+          screen: NotificationScreen,
+          navigationOptions:
+            { header: null }
+        },
+        //SentMoney And Receive Money
+        SentAndReceiveeScreen: {
+          screen: SentAndReceiveeScreen,
+          navigationOptions:
+            { header: null }
+        },
+        SentMoneyScreen: {
+          screen: SentMoneyScreen,
+          navigationOptions:
+            { header: null }
+        },
+        ReceiveMoneyScreen: {
+          screen: ReceiveMoneyScreen,
+          navigationOptions:
+            { header: null }
+        },
+
       },
       {
-        initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
-        //initialRouteName: signedIn ? "PasswordGesture" : "PasswordGesture"
+        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+        initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
       }
     );
   } else {
@@ -220,11 +340,63 @@ export const createRootNavigator = (
           screen: LeftDrawerNavigator,
           navigationOptions:
             { header: null }
-        }
+        },
+        //Drwaer Navigation
+        AccountSettingScreen: {
+          screen: AccountSettingScreen,
+          navigationOptions:
+            { header: null }
+        },
+        SecurityScreen: {
+          screen: SecurityScreen,
+          navigationOptions:
+            { header: null }
+        },
+        HelpScreen: {
+          screen: HelpScreen,
+          navigationOptions:
+            { header: null }
+        },
+        InviteScreen: {
+          screen: InviteScreen,
+          navigationOptions:
+            { header: null }
+        },
+        BankAccountScreen: {
+          screen: BankAccountScreen,
+          navigationOptions:
+            { header: null }
+        },
+        LogoutScreen: {
+          screen: LogoutScreen,
+          navigationOptions:
+            { header: null }
+        },
+        NotificationScreen: {
+          screen: NotificationScreen,
+          navigationOptions:
+            { header: null }
+        },
+        //SentMoney And Receive Money
+        SentAndReceiveeScreen: {
+          screen: SentAndReceiveeScreen,
+          navigationOptions:
+            { header: null }
+        },
+        SentMoneyScreen: {
+          screen: SentMoneyScreen,
+          navigationOptions:
+            { header: null }
+        },
+        ReceiveMoneyScreen: {
+          screen: ReceiveMoneyScreen,
+          navigationOptions:
+            { header: null }
+        },
       },
       {
-        initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
-        //initialRouteName: signedIn ? "OnBoardingNavigator" : "PasswordGesture"
+        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"   
+        initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
       }
     );
   }
