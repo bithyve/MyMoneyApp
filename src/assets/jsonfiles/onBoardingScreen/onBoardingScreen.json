@@ -1,0 +1,16 @@
+{
+    "onBoarding": [
+        {
+            "id": 1,
+            "title": "Bithyve",
+            "image": "../../../assets/images/onBoardingScreen/bitcoin.png",   
+            "desc": "The cryptotech specialists providing technology and business expertise in cryptocurrencies blockchain cryptofinance lightningnetworks sidechains  smartcontracts Ethereum Bitcoin."
+        },
+        {
+            "id": 2,
+            "title": "Zcash",  
+            "image": "../../../assets/images/onBoardingScreen/bitcoin.png",  
+            "desc": "Zcash is a cryptocurrency aimed at using cryptography to provide enhanced privacy for its users compared to other cryptocurrencies such as Bitcoin."
+        }   
+    ]
+}
