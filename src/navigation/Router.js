@@ -28,6 +28,7 @@ import VerifyBackupPhraseScreen from "../screens/WalletScreen/VerifyBackupPhrase
 
 //Passcode
 import PasscodeScreen from "../screens/PasscodeScreen/PasscodeScreen";
+import PasscodeConfirmScreen from "../screens/PasscodeScreen/PasscodeConfirmScreen";
 
 
 //Password 
@@ -143,13 +144,7 @@ const LeftDrawer = createStackNavigator({
 });
 
 
-
-
-
-
-
 //TODO: TabNavigator
-
 const TabNavigator = createBottomTabNavigator({
   Payment: {
     screen: PaymentScreen,
@@ -208,12 +203,10 @@ const TabNavigator = createBottomTabNavigator({
       },
     }
   }
-
 );
 
 
 //TODO: DrawerNavigator
-
 const LeftDrawerNavigator = createDrawerNavigator({
   Home: {
     screen: TabNavigator,
@@ -240,18 +233,15 @@ const LeftDrawerNavigator = createDrawerNavigator({
   });
 
 
+
+
 export const createRootNavigator = (
   signedIn = false,
   screenName = "Password"
 ) => {
-  if (screenName == "Password" || screenName == "Home") {
+  if (screenName == "OnBoarding") {
     return createStackNavigator(
       {
-        PasswordGesture: {
-          screen: PasswordGestureScreen,
-          navigationOptions:
-            { header: null }
-        },
         PasscodeScreen: {
           screen: PasscodeScreen,
           navigationOptions:
@@ -259,6 +249,11 @@ export const createRootNavigator = (
         },
         OnBoardingNavigator: {
           screen: OnBoardingRouter,
+          navigationOptions:
+            { header: null }
+        },
+        PasscodeConfirmScreen: {
+          screen: PasscodeConfirmScreen,
           navigationOptions:
             { header: null }
         },
@@ -319,22 +314,41 @@ export const createRootNavigator = (
           navigationOptions:
             { header: null }
         },
+        //Backup Phrase
+        BackupPhraseScreen: {
+          screen: BackupPhraseScreen,
+          navigationOptions: () => ({
+            title: 'Backup Phrase',
+            headerTintColor: '#ffffff',
+
+            headerStyle: {
+              backgroundColor: colors.appColor,
+              marginTop: 20,
+            },
+          }),
+        },
+        VerifyBackupPhraseScreen: {
+          screen: VerifyBackupPhraseScreen,
+          navigationOptions: () => ({
+            title: 'Verify Backup Phrase',
+            headerTintColor: '#ffffff',
+            headerStyle: {
+              backgroundColor: colors.appColor,
+              marginTop: 20,
+            },
+          }),
+        },
 
       },
       {
-        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+        initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
+        //initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
       }
     );
   } else {
     return createStackNavigator(
       {
-        PasswordGesture: {
-          screen: PasswordGestureScreen,
-          navigationOptions:
-            { header: null }
-        },
         PasscodeScreen: {
           screen: PasscodeScreen,
           navigationOptions:
@@ -342,6 +356,11 @@ export const createRootNavigator = (
         },
         OnBoardingNavigator: {
           screen: OnBoardingRouter,
+          navigationOptions:
+            { header: null }  
+        },
+        PasscodeConfirmScreen: {
+          screen: PasscodeConfirmScreen,
           navigationOptions:
             { header: null }
         },
@@ -407,11 +426,36 @@ export const createRootNavigator = (
           navigationOptions:
             { header: null }
         },
+        //Backup Phrase
+        BackupPhraseScreen: {
+          screen: BackupPhraseScreen,
+          navigationOptions: () => ({
+            title: 'Backup Phrase',
+            headerTintColor: '#ffffff',
+
+            headerStyle: {
+              backgroundColor: colors.appColor,
+              marginTop: 20,
+            },
+          }),
+        },
+        VerifyBackupPhraseScreen: {
+          screen: VerifyBackupPhraseScreen,
+          navigationOptions: () => ({
+            title: 'Verify Backup Phrase',
+            headerTintColor: '#ffffff',
+            headerStyle: {
+              backgroundColor: colors.appColor,
+              marginTop: 20,
+            },
+          }),
+        },
+
       },
       {
-        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"   
-        // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
+        initialRouteName: signedIn ? "TabbarBottom" : "PasscodeScreen"
+        //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
+        //initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
       }
     );
   }

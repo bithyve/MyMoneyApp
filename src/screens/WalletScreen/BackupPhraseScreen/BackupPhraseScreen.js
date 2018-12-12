@@ -21,8 +21,8 @@ import Share, { ShareSheet } from 'react-native-share';
 //TODO: Custome Pages
 import { colors, images } from "../../../constants/Constants";
 
-//TODO: Wallet Function
-//import { createWallet } from "../../../bitcoin/services/wallet";
+//TODO: Wallets    
+var createWallet = require('../../../bitcoin/services/wallet.js');
 
 
 
@@ -34,20 +34,24 @@ export default class BackupPhraseScreen extends React.Component {
             mnemonicValues: [],
             visible: false
         })
-    }
+    }  
 
     componentWillMount() {
-        const { navigation } = this.props;
-        this.setState({
-            mnemonicValues: navigation.getParam('numanicValues')
-        })   
+        this.getWalletsData();
     }
 
-
-
-
-
-
+    async getWalletsData() {
+        const { mnemonic, address, keyPair } = await createWallet.createWallet();
+        this.setState({
+            mnemonicValues: mnemonic.split(" "),
+        });
+        console.log(this.state.mnemonicValues);
+        if (this.state.mnemonicValues.length > 0) {
+            this.setState({
+                spinner: false
+            });
+        }
+    }
 
     onCancel() {
         this.setState({ visible: false });
@@ -68,13 +72,8 @@ export default class BackupPhraseScreen extends React.Component {
 
 
         return (
-            <Container style={styles.container}>
-                <Header style={{ backgroundColor: '#F5951D' }} androidStatusBarColor="#F5951D">
-                    <Body>
-                        <Title>Backup Phrase</Title>
-                    </Body>
-                </Header>
-                <Content>
+            <Container>
+                <Content contentContainerStyle={styles.container}>
                     <View style={styles.viewImageAndTitle}>
                         <Image
                             style={styles.backupImg}
@@ -100,7 +99,7 @@ export default class BackupPhraseScreen extends React.Component {
                     </View>
                 </Content>
                 <Footer style={styles.footer}>
-                    <Button style={styles.btnNext} onPress={() => this.props.navigation.push('VerifyBackupPhrase',
+                    <Button style={styles.btnNext} onPress={() => this.props.navigation.push('VerifyBackupPhraseScreen',
                         {
                             numanicValues: this.state.mnemonicValues
                         })}>
@@ -118,9 +117,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
     viewImageAndTitle: {
-        flex: 2,
+        flex: 0.6,
         alignItems: 'center',
-        marginTop: 80,
+        marginTop: 40,
     },
     backupImg: {
         marginBottom: 20
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     viewNumanicValue: {
         backgroundColor: '#ECF0F4',
         height: 100,
-        marginTop: 30,
         flexDirection: 'row',
         flexWrap: "wrap",
         padding: 10,

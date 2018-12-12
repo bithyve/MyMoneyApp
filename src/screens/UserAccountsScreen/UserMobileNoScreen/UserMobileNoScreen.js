@@ -20,12 +20,9 @@ import RSAKey from 'react-native-rsa';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 
-
-
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../constants/Constants";
-import SQLite from "react-native-sqlite-storage";
-var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
+import { colors, images } from "../../../constants/Constants";
+
 
 
 
@@ -122,34 +119,6 @@ export default class UserMobileNoScreen extends React.Component {
     //TODO: func click_Continue
 
     click_Continue() {
-        // var date = new Date().getDate();
-        // var month = new Date().getMonth() + 1;
-        // var year = new Date().getFullYear();
-        // var fulldate = date + "-" + month + "-" + year;
-        // const dateTime = Date.now();
-        // const fulldate = Math.floor(dateTime / 1000);
-        // const firstName = this.state.firstName;
-        // const lastName = this.state.lastName;
-        // const email = this.state.email;
-        // const country = this.state.countryName;
-        // const mobileNumber = '+' + this.state.callingCode + this.state.mobileNo;
-        // db.transaction(function (txn) {
-        //     txn.executeSql(
-        //         "INSERT INTO " +
-        //         localDB.tableName.tblUserDetials +
-        //         " (date,firstName,lastName,email,country,mobileNo) VALUES (:date,:firstName,:lastName,:email,:country,:mobileNo)",
-        //         [
-        //             fulldate,
-        //             firstName,
-        //             lastName,
-        //             email,
-        //             country,
-        //             mobileNumber,
-        //         ]
-        //     );
-        // });
-
-
         // const bits = 1024;
         // const exponent = '10001'; // must be a string. This is hex string. decimal = 65537
         // var rsa = new RSAKey();
@@ -160,12 +129,21 @@ export default class UserMobileNoScreen extends React.Component {
         // var privateJson = JSON.parse(privateKey);
         // AsyncStorage.setItem("@publicKey:key", publicJson["n"]);
         // AsyncStorage.setItem("@privateKey:key", privateJson["n"]);
-
+        const mobileNumber = '+' + this.state.callingCode + this.state.mobileNo;
         const resetAction = StackActions.reset({
             index: 0, // <-- currect active route from actions array
             key: null,
             actions: [
-                NavigationActions.navigate({ routeName: 'PasscodeScreen' }),
+                NavigationActions.navigate({
+                    routeName: 'PasscodeConfirmScreen',  
+                    params: {
+                        firstName: this.state.firstName,
+                        lastName: this.state.lastName,
+                        email: this.state.email,
+                        mobileNo: mobileNumber,
+                        countryName: this.state.countryName
+                    }
+                }),   
             ],
         });
         this.props.navigation.dispatch(resetAction);

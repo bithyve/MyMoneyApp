@@ -21,9 +21,8 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { colors, images } from "../../../constants/Constants";
 import CreateTables from "../../../manager/database/CreateTables";
 
+  
 
-//TODO: Wallets    
-var createWallet = require('../../../bitcoin/services/wallet.js');
 
 //TODO: Json Files
 import onBoardingData from "../../../assets/jsonfiles/onBoardingScreen/onBoardingScreen.json";
@@ -48,7 +47,6 @@ export default class OnBoardingScreen extends React.Component {
         super(props);
         StatusBar.setBackgroundColor(colors.appColor, true);
         this.state = {
-            mnemonicValues: [],
             sliderData: [],
             slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
             visible: false,
@@ -61,7 +59,9 @@ export default class OnBoardingScreen extends React.Component {
     //TODO: Page Life Cycle
     componentWillMount() {
         this.getOnBoardingData();
+
     }
+    
 
     //TODO: Fun getOnBoardingData
     getOnBoardingData() {
@@ -86,19 +86,7 @@ export default class OnBoardingScreen extends React.Component {
 
     }
 
-    async getWalletsData() {
-        const { mnemonic, address, keyPair } = await createWallet.createWallet();
-        this.setState({
-            mnemonicValues: mnemonic.split(" "),
-        });
-        console.log(this.state.mnemonicValues);
-        if (this.state.mnemonicValues.length > 0) {
-            this.setState({
-                spinner: false
-            });
-            this.props.navigation.push('BackupPhrase', { numanicValues: this.state.mnemonicValues })
-        }
-    }
+
 
 
 
@@ -164,6 +152,7 @@ export default class OnBoardingScreen extends React.Component {
                         visible={this.state.spinner}
                         textContent={'Loading...'}
                     />
+
                 </Body>
                 <CreateTables />
                 <Dialog
@@ -206,7 +195,8 @@ export default class OnBoardingScreen extends React.Component {
                         </View>
                     </DialogContent>
                 </Dialog>
-            </Container>  
+               
+            </Container>
         );
     }
 }

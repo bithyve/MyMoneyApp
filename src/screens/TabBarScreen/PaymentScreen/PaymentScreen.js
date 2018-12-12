@@ -22,9 +22,6 @@ import {
     mdl,
 } from 'react-native-material-kit';
 
-
-
-
 //TODO: Custome Pages
 import { colors, images } from "../../../constants/Constants";
 //import styles from './Styles';
@@ -34,8 +31,6 @@ import renderIf from "../../../constants/validation/renderIf";
 import transData from "../../../assets/jsonfiles/paymentScreen/recentTransactions.json";
 import cardsData from "../../../assets/jsonfiles/paymentScreen/cardList.json";
 import accounts from "../../../assets/jsonfiles/paymentScreen/accountList.json";
-
-
 
 const { width, height } = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -60,8 +55,11 @@ export default class PaymentScreen extends React.Component {
             cardsList: [],
             accountsList: [],
             slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
-            accountTypeVisible: false
+            accountTypeVisible: false,
+            isOpen: false,
         }
+
+
     }
 
 
@@ -113,11 +111,17 @@ export default class PaymentScreen extends React.Component {
                 </TouchableHighlight>
             </CardFlip>
         );
-    }   
+    }
+
+
+
+
 
     render() {
         const { slider1ActiveSlide } = this.state;
+
         return (
+
             <Container>
                 <View style={styles.container}>
                     <ImageBackground
@@ -275,6 +279,7 @@ export default class PaymentScreen extends React.Component {
 
                 </View>
             </Container>
+
         );
     }
 }
@@ -412,7 +417,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginLeft: 5,
         marginRight: 5,
+        height: 40
     }
-
-
 });

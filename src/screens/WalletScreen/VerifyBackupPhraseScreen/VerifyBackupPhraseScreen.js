@@ -153,18 +153,18 @@ export default class VerifyBackupPhraseScreen extends React.Component {
             this.setState({ verifyNumanic: temp }, function () {
                 if (JSON.stringify(this.state.verifyNumanic) === JSON.stringify(this.state.verifyNumanicValues)) {
                     Toast.show('Thanks', Toast.SHORT);
-                    const actionToDispatch = StackActions.reset({
-                        index: 0,
-                        key: null,
-                        actions: [NavigationActions.navigate({ routeName: 'TabbarBottom' })],
-                    });
-                    this.props.navigation.dispatch(actionToDispatch);
-                    try {
-                        AsyncStorage.setItem("@loadingPage:key", "Home");
-                        AsyncStorage.setItem("@signedPage:key", "Home");
-                    } catch (error) {
-                        // Error saving data
-                    }
+                    // const actionToDispatch = StackActions.reset({
+                    //     index: 0,
+                    //     key: null,
+                    //     actions: [NavigationActions.navigate({ routeName: 'TabbarBottom' })],
+                    // });
+                    // this.props.navigation.dispatch(actionToDispatch);
+                    // try {
+                    //     AsyncStorage.setItem("@loadingPage:key", "Home");
+                    //     AsyncStorage.setItem("@signedPage:key", "Home");
+                    // } catch (error) {
+                    //     // Error saving data
+                    // }
                 }
                 else {
                     Toast.show('Invalid order.Try again!', Toast.SHORT);
@@ -181,7 +181,7 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                     <View style={styles.viewTitle}>
                         <Image
                             style={styles.backupImg}
-                            resizeMode='contain'   
+                            resizeMode='contain'
                             source={images.verifyBackupPhraseScreen.verifyBackupPhraseLogo}
                         />
                         <Text style={styles.desc}>Tap the words to put them next to each other in the correct order.</Text>

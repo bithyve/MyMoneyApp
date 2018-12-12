@@ -10,7 +10,10 @@ import React, { Component } from 'react';
 import { AsyncStorage, AppState } from 'react-native';
 import { createRootNavigator } from "./src/navigation/Router";
 import { createAppContainer } from "react-navigation";
-import PasswordGestureScreen from "./src/screens/PasswordGestureScreen/PasswordGestureScreen"
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+
+  
 
 import { colors } from './src/constants/Constants'
 
@@ -19,7 +22,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       signedIn: true,
-      loadingPage: 'Password',
+      loadingPage: 'OnBoarding',
       appState: AppState.currentState
     };
     console.disableYellowBox = true;
@@ -31,28 +34,29 @@ export default class App extends Component {
     this.retrieveData();
   }
 
-  componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
+  // componentDidMount() {
+  //   AppState.addEventListener('change', this._handleAppStateChange);
+  //loaderHandler.showLoader("Loading");
+  // }
 
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
-  }
+  // componentWillUnmount() {
+  //   AppState.removeEventListener('change', this._handleAppStateChange);
+  // }
 
   //TODO: Fun RetriveData 
 
   retrieveData = async () => {
     try {
       var value = await AsyncStorage.getItem('@loadingPage:key');
-      console.log('app value =' + value);
+      console.log('loading page = ' + value);
       if (value == "Password") {
         this.setState({
-          loadingPage: 'Password'
+          signedIn: false
         });
       }
-      else if (value == "Home") {
+      else if (value == "TabbarBottom") {
         this.setState({
-          signedIn: false
+          loadingPage: 'TabbarBottom'
         });
       }
       else {
@@ -68,23 +72,23 @@ export default class App extends Component {
 
   //TODO: App Check forgound,backgound,active
 
-  _handleAppStateChange = async  (nextAppState) => {
+  _handleAppStateChange = async (nextAppState) => {
     //if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       try {
         var value = await AsyncStorage.getItem('@loadingPage:key');
         console.log('forgount value =' + value);
         if (value == "Home") {
-          this.setState({  
+          this.setState({
             signedIn: false
           });
-          AsyncStorage.setItem("@signedPage:key", "Home");   
+          AsyncStorage.setItem("@signedPage:key", "Home");
         }
         AsyncStorage.setItem("@loadingPage:key", "Password");
       } catch (error) {
         // Error saving data
-      }   
-    }  
+      }
+    }
     this.setState({ appState: nextAppState });
   }
 
@@ -92,9 +96,9 @@ export default class App extends Component {
 
   render() {
     const { signedIn } = this.state;
-    console.log('stage and page name = ' + this.state.signedIn, this.state.loadingPage)
     const Layout = createRootNavigator(signedIn, this.state.loadingPage);
     const AppContainer = createAppContainer(Layout);
+    // <BusyIndicator />
     return <AppContainer />;
   }
 }

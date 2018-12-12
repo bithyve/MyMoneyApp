@@ -1,4 +1,4 @@
-//bottom button
+//02/12/2018   bottom button
 
        <View style={styles.viewContinueBtn}>
                         <Button

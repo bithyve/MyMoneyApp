@@ -60,7 +60,7 @@ var apiary = {
 //Local Database
 var localDB = {
     dbName: 'MyMoney.db',
-    tableName: {   
+    tableName: {
         tblUserDetials: 'tblUserDetails',
         tblWallets: 'tblWallets'
     }
