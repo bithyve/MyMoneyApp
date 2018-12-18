@@ -71,12 +71,12 @@ class DrawerScreen extends Component {
 
     }
 
-    render() {
+    render() {   
         return (
             <Container>
                 <ImageBackground
-                    source={images.appBackgound}   
-                    style={styles.container}
+                    source={images.slideMenuIcon}   
+                    style={styles.container}  
                 >
                     <View style={styles.viewHeading}>
                         <Image style={styles.userProfileIcon} source={require('../../../assets/images/developer/anantTapadia.png')} />

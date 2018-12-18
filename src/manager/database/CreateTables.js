@@ -18,7 +18,7 @@ export default class CreateTables extends Component {
         db.transaction(function (txn) {
             //txn.executeSql('DROP TABLE IF EXISTS ' + localDB.tableName.tblLogin, []);  
             txn.executeSql('CREATE TABLE IF NOT EXISTS ' + localDB.tableName.tblUserDetials + ' (id  INTEGER PRIMARY KEY AUTOINCREMENT,date TEXT,firstName TEXT,lastName TEXT,email TEXT,country TEXT,mobileNo TEXT)', []);
-            txn.executeSql('CREATE TABLE IF NOT EXISTS ' + localDB.tableName.tblWallets + ' (id  INTEGER PRIMARY KEY AUTOINCREMENT,date TEXT,mnemonic TEXT,keypair TEXT,address TEXT)', []);
+            txn.executeSql('CREATE TABLE IF NOT EXISTS ' + localDB.tableName.tblWallets + ' (id  INTEGER PRIMARY KEY AUTOINCREMENT,date TEXT,mnemonic TEXT,privateKey TEXT,address TEXT)', []);
             console.log('create database.');
         });
     }

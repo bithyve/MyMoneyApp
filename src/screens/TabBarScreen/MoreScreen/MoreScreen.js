@@ -46,7 +46,7 @@ export default class MoreScreen extends React.Component {
        // loaderHandler.showLoader("Loading");
         this.props.navigation.push('BackupPhraseScreen');
     }
-
+  
 
     render() {
         return (

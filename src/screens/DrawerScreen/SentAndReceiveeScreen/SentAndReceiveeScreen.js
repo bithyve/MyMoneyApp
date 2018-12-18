@@ -12,14 +12,101 @@ import {
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Card, CardItem } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-       
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+
+
+
+
+
+
 
 //TODO: Custome Pages
-import { colors, images } from "../../../constants/Constants";
+import { colors, images, localDB } from "../../../constants/Constants";
+import SQLite from "react-native-sqlite-storage";
+var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
+
+//TODO: Wallets    
+var walletService = require('../../../bitcoin/services/wallet.js');
 
 
 export default class SentAndReceiveeScreen extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {
+            addressKey: '',
+            privateKey: '',
+            finalBal: 'Final Balance',
+            totalRec: 'Total Recieved',
+        }
+        this.getLocalDBAddress();
+        loaderHandler.showLoader("Loading");
+        setTimeout(() => {
+            this.getAddressBal();
+        }, 100);
+    }   
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    getLocalDBAddress() {
+        db.transaction(tx => {
+            tx.executeSql(
+                "SELECT * FROM " + localDB.tableName.tblWallets,
+                [],
+                (tx, results) => {
+                    // Get rows with Web SQL Database spec compliance.
+                    var len = results.rows.length;
+                    var addressValue;
+                    var privateKeyValue;
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let row = results.rows.item(i);
+                            this.addressValues = row.address;
+                            addressValue = row.address;
+                            privateKeyValue = row.privateKey;
+                        }
+
+                        console.log(addressValue);
+
+                        this.setState({
+                            addressKey: addressValue,
+                            privateKey: privateKeyValue
+                        });
+                    } else {
+                        Alert.alert('Address not found!!');
+                    }
+                }
+            );
+        });
+    }
+
+    async getAddressBal() {
+        if (this.state.addressKey != '') {
+            const bal = await walletService.getBalance(this.state.addressKey);
+
+            this.setState({
+                finalBal: 'Final Balance: ' + bal.final_balance / 10e8,
+                totalRec: 'Total Recieved: ' + bal.total_received / 10e8
+            });
+            loaderHandler.hideLoader();
+        }
+    }
+
     render() {
         return (
             <Container>
@@ -27,17 +114,17 @@ export default class SentAndReceiveeScreen extends React.Component {
                     source={images.appBackgound}
                     style={styles.container}
                 >
-                    <Header transparent style={{backgroundColor:colors.appColor}}>
+                    <Header transparent style={{ backgroundColor: colors.appColor }}>
                         <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
                             </Button>
                         </Left>
-                        <Body>   
+                        <Body>
                             <Title>My Money</Title>
-                        </Body>  
-                    </Header>  
-                    <Content padder>   
+                        </Body>
+                    </Header>
+                    <Content padder>
                         <Card style={styles.cardSentandRec}>
                             <CardItem>
                                 <View style={styles.viewAppIcon}>
@@ -47,20 +134,21 @@ export default class SentAndReceiveeScreen extends React.Component {
                                         source={images.appIcon}
                                     />
                                     <View style={styles.viewInline}>
-                                        <Text style={styles.txtBal}>0.00 Test</Text>
-                                        <Text style={styles.txtExcRate}>  ($0.00)</Text>
+                                        <Text style={styles.txtBal}> {this.state.finalBal}</Text>
+                                        <Text style={styles.txtExcRate}> {this.state.totalRec}</Text>
                                     </View>
                                 </View>
                             </CardItem>
                             <CardItem footer>
-                                <View style={styles.viewButtonSaveRec}></View>   
-                                <Button style={styles.btnSentAndRec}  onPress={() => this.props.navigation.push('SentMoneyScreen')} ><Text style={styles.txtButtonTitle}> SEND </Text></Button>
-                                <Button style={styles.btnSentAndRec}  onPress={() => this.props.navigation.push('ReceiveMoneyScreen')} ><Text style={styles.txtButtonTitle}> RECEIVE </Text></Button>
+                                <View style={styles.viewButtonSaveRec}></View>
+                                <Button style={styles.btnSentAndRec} onPress={() => this.props.navigation.push('SentMoneyScreen', { address: this.state.addressKey, privateKey: this.state.privateKey })} ><Text style={styles.txtButtonTitle}> SEND </Text></Button>
+                                <Button style={styles.btnSentAndRec} onPress={() => this.props.navigation.push('ReceiveMoneyScreen', { address: this.state.addressKey })} ><Text style={styles.txtButtonTitle}> RECEIVE </Text></Button>
                             </CardItem>
                         </Card>
                     </Content>
 
                 </ImageBackground>
+                <BusyIndicator />
             </Container>
         );
     }
@@ -71,7 +159,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-   
+
     viewAppIcon: {
         flex: 1,
         alignItems: 'center',
@@ -85,9 +173,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     viewInline: {
-        flexDirection: 'row',
-       alignItems:'center',
-       marginHorizontal:10,
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginHorizontal: 10,
     },
     txtBal: {
         fontSize: 18

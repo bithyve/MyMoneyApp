@@ -53,7 +53,7 @@ import DrawerScreen from "../screens/DrawerScreen/DrawerScreen/DrawerScreen";
 import SentAndReceiveeScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/SentAndReceiveeScreen";
 import SentMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/SentMoneyScreen/SentMoneyScreen";
 import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/ReceiveMoneyScreen/ReceiveMoneyScreen";
-
+import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/QrcodeScannerScreen/QrcodeScannerScreen";
 
 
 
@@ -150,6 +150,7 @@ const TabNavigator = createBottomTabNavigator({
     screen: PaymentScreen,
     navigationOptions: {
       tabBarLabel: "Payment",
+      drawerLockMode: 'locked-open',
       tabBarIcon: ({ tintColor }) => (
         <Icon name="credit-card" size={20} color={tintColor} />
       )
@@ -201,9 +202,12 @@ const TabNavigator = createBottomTabNavigator({
       style: {
         backgroundColor: colors.appColor,
       },
-    }
+    },
   }
 );
+
+
+
 
 
 //TODO: DrawerNavigator
@@ -212,6 +216,7 @@ const LeftDrawerNavigator = createDrawerNavigator({
     screen: TabNavigator,
     navigationOptions: {
       drawerLabel: 'Home',
+      drawerLockMode: 'locked-open',
       drawerIcon: ({ tintColor }) => <Icon name="home" size={17} />,
 
     }
@@ -229,8 +234,28 @@ const LeftDrawerNavigator = createDrawerNavigator({
         flex: 1,
         paddingTop: 15,
       }
-    }
+    },
+
   });
+
+
+
+
+LeftDrawerNavigator.navigationOptions = ({ navigation }) => {
+  //console.log('navigator =' + JSON.stringify(navigation));
+  let drawerLockMode = 'unlocked';
+  if (navigation.state.index > 0) {
+    drawerLockMode = 'locked-closed';
+  }
+
+  return {
+    drawerLockMode,
+  };
+};
+
+
+
+
 
 
 
@@ -302,7 +327,10 @@ export const createRootNavigator = (
         SentAndReceiveeScreen: {
           screen: SentAndReceiveeScreen,
           navigationOptions:
-            { header: null }
+          {
+            header: null,
+            drawerLockMode: 'locked-open',
+          }
         },
         SentMoneyScreen: {
           screen: SentMoneyScreen,
@@ -311,6 +339,11 @@ export const createRootNavigator = (
         },
         ReceiveMoneyScreen: {
           screen: ReceiveMoneyScreen,
+          navigationOptions:
+            { header: null }
+        },
+        QrcodeScannerScreen: {
+          screen: QrcodeScannerScreen,
           navigationOptions:
             { header: null }
         },
@@ -343,7 +376,7 @@ export const createRootNavigator = (
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        //initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
+        // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }
     );
   } else {
@@ -357,7 +390,7 @@ export const createRootNavigator = (
         OnBoardingNavigator: {
           screen: OnBoardingRouter,
           navigationOptions:
-            { header: null }  
+            { header: null }
         },
         PasscodeConfirmScreen: {
           screen: PasscodeConfirmScreen,
@@ -414,7 +447,10 @@ export const createRootNavigator = (
         SentAndReceiveeScreen: {
           screen: SentAndReceiveeScreen,
           navigationOptions:
-            { header: null }
+          {
+            header: null,
+            drawerLockMode: 'locked-open',
+          }
         },
         SentMoneyScreen: {
           screen: SentMoneyScreen,
@@ -423,6 +459,11 @@ export const createRootNavigator = (
         },
         ReceiveMoneyScreen: {
           screen: ReceiveMoneyScreen,
+          navigationOptions:
+            { header: null }
+        },
+        QrcodeScannerScreen: {
+          screen: QrcodeScannerScreen,
           navigationOptions:
             { header: null }
         },
@@ -455,8 +496,10 @@ export const createRootNavigator = (
       {
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        //initialRouteName: signedIn ? "PasscodeScreen" : "PasscodeScreen"
+        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }
     );
   }
 };
+
+

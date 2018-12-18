@@ -81,14 +81,14 @@ export default class PasscodeConfirmScreen extends Component {
     }
 
     saveData = async () => {
-        const { mnemonic, address, keyPair } = await createWallet.createWallet();
+        const { mnemonic, address, privateKey } = await createWallet.createWallet();
         this.setState({
             mnemonicValues: mnemonic.split(" "),
         });
         if (this.state.mnemonicValues.length > 0) {
             //mnemonic key
             var mnemonicValue = this.state.mnemonicValues;
-            var keyPairValues = JSON.stringify(keyPair);
+            var priKeyValue = privateKey;
 
             //User Details Data
             var date = new Date().getDate();
@@ -121,11 +121,11 @@ export default class PasscodeConfirmScreen extends Component {
                 txn.executeSql(
                     "INSERT INTO " +
                     localDB.tableName.tblWallets +
-                    " (date,mnemonic,keypair,address) VALUES (:date,:mnemonic,:keypair,:address)",
+                    " (date,mnemonic,privateKey,address) VALUES (:date,:mnemonic,:privateKey,:address)",
                     [
                         fulldate,
                         mnemonicValue,
-                        keyPairValues,
+                        priKeyValue,
                         address
                     ]
                 );

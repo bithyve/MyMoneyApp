@@ -2,7 +2,7 @@ const bitcoinJS = require('bitcoinjs-lib');
 const bip39 = require('bip39');
 const axios = require('axios');
 const coinselect = require('coinselect');
-
+const request = require('superagent');
 
 const { TESTNET, MAINNET } = require('../config').API_URLS;
 const network = require('../config').NETWORK;   
@@ -13,7 +13,7 @@ const getAddress = keyPair => bitcoinJS.payments.p2sh({
     pubkey: keyPair.publicKey,
     network,
   }),
-  network, 
+  network,
 }).address;
 
 const getP2SH = keyPair => bitcoinJS.payments.p2sh({
@@ -37,6 +37,7 @@ const generateHDWallet = (mnemonic, passphrase) => {
   const root = bitcoinJS.bip32.fromSeed(seed, network);
   const child1 = root.derivePath(path);
 
+  const privateKey = child1.toWIF(); 
   const address = getAddress(child1);
 
   console.log(`Mnemonic: ${mnemonic}`);
@@ -45,6 +46,7 @@ const generateHDWallet = (mnemonic, passphrase) => {
   return {
     mnemonic,
     keyPair: child1,
+    privateKey,
     address,
   };
 };
@@ -131,15 +133,15 @@ const generateTestnetKeys = (rng) => {
   return keyPair;
 };
 
-// const fundTestNetAddress = async (address, amount) => request // blockcypher faucet doesn't seems to work (insufficient balance in faucet)
-//   .post(`${TESTNET.FUND.URL}${TESTNET.FUND.TOKEN}`)
-//   .send({ address, amount })
-//   .end((err, res) => {
-//     if (err) {
-//       console.log(err);
-//     }
-//     console.log(res);
-//   });
+const fundTestNetAddress = async (address, amount) => request // blockcypher faucet doesn't seems to work (insufficient balance in faucet)
+  .post(`${TESTNET.FUND.URL}${TESTNET.FUND.TOKEN}`)
+  .send({ address, amount })
+  .end((err, res) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(res);
+  });
 
 // const generate2of2MultiSigAddress = (pubKey1, pubKey2) => {
 //   //2-of-2 multiSig address generator
@@ -222,25 +224,30 @@ const createTransaction = async ({
 }) => {
   const inputUTXOs = await fetchUnspentOutputs(senderAddress);
   const outputUTXOs = [{ address: recipientAddress, value: amount }];
-  const feeRates = await fetchTxnFeeRate();
-  // console.log('Current feeRates:', feeRates);
-  const medium_fee_per_byte = feeRates.medium_fee_per_kb / 1000;
-  const { inputs, outputs, fee } = coinselect(inputUTXOs, outputUTXOs, medium_fee_per_byte);
 
+  const feeRates = await fetchTxnFeeRate();
+  const medium_fee_per_byte = feeRates.medium_fee_per_kb / 1000;
+
+  const { inputs, outputs, fee } = coinselect(inputUTXOs, outputUTXOs, medium_fee_per_byte);
+  
   console.log('-------Transaction--------');
   console.log('\tFee', fee);
   console.log('\tInputs:', inputs);
   console.log('\tOutputs:', outputs);
 
+  console.log('From the config, Network:', network)
   const txb = new bitcoinJS.TransactionBuilder(network);
+  console.log('Transaction object:', txb)
 
   inputs.forEach(input => txb.addInput(input.txId, input.vout));
+  console.log('Outputs:', outputs)
   outputs.forEach((output) => {
     // Outputs may have been added that needs an
     // output address/script (generating change)
     if (!output.address) {
       output.address = senderAddress;
     }
+
     console.log('Added Output:', output);
     txb.addOutput(output.address, output.value);
   });

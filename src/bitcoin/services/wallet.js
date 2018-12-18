@@ -10,7 +10,8 @@ const {
   signTransaction,
   broadcastTransaction,
 } = require('../utilities/bitcoin');
-
+const network = require('../config').NETWORK;   
+const bitcoinJS = require('bitcoinjs-lib');
 
 
 const createWallet = passphrase => createHDWallet(passphrase);
@@ -34,17 +35,22 @@ const createMultiSig = (required, ...pubKeys) => {
 };
 
 const transfer = async ({
-  senderAddress, recipientAddress, amount, keyPair,
+  senderAddress, recipientAddress, amount, privateKey,
 }) => {
-  const balance = await checkBalance(senderAddress);
-  if (balance <= amount) { // logic for fee inclusion can also be accomodated
+  console.log('Transfer',{senderAddress, recipientAddress, amount, keyPair})
+  const {final_balance} = await checkBalance(senderAddress);
+  console.log('Balance:', final_balance)
+  if (final_balance <= amount) { // logic for fee inclusion can also be accomodated
     throw new Error('Insufficient balance');
   }
 
   const txnObj = await createTransaction({ senderAddress, recipientAddress, amount });
   console.log('---- Transaction Created ----');
 
+  const keyPair = bitcoinJS.ECPair.fromWIF(privateKey, network)
+
   const p2sh = getP2SH(keyPair);
+  console.log('P2SH Constructed')
   const txnHash = signTransaction({
     inputs: txnObj.inputs,
     txb: txnObj.txb,

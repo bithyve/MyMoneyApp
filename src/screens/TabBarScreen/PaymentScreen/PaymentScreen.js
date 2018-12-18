@@ -58,9 +58,9 @@ export default class PaymentScreen extends React.Component {
             accountTypeVisible: false,
             isOpen: false,
         }
-
-
     }
+
+  
 
 
     componentWillMount() {
@@ -123,10 +123,13 @@ export default class PaymentScreen extends React.Component {
         return (
 
             <Container>
-                <View style={styles.container}>
+                <Content contentContainerStyle={styles.container}>
                     <ImageBackground
                         source={images.appBackgound}
-                        style={styles.container}
+                        style={styles.backgroundImage}
+                        imageStyle={{
+                            resizeMode: 'cover' // works only here!
+                        }}
                     >
                         <Header transparent>
                             <Left>
@@ -273,11 +276,8 @@ export default class PaymentScreen extends React.Component {
 
                             </DialogContent>
                         </Dialog>
-
-
                     </ImageBackground>
-
-                </View>
+                </Content>
             </Container>
 
         );
@@ -288,6 +288,10 @@ export default class PaymentScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    backgroundImage: {
+        flex: 1,
+        width: '100%'
     },
     sliderView: {
         flex: 3,

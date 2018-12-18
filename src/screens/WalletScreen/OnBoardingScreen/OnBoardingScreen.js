@@ -21,13 +21,9 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { colors, images } from "../../../constants/Constants";
 import CreateTables from "../../../manager/database/CreateTables";
 
-  
-
 
 //TODO: Json Files
 import onBoardingData from "../../../assets/jsonfiles/onBoardingScreen/onBoardingScreen.json";
-
-
 
 const { width, height } = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -40,6 +36,8 @@ const itemHorizontalMargin = wp(0);
 const sliderWidth = viewportWidth;
 const itemWidth = slideWidth + itemHorizontalMargin * 2;
 const SLIDER_1_FIRST_ITEM = 0;
+
+
 
 
 export default class OnBoardingScreen extends React.Component {
@@ -55,21 +53,17 @@ export default class OnBoardingScreen extends React.Component {
         };
     }
 
-
     //TODO: Page Life Cycle
     componentWillMount() {
         this.getOnBoardingData();
-
     }
     
-
     //TODO: Fun getOnBoardingData
     getOnBoardingData() {
         this.setState({
             sliderData: onBoardingData.onBoarding
         });
     }
-
 
     //TODO: Funciton
     click_Import() {
@@ -83,11 +77,7 @@ export default class OnBoardingScreen extends React.Component {
             spinner: true
         });
         this.getWalletsData();
-
     }
-
-
-
 
 
     //TODO: Slider Item View
@@ -108,11 +98,12 @@ export default class OnBoardingScreen extends React.Component {
         );
     }
 
-
     //TODO: func click_signup
     click_SignUP() {
         this.props.navigation.push('UsernameScreen');
     }
+
+
 
     render() {
         const { slider1ActiveSlide } = this.state;
@@ -201,16 +192,13 @@ export default class OnBoardingScreen extends React.Component {
     }
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#ffffff"
     },
-
     viewSlider: {
         flex: 8,
-
     },
     slidesView: {
         marginTop: 20,

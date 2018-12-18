@@ -20,13 +20,15 @@ var errorValidationMessage = {
 var colors = {
     appColor: "#F5951D",
     black: "#000000"
-}
+}  
 
 const assetsImages = '../assets/images/';
-
+  
 var images = {
-    appBackgound: require(assetsImages + 'icon/mainBackgoundImage.png'),
+   // appBackgound: require(assetsImages + 'icon/mainBackgoundImage.png'),
+    appBackgound: require(assetsImages + 'icon/slideMenuImage.jpg'),
     appIcon: require(assetsImages + 'appLogo.png'),
+    slideMenuIcon : require(assetsImages + 'icon/slideMenuImage.jpg'),
     onBoardingScreen: {
         cardSideBitcon: require(assetsImages + 'onBoardingScreen/bitcoin.png'),
         cardSideBitcon1: require(assetsImages + 'onBoardingScreen/bitcoin1.png')

@@ -23,7 +23,16 @@ export default class ReceiveMoneyScreen extends React.Component {
     constructor() {
         super();
         this.state = ({
-            address: '4asdf654fads12321dsaf54cc',
+            address: '',
+        });
+    }
+
+
+
+    componentWillMount() {
+        const { navigation } = this.props;
+        this.setState({
+            address: navigation.getParam('address')
         });
     }
 
@@ -88,7 +97,9 @@ const styles = StyleSheet.create({
     },
     txtBarcode: {
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
+        fontSize: 16,  
+        textAlign: 'center'
     },
     btnCopy: {
         backgroundColor: colors.appColor
