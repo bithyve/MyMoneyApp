@@ -2,7 +2,7 @@
 
 My Money App Alpha Release
 
-#System Environment
+# System Environment
 
 # Instructions
 
