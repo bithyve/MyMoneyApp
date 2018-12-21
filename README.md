@@ -229,8 +229,7 @@ rn-nodeify --install --hack<br />
 
 # Issue (Adnroid + ios)
 
-1.
-<img src="https://github.com/thecryptobee/MyMoneyApp/blob/master/src/assets/issuesImages/images/busyIndicatorIssue.PNG" width="200" height="300">
+<img src="https://github.com/thecryptobee/MyMoneyApp/blob/master/src/assets/issuesImages/images/busyIndicatorIssue.PNG" width="300" height="400">
 
 # Issue (Android)
 
