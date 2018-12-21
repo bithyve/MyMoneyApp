@@ -6,10 +6,10 @@ My Money App Alpha Release
 
 ### Step 1:(NodeJS)
 
-Please check nodejs environment
-npm -v
-(if not set to donload nodejs setup and install )
-download link (always use recommended for most use):https://nodejs.org/en/
+Please check nodejs environment<br />
+npm -v<br />
+(if not set to donload nodejs setup and install )<br />
+download link (always use recommended for most use):https://nodejs.org/en/<br />
 
 ### Step 2:(React-Native)
 
