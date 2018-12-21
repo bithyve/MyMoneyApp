@@ -227,9 +227,144 @@ rn-nodeify --install --hack<br />
 1.react-native run-android and see console(react-native log-android)<br />
 1.react-native run-ios and see console(react-native log-ios)<br />
 
+## ios (info.plist)
+
+```
+<key>NSCameraUsageDescription</key>
+<string>Your message to user when the camera is accessed for the first time</string>
+
+  <!-- Include this only if you are planning to use the camera roll -->
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Your message to user when the photo library is accessed for the first time</string>
+
+  <!-- Include this only if you are planning to use the microphone for video recording -->
+
+<key>NSMicrophoneUsageDescription</key>
+<string>Your message to user when the microphone is accessed for the first time</string>
+
+  <!-- Include this only if you are planning to use the camera roll -->
+
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>Your message to user when the photo library is accessed for the first time</string>
+```
+
+## android (settings.gradle , app/build.gradle and app/src/main/java/com/mymoney/MainApplication.java)
+
+1.settings.gradel
+
+```
+rootProject.name = 'MyMoney'
+include ':react-native-vector-icons'
+project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
+include ':react-native-udp'
+project(':react-native-udp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-udp/android')
+include ':react-native-tcp'
+project(':react-native-tcp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-tcp/android')
+include ':react-native-splash-screen'
+project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android')
+include ':react-native-spinkit'
+project(':react-native-spinkit').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-spinkit/android')
+include ':react-native-share'
+project(':react-native-share').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-share/android')
+include ':react-native-randombytes'
+project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
+include ':react-native-os'
+project(':react-native-os').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-os/android')
+include ':react-native-material-kit'
+project(':react-native-material-kit').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-material-kit/android')
+include ':react-native-gesture-handler'
+project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
+include ':react-native-device-info'
+project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
+include ':react-native-camera'
+project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
+include ':react-native-sqlite-storage'
+project(':react-native-sqlite-storage').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sqlite-storage/src/android')
+
+include ':app'
+```
+
+2.app/build.gradle
+
+```
+dependencies {
+compile project(':react-native-vector-icons')
+compile project(':react-native-udp')
+compile project(':react-native-tcp')
+compile project(':react-native-splash-screen')
+compile project(':react-native-spinkit')
+compile project(':react-native-share')
+compile project(':react-native-randombytes')
+compile project(':react-native-os')
+compile project(':react-native-material-kit')
+compile project(':react-native-gesture-handler')
+compile project(':react-native-fs')
+compile project(':react-native-device-info')
+compile project(':react-native-camera')
+compile project(':react-native-sqlite-storage')
+implementation fileTree(dir: "libs", include: ["*.jar"])
+implementation "com.android.support:appcompat-v7:\${rootProject.ext.supportLibVersion}"
+implementation "com.facebook.react:react-native:+" // From node_modules
+}
+```
+
+3.app/src/main/java/com/mymoney/MainApplication.java
+
+```
+package com.mymoney;
+
+import android.app.Application;
+
+import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.tradle.react.UdpSocketsModule;
+import com.peel.react.TcpSocketsModule;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import cl.json.RNSharePackage;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.peel.react.rnos.RNOSModule;
+import com.github.xinthink.rnmk.ReactMaterialKitPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.rnfs.RNFSPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import org.reactnative.camera.RNCameraPackage;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.facebook.soloader.SoLoader;
+import org.pgsqlite.SQLitePluginPackage;
+import java.util.Arrays;
+import java.util.List;
+
+@Override
+protected List<ReactPackage> getPackages() {
+return Arrays.<ReactPackage>asList(
+new MainReactPackage(),
+new VectorIconsPackage(),
+new UdpSocketsModule(),
+new TcpSocketsModule(),
+new SplashScreenReactPackage(),
+new RNSpinkitPackage(),
+new RNSharePackage(),
+new RandomBytesPackage(),
+new RNOSModule(),
+new ReactMaterialKitPackage(),
+new RNGestureHandlerPackage(),
+new RNFSPackage(),
+new RNDeviceInfo(),
+new SQLitePluginPackage(),
+new RNCameraPackage()
+);
+}
+```
+
 # Issue (Adnroid + ios)
 
-<img src="https://github.com/thecryptobee/MyMoneyApp/blob/master/src/assets/issuesImages/images/busyIndicatorIssue.PNG" width="270" height="400"><br/>
+<img src="https://github.com/thecryptobee/MyMoneyApp/blob/master/src/assets/issuesImages/images/busyIndicatorIssue.PNG" width="270" height="420"><br/>
 Update file
 /node_modules/react-native-busy-indicator/index.js
 
