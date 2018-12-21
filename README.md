@@ -8,7 +8,7 @@ My Money App Alpha Release
 
 Please check nodejs environment<br />
 npm -v<br />
-(if not set to donload nodejs setup and install )<br />
+(if not set to download nodejs setup and install )<br />
 download link (always use recommended for most use):https://nodejs.org/en/<br />
 
 ### Step 2:(React-Native)
@@ -226,6 +226,15 @@ rn-nodeify --install --hack<br />
 2)with ide<br />
 1.react-native run-android and see console(react-native log-android)<br />
 1.react-native run-ios and see console(react-native log-ios)<br />
+
+### Step 6 ======> imp step: any time github project pull or development time remove node_modules then this step apply <========
+
+1.project inside rm -rf node_modules
+2.In package.json remove (browser{},react-native{})
+3.Delete file shim.js
+======> imp <======
+4.First rn-nodeify --install --hack (then)
+5.npm install (then run app)
 
 ## ios (info.plist)
 
