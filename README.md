@@ -30,6 +30,7 @@ Check /Users/..(bithyve)/ folder inside<br />
 
 2.Create new pacakge.json file and paste inside file code<br />
 Two method solve 1.<br />
+
 ```javascript
 {
 "dependencies": {
@@ -93,11 +94,13 @@ Two method solve 1.<br />
 }
 }
 ```
+
 <br />
 then<br />
 npm install<br />
 
 2.<br />
+
 ```javascript
 {
 "dependencies": {
@@ -109,6 +112,7 @@ npm install<br />
 }
 }
 ```
+
 <br />
 then<br />
 rn-nodeify --install --hack<br />
@@ -123,6 +127,7 @@ rn-nodeify --install --hack<br />
 ### Step 5 (Project inside cmd)
 
 1.First check package.json correct format like<br />
+
 ```javascript
 {
 "name": "MyMoney",
@@ -202,13 +207,15 @@ rn-nodeify --install --hack<br />
 }
 }
 ```
+
 <br />
 
 2.Delete package-lock.json,yarn.lock,node_modules folder<br />
-3.npm install(if runtime any issue show like main.startWith then use Step 3 method 2)<br />
-4.If no any issue then<br />
-5.react-native eject (it use for create fresh android and ios project)<br />
-6.react-native link (it use for all lib bind to android and ios project like(sqlite,camera,etc....))<br />
+3.npm cache clear<br/>
+4.npm install(if runtime any issue show like main.startWith then use Step 3 method 2)<br />
+5.If no any issue then<br />
+6.react-native eject (it use for create fresh android and ios project)<br />
+7.react-native link (it use for all lib bind to android and ios project like(sqlite,camera,etc....))<br />
 
 ========> Two way run android and ios project with ide without ide<br />
 1)With ide<br />
@@ -220,9 +227,14 @@ rn-nodeify --install --hack<br />
 1.react-native run-android and see console(react-native log-android)<br />
 1.react-native run-ios and see console(react-native log-ios)<br />
 
-# Issue
+# Issue (Adnroid + ios)
 
-1.Working<br />
+1.
+![alt text]()
+
+# Issue (Android)
+
+#Issue (IOS)
 
 # Instructions
 
