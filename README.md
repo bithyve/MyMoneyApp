@@ -30,6 +30,7 @@ Check /Users/..(bithyve)/ folder inside<br />
 
 2.Create new pacakge.json file and paste inside file code<br />
 Two method solve 1.<br />
+```javascript
 {
 "dependencies": {
 "react": "16.6.3",
@@ -90,7 +91,9 @@ Two method solve 1.<br />
 "vm": "vm-browserify",
 "tls": false
 }
-}<br />
+}
+```
+<br />
 then<br />
 npm install<br />
 
