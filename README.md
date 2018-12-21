@@ -98,6 +98,7 @@ then<br />
 npm install<br />
 
 2.<br />
+```javascript
 {
 "dependencies": {
 "react": "16.6.3",
@@ -106,7 +107,9 @@ npm install<br />
 "repository": {
 "private": true
 }
-}<br />
+}
+```
+<br />
 then<br />
 rn-nodeify --install --hack<br />
 (cmd run then please all file format like step 1)<br />
@@ -120,6 +123,7 @@ rn-nodeify --install --hack<br />
 ### Step 5 (Project inside cmd)
 
 1.First check package.json correct format like<br />
+```javascript
 {
 "name": "MyMoney",
 "version": "0.0.1",
@@ -196,7 +200,9 @@ rn-nodeify --install --hack<br />
 "vm": "vm-browserify",
 "tls": false
 }
-}<br />
+}
+```
+<br />
 
 2.Delete package-lock.json,yarn.lock,node_modules folder<br />
 3.npm install(if runtime any issue show like main.startWith then use Step 3 method 2)<br />
