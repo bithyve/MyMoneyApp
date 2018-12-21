@@ -229,12 +229,12 @@ rn-nodeify --install --hack<br />
 
 ### Step 6 ======> imp step: any time github project pull or development time remove node_modules then this step apply <========
 
-1.project inside rm -rf node_modules
-2.In package.json remove (browser{},react-native{})
-3.Delete file shim.js
-======> imp <======
-4.First rn-nodeify --install --hack (then)
-5.npm install (then run app)
+1.project inside rm -rf node_modules<br/>
+2.In package.json remove (browser{},react-native{})<br/>
+3.Delete file shim.js<br/>
+======> imp <======<br/>
+4.First rn-nodeify --install --hack (then)<br/>
+5.npm install (then run app)<br/>
 
 ## ios (info.plist)
 
