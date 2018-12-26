@@ -50,8 +50,12 @@ export default class NotificationScreen extends React.Component {
     render() {
         return (
             <Container>
-                <View style={styles.container}>
-                    <Header transparent style={{ backgroundColor: colors.appColor }}>
+                <ImageBackground
+                    source={images.appBackgound}
+                    style={styles.container}
+                >
+
+                    <Header transparent>
                         <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
@@ -59,38 +63,41 @@ export default class NotificationScreen extends React.Component {
                         </Left>
 
                         <Body>
-                            <Title>Notification</Title>
+                            <Title adjustsFontSizeToFit={true}
+                                numberOfLines={1} style={styles.titleUserName}>Notification</Title>
                         </Body>
+                        <Right></Right>
                     </Header>
-
-                    <View style={styles.notificaitonListView}>
-                        <FlatList
-                            data={this.state.data}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item }) =>
-                                <List>
-                                    <ListItem thumbnail>
-                                        <Left>   
-                                            <Image    
-                                                style={styles.notificationIcon}
-                                                source={{ uri: item.icon }}   
-                                            />   
-                                        </Left>   
-                                        <Body>
-                                            <Text style={styles.txtTransTitle}>{item.title}</Text>
-                                        </Body>
-                                    </ListItem>
-                                </List>
-                            }
-                            keyExtractor={item => item.id}
-                        />
-                    </View>
-
-
+                    <Content style={styles.container}>
+                        <View style={styles.notificaitonListView}>
+                            <FlatList
+                                data={this.state.data}
+                                showsVerticalScrollIndicator={false}
+                                renderItem={({ item }) =>
+                                    <List>
+                                        <ListItem thumbnail>
+                                            <Left>
+                                                <Image
+                                                    style={styles.notificationIcon}
+                                                    source={{ uri: item.icon }}
+                                                />
+                                            </Left>
+                                            <Body>
+                                                <Text style={styles.txtTransTitle}>{item.title}</Text>
+                                            </Body>
+                                        </ListItem>
+                                    </List>
+                                }
+                                keyExtractor={item => item.id}
+                            />
+                        </View>
 
 
 
-                </View>
+
+
+                    </Content>
+                </ImageBackground>
             </Container>
         );
     }
@@ -100,7 +107,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    },   
+    },
+    titleUserName: {
+        color: "#ffffff"
+    },
     notificationIcon: {
         height: 50,
         width: 50,

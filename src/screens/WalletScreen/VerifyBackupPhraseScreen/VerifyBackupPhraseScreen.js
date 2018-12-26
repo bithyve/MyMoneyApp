@@ -9,7 +9,8 @@ import {
     Alert,
     StatusBar,
     TouchableOpacity,
-    AsyncStorage
+    AsyncStorage,
+    ImageBackground
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Footer, CardItem } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -176,8 +177,25 @@ export default class VerifyBackupPhraseScreen extends React.Component {
 
     render() {
         return (
-            <Container style={styles.container}>
-                <Content>
+            <Container>
+              <ImageBackground
+                    source={images.appBackgound}
+                    style={styles.container}
+                >
+                   <Header transparent>
+                            <Left>
+                                <Button transparent onPress={() => this.props.navigation.goBack()}>
+                                    <Icon name='chevron-left' size={25} color="#ffffff" />
+                                </Button>
+                            </Left>
+
+                            <Body>
+                                <Title adjustsFontSizeToFit={true}
+                                    numberOfLines={1} style={styles.titleUserName}>Verification</Title>
+                            </Body>
+                            <Right></Right>
+                        </Header>
+                        <Content contentContainerStyle={styles.container}>
                     <View style={styles.viewTitle}>
                         <Image
                             style={styles.backupImg}
@@ -187,7 +205,7 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                         <Text style={styles.desc}>Tap the words to put them next to each other in the correct order.</Text>
 
                     </View>
-                    <View style={styles.viewNumanicValue}>
+                    <View style={styles.viewNumanicValueConfi}>
                         <GridView
                             itemDimension={100}
                             items={this.state.verifyNumanicValues}
@@ -202,7 +220,7 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                         />
 
                     </View>
-                    <View>
+                    <View style={styles.viewNumanicValue}>
                         <GridView
                             itemDimension={100}
                             items={this.state.numanicValues}
@@ -222,6 +240,7 @@ export default class VerifyBackupPhraseScreen extends React.Component {
                         <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>DONE</Text>
                     </Button>
                 </Footer>
+                </ImageBackground>
             </Container>
         );
     }
@@ -232,22 +251,31 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
     },
+    titleUserName: {
+        color: "#ffffff"
+    },
     viewTitle: {
-        flex: 2,
+        flex: 1,
         alignItems: 'center',
         marginTop: 20,
     },
     backupImg: {
-        marginBottom: 20
+        marginBottom: 10
     },
     desc: {
         textAlign: 'center',
         color: 'gray',
     },
     //Numanic Values show
-    viewNumanicValue: {
+    viewNumanicValueConfi: {
+        flex:1,
         backgroundColor: '#ECF0F4',
-        marginTop: 30,
+        flexDirection: 'row',
+        flexWrap: "wrap",
+        padding: 10,
+    },
+    viewNumanicValue:{
+        flex:1,
         flexDirection: 'row',
         flexWrap: "wrap",
         padding: 10,
@@ -286,5 +314,5 @@ const styles = StyleSheet.create({
     //Fotter
     footer: {
         backgroundColor: "transparent",
-    }
+    } 
 });

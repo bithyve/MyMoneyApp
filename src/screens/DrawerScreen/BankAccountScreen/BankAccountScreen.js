@@ -24,17 +24,18 @@ export default class BankAccountScreen extends React.Component {
                     style={styles.container}
                 >
 
-                    <Header transparent style={{ backgroundColor: colors.appColor }}>
-                    <Left>
+                    <Header transparent >
+                        <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
                             </Button>
                         </Left>
 
                         <Body>
-                            <Title>Bank Account</Title>
+                            <Title adjustsFontSizeToFit={true}
+                                numberOfLines={1} style={styles.titleUserName}>Bank Account</Title>
                         </Body>
-                       
+                        <Right></Right>
                     </Header>
                     <Content>
                         <Text>
@@ -52,5 +53,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    }
+    },
+    titleUserName: {
+        color: "#ffffff"
+    },
 });

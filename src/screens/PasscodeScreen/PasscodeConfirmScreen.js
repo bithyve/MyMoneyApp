@@ -17,18 +17,16 @@ import CodePin from 'react-native-pin-code';
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
 
-
-
 import renderIf from "../../constants/validation/renderIf";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../constants/Constants";
-import SQLite from "react-native-sqlite-storage";
-var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
+var dbOpration = require("../../manager/database/DBOpration");
 
 //TODO: Wallets    
 var createWallet = require('../../bitcoin/services/wallet.js');
 const { height, width } = Dimensions.get('window');
+
 
 
 export default class PasscodeConfirmScreen extends Component {
@@ -80,6 +78,7 @@ export default class PasscodeConfirmScreen extends Component {
 
     }
 
+
     saveData = async () => {
         const { mnemonic, address, privateKey } = await createWallet.createWallet();
         this.setState({
@@ -89,7 +88,6 @@ export default class PasscodeConfirmScreen extends Component {
             //mnemonic key
             var mnemonicValue = this.state.mnemonicValues;
             var priKeyValue = privateKey;
-
             //User Details Data
             var date = new Date().getDate();
             var month = new Date().getMonth() + 1;
@@ -102,56 +100,31 @@ export default class PasscodeConfirmScreen extends Component {
             const email = this.state.email;
             const country = this.state.countryName;
             const mobileNumber = this.state.mobileNo;
-            db.transaction(function (txn) {
-                txn.executeSql(
-                    "INSERT INTO " +
-                    localDB.tableName.tblUserDetials +
-                    " (date,firstName,lastName,email,country,mobileNo) VALUES (:date,:firstName,:lastName,:email,:country,:mobileNo)",
-                    [
-                        fulldate,
-                        firstName,
-                        lastName,
-                        email,
-                        country,
-                        mobileNumber,
-                    ]
-                );
-            });
-            db.transaction(function (txn) {
-                txn.executeSql(
-                    "INSERT INTO " +
-                    localDB.tableName.tblWallets +
-                    " (date,mnemonic,privateKey,address) VALUES (:date,:mnemonic,:privateKey,:address)",
-                    [
-                        fulldate,
-                        mnemonicValue,
-                        priKeyValue,
-                        address
-                    ]
-                );
-            });
-            this.setState({
-                success: 'Ok!!'
-            });
-            const resetAction = StackActions.reset({
-                index: 0, // <-- currect active route from actions array
-                key: null,
-                actions: [
-                    NavigationActions.navigate({ routeName: 'TabbarBottom' }),
-                ],
-            });
-            this.props.navigation.dispatch(resetAction);
-            try {
-                console.log('enter pincode = ' + this.state.pincode);
-                AsyncStorage.setItem("@Passcode:key", this.state.pincode);
-                AsyncStorage.setItem("@loadingPage:key", "Password");
-            } catch (error) {
-                // Error saving data
+            const resultInsertUserDetails = await dbOpration.insertUserDetailsData(localDB.tableName.tblUserDetials, fulldate, firstName, lastName, email, country, mobileNumber);
+            if (resultInsertUserDetails) {
+                const resultCreateWallet = await dbOpration.insertWalletAndCreateAccountType(localDB.tableName.tblWallets, localDB.tableName.tblAccountsType, fulldate, mnemonicValue, priKeyValue, address);
+                if (resultCreateWallet) {
+                    this.setState({
+                        success: 'Ok!!'
+                    });
+                    const resetAction = StackActions.reset({
+                        index: 0, // <-- currect active route from actions array
+                        key: null,
+                        actions: [
+                            NavigationActions.navigate({ routeName: 'TabbarBottom' }),
+                        ],
+                    });
+                    this.props.navigation.dispatch(resetAction);
+                    try {
+                        AsyncStorage.setItem("@Passcode:key", this.state.pincode);
+                        AsyncStorage.setItem("@loadingPage:key", "Password");
+                    } catch (error) {
+                        // Error saving data
+                    }
+                }
             }
-            //loaderHandler.hideLoader();
         }
     }
-
 
     render() {
         return (

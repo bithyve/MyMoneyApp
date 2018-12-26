@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "rn-nodeify --install fs,dgram,process,path,console --hack",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc --watch"
   },
   "dependencies": {
     "@tradle/react-native-http": "^2.0.1",
@@ -86,20 +87,21 @@
     "vm-browserify": "0.0.4"
   },
   "devDependencies": {
+    "@types/react": "^16.7.18",
+    "@types/react-native": "^0.57.20",
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.51.0",
-    "react-test-renderer": "16.6.3"
+    "react-native-typescript-transformer": "^1.2.11",
+    "react-test-renderer": "16.6.3",
+    "typescript": "^3.2.2"
   },
   "jest": {
     "preset": "react-native"
   },
   "react-native": {
-    "console": "console-browserify",
-    "path": "path-browserify",
-    "fs": "react-native-level-fs",
-    "dgram": "react-native-udp",
     "zlib": "browserify-zlib",
+    "console": "console-browserify",
     "constants": "constants-browserify",
     "crypto": "react-native-crypto",
     "dns": "dns.js",
@@ -108,12 +110,15 @@
     "http": "@tradle/react-native-http",
     "https": "https-browserify",
     "os": "react-native-os",
+    "path": "path-browserify",
     "querystring": "querystring-es3",
+    "fs": "react-native-level-fs",
     "_stream_transform": "readable-stream/transform",
     "_stream_readable": "readable-stream/readable",
     "_stream_writable": "readable-stream/writable",
     "_stream_duplex": "readable-stream/duplex",
     "_stream_passthrough": "readable-stream/passthrough",
+    "dgram": "react-native-udp",
     "stream": "stream-browserify",
     "timers": "timers-browserify",
     "tty": "tty-browserify",
@@ -121,11 +126,8 @@
     "tls": false
   },
   "browser": {
-    "console": "console-browserify",
-    "path": "path-browserify",
-    "fs": "react-native-level-fs",
-    "dgram": "react-native-udp",
     "zlib": "browserify-zlib",
+    "console": "console-browserify",
     "constants": "constants-browserify",
     "crypto": "react-native-crypto",
     "dns": "dns.js",
@@ -134,12 +136,15 @@
     "http": "@tradle/react-native-http",
     "https": "https-browserify",
     "os": "react-native-os",
+    "path": "path-browserify",
     "querystring": "querystring-es3",
+    "fs": "react-native-level-fs",
     "_stream_transform": "readable-stream/transform",
     "_stream_readable": "readable-stream/readable",
     "_stream_writable": "readable-stream/writable",
     "_stream_duplex": "readable-stream/duplex",
     "_stream_passthrough": "readable-stream/passthrough",
+    "dgram": "react-native-udp",
     "stream": "stream-browserify",
     "timers": "timers-browserify",
     "tty": "tty-browserify",

@@ -67,7 +67,6 @@ export default class PasswordGestureScreen extends Component {
         } catch (error) {
             console.log(error);
         }
-
     }
 
     onEnd(password) {

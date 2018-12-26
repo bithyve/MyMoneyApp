@@ -10,8 +10,7 @@ import React, { Component } from 'react';
 import { AsyncStorage, AppState } from 'react-native';
 import { createRootNavigator } from "./src/navigation/Router";
 import { createAppContainer } from "react-navigation";
-import BusyIndicator from 'react-native-busy-indicator';
-import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+
 
   
 

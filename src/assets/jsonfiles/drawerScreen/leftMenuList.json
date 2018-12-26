@@ -9,18 +9,11 @@
         },
         {
             "id": 2,
-            "icon": "rupee",   
-            "title": "Sent/Receive",
-            "pageName": "SentAndReceiveeScreen",
-            "desc": "In Regualr Account"
-        },   
-        {
-            "id": 2,
             "icon": "user-circle",
             "title": "Account Settings",
             "pageName": "AccountSettingScreen",
             "desc": "In Regualr Account"
-        },
+        },  
         {
             "id": 3,
             "icon": "cog",

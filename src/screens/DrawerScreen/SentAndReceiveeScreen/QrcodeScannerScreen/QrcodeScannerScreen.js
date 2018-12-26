@@ -38,7 +38,6 @@ export default class QrcodeScannerScreen extends React.Component {
         });
     }
 
-
     onBarCodeRead(res) {
         //this.props.navigation.goBack();
         const { navigation } = this.props;
@@ -46,16 +45,8 @@ export default class QrcodeScannerScreen extends React.Component {
         navigation.state.params.onSelect({ barcode: res.data });
     }
 
-
-   
-
     onReadBarCodeByGalleryFailure() {
         Alert.alert('Note', 'Not found barcode!')
-    }
-
-    //TODO: goBack
-    goBack() {
-        this.props.navigation.goBack();
     }
 
     render() {  

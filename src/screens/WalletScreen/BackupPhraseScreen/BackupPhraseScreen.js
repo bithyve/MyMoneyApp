@@ -11,7 +11,8 @@ import {
     TouchableOpacity,
     Clipboard,
     ToastAndroid,
-    AlertIOS
+    AlertIOS,
+    ImageBackground
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text, Footer } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,7 +35,7 @@ export default class BackupPhraseScreen extends React.Component {
             mnemonicValues: [],
             visible: false
         })
-    }  
+    }
 
     componentWillMount() {
         this.getWalletsData();
@@ -73,39 +74,59 @@ export default class BackupPhraseScreen extends React.Component {
 
         return (
             <Container>
-                <Content contentContainerStyle={styles.container}>
-                    <View style={styles.viewImageAndTitle}>
-                        <Image
-                            style={styles.backupImg}
-                            resizeMode='contain'
-                            source={images.backupPhraseScreen.backupPhraseLogo}
-                        />
-                        <Text style={styles.desc}>These 12 words are they only way to restore your MyMoney App.</Text>
-                        <Text style={styles.desc}>Save them somewhere safe and secret.</Text>
-                    </View>
-                    <View style={styles.viewNumanicValue}>
-                        {textSecurityKey}
+                <ImageBackground
+                    source={images.appBackgound}
+                    style={styles.container}
+                >
+                  
 
-                    </View>
-                    <View>
-                        <Button transparent style={styles.btnCopy} onPress={() => {
-                            Share.open(shareOptions);
-                        }}>
-                            <Text style={{
-                                fontWeight: 'bold', fontSize: 16,
-                                color: '#F5951D'
-                            }}>Copy</Text>
+                        <Header transparent>
+                            <Left>
+                                <Button transparent onPress={() => this.props.navigation.goBack()}>
+                                    <Icon name='chevron-left' size={25} color="#ffffff" />
+                                </Button>
+                            </Left>
+
+                            <Body>
+                                <Title adjustsFontSizeToFit={true}
+                                    numberOfLines={1} style={styles.titleUserName}>Backup Phrase</Title>
+                            </Body>
+                            <Right></Right>
+                        </Header>
+                        <Content contentContainerStyle={styles.container}>
+                        <View style={styles.viewImageAndTitle}>
+                            <Image
+                                style={styles.backupImg}
+                                resizeMode='contain'
+                                source={images.backupPhraseScreen.backupPhraseLogo}
+                            />
+                            <Text style={styles.desc}>These 12 words are they only way to restore your MyMoney App.</Text>
+                            <Text style={styles.desc}>Save them somewhere safe and secret.</Text>
+                        </View>
+                        <View style={styles.viewNumanicValue}>
+                            {textSecurityKey}
+
+                        </View>
+                        <View>
+                            <Button transparent style={styles.btnCopy} onPress={() => {
+                                Share.open(shareOptions);
+                            }}>
+                                <Text style={{
+                                    fontWeight: 'bold', fontSize: 16,
+                                    color: '#F5951D'
+                                }}>Copy</Text>
+                            </Button>
+                        </View>
+                    </Content>
+                    <Footer style={styles.footer}>
+                        <Button style={styles.btnNext} onPress={() => this.props.navigation.push('VerifyBackupPhraseScreen',
+                            {
+                                numanicValues: this.state.mnemonicValues
+                            })}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>NEXT</Text>
                         </Button>
-                    </View>
-                </Content>
-                <Footer style={styles.footer}>
-                    <Button style={styles.btnNext} onPress={() => this.props.navigation.push('VerifyBackupPhraseScreen',
-                        {
-                            numanicValues: this.state.mnemonicValues
-                        })}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>NEXT</Text>
-                    </Button>
-                </Footer>
+                    </Footer>
+                </ImageBackground>
             </Container>
         );
     }
@@ -115,6 +136,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
+    },
+    titleUserName: {
+        color: "#ffffff"
     },
     viewImageAndTitle: {
         flex: 0.6,

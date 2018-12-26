@@ -177,3 +177,14 @@ BusyIndicator.defaultProps = {
 
 module.exports = BusyIndicator;
 
+## Bundle id (ios and android)
+1.ios:com.bithyve.mymoney.staging
+2.android:com.bithyve.mymoney.staging 
+
+
+## Sqlite Database file check (ios and android)
+1.ios(using objective-c):
+NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+NSString *documentsDirectory = [paths objectAtIndex:0];
+NSLog(@"path is %@",documentsDirectory);
+  

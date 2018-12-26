@@ -24,7 +24,7 @@ export default class AccountSettingScreen extends React.Component {
                     style={styles.container}
                 >
 
-                    <Header transparent style={{ backgroundColor: colors.appColor }}>
+                    <Header transparent>
                         <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
@@ -32,9 +32,11 @@ export default class AccountSettingScreen extends React.Component {
                         </Left>
 
                         <Body>
-                            <Title>Account Setting</Title>
+                            <Title adjustsFontSizeToFit={true}
+                                numberOfLines={1} style={styles.titleUserName}>Account Setting</Title>
                         </Body>
-                       
+                        <Right></Right>
+
                     </Header>
                     <Content>
                         <Text>
@@ -52,5 +54,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    }
+    },
+    titleUserName: {
+        color: "#ffffff"
+      },
 });
