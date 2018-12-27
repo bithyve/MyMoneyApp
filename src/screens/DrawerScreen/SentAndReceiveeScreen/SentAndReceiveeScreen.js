@@ -54,7 +54,7 @@ export default class SentAndReceiveeScreen extends React.Component {
   getLocalDBAddress() {
     db.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM " + localDB.tableName.tblWallets,
+        "SELECT * FROM " + localDB.tableName.tblWallet,
         [],
         (tx, results) => {
           // Get rows with Web SQL Database spec compliance.

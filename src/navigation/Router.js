@@ -11,7 +11,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
 
-
 //OnBoarding
 import OnBoardingScreen from "../screens/WalletScreen/OnBoardingScreen/OnBoardingScreen";
 import UsernameScreen from "../screens/UserAccountsScreen/UsernameScreen/UsernameScreen";
@@ -46,6 +45,9 @@ import SentAndReceiveeScreen from "../screens/DrawerScreen/SentAndReceiveeScreen
 import SentMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/SentMoneyScreen/SentMoneyScreen";
 import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/ReceiveMoneyScreen/ReceiveMoneyScreen";
 import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/QrcodeScannerScreen/QrcodeScannerScreen";
+
+import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
+
 
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -95,6 +97,20 @@ const OnBoardingRouter = createStackNavigator(
     initialRouteName: "OnBoarding"
   }
 );
+
+//TODO: Login
+const LoginRouter = createStackNavigator(
+  {
+    Login: {
+      screen: LoginScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "Login"
+  }
+);
+
 
 //TODO: Login
 const LoginRouter = createStackNavigator(
@@ -176,7 +192,7 @@ const TabNavigator = createBottomTabNavigator(
       style: {
         backgroundColor: "#ffffff"
       }
-    }  
+    }
   }
 );
 
@@ -301,7 +317,12 @@ export const createRootNavigator = (
         VerifyBackupPhraseScreen: {
           screen: VerifyBackupPhraseScreen,
           navigationOptions: { header: null }
-        }  
+        },
+        //AccountDetailsScrenn
+        AccountsDetailsScreen: {
+          screen: AccountsDetailsScreen,
+          navigationOptions: { header: null }
+        }
       },
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
@@ -389,7 +410,12 @@ export const createRootNavigator = (
         VerifyBackupPhraseScreen: {
           screen: VerifyBackupPhraseScreen,
           navigationOptions: { header: null }
-        }  
+        },
+        //AccountDetailsScrenn
+        AccountsDetailsScreen: {
+          screen: AccountsDetailsScreen,
+          navigationOptions: { header: null }
+        }
       },
       {
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeScreen"

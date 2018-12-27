@@ -35,13 +35,13 @@ import Dialog, {
   DialogContent,
   DialogButton
 } from "react-native-popup-dialog";
-import { MKTextField, MKColor, mdl } from "react-native-material-kit";
+import BusyIndicator from 'react-native-busy-indicator';
+import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
+
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
-
-
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
 
@@ -77,7 +77,7 @@ export default class PaymentScreen extends React.Component {
     this.state = {
       recentTrans: [],
       accountTypeList: [],
-      accountsList: [],
+      walletsData: [],
       userDetails: [],
       fullName: "",
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
@@ -88,19 +88,50 @@ export default class PaymentScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchUserDetails();
+    this.willFocusSubscription = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        this.fetchUserDetails();
+      }
+    );
+    this.setState({
+      recentTrans: transData.transaction
+    })
   }
 
 
   async fetchUserDetails() {
-    const resultUserDetails = await dbOpration.readTablesData(localDB.tableName.tblUserDetials);
-    const resultAccountTypes = await dbOpration.readTablesData(localDB.tableName.tblAccountsType);
-    this.setState({
-      userDetails: resultUserDetails.temp,
-      fullName: resultUserDetails.temp[0].firstName + ' ' + resultUserDetails.temp[0].lastName,
-      accountTypeList: resultAccountTypes.temp
-    });
+    loaderHandler.showLoader("Loading");
+    const dateTime = Date.now();
+    const lastUpdateDate = Math.floor(dateTime / 1000);
+    const resultUserDetails = await dbOpration.readTablesData(localDB.tableName.tblUser);
+    const resultWallet = await dbOpration.readTablesData(localDB.tableName.tblWallet);
 
+    const bal = await walletService.getBalance(resultWallet.temp[0].address);
+    if (bal) {
+      const resultUpdateTblAccount = await dbOpration.updateTableData(localDB.tableName.tblAccount, bal.final_balance / 1e8, resultWallet.temp[0].address, lastUpdateDate);
+      if (resultUpdateTblAccount) {
+        const resultAccount = await dbOpration.readTablesData(localDB.tableName.tblAccount);
+
+
+        this.setState({
+          userDetails: resultUserDetails.temp,
+          fullName: resultUserDetails.temp[0].firstName + ' ' + resultUserDetails.temp[0].lastName,
+          accountTypeList: resultAccount.temp,
+          walletsData: resultWallet.temp
+        });
+        loaderHandler.hideLoader();
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
+  }
+
+  //TODO: Funciton
+  click_openPopupAccountType() {
+    this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
   }
 
   //TODO: Funciton
@@ -109,13 +140,11 @@ export default class PaymentScreen extends React.Component {
     this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
   }
 
-
-
   _renderItem({ item, index }) {
     return (
-      <View>
-        {renderIf(item.accountType == "UnKnown")(
-          <TouchableHighlight >
+      <View key={"card" + index}>
+        {renderIf(item.idAccountType == "UnKnown")(
+          <TouchableHighlight onPress={this.click_openPopupAccountType}>
             <RkCard style={styles.rkCardUnnown}>
               <Icon
                 name="plus-circle"
@@ -126,11 +155,11 @@ export default class PaymentScreen extends React.Component {
             </RkCard>
           </TouchableHighlight>
         )}
-        {renderIf(item.accountType != "receive")(
-          <TouchableHighlight >
+        {renderIf(item.idAccountType != "receive")(
+          <TouchableHighlight onPress={() => this.props.navigation.push('AccountsDetailsScreen', { data: item, privateKeyJson: this.state.walletsData })}>
             <RkCard style={styles.rkCard}>
               <ImageBackground
-                source={require("../../../assets/images/accountTypesCard/btc-shape.png")}
+                source={images.accounts.saving}
                 style={styles.cardSlideBgImage}
                 borderRadius={10}
                 imageStyle={{
@@ -139,10 +168,10 @@ export default class PaymentScreen extends React.Component {
               >
                 <View rkCardContent style={styles.cardHeader}>
                   <Text style={[styles.cardText, styles.cardTitle]}>
-                    {item.accountType}
+                    {item.idAccountType}
                   </Text>
                   <Text style={[styles.cardText, styles.cardAmount]}>
-                    {item.amount} {item.amountUnit}
+                    {item.balance} {item.unit}
                   </Text>
                 </View>
               </ImageBackground>
@@ -206,8 +235,7 @@ export default class PaymentScreen extends React.Component {
                   this._carousel = c;
                 }}
                 data={this.state.accountTypeList}
-                renderItem={this._renderItem}
-                onPress={this.click_openPopupAccountType}
+                renderItem={this._renderItem.bind(this)}
                 sliderWidth={sliderWidth}
                 itemWidth={itemWidth}
                 onSnapToItem={index =>
@@ -289,16 +317,6 @@ export default class PaymentScreen extends React.Component {
             >
               <DialogContent>
                 <View style={styles.accountTypePopUP}>
-                  <Text>Enter Account Name</Text>
-                  <MKTextField
-                    tintColor={colors.appColor}
-                    textInputStyle={{ color: colors.black }}
-                    placeholder="Account Name"
-                    style={styles.textfield}
-                    name="accountName"
-                    onChangeText={val => this.setState({ email: val })}
-                    customStyle={{ width: Dimensions.get("screen").width - 50 }}
-                  />
                   <View style={styles.btnGroupAccountTypes}>
                     <Button full style={styles.btnAccountTypes}>
                       <Text>Saving Account</Text>
@@ -335,6 +353,7 @@ export default class PaymentScreen extends React.Component {
             </Dialog>
           </ImageBackground>
         </Content>
+        <BusyIndicator />
       </Container>
     );
   }
@@ -352,7 +371,7 @@ const styles = StyleSheet.create({
     color: "#ffffff"
   },
   sliderView: {
-    flex: 2.4
+    flex: 2
   },
   slideMainCard: {
     marginTop: 5,
@@ -381,9 +400,9 @@ const styles = StyleSheet.create({
   },
   //TODO: CARD
   cardHeader: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
-    flexDirection: 'column'  
+    flexDirection: 'column'
   },
   cardText: {
     color: "#ffffff",
@@ -392,14 +411,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold'
   },
-
   cardAmount: {
     fontWeight: 'bold',
     fontSize: 30
   },
   paginationContainer: {
     marginBottom: -10
-  },  
+  },
   //Amount Infomation
   viewAmountInfo: {
     flex: 1,
@@ -416,7 +434,7 @@ const styles = StyleSheet.create({
   },
   //Recent Transaction
   viewMainRecentTran: {
-    flex: 3
+    flex: 3,
   },
   viewTitleRecentTrans: {
     marginLeft: 20
@@ -438,7 +456,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   recentTransListView: {
-    marginBottom: 50
+    flex: 1,
+    marginTop: 10
   },
   //Account Type Popup Account
   accountTypePopUP: {
@@ -490,11 +509,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.appColor,
     color: "#ffffff",
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 20,
     marginLeft: 5,
     marginRight: 5,
-    height: 40
+    height: 50
   },
-
-
 });

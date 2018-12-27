@@ -8,13 +8,14 @@ import {
     View,
     Alert,
     ImageBackground,
-    Clipboard
+    Clipboard,
+    Dimensions
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Footer, FooterTab, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import QRCode from 'react-native-qrcode';
+import { QRCode } from 'react-native-custom-qr-codes';
 import Toast from 'react-native-simple-toast';
-
+import Share, { ShareSheet } from 'react-native-share';
 //TODO: Custome Pages
 import { colors, images } from "../../../../constants/Constants";
 export default class ReceiveMoneyScreen extends React.Component {
@@ -45,32 +46,56 @@ export default class ReceiveMoneyScreen extends React.Component {
 
 
     render() {
+        let shareOptions = {
+            title: "Address",
+            message: this.state.address,
+            url: "\nhttps://bithyve.com/",
+            subject: "MyMoney" //  for email
+        };
         return (
             <Container>
                 <ImageBackground
                     source={images.appBackgound}
-                    style={styles.container}
+                    style={styles.backgroundImage}
                 >
-                    <Header transparent style={{ backgroundColor: colors.appColor }}>
+                    <Header transparent>
                         <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Receive Money</Title>
+                            <Title adjustsFontSizeToFit={true}
+                                numberOfLines={1}
+                                style={styles.titleUserName}>Receive</Title>
                         </Body>
+                        <Right></Right>
                     </Header>
-                    <Content padder>
+                    <Content contentContainerStyle={styles.container} scrollEnabled={false}>
                         <View style={styles.viewShowQRcode}>
-                            <Text style={styles.txtTitle}>My Public Address to Receive My Money</Text>
                             <QRCode
-                                value={this.state.address}
-                                size={300}
-                                bgColor='#000000'
+                                logo={images.appIcon}
+                                content={this.state.address}
+                                size={Dimensions.get('screen').width - 40}
+                                codeStyle="square"
+                                outerEyeStyle='square'
+                                innerEyeStyle="square"
+                                //linearGradient={['rgb(255,0,0)','rgb(0,255,255)']}
+                                padding={1}
                             />
-                            <Text style={styles.txtBarcode}>{this.state.address}</Text>
-                            <Button style={styles.btnCopy} full onPress={() => this.click_CopyAddress()} ><Text > COPY WALLET ADDRESS </Text></Button>
+                            <TouchableOpacity onPress={() => this.click_CopyAddress()}>
+                                <Text style={styles.txtBarcode} note>{this.state.address}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.viewShareButtonMain}>
+                            <View style={styles.viewSahreBtn}>
+                                <Button transparent onPress={() => {
+                                Share.open(shareOptions);
+                            }}>
+                                    <Icon name='share-square' size={25} color="#ffffff" />
+                                    <Text style={styles.titleUserName}>Share</Text>
+                                </Button>
+                            </View>
                         </View>
                     </Content>
                 </ImageBackground>
@@ -82,10 +107,15 @@ export default class ReceiveMoneyScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+    },
+    backgroundImage: {
+        flex: 1
+    },
+    titleUserName: {
+        color: "#ffffff"
     },
     viewShowQRcode: {
-        flex: 1,
+        flex: 1,    
         alignItems: 'center',
         justifyContent: 'center',
 
@@ -96,13 +126,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     txtBarcode: {
-        marginTop: 20,
+        marginTop: 40,
         marginBottom: 20,
-        fontSize: 16,  
+        fontSize: 16,
         textAlign: 'center'
     },
     btnCopy: {
         backgroundColor: colors.appColor
+    },
+    //share button
+    viewShareButtonMain: {
+        flex: 0.2,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+
+    },
+    viewSahreBtn: {
+        backgroundColor: colors.appColor,
+        paddingLeft: 10,
+        borderRadius: 10,
     }
+
+
 
 });

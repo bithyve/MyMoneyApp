@@ -89,20 +89,16 @@ export default class PasscodeConfirmScreen extends Component {
             var mnemonicValue = this.state.mnemonicValues;
             var priKeyValue = privateKey;
             //User Details Data
-            var date = new Date().getDate();
-            var month = new Date().getMonth() + 1;
-            var year = new Date().getFullYear();
-            var fulldate = date + "-" + month + "-" + year;
-            const dateTime = Date.now();
+            const dateTime = Date.now();  
             const fulldate = Math.floor(dateTime / 1000);
             const firstName = this.state.firstName;
             const lastName = this.state.lastName;
             const email = this.state.email;
             const country = this.state.countryName;
             const mobileNumber = this.state.mobileNo;
-            const resultInsertUserDetails = await dbOpration.insertUserDetailsData(localDB.tableName.tblUserDetials, fulldate, firstName, lastName, email, country, mobileNumber);
-            if (resultInsertUserDetails) {
-                const resultCreateWallet = await dbOpration.insertWalletAndCreateAccountType(localDB.tableName.tblWallets, localDB.tableName.tblAccountsType, fulldate, mnemonicValue, priKeyValue, address);
+            const resultInsertUserDetails = await dbOpration.insertUserDetailsData(localDB.tableName.tblUser, fulldate, firstName, lastName, email, country, mobileNumber);
+            if (resultInsertUserDetails) {      
+                const resultCreateWallet = await dbOpration.insertWalletAndCreateAccountType(localDB.tableName.tblWallet, localDB.tableName.tblAccount, fulldate, mnemonicValue, priKeyValue, address);
                 if (resultCreateWallet) {
                     this.setState({
                         success: 'Ok!!'

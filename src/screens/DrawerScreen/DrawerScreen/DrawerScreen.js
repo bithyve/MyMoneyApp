@@ -59,7 +59,7 @@ class DrawerScreen extends Component {
   }
 
 async getUserDetails(){
-  const result = await dbOpration.readTablesData(localDB.tableName.tblUserDetials);
+  const result = await dbOpration.readTablesData(localDB.tableName.tblUser);
   this.setState({
     userDetails:result.temp,
     fullName:result.temp[0].firstName+' '+result.temp[0].lastName

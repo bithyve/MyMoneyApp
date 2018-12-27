@@ -48,6 +48,14 @@ var images = {
   paymentScreen: {
     cardSideBitcon: require(assetsImages + "paymentScreen/bitcoin1.jpg"),
     cardSideBitcon1: require(assetsImages + "paymentScreen/bitcoin2.png")
+
+  },
+  accounts:{
+    saving: require(assetsImages + "accountTypesCard/btcshape.png"),
+    secure: require(assetsImages + "accountTypesCard/btcshape.png"),
+    vault: require(assetsImages + "accountTypesCard/btcshape.png"),
+    joint: require(assetsImages + "accountTypesCard/btcshape.png"),
+    unknown: require(assetsImages + "accountTypesCard/btcshape.png"),
   }
 };
 
@@ -63,9 +71,11 @@ var apiary = {
 var localDB = {
   dbName: "MyMoney.db",
   tableName: {
-    tblUserDetials: "tblUserDetails",
-    tblWallets: "tblWallets",
-    tblAccountsType: "tblAccountsType"  
+    tblUser: "tblUser",
+    tblWallet: "tblWallet",   
+    tblAccountType: "tblType",
+    tblAccount: "tblAccount",   
+    tblTransaction: "tblTransaction"
   }
 };
 

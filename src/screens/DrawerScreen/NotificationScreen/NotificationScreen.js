@@ -68,7 +68,7 @@ export default class NotificationScreen extends React.Component {
                         </Body>
                         <Right></Right>
                     </Header>
-                    <Content style={styles.container}>
+                    <Content contentContainerStyle={styles.container} scrollEnabled={false}>
                         <View style={styles.notificaitonListView}>
                             <FlatList
                                 data={this.state.data}
