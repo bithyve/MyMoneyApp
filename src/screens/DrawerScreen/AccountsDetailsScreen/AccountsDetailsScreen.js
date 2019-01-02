@@ -40,7 +40,7 @@ export default class AccountDetailsScreen extends React.Component {
             waletteData: [],
             recentTrans: [],
 
-        }
+        }  
     }
 
     //TODO: Page Life Cycle

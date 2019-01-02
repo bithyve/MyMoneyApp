@@ -33,11 +33,11 @@ import Dialog, {
   SlideAnimation,
   DialogTitle,
   DialogContent,
-  DialogButton
+  DialogButton   
 } from "react-native-popup-dialog";
 import BusyIndicator from 'react-native-busy-indicator';
 import loaderHandler from 'react-native-busy-indicator/LoaderHandler';
-
+     
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
