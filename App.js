@@ -11,7 +11,7 @@ import { AsyncStorage, AppState } from 'react-native';
 import { createRootNavigator } from "./src/navigation/Router";
 import { createAppContainer } from "react-navigation";
 
-
+  
   
 
 import { colors } from './src/constants/Constants'

@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-    StyleSheet,
-    Text,
-    View,
-    Alert,
-    AsyncStorage,
-    StatusBar,
-    Vibration,
-    KeyboardAvoidingView,
-    Dimensions
-} from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
-import Spinner from 'react-native-loading-spinner-overlay';
-import CodePin from 'react-native-pin-code';
-
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  AsyncStorage,
+  StatusBar,
+  Vibration,
+  KeyboardAvoidingView,
+  Dimensions
+} from "react-native";
+import { StackActions, NavigationActions } from "react-navigation";
+import Spinner from "react-native-loading-spinner-overlay";
+import CodeInput from "react-native-confirmation-code-input";
+import DropdownAlert from "react-native-dropdownalert";
 
 
 //TODO: Custome Pages
@@ -21,108 +21,112 @@ import { colors, images, localDB } from "../../constants/Constants";
 import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
-//TODO: Wallets    
-var createWallet = require('../../bitcoin/services/wallet.js');
+//TODO: Wallets
+//var createWallet = require('../../bitcoin/services/wallet');
+import WalletService from "../../bitcoin/services/WalletService";
 
-
-const { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get("window");
 export default class PasscodeScreen extends Component {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.state = {
-            mnemonicValues: [],
-            status: 'choice',
-            pincode: '',
-            success: 'Enter a PinCode!!',
-            firstName: '',
-            lastName: '',
-            email: '',
-            mobileNo: ''
-        };
+    this.state = {
+      mnemonicValues: [],
+      status: "choice",
+      pincode: "",
+      success: "Enter a PinCode!!",
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobileNo: "",
+      message: "Enter your PIN"
+    };
+  }
+
+  //TODO: Page Life Cycle
+  componentWillMount() {
+    this.retrieveData();
+  }
+
+  retrieveData = async () => {
+    try {
+      var passcodeValues = await AsyncStorage.getItem("@Passcode:key");
+
+      this.setState({
+        pincode: passcodeValues
+      });
+    } catch (error) {
+      console.log(error);
     }
+    console.log("pincode = " + this.state.pincode);
+  };
 
-
-
-    //TODO: Page Life Cycle
-    componentWillMount() {
-        this.retrieveData();
+  _onFinishCheckingCode2(isValid, code) {
+    if (isValid) {
+      this.onSuccess();
+    } else {
+      this.dropdown.alertWithType(
+        "error",
+        "Error",
+        "Oh!! Please enter correct password"
+      );
     }
+  }
 
-    retrieveData = async () => {
-        try {
-            var passcodeValues = await AsyncStorage.getItem("@Passcode:key");
+  onSuccess = () => {
+    const resetAction = StackActions.reset({
+      index: 0, // <-- currect active route from actions array
+      key: null,
+      actions: [NavigationActions.navigate({ routeName: "TabbarBottom" })]
+    });
+    this.props.navigation.dispatch(resetAction);
+  };
 
-            this.setState({
-                pincode: passcodeValues
-            });
-        } catch (error) {
-            console.log(error);
-        }
-        console.log('pincode = ' + this.state.pincode);
-
-    }
-
-
-
-    onSuccess = () => {
-        const resetAction = StackActions.reset({
-            index: 0, // <-- currect active route from actions array
-            key: null,
-            actions: [
-                NavigationActions.navigate({ routeName: 'TabbarBottom' }),
-            ],
-        });
-        this.props.navigation.dispatch(resetAction);
-    }
-   
-
-    render() {
-        return (
-            <View
-                style={styles.container}
-            >
-                <KeyboardAvoidingView
-                    behavior={'position'}
-                    contentContainerStyle={styles.avoidingView}
-                >
-                    <CodePin
-                        ref={ref => (this.ref = ref)}
-                        checkPinCode={(code, callback) => callback(code === this.state.pincode)}
-                        number={4}
-                        success={this.onSuccess}
-                        containerStyle={styles.containerCodePin}
-                        pinStyle={styles.pinStyle}
-                        textStyle={{ fontSize: 12 }}
-                        text={this.state.success}
-                        errorStyle={{ fontSize: 10 }}
-                        error={'Incorrect Pincode!!'}
-                        keyboardType="numeric"
-                    />
-                </KeyboardAvoidingView>
-            </View>
-        );
-    }
-}
-
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={[styles.txtText,styles.txtTitle]}>My Money</Text>
+        <Text style={[styles.txtText]}>{this.state.message}</Text>
+        <CodeInput
+          ref="codeInputRef2"
+          secureTextEntry
+          keyboardType="numeric"
+          codeLength={4}
+          activeColor={colors.appColor}
+          inactiveColor={colors.appColor}
+          className="border-circle"
+          compareWithCode={this.state.pincode}
+          cellBorderWidth={2}
+          autoFocus={true}
+          inputPosition="center"
+          space={10}
+          size={50}
+          containerStyle={{ marginTop: Dimensions.get("screen").height / 3 }}
+          codeInputStyle={{ borderWidth: 1.5 }}
+          codeInputStyle={{ fontWeight: "800" }}
+          containerStyle={styles.codeInput}
+          onFulfill={(isValid, code) =>
+            this._onFinishCheckingCode2(isValid, code)
+          }   
+        />
+        <DropdownAlert ref={ref => (this.dropdown = ref)} />
+      </View>
+    );
+  }  
+}  
 
 let styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF'
-    },
-    avoidingView: {
-        borderRadius: 10,
-        height: 150,
-        width: width - 30
-    },
-    containerCodePin: {
-        borderRadius: 10
-    },
-    pinStyle: {
-        marginLeft: 5,
-        marginRight: 5
-    },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  txtText:{
+    color:colors.appColor,
+    fontFamily: "Lalezar"
+  },
+ txtTitle: {
+     marginTop: 100,
+     fontSize: 40,
+  }  
 });

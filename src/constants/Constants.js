@@ -9,7 +9,7 @@ var errorMessage = {
   aPI_FAILED: "Server not responding, please try after some time.",
   internet_ErrorTitle: "No Internet",
   fAILED_INTERNET: "No internet connection available."
-};
+};    
 
 //Validation Message
 var errorValidationMessage = {
@@ -19,7 +19,8 @@ var errorValidationMessage = {
 //Colors
 var colors = {
   appColor: "#F5951D",
-  black: "#000000"
+  black: "#000000",
+  white:"#ffffff"
 };
 
 const assetsImages = "../assets/images/";
@@ -36,7 +37,7 @@ var images = {
   loginScreen: {
     backgoundImage: require(assetsImages + "loginscreen/loginBackgound.jpg"),
     faceIdImage: require(assetsImages + "loginscreen/faceid.png")
-  },
+  },  
   backupPhraseScreen: {
     backupPhraseLogo: require(assetsImages +
       "backupPhraseScreen/backupPhraseLogo.png")

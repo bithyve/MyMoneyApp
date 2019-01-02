@@ -17,12 +17,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import GridView from "react-native-super-grid";
 import Toast from 'react-native-simple-toast';
 import { StackActions, NavigationActions } from 'react-navigation';
-
+  
 //TODO: Custome Pages
-import { colors, images } from "../../../constants/Constants";
-
-
-
+import { colors, images } from "../../../constants/Constants";   
+   
 export default class VerifyBackupPhraseScreen extends React.Component {
     constructor(props) {
         super(props);

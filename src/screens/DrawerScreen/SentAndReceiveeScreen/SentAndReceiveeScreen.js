@@ -33,7 +33,8 @@ import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
 //TODO: Wallets
-var walletService = require("../../../bitcoin/services/wallet.js");
+//var walletService = require("../../../bitcoin/services/wallet");
+import WalletService from "../../../bitcoin/services/WalletService";
 
 export default class SentAndReceiveeScreen extends React.Component {
   constructor() {
@@ -85,7 +86,7 @@ export default class SentAndReceiveeScreen extends React.Component {
 
   async getAddressBal() {
     if (this.state.addressKey != "") {
-      const bal = await walletService.getBalance(this.state.addressKey);
+      const bal = await WalletService.getBalance(this.state.addressKey);
       console.log("fin bal" + bal.final_balance);
       this.setState({
         finalBal: "Final Balance: " + bal.final_balance / 1e8,

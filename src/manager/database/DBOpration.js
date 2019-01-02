@@ -6,7 +6,7 @@ import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
 
-
+//TODO: Select
 const readTablesData = tableName => {
   return new Promise((resolve, reject) => {
     var temp = [];
@@ -24,8 +24,33 @@ const readTablesData = tableName => {
   });
 }
 
+//TODO: Update
+
+//tblAmount
+const updateTableData = (tblName, balance, address,lastUdateDate) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(function (txn) {  
+      txn.executeSql(
+        "update " +
+        tblName +
+        " set balance = :amount,lastUpdated = :lastUpdated where address = :address",
+        [
+          balance,
+          lastUdateDate,
+          address,  
+        ]
+      );
+      resolve(true);
+    });
+  });
+}
 
 
+
+
+//TODO: Insert
+
+//tblUserDetails
 const insertUserDetailsData = (tblName, fulldate,
   firstName,
   lastName,
@@ -37,7 +62,7 @@ const insertUserDetailsData = (tblName, fulldate,
       txn.executeSql(
         "INSERT INTO " +
         tblName +
-        " (date,firstName,lastName,email,country,mobileNo) VALUES (:date,:firstName,:lastName,:email,:country,:mobileNo)",
+        " (dateCreated,firstName,lastName,email,country,mobileNo,lastUpdated) VALUES (:dateCreated,:firstName,:lastName,:email,:country,:mobileNo,:lastUpdated)",
         [
           fulldate,
           firstName,
@@ -45,6 +70,7 @@ const insertUserDetailsData = (tblName, fulldate,
           email,
           country,
           mobileNumber,
+          fulldate,
         ]
       );
       resolve(true);
@@ -56,6 +82,8 @@ const insertUserDetailsData = (tblName, fulldate,
 
 
 
+
+//tblWallet and  tblAccount
 const insertWalletAndCreateAccountType = (tblName, tblName1,
   fulldate,
   mnemonicValue,
@@ -67,12 +95,13 @@ const insertWalletAndCreateAccountType = (tblName, tblName1,
       txn.executeSql(
         "INSERT INTO " +
         tblName +
-        " (date,mnemonic,privateKey,address) VALUES (:date,:mnemonic,:privateKey,:address)",
+        " (dateCreated,mnemonic,privateKey,address,lastUpdated) VALUES (:dateCreated,:mnemonic,:privateKey,:address,:lastUpdated)",
         [
           fulldate,
           mnemonicValue,
           priKeyValue,
-          address
+          address,
+          fulldate
         ]
       );
     });
@@ -81,15 +110,14 @@ const insertWalletAndCreateAccountType = (tblName, tblName1,
       txn.executeSql(
         "INSERT INTO " +
         tblName1 +
-        " (date,mnemonic,privateKey,address,amount,amountUnit,accountType) VALUES (:date,:mnemonic,:privateKey,:address,:amount,:amountUnit,:accountType)",
+        "(dateCreated,address,balance,unit,idAccountType,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:idAccountType,:lastUpdated)",
         [
           fulldate,
-          mnemonicValue,
-          priKeyValue,
           address,
-          '0.0',
+          0.0,
           'BTC',
-          'Saving'
+          'Savings',  
+          fulldate
         ]
       );
     });
@@ -97,22 +125,21 @@ const insertWalletAndCreateAccountType = (tblName, tblName1,
       txn.executeSql(
         "INSERT INTO " +
         tblName1 +
-        " (date,mnemonic,privateKey,address,amount,amountUnit,accountType) VALUES (:date,:mnemonic,:privateKey,:address,:amount,:amountUnit,:accountType)",
+        "(dateCreated,address,balance,unit,idAccountType,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:idAccountType,:lastUpdated)",
         [
           fulldate,
-          mnemonicValue,
-          priKeyValue,
           address,
-          '0.0',
+          0.0,  
           'BTC',
-          'UnKnown'
+          'UnKnown',
+          fulldate  
         ]
       );
       resolve(true);
     });
   });
 }
-
+  
 
 
 
@@ -122,5 +149,6 @@ const insertWalletAndCreateAccountType = (tblName, tblName1,
 module.exports = {
   readTablesData,
   insertUserDetailsData,
-  insertWalletAndCreateAccountType
+  insertWalletAndCreateAccountType,
+  updateTableData
 };

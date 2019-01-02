@@ -48,7 +48,6 @@ import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/Q
 
 import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
 
-
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
@@ -111,24 +110,10 @@ const LoginRouter = createStackNavigator(
   }
 );
 
-
-//TODO: Login
-const LoginRouter = createStackNavigator(
-  {
-    Login: {
-      screen: LoginScreen,
-      navigationOptions: { header: null }
-    }
-  },
-  {
-    initialRouteName: "Login"
-  }
-);
-
 //TODO: Left DrawerNavigator
 const LeftDrawer = createStackNavigator({
   AccountSettingScreen: {
-    screen: AccountSettingScreen,
+    screen: AccountSettingScreen,  
     navigationOptions: { header: null }
   }
 });
@@ -324,15 +309,15 @@ export const createRootNavigator = (
           navigationOptions: { header: null }
         }
       },
-      {
+      {  
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
         // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }
     );
-  } else {
+  } else {  
     return createStackNavigator(
-      {
+      {    
         PasscodeScreen: {
           screen: PasscodeScreen,
           navigationOptions: { header: null }
@@ -407,7 +392,7 @@ export const createRootNavigator = (
           screen: BackupPhraseScreen,
           navigationOptions: { header: null }
         },
-        VerifyBackupPhraseScreen: {
+        VerifyBackupPhraseScreen: {  
           screen: VerifyBackupPhraseScreen,
           navigationOptions: { header: null }
         },
@@ -417,7 +402,7 @@ export const createRootNavigator = (
           navigationOptions: { header: null }
         }
       },
-      {
+      {      
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
         //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"

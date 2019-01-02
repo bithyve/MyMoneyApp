@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Footer, FooterTab, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import QRCode from 'react-native-qrcode';
 import Toast from 'react-native-simple-toast';
 import BarcodeScanner from 'react-native-barcode-scanners'
 import ImagePicker from 'react-native-image-picker';
@@ -24,7 +23,7 @@ const options = {
         skipBackup: true,
         path: 'images',
     },
-};
+};  
 
 //TODO: Custome Pages
 import { colors, images } from "../../../../constants/Constants";
