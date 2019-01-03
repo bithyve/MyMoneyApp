@@ -41,7 +41,7 @@ export default class PasscodeConfirmScreen extends Component {
       mobileNo: "",
       countryName: ""
     };
-  }
+  }     
 
   //TODO: Page Life Cycle
   componentWillMount() {
@@ -112,31 +112,39 @@ export default class PasscodeConfirmScreen extends Component {
         country,
         mobileNumber
       );
+      const resultAccountType = await dbOpration.insertAccountTypeData(
+        localDB.tableName.tblAccountType,
+        fulldate
+      );
       if (resultInsertUserDetails) {
-        const resultCreateWallet = await dbOpration.insertWalletAndCreateAccountType(
-          localDB.tableName.tblWallet,
-          localDB.tableName.tblAccount,
-          fulldate,
-          mnemonicValue,
-          priKeyValue,
-          address
-        );
-        if (resultCreateWallet) {
-          this.setState({
-            success: "Ok!!"
-          });
-          const resetAction = StackActions.reset({
-            index: 0, // <-- currect active route from actions array
-            key: null,
-            actions: [NavigationActions.navigate({ routeName: "TabbarBottom" })]
-          });
-          this.props.navigation.dispatch(resetAction);
-          try {
-            AsyncStorage.setItem("@Passcode:key", this.state.pincode);
-            AsyncStorage.setItem("@loadingPage:key", "Password");
-          } catch (error) {
-            // Error saving data
-          }
+        if (resultAccountType) {
+          const resultCreateWallet = await dbOpration.insertWalletAndCreateAccountType(
+            localDB.tableName.tblWallet,
+            localDB.tableName.tblAccount,
+            fulldate,
+            mnemonicValue,
+            priKeyValue,
+            address
+          );
+          if (resultCreateWallet) {
+            try {
+              AsyncStorage.setItem("@Passcode:key", this.state.pincode);
+              AsyncStorage.setItem("@loadingPage:key", "Password");
+            } catch (error) {
+              // Error saving data
+            }
+            this.setState({
+              success: "Ok!!"
+            });
+            const resetAction = StackActions.reset({
+              index: 0, // <-- currect active route from actions array
+              key: null,
+              actions: [
+                NavigationActions.navigate({ routeName: "TabbarBottom" })
+              ]
+            });
+            this.props.navigation.dispatch(resetAction);
+          }   
         }
       }
     }
@@ -181,7 +189,7 @@ export default class PasscodeConfirmScreen extends Component {
               compareWithCode={this.state.pincode}
               autoFocus={true}
               inputPosition="center"
-              inputPosition="center"  
+              inputPosition="center"
               space={10}
               size={50}
               codeInputStyle={{ borderWidth: 1.5 }}

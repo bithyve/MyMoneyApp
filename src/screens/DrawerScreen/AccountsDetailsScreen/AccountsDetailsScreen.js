@@ -9,7 +9,8 @@ import {
   FlatList,
   StatusBar,
   Alert,
-  ImageBackground
+  ImageBackground,
+  RefreshControl
 } from "react-native";
 import {
   Container,
@@ -48,10 +49,10 @@ export default class AccountDetailsScreen extends React.Component {
     this.state = {
       data: [],
       waletteData: [],
-      tranDetails: []
+      tranDetails: [],
+      refreshing: false
     };
     console.log("2MvwghT7H8Y81v9pSAvTprsNEw5yEqXTDcU");
-    this._refresh = this._refresh.bind(this);
   }
 
   //TODO: Page Life Cycle
@@ -73,6 +74,11 @@ export default class AccountDetailsScreen extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
+  }
+
+  //TODO: func loadData
   async loadData() {
     loaderHandler.showLoader("Loading");
     const dateTime = Date.now();
@@ -104,173 +110,175 @@ export default class AccountDetailsScreen extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.willFocusSubscription.remove();
-  }
+  //TODO: func refresh
 
-  checkConfirmation(val) {
-    let label;
-    if (val == 0) {
-      label = "UNCONFIRMED";
-    } else if (val > 0 && val < 6) {
-      label = "CONFIRMED";
-    } else {
-      label = "SUPER CONFIRMED";
-    }
-
-    return label;
-  }
-
-  //TODO: Ref
-  _refresh() {
+  refresh() {
+    this.setState({ refreshing: true });
     return new Promise(resolve => {
       setTimeout(() => {
+        this.setState({ refreshing: false });
         this.loadData();
         resolve();
-      }, 2000);
+      }, 1000);
     });
   }
 
   render() {
     return (
       <Container style={styles.container}>
-      
-          <Content
-            contentContainerStyle={styles.container}
-            scrollEnabled={false}
+        <Content
+          contentContainerStyle={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.refresh.bind(this)}
+            />
+          }
+        >
+          <ImageBackground
+            source={images.accounts.saving}
+            style={styles.backgroundImage}
+            borderRadius={10}
+            imageStyle={{
+              resizeMode: "cover" // works only here!
+            }}
           >
-            <ImageBackground
-              source={images.accounts.saving}
-              style={styles.backgroundImage}
-              borderRadius={10}
-              imageStyle={{
-                resizeMode: "cover" // works only here!
-              }}
-            >
-              <View style={styles.viewBackBtn}>
-                <Left>
-                  <Button
-                    transparent
-                    onPress={() => this.props.navigation.goBack()}
-                  >
-                    <Icon name="chevron-left" size={25} color="#ffffff" />
-                  </Button>
-                </Left>
+            <View style={styles.viewBackBtn}>
+              <Left>
+                <Button
+                  transparent
+                  onPress={() => this.props.navigation.goBack()}
+                >
+                  <Icon name="chevron-left" size={25} color="#ffffff" />
+                </Button>
+              </Left>
 
-                <Right>
-                  <Title style={{ color: "#ffffff" }}>options</Title>
-                </Right>
-              </View>
-              <View style={styles.viewBalInfo}>
-                <Text style={[styles.txtTile, styles.txtAccountType]}>
-                  {this.state.data.idAccountType}
+              <Right>
+                <Title style={{ color: "#ffffff" }}>options</Title>
+              </Right>
+            </View>
+            <View style={styles.viewBalInfo}>
+              <Text style={[styles.txtTile, styles.txtAccountType]}>
+                {this.state.data.idAccountType}
+              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={[styles.txtTile, styles.txtBalInfo]}>
+                  {this.state.data.balance + " "}
                 </Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={[styles.txtTile, styles.txtBalInfo]}>
-                    {this.state.data.balance + " "}
-                  </Text>
-                  <Text style={[styles.txtTile, styles.txtBalInfo]}>
-                    {this.state.data.unit}
+                <Text style={[styles.txtTile, styles.txtBalInfo]}>
+                  {this.state.data.unit}
+                </Text>
+              </View>
+            </View>
+          </ImageBackground>
+          <View style={styles.viewMainRecentTran}>
+            <View style={styles.viewTitleRecentTrans}>
+              <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+            </View>
+            <View style={styles.recentTransListView}>
+              {renderIf(this.state.tranDetails.length == 0)(
+                <View style={styles.viewNoTransaction}>
+                  <Thumbnail
+                    source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
+                  />
+                  <Text style={styles.txtNoTransaction} note>
+                    No Transactions
                   </Text>
                 </View>
-              </View>
-            </ImageBackground>
-            <View style={styles.viewMainRecentTran}>
-              <View style={styles.viewTitleRecentTrans}>
-                <Text style={styles.txtRecentTran}>Recent Transactions</Text>
-              </View>
-              <View style={styles.recentTransListView}>
-              <PTRView onRefresh={this._refresh.bind(this)}>
-                <FlatList
-                  data={this.state.tranDetails}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item }) => (
-                    <List>
-                      <ListItem thumbnail>
-                        <Left>
-                          <Thumbnail
-                            source={require("../../../assets/images/bitcoinLogo.jpg")}
-                          />
-                        </Left>
-                        <Body>
-                          {renderIf(item.sent == true)(
-                            <Text style={styles.txtTransTitle}>
-                              Sent{" "}
-                              <Text style={styles.txtConfimation}>
-                                {this.checkConfirmation(item.confirmations)}{" "}
-                              </Text>{" "}
-                            </Text>
-                          )}
-                          {renderIf(item.sent != true)(
-                            <Text style={styles.txtTransTitle}>
-                              Recieved{" "}
-                              <Text style={styles.txtConfimation}>
-                                {this.checkConfirmation(item.confirmations)}{" "}
-                              </Text>{" "}
-                            </Text>
-                          )}
+              )}
+              {renderIf(this.state.tranDetails.length != 0)(
+                <View style={styles.recentTransListView}>
+                  <FlatList
+                    data={this.state.tranDetails}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                      <List>
+                        <ListItem thumbnail>
+                          <Left>
+                            <Thumbnail
+                              source={require("../../../assets/images/bitcoinLogo.jpg")}
+                            />
+                          </Left>
+                          <Body>
+                            {renderIf(item.transactionType == "Sent")(
+                              <Text style={styles.txtTransTitle}>
+                                Sent{" "}
+                                <Text style={styles.txtConfimation}>
+                                  {item.confirmationType}{" "}
+                                </Text>{" "}
+                              </Text>
+                            )}
+                            {renderIf(item.transactionType == "Received")(
+                              <Text style={styles.txtTransTitle}>
+                                Recieved{" "}
+                                <Text style={styles.txtConfimation}>
+                                  {item.confirmationType}{" "}
+                                </Text>{" "}
+                              </Text>
+                            )}
 
-                          <Text note numberOfLines={1}>
-                            {item.received}
-                          </Text>
-                        </Body>
-                        <Right>
-                          {renderIf(item.sent == true)(
-                            <Text style={styles.txtAmoundSent}>
-                              - {item.totalSpent / 1e8}
+                            <Text note numberOfLines={1}>
+                              {item.received}
                             </Text>
-                          )}
-                          {renderIf(item.sent != true)(
-                            <Text style={styles.txtAmoundRec}>
-                              + {item.totalRecieved / 1e8}
-                            </Text>
-                          )}
-                        </Right>
-                      </ListItem>
-                    </List>
-                  )}
-                  keyExtractor={item => item.hash}
-                />
-                </PTRView>
-              </View>
+                          </Body>
+                          <Right>
+                            {renderIf(item.transactionType == "Sent")(
+                              <Text style={styles.txtAmoundSent}>
+                                - {item.totalSpent / 1e8}
+                              </Text>
+                            )}
+                            {renderIf(item.transactionType == "Received")(
+                              <Text style={styles.txtAmoundRec}>
+                                + {item.totalReceived / 1e8}
+                              </Text>
+                            )}
+                          </Right>
+                        </ListItem>
+                      </List>
+                    )}
+                    keyExtractor={item => item.hash}
+                  />
+                </View>
+              )}
             </View>
-            <View style={styles.viewFooter}>
-              <View
-                style={{
-                  backgroundColor: colors.appColor,
-                  flexDirection: "row",
-                  paddingLeft: 20,
-                  paddingRight: 10,
-                  borderRadius: 5
-                }}
+          </View>
+          <View style={styles.viewFooter}>
+            <View
+              style={{
+                backgroundColor: colors.appColor,
+                flexDirection: "row",
+                paddingLeft: 20,
+                paddingRight: 10,
+                borderRadius: 5
+              }}
+            >
+              <Button
+                transparent
+                onPress={() =>
+                  this.props.navigation.push("SentMoneyScreen", {
+                    address: this.state.data.address,
+                    privateKey: this.state.waletteData.privateKey
+                  })
+                }
               >
-                <Button
-                  transparent
-                  onPress={() =>
-                    this.props.navigation.push("SentMoneyScreen", {
-                      address: this.state.data.address,
-                      privateKey: this.state.waletteData.privateKey
-                    })
-                  }
-                >
-                  <Icon name="angle-up" size={25} color="#ffffff" />
-                  <Text style={styles.txtTile}>Send</Text>
-                </Button>
-                <Button
-                  transparent
-                  onPress={() =>
-                    this.props.navigation.push("ReceiveMoneyScreen", {
-                      address: this.state.data.address
-                    })
-                  }
-                >
-                  <Icon name="angle-down" size={25} color="#ffffff" />
-                  <Text style={styles.txtTile}>Receive</Text>
-                </Button>
-              </View>
+                <Icon name="angle-up" size={25} color="#ffffff" />
+                <Text style={styles.txtTile}>Send</Text>
+              </Button>
+              <Button
+                transparent
+                onPress={() =>
+                  this.props.navigation.push("ReceiveMoneyScreen", {
+                    address: this.state.data.address
+                  })
+                }
+              >
+                <Icon name="angle-down" size={25} color="#ffffff" />
+                <Text style={styles.txtTile}>Receive</Text>
+              </Button>
             </View>
-          </Content>
-   
+          </View>
+        </Content>
+
         <BusyIndicator />
       </Container>
     );
@@ -339,6 +347,17 @@ const styles = StyleSheet.create({
   recentTransListView: {
     flex: 1,
     marginTop: 10
+  },
+  //No Transaction
+  viewNoTransaction: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 20
+  },
+  txtNoTransaction: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingTop: 5
   },
   //TODO:Fotter view
   viewFooter: {

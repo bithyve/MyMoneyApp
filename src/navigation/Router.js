@@ -113,7 +113,7 @@ const LoginRouter = createStackNavigator(
 //TODO: Left DrawerNavigator
 const LeftDrawer = createStackNavigator({
   AccountSettingScreen: {
-    screen: AccountSettingScreen,  
+    screen: AccountSettingScreen,
     navigationOptions: { header: null }
   }
 });
@@ -309,15 +309,15 @@ export const createRootNavigator = (
           navigationOptions: { header: null }
         }
       },
-      {  
+      {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
         // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }
     );
-  } else {  
+  } else {
     return createStackNavigator(
-      {    
+      {
         PasscodeScreen: {
           screen: PasscodeScreen,
           navigationOptions: { header: null }
@@ -391,8 +391,8 @@ export const createRootNavigator = (
         BackupPhraseScreen: {
           screen: BackupPhraseScreen,
           navigationOptions: { header: null }
-        },
-        VerifyBackupPhraseScreen: {  
+        },  
+        VerifyBackupPhraseScreen: {
           screen: VerifyBackupPhraseScreen,
           navigationOptions: { header: null }
         },
@@ -402,8 +402,8 @@ export const createRootNavigator = (
           navigationOptions: { header: null }
         }
       },
-      {      
-        initialRouteName: signedIn ? "TabbarBottom" : "PasscodeScreen"
+      {
+        initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
         //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }

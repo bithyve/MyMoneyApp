@@ -67,14 +67,14 @@ var apiary = {
   urlRegistionWithCode: domain + "registationwithcode",
   urlquestionAndAnswer: domain + "questionAndAnswer"
 };
-
+  
 //Local Database
 var localDB = {
   dbName: "MyMoney.db",
   tableName: {
     tblUser: "tblUser",
     tblWallet: "tblWallet",   
-    tblAccountType: "tblType",
+    tblAccountType: "tblAccountType",     
     tblAccount: "tblAccount",   
     tblTransaction: "tblTransaction"
   }

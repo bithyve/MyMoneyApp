@@ -5,7 +5,7 @@ import bip65 from "bip65";
 import bitcoinJS, { ECPair, Network, TransactionBuilder } from "bitcoinjs-lib";
 import coinselect from "coinselect";
 import request from "superagent";
-import config from "../config";
+import config from "../Config";
 const { TESTNET, MAINNET } = config.API_URLS;
 
 export default class Bitcoin {
@@ -143,7 +143,7 @@ export default class Bitcoin {
     // only handling for single walletAddress for now
     const { inputs, outputs } = tx;
     let sent: boolean = false;
-    let totalRecieved: number = 0;
+    let totalReceived: number = 0;
     let totalSpent: number = 0;
 
     inputs.forEach((input) => {
@@ -160,16 +160,31 @@ export default class Bitcoin {
       if (addresses[0] !== walletAddress) {
         totalSpent += output.value;
       } else {
-        totalRecieved += output.value;
+        totalReceived += output.value;
       }
     });
 
-    tx.sent = sent;
-    if (tx.sent) {
+    tx.transactionType = sent ? "Sent" : "Received";
+    if (sent) {
       tx.totalSpent = totalSpent;
     } else {
-      tx.totalRecieved = totalRecieved;
+      tx.totalReceived = totalReceived;
     }
+    return tx;
+  }
+
+  public confirmationCat = async (tx: any) => {
+    let confirmationType: string;
+    const nConfirmations: number = tx.confirmations;
+    if (nConfirmations === 0) {
+      confirmationType = "UNCONFIRMED";
+    } else if (nConfirmations > 0 && nConfirmations < 6) {
+      confirmationType = "CONFIRMED";
+    } else {
+      confirmationType = "SUPER CONFIRMED";
+    }
+
+    tx.confirmationType = confirmationType;
     return tx;
   }
 
@@ -182,7 +197,7 @@ export default class Bitcoin {
     } = await this.fetchAddressInfo(address);
 
     txs.map((tx) => {
-      this.categorizeTx(tx, address);
+      this.confirmationCat(this.categorizeTx(tx, address));
     });
 
     return {
@@ -302,7 +317,7 @@ export default class Bitcoin {
     }
   }
 
-  public fetchUnspentOutputs = async (address: string): Promise<string[]> => {
+  public fetchUnspentOutputs = async (address: string): Promise<any> => {
     let data;
     if (this.network === bitcoinJS.networks.testnet) {
       const res: AxiosResponse = await axios.get(
@@ -372,6 +387,27 @@ export default class Bitcoin {
     };
   }
 
+  public createPartialTransaction = async (
+    multiSigAddress: string,
+  ): Promise<any> => {
+    const inputs = await this.fetchUnspentOutputs(multiSigAddress);
+    const chainInfo = await this.fetchChainInfo();
+
+    const highFeePerByte: number = chainInfo.high_fee_per_kb / 1000;
+    console.log("Fee rate:", highFeePerByte);
+
+    const txb: TransactionBuilder = new bitcoinJS.TransactionBuilder(
+      this.network,
+    );
+
+    inputs.forEach((input) => txb.addInput(input.txId, input.vout));
+
+    return {
+      inputs,
+      txb,
+    };
+  }
+
   public signTransaction = (
     inputs: any,
     txb: TransactionBuilder,
@@ -395,6 +431,32 @@ export default class Bitcoin {
     });
 
     const txHash = txb.build().toHex();
+    return txHash;
+  }
+
+  public signPartialTxn = (
+    inputs: any,
+    txb: TransactionBuilder,
+    keyPairs: ECPair[],
+    redeemScript: any,
+    witnessScript?: any,
+  ): any => {
+    let vin = 0;
+    inputs.forEach((input) => {
+      keyPairs.forEach((keyPair) => {
+        txb.sign(
+          vin,
+          keyPair,
+          redeemScript, // multiSig.p2sh.redeem.output
+          null,
+          input.value,
+          witnessScript, // multiSig.p2wsh.redeem.output
+        );
+      });
+      vin += 1;
+    });
+
+    const txHash = txb.buildIncomplete();
     return txHash;
   }
 
@@ -578,6 +640,42 @@ class SmokeTest {
       network: this.bitcoin.network,
     });
   }
+
+  public testingPartialTxn = async () => {
+    const privateKeys = [
+      this.bitcoin.generateTestnetKeys(this.bitcoin.rng1),
+      this.bitcoin.generateTestnetKeys(this.bitcoin.rng2),
+    ];
+    const keyPairs = privateKeys.map((privateKey) =>
+      this.bitcoin.getKeyPair(privateKey),
+    );
+    // console.log({ privateKeys, keyPairs });
+    const pubKeys = keyPairs.map((keyPair) => keyPair.publicKey);
+    const multiSig = this.bitcoin.generateMultiSig(keyPairs.length, pubKeys);
+
+    // Using same testnet addresses to derive a deterministic multisig address
+    // which is explicitly funded
+    console.log("MultiSig Address", multiSig.address);
+
+    // checking for funds in the multiSig
+    const balance = await this.bitcoin.checkBalance(multiSig.address);
+    console.log("MultiSig Balance:", balance);
+
+    const { inputs, txb } = await this.bitcoin.createPartialTransaction(
+      multiSig.address,
+    );
+    console.log("------------------");
+    console.log("Unsigned Partial Txn:", txb.buildIncomplete());
+    const tx = this.bitcoin.signPartialTxn(
+      inputs,
+      txb,
+      keyPairs,
+      multiSig.p2sh.redeem.output,
+      multiSig.p2wsh.redeem.output,
+    );
+
+    console.log("Signed Partial Txn:", tx.toHex());
+  }
 }
 
 ////////// SMOKE TEST ZONE /////////////////
@@ -598,3 +696,13 @@ class SmokeTest {
 // const smokeTest = new SmokeTest();
 // smokeTest.testnetTxn();
 // smokeTest.testnetMultiSigTxn();
+
+///// TESTING PARTIALLY BUILT TXNS /////
+
+// const smokeTest = new SmokeTest();
+// smokeTest.testingPartialTxn();
+
+// const bitcoin = new Bitcoin();
+// bitcoin
+//   .fetchUnspentOutputs("2NFb3TpSctXBdax6pJaPaAuJG9tKzuihCrz")
+//   .then(console.log);

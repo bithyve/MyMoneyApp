@@ -1,4 +1,4 @@
-import Bitcoin from "../utilities/Bitcoin";  
+import Bitcoin from "../utilities/Bitcoin";
 import twoFactorAuthentication from "../utilities/TwoFactorAuthentication";
 
 class WalletService {
@@ -7,8 +7,8 @@ class WalletService {
   constructor() {
     this.bitcoin = new Bitcoin();
     this.twoFA = new twoFactorAuthentication();
-  }
-
+  }  
+      
   public createWallet = (passphrase?: string) =>
     this.bitcoin.createHDWallet(passphrase)
 

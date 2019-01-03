@@ -102,7 +102,7 @@ async getUserDetails(){
           <View style={styles.viewHeading}>
             <Image
               style={styles.userProfileIcon}
-              source={require("../../../assets/images/developer/anantTapadia.png")}
+              source={require("../../../assets/images/icon/default_user_icon.png")}
             />
             <Text style={styles.txtUserName}>{this.state.fullName}</Text>
           </View>  

@@ -4,7 +4,7 @@ import qrcode from "qrcode";
 export default class TwoFactorAuthentication {
   constructor() {
     authenticator.options = { crypto };
-  }  
+  }
 
   public generator = async (
     userID: string,
@@ -17,7 +17,7 @@ export default class TwoFactorAuthentication {
     return {
       imageURL,
       secret,
-    };  
+    };
   }
 
   public validator = (secret: string, token: string): boolean =>

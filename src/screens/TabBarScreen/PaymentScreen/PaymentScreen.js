@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  RefreshControl,
   ScrollView
 } from "react-native";
 import {
@@ -72,19 +73,21 @@ export default class PaymentScreen extends React.Component {
     this.state = {
       tranDetails: [],
       accountTypeList: [],
+      popupAccountTypeList: [],
       walletsData: [],
       userDetails: [],
       fullName: "",
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       accountTypeVisible: false,
-      isOpen: false
+      isOpen: false,
+      refreshing: false
     };
     this.click_openPopupAccountType = this.click_openPopupAccountType.bind(
       this
     );
-    this._refresh = this._refresh.bind(this);
   }
 
+  //TODO: Page Life Cycle
   componentDidMount() {
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
@@ -93,6 +96,12 @@ export default class PaymentScreen extends React.Component {
       }
     );
   }
+
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
+  }
+
+  //TODO: func fetchUserDetails
 
   async fetchUserDetails() {
     loaderHandler.showLoader("Loading");
@@ -104,10 +113,22 @@ export default class PaymentScreen extends React.Component {
     const resultWallet = await dbOpration.readTablesData(
       localDB.tableName.tblWallet
     );
+    const resultPopUpAccountTypes = await dbOpration.readTableAcccountType(
+      localDB.tableName.tblAccountType,
+      localDB.tableName.tblAccount
+    );
     const bal = await WalletService.getBalance(resultWallet.temp[0].address);
     const resultRecentTras = await WalletService.getTransactions(
       resultWallet.temp[0].address
     );
+    if (resultRecentTras.transactionDetails.length > 0) {
+      console.log("Recent Trnasaction =", resultRecentTras.transactionDetails);
+      const resultRecentTransaction = await dbOpration.insertTblTransation(
+        localDB.tableName.tblTransaction,
+        resultRecentTras.transactionDetails,
+        lastUpdateDate
+      );
+    }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
         localDB.tableName.tblAccount,
@@ -115,12 +136,10 @@ export default class PaymentScreen extends React.Component {
         resultWallet.temp[0].address,
         lastUpdateDate
       );
-
       if (resultUpdateTblAccount) {
         const resultAccount = await dbOpration.readTablesData(
           localDB.tableName.tblAccount
         );
-
         this.setState({
           userDetails: resultUserDetails.temp,
           fullName:
@@ -129,43 +148,47 @@ export default class PaymentScreen extends React.Component {
             resultUserDetails.temp[0].lastName,
           accountTypeList: resultAccount.temp,
           walletsData: resultWallet.temp,
-          tranDetails: resultRecentTras.transactionDetails
+          tranDetails: resultRecentTras.transactionDetails,
+          popupAccountTypeList: resultPopUpAccountTypes.temp
         });
         loaderHandler.hideLoader();
       }
     }
   }
 
-  componentWillUnmount() {
-    this.willFocusSubscription.remove();
-  }
+  //TODO: func fetchRecentTransaction
 
-  //TODO: Funciton
-  click_openPopupAccountType() {
-    this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
-  }
-
-  //TODO: Funciton
-  click_openPopupAccountType() {
-    console.log("hi");
-    this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
-  }
   
-  //TODO: Ref
-  _refresh() {
+
+
+  //TODO: func click_openPopupAccountType
+
+  click_openPopupAccountType() {
+    this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
+  }
+
+  //TODO: func click_openPopupAccountType
+  click_openPopupAccountType() {
+    this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
+  }
+
+  //TODO: func refresh
+  refresh() {
+   this.setState({ refreshing: true });
     return new Promise(resolve => {
-      setTimeout(() => {
+      setTimeout(() => {  
+        this.setState({ refreshing: false });
         this.fetchUserDetails();
         resolve();
-      }, 2000);
+      }, 1000);
     });
   }
 
   _renderItem({ item, index }) {
     return (
       <View key={"card" + index}>
-        {renderIf(item.idAccountType == "UnKnown")(
-          <TouchableHighlight onPress={this.click_openPopupAccountType}>
+        {renderIf(item.accountType == "UnKnown")(
+          <TouchableOpacity onPress={this.click_openPopupAccountType}>
             <RkCard style={styles.rkCardUnnown}>
               <Icon name="plus-circle" size={40} color={"#ffffff"} />
               <Text
@@ -175,10 +198,10 @@ export default class PaymentScreen extends React.Component {
                 Create a wallet
               </Text>
             </RkCard>
-          </TouchableHighlight>
+          </TouchableOpacity>
         )}
-        {renderIf(item.idAccountType != "receive")(
-          <TouchableHighlight
+        {renderIf(item.accountType != "UnKnown")(
+          <TouchableOpacity
             onPress={() =>
               this.props.navigation.push("AccountsDetailsScreen", {
                 data: item,
@@ -197,7 +220,7 @@ export default class PaymentScreen extends React.Component {
               >
                 <View rkCardContent style={styles.cardHeader}>
                   <Text style={[styles.cardText, styles.cardTitle]}>
-                    {item.idAccountType}
+                    {item.accountType}
                   </Text>
                   <Text style={[styles.cardText, styles.cardAmount]}>
                     {item.balance} {item.unit}
@@ -205,41 +228,25 @@ export default class PaymentScreen extends React.Component {
                 </View>
               </ImageBackground>
             </RkCard>
-          </TouchableHighlight>
+          </TouchableOpacity>
         )}
       </View>
     );
-  }
-
-  checkConfirmation(val) {
-    let label;
-    if (val == 0) {
-      label = "UNCONFIRMED";
-    } else if (val > 0 && val < 6) {
-      label = "CONFIRMED";
-    } else {
-      label = "SUPER CONFIRMED";
-    }
-
-    return label;
-  }
-
-  //TODO: Ref
-
-  _refresh() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        this.fetchUserDetails();
-        resolve();
-      }, 2000);
-    });
   }
 
   render() {
     const { slider1ActiveSlide } = this.state;
     return (
       <Container>
-        <Content contentContainerStyle={styles.container} scrollEnabled={false}>
+        <Content
+          contentContainerStyle={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.refresh.bind(this)}
+            />
+          }
+        >
           <ImageBackground
             source={images.appBackgound}
             style={styles.backgroundImage}
@@ -279,37 +286,48 @@ export default class PaymentScreen extends React.Component {
                 </Button>
               </Right>
             </Header>
-            <PTRView onRefresh={this._refresh.bind(this)}>
-              <View style={styles.sliderView}>
-                <Carousel
-                  ref={c => {
-                    this._carousel = c;
-                  }}
-                  data={this.state.accountTypeList}
-                  renderItem={this._renderItem.bind(this)}
-                  sliderWidth={sliderWidth}
-                  itemWidth={itemWidth}
-                  onSnapToItem={index =>
-                    this.setState({ slider1ActiveSlide: index })
-                  }
-                />
-                <Pagination
-                  dotsLength={this.state.accountTypeList.length}
-                  activeDotIndex={slider1ActiveSlide}
-                  containerStyle={styles.paginationContainer}
-                  dotColor={"rgba(255, 255, 255, 0.92)"}
-                  dotStyle={styles.paginationDot}
-                  inactiveDotColor={colors.black}
-                  inactiveDotOpacity={0.4}
-                  inactiveDotScale={0.6}
-                  carouselRef={this._slider1Ref}
-                  tappableDots={!!this._slider1Ref}
-                />
+            <View style={styles.sliderView}>
+              <Carousel
+                ref={c => {
+                  this._carousel = c;
+                }}
+                data={this.state.accountTypeList}
+                renderItem={this._renderItem.bind(this)}
+                sliderWidth={sliderWidth}
+                itemWidth={itemWidth}
+                onSnapToItem={index => (
+                  console.log(index),
+                  this.setState({ slider1ActiveSlide: index })
+                )}
+              />
+              <Pagination
+                dotsLength={this.state.accountTypeList.length}
+                activeDotIndex={slider1ActiveSlide}
+                containerStyle={styles.paginationContainer}
+                dotColor={"rgba(255, 255, 255, 0.92)"}
+                dotStyle={styles.paginationDot}
+                inactiveDotColor={colors.black}
+                inactiveDotOpacity={0.4}
+                inactiveDotScale={0.6}
+                carouselRef={this._slider1Ref}
+                tappableDots={!!this._slider1Ref}
+              />
+            </View>
+            <View style={styles.viewMainRecentTran}>
+              <View style={styles.viewTitleRecentTrans}>
+                <Text style={styles.txtRecentTran}>Recent Transactions</Text>
               </View>
-              <View style={styles.viewMainRecentTran}>
-                <View style={styles.viewTitleRecentTrans}>
-                  <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+              {renderIf(this.state.tranDetails.length == 0)(
+                <View style={styles.viewNoTransaction}>
+                  <Thumbnail
+                    source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
+                  />
+                  <Text style={styles.txtNoTransaction} note>
+                    No Transactions
+                  </Text>
                 </View>
+              )}
+              {renderIf(this.state.tranDetails.length != 0)(
                 <View style={styles.recentTransListView}>
                   <FlatList
                     data={this.state.tranDetails}
@@ -323,36 +341,25 @@ export default class PaymentScreen extends React.Component {
                             />
                           </Left>
                           <Body>
-                            {renderIf(item.sent == true)(
-                              <Text style={styles.txtTransTitle}>
-                                Sent{" "}
-                                <Text style={styles.txtConfimation}>
-                                  {this.checkConfirmation(item.confirmations)}{" "}
-                                </Text>{" "}
-                              </Text>
-                            )}
-                            {renderIf(item.sent != true)(
-                              <Text style={styles.txtTransTitle}>
-                                Recieved{" "}
-                                <Text style={styles.txtConfimation}>
-                                  {this.checkConfirmation(item.confirmations)}{" "}
-                                </Text>{" "}
-                              </Text>
-                            )}
-
+                            <Text style={styles.txtTransTitle}>
+                              {item.transactionType}{" "}
+                              <Text style={styles.txtConfimation}>
+                                {item.confirmationType}{" "}
+                              </Text>{" "}
+                            </Text>
                             <Text note numberOfLines={1}>
                               {item.received}
                             </Text>
                           </Body>
                           <Right>
-                            {renderIf(item.sent == true)(
+                            {renderIf(item.transactionType == "Sent")(
                               <Text style={styles.txtAmoundSent}>
                                 - {item.totalSpent / 1e8}
                               </Text>
                             )}
-                            {renderIf(item.sent != true)(
+                            {renderIf(item.transactionType == "Received")(
                               <Text style={styles.txtAmoundRec}>
-                                + {item.totalRecieved / 1e8}
+                                + {item.totalReceived / 1e8}
                               </Text>
                             )}
                           </Right>
@@ -362,65 +369,42 @@ export default class PaymentScreen extends React.Component {
                     keyExtractor={item => item.hash}
                   />
                 </View>
-              </View>
-              <Dialog
-                width={Dimensions.get("screen").width - 30}
-                visible={this.state.accountTypeVisible}
-                onTouchOutside={() => {
-                  this.setState({ accountTypeVisible: false });
-                }}
-                actions={[
-                  <DialogButton
-                    text="CONFIGURE"
-                    style={[styles.importPopup, styles.btnPopUPConfigure]}
-                    onPress={() => {
-                      this.click_Import();
-                    }}
+              )}
+            </View>
+
+            <Dialog
+              width={Dimensions.get("screen").width - 30}
+              visible={this.state.accountTypeVisible}
+              onTouchOutside={() => {
+                this.setState({ accountTypeVisible: false });
+              }}
+              dialogAnimation={
+                new SlideAnimation({
+                  slideFrom: "bottom"
+                })
+              }
+            >
+              <DialogContent>
+                <View style={styles.accountTypePopUP}>
+                  <FlatList
+                    data={this.state.popupAccountTypeList}
+                    renderItem={({ item }) => (
+                      <View style={styles.btnGroupAccountTypes}>
+                        <Button
+                          full
+                          style={styles.btnAccountTypes}
+                          onPress={() =>
+                            this.setState({ accountTypeVisible: false })
+                          }
+                        >
+                          <Text>{item.name}</Text>
+                        </Button>
+                      </View>
+                    )}
                   />
-                ]}
-                dialogAnimation={
-                  new SlideAnimation({
-                    slideFrom: "bottom"
-                  })
-                }
-              >
-                <DialogContent>
-                  <View style={styles.accountTypePopUP}>
-                    <View style={styles.btnGroupAccountTypes}>
-                      <Button full style={styles.btnAccountTypes}>
-                        <Text>Saving Account</Text>
-                      </Button>
-                      <Button full style={styles.btnAccountTypes}>
-                        <Text>Investment</Text>
-                      </Button>
-                      <Button full style={styles.btnAccountTypes}>
-                        <Text>Agrement</Text>
-                      </Button>
-                    </View>
-                    <View style={styles.popupButtonIcon}>
-                      <Button
-                        vertical
-                        transparent
-                        style={styles.popupBtnAccountInfo}
-                      >
-                        <Icon name="lock" size={40} color={colors.appColor} />
-                        <Text style={styles.txtAccountBtnInfo}>Time Lock</Text>
-                      </Button>
-                      <Button
-                        vertical
-                        transparent
-                        style={styles.popupBtnAccountInfo}
-                      >
-                        <Icon name="user" size={40} color={colors.appColor} />
-                        <Text style={styles.txtAccountBtnInfo}>
-                          Joint/Multi-Sig
-                        </Text>
-                      </Button>
-                    </View>
-                  </View>
-                </DialogContent>
-              </Dialog>
-            </PTRView>
+                </View>
+              </DialogContent>
+            </Dialog>
           </ImageBackground>
         </Content>
         <BusyIndicator />
@@ -457,7 +441,7 @@ const styles = StyleSheet.create({
   rkCardUnnown: {
     alignItems: "center",
     justifyContent: "center",
-    height: "74%",
+    height: "100%",
     width: "100%",
     alignSelf: "center",
     borderRadius: 12,
@@ -530,6 +514,17 @@ const styles = StyleSheet.create({
   recentTransListView: {
     flex: 1,
     marginTop: 10
+  },
+  //No Transaction
+  viewNoTransaction: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 20
+  },
+  txtNoTransaction: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingTop: 5
   },
   //Account Type Popup Account
   accountTypePopUP: {
