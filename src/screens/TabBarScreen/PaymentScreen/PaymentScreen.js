@@ -122,12 +122,15 @@ export default class PaymentScreen extends React.Component {
       resultWallet.temp[0].address
     );
     if (resultRecentTras.transactionDetails.length > 0) {
-      console.log("Recent Trnasaction =", resultRecentTras.transactionDetails);
+      // console.log("Recent Trnasaction =", resultRecentTras.transactionDetails);
       const resultRecentTransaction = await dbOpration.insertTblTransation(
         localDB.tableName.tblTransaction,
         resultRecentTras.transactionDetails,
         lastUpdateDate
       );
+      if (resultRecentTransaction) {
+        this.fetchRecentTransaction(resultWallet.temp[0].address);
+      }
     }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
@@ -148,7 +151,6 @@ export default class PaymentScreen extends React.Component {
             resultUserDetails.temp[0].lastName,
           accountTypeList: resultAccount.temp,
           walletsData: resultWallet.temp,
-          tranDetails: resultRecentTras.transactionDetails,
           popupAccountTypeList: resultPopUpAccountTypes.temp
         });
         loaderHandler.hideLoader();
@@ -157,9 +159,15 @@ export default class PaymentScreen extends React.Component {
   }
 
   //TODO: func fetchRecentTransaction
-
-  
-
+  async fetchRecentTransaction(address) {
+    const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+      localDB.tableName.tblTransaction,
+      address
+    );
+    this.setState({
+      tranDetails: resultRecentTras.temp
+    });
+  }
 
   //TODO: func click_openPopupAccountType
 
@@ -174,9 +182,9 @@ export default class PaymentScreen extends React.Component {
 
   //TODO: func refresh
   refresh() {
-   this.setState({ refreshing: true });
+    this.setState({ refreshing: true });
     return new Promise(resolve => {
-      setTimeout(() => {  
+      setTimeout(() => {
         this.setState({ refreshing: false });
         this.fetchUserDetails();
         resolve();
@@ -348,18 +356,18 @@ export default class PaymentScreen extends React.Component {
                               </Text>{" "}
                             </Text>
                             <Text note numberOfLines={1}>
-                              {item.received}
+                              {item.dateCreated}
                             </Text>
                           </Body>
                           <Right>
                             {renderIf(item.transactionType == "Sent")(
                               <Text style={styles.txtAmoundSent}>
-                                - {item.totalSpent / 1e8}
+                                - {item.balance / 1e8}
                               </Text>
                             )}
                             {renderIf(item.transactionType == "Received")(
                               <Text style={styles.txtAmoundRec}>
-                                + {item.totalReceived / 1e8}
+                                + {item.balance / 1e8}
                               </Text>
                             )}
                           </Right>

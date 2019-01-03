@@ -8,7 +8,7 @@ var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 //TODO: Json Files
 import accountTypeData from "../../assets/jsonfiles/tblAccountType/tblAccountType.json";
 
-//TODO: Select
+//TODO: Select All Table Data
 const readTablesData = tableName => {
   return new Promise((resolve, reject) => {
     var temp = [];
@@ -26,7 +26,7 @@ const readTablesData = tableName => {
   });
 };
 
-//tblAccountType
+//TODO: Select tblAccountType
 const readTableAcccountType = (tableName1, tableName2) => {
   return new Promise((resolve, reject) => {
     var temp = [];
@@ -44,6 +44,35 @@ const readTableAcccountType = (tableName1, tableName2) => {
             for (let i = 0; i < len; i++) {
               temp.push(results.rows.item(i));
             }
+            resolve({ temp });
+          }
+        }
+      );
+    });
+  });
+};
+
+//TODO: Select Recent Transaciton Address Wise
+
+const readRecentTransactionAddressWise = (tableName, address) => {
+  console.log({ tableName, address });
+  return new Promise((resolve, reject) => {
+    var temp = [];
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM " +
+          tableName +
+          " where accountAddress = '" +
+          address +
+          "' order by id desc limit 0,10",
+        [],
+        (tx, results) => {
+          var len = results.rows.length;
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              temp.push(results.rows.item(i));
+            }
+            console.log({ temp });
             resolve({ temp });
           }
         }
@@ -156,7 +185,7 @@ const insertWalletAndCreateAccountType = (
   });
 };
 
-//tblTransaction
+//TODO: Insert tblTransaction
 const insertTblTransation = (tblName, transactionDetails, fulldate) => {
   let bal;
   if (transactionDetails[0].transactionType == "Received") {
@@ -166,12 +195,21 @@ const insertTblTransation = (tblName, transactionDetails, fulldate) => {
   }
   return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
+      //delete
       txn.executeSql(
-        "INSERT INTO " +  
+        "DELETE FROM " +
+          tblName +
+          " WHERE accountAddress = '" +
+          transactionDetails[0].addresses[1] +
+          "'"
+      );    
+      //insert  
+      txn.executeSql(
+        "INSERT INTO " +
           tblName +
           "(dateCreated,accountAddress,transactionHash,balance,unit,transactionType,confirmationType,lastUpdated) VALUES (:dateCreated,:accountAddress,:transactionHash,:balance,:unit,:transactionType,:confirmationType,:lastUpdated)",
-        [   
-          fulldate,
+        [  
+          transactionDetails[0].received,
           transactionDetails[0].addresses[1],
           transactionDetails[0].hash,
           bal,
@@ -186,11 +224,10 @@ const insertTblTransation = (tblName, transactionDetails, fulldate) => {
   });
 };
 
-
-
 module.exports = {
   readTablesData,
   readTableAcccountType,
+  readRecentTransactionAddressWise,
   insertAccountTypeData,
   insertUserDetailsData,
   insertWalletAndCreateAccountType,
