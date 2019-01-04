@@ -184,9 +184,9 @@ const insertWalletAndCreateAccountType = (
     });
   });
 };
-
+  
 //TODO: Insert tblTransaction
-const insertTblTransation = (tblName, transactionDetails, fulldate) => {
+const insertTblTransation = (tblName, transactionDetails,address,fulldate) => {
   let bal;
   if (transactionDetails[0].transactionType == "Received") {
     bal = transactionDetails[0].totalReceived;
@@ -200,9 +200,9 @@ const insertTblTransation = (tblName, transactionDetails, fulldate) => {
         "DELETE FROM " +
           tblName +
           " WHERE accountAddress = '" +
-          transactionDetails[0].addresses[1] +
-          "'"
-      );    
+          address +
+          "'"  
+      );      
       //insert  
       txn.executeSql(
         "INSERT INTO " +
@@ -210,13 +210,13 @@ const insertTblTransation = (tblName, transactionDetails, fulldate) => {
           "(dateCreated,accountAddress,transactionHash,balance,unit,transactionType,confirmationType,lastUpdated) VALUES (:dateCreated,:accountAddress,:transactionHash,:balance,:unit,:transactionType,:confirmationType,:lastUpdated)",
         [  
           transactionDetails[0].received,
-          transactionDetails[0].addresses[1],
+          address,
           transactionDetails[0].hash,
           bal,
           "BTC",
           transactionDetails[0].transactionType,
           transactionDetails[0].confirmationType,
-          fulldate
+          fulldate  
         ]
       );
       resolve(true);

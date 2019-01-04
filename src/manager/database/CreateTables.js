@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import RNFS from "react-native-fs";
 import SQLite from "react-native-sqlite-storage";
 import { localDB } from "../../constants/Constants";
 

@@ -47,6 +47,7 @@ import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/Re
 import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/QrcodeScannerScreen/QrcodeScannerScreen";
 
 import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
+import RecentTransactionsScreen from "../screens/DrawerScreen/RecentTransactionsScreen/RecentTransactionsScreen";
 
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -169,6 +170,7 @@ const TabNavigator = createBottomTabNavigator(
     }
   },
   {
+    mode: "modal",
     tabBarOptions: {
       activeTintColor: colors.appColor,
       labelStyle: {
@@ -221,6 +223,8 @@ LeftDrawerNavigator.navigationOptions = ({ navigation }) => {
     drawerLockMode
   };
 };
+
+//TODO: Model
 
 export const createRootNavigator = (
   signedIn = false,
@@ -307,6 +311,11 @@ export const createRootNavigator = (
         AccountsDetailsScreen: {
           screen: AccountsDetailsScreen,
           navigationOptions: { header: null }
+        },
+        //RecentTransactionsScreen
+        RecentTransactionsScreen: {
+          screen: RecentTransactionsScreen,
+          navigationOptions: { header: null }
         }
       },
       {
@@ -391,7 +400,7 @@ export const createRootNavigator = (
         BackupPhraseScreen: {
           screen: BackupPhraseScreen,
           navigationOptions: { header: null }
-        },  
+        },
         VerifyBackupPhraseScreen: {
           screen: VerifyBackupPhraseScreen,
           navigationOptions: { header: null }
@@ -400,9 +409,14 @@ export const createRootNavigator = (
         AccountsDetailsScreen: {
           screen: AccountsDetailsScreen,
           navigationOptions: { header: null }
+        },
+        //RecentTransactionsScreen
+        RecentTransactionsScreen: {
+          screen: RecentTransactionsScreen,
+          navigationOptions: { header: null }
         }
       },
-      {
+      {    
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
         //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"

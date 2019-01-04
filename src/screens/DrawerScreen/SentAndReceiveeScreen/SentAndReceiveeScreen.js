@@ -24,8 +24,7 @@ import {
   CardItem
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import BusyIndicator from "react-native-busy-indicator";
-import loaderHandler from "react-native-busy-indicator/LoaderHandler";
+
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
@@ -46,7 +45,7 @@ export default class SentAndReceiveeScreen extends React.Component {
       totalRec: "Total Recieved"
     };
     this.getLocalDBAddress();
-    loaderHandler.showLoader("Loading");
+   // loaderHandler.showLoader("Loading");
     setTimeout(() => {
       this.getAddressBal();
     }, 100);
@@ -92,7 +91,7 @@ export default class SentAndReceiveeScreen extends React.Component {
         finalBal: "Final Balance: " + bal.final_balance / 1e8,
         totalRec: "Total Recieved: " + bal.total_received / 1e8
       });
-      loaderHandler.hideLoader();
+      //loaderHandler.hideLoader();
     }
   }
 
@@ -158,7 +157,6 @@ export default class SentAndReceiveeScreen extends React.Component {
             </Card>
           </Content>
         </ImageBackground>
-        <BusyIndicator />
       </Container>
     );
   }

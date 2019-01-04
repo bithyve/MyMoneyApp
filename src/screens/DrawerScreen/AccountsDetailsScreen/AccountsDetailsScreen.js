@@ -28,9 +28,7 @@ import {
   Footer
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import BusyIndicator from "react-native-busy-indicator";
-import loaderHandler from "react-native-busy-indicator/LoaderHandler";
-import PTRView from "react-native-pull-to-refresh";
+
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
@@ -69,7 +67,7 @@ export default class AccountDetailsScreen extends React.Component {
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
-        this.loadData();
+        this.fetchloadData();
       }
     );
   }
@@ -79,8 +77,8 @@ export default class AccountDetailsScreen extends React.Component {
   }
 
   //TODO: func loadData
-  async loadData() {
-    loaderHandler.showLoader("Loading");
+  async fetchloadData() {
+    //loaderHandler.showLoader("Loading");
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const { navigation } = this.props;
@@ -90,6 +88,17 @@ export default class AccountDetailsScreen extends React.Component {
     const resultRecentTras = await WalletService.getTransactions(
       navigation.getParam("data").address
     );
+    if (resultRecentTras.transactionDetails.length > 0) {
+      const resultRecentTransaction = await dbOpration.insertTblTransation(
+        localDB.tableName.tblTransaction,
+        resultRecentTras.transactionDetails,
+        resultRecentTras.address, 
+        lastUpdateDate
+      );
+      if (resultRecentTransaction) {
+        this.fetchRecentTransaction(navigation.getParam("data").address);
+      }
+    }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
         localDB.tableName.tblAccount,
@@ -102,22 +111,31 @@ export default class AccountDetailsScreen extends React.Component {
           localDB.tableName.tblAccount
         );
         this.setState({
-          data: resultAccount.temp[0],
-          tranDetails: resultRecentTras.transactionDetails
-        });
-        loaderHandler.hideLoader();
+          data: resultAccount.temp[0]
+        });  
+       // loaderHandler.hideLoader();
       }
     }
   }
 
-  //TODO: func refresh
+  //TODO: func fetchRecentTransaction
+  async fetchRecentTransaction(address) {
+    const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+      localDB.tableName.tblTransaction,
+      address
+    );
+    this.setState({
+      tranDetails: resultRecentTras.temp
+    });
+  }
 
+  //TODO: func refresh
   refresh() {
     this.setState({ refreshing: true });
     return new Promise(resolve => {
       setTimeout(() => {
         this.setState({ refreshing: false });
-        this.loadData();
+        this.fetchloadData();
         resolve();
       }, 1000);
     });
@@ -200,36 +218,25 @@ export default class AccountDetailsScreen extends React.Component {
                             />
                           </Left>
                           <Body>
-                            {renderIf(item.transactionType == "Sent")(
-                              <Text style={styles.txtTransTitle}>
-                                Sent{" "}
-                                <Text style={styles.txtConfimation}>
-                                  {item.confirmationType}{" "}
-                                </Text>{" "}
-                              </Text>
-                            )}
-                            {renderIf(item.transactionType == "Received")(
-                              <Text style={styles.txtTransTitle}>
-                                Recieved{" "}
-                                <Text style={styles.txtConfimation}>
-                                  {item.confirmationType}{" "}
-                                </Text>{" "}
-                              </Text>
-                            )}
-
+                            <Text style={styles.txtTransTitle}>
+                              {item.transactionType}{" "}
+                              <Text style={styles.txtConfimation}>
+                                {item.confirmationType}{" "}
+                              </Text>{" "}
+                            </Text>
                             <Text note numberOfLines={1}>
-                              {item.received}
+                              {item.dateCreated}
                             </Text>
                           </Body>
                           <Right>
                             {renderIf(item.transactionType == "Sent")(
                               <Text style={styles.txtAmoundSent}>
-                                - {item.totalSpent / 1e8}
+                                - {item.balance / 1e8}
                               </Text>
                             )}
                             {renderIf(item.transactionType == "Received")(
                               <Text style={styles.txtAmoundRec}>
-                                + {item.totalReceived / 1e8}
+                                + {item.balance / 1e8}
                               </Text>
                             )}
                           </Right>
@@ -279,7 +286,6 @@ export default class AccountDetailsScreen extends React.Component {
           </View>
         </Content>
 
-        <BusyIndicator />
       </Container>
     );
   }

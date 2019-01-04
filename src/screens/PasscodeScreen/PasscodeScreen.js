@@ -11,7 +11,6 @@ import {
   Dimensions
 } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
-import Spinner from "react-native-loading-spinner-overlay";
 import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
 

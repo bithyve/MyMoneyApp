@@ -22,8 +22,6 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import BusyIndicator from "react-native-busy-indicator";
-import loaderHandler from "react-native-busy-indicator/LoaderHandler";
 
 const required = value => (value ? undefined : "This is a required field.");
 const email = value =>
@@ -87,7 +85,7 @@ export default class SentMoneyScreen extends React.Component {
 
   //TODO: func click_SentMoney
   async click_SentMoney() {
-    loaderHandler.showLoader("Loading");
+   // loaderHandler.showLoader("Loading");
     var recAddress = this.state.recipientAddress;
     var amountValue = this.state.amount;
     console.log("first amount=", amountValue);
@@ -116,7 +114,7 @@ export default class SentMoneyScreen extends React.Component {
         );
         if (resultUpdateTblAccount) {
           setTimeout(() => {
-            loaderHandler.hideLoader();
+           // loaderHandler.hideLoader();
             this.props.navigation.goBack();
           }, 2000);
         }
@@ -212,7 +210,6 @@ export default class SentMoneyScreen extends React.Component {
             </Button>
           </Content>
         </ImageBackground>
-        <BusyIndicator />
       </Container>
     );
   }

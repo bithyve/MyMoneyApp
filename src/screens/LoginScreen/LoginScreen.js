@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         marginTop: 40,
-    },
+    },  
     txtTitle: {
         color: '#ffffff',
         fontSize: 16,

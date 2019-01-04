@@ -11,10 +11,7 @@ import {
   Dimensions
 } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
-import Spinner from "react-native-loading-spinner-overlay";
 import CodeInput from "react-native-confirmation-code-input";
-import BusyIndicator from "react-native-busy-indicator";
-import loaderHandler from "react-native-busy-indicator/LoaderHandler";
 import DropdownAlert from "react-native-dropdownalert";
 import renderIf from "../../constants/validation/renderIf";
 import CardFlip from "react-native-card-flip";
@@ -55,7 +52,7 @@ export default class PasscodeConfirmScreen extends Component {
     });
   }
   componentWillUnmount() {
-    loaderHandler.hideLoader();
+    //loaderHandler.hideLoader();
   }
 
   onCheckPincode(code) {
@@ -66,13 +63,13 @@ export default class PasscodeConfirmScreen extends Component {
     });
     this.card.flip();
   }
-
+  
   _onFinishCheckingCode2(isValid, code) {
-    loaderHandler.showLoader("Loading");
+    //loaderHandler.showLoader("Loading");
     if (isValid) {
       this.saveData();
     } else {
-      loaderHandler.hideLoader();
+     // loaderHandler.hideLoader();
       this.dropdown.alertWithType(
         "error",
         "Error",
@@ -200,7 +197,6 @@ export default class PasscodeConfirmScreen extends Component {
             />
           )}
         </CardFlip>
-        <BusyIndicator />
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </View>
     );

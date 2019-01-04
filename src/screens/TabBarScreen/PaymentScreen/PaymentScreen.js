@@ -28,6 +28,7 @@ import {
   Thumbnail
 } from "native-base";
 import { RkCard } from "react-native-ui-kitten";
+import { StackActions, NavigationActions } from "react-navigation";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import CardFlip from "react-native-card-flip";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -37,9 +38,7 @@ import Dialog, {
   DialogContent,
   DialogButton
 } from "react-native-popup-dialog";
-import BusyIndicator from "react-native-busy-indicator";
-import loaderHandler from "react-native-busy-indicator/LoaderHandler";
-import PTRView from "react-native-pull-to-refresh";
+
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
@@ -102,9 +101,9 @@ export default class PaymentScreen extends React.Component {
   }
 
   //TODO: func fetchUserDetails
-
+  
   async fetchUserDetails() {
-    loaderHandler.showLoader("Loading");
+   // loaderHandler.showLoader("Loading");
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const resultUserDetails = await dbOpration.readTablesData(
@@ -121,11 +120,12 @@ export default class PaymentScreen extends React.Component {
     const resultRecentTras = await WalletService.getTransactions(
       resultWallet.temp[0].address
     );
+
     if (resultRecentTras.transactionDetails.length > 0) {
-      // console.log("Recent Trnasaction =", resultRecentTras.transactionDetails);
       const resultRecentTransaction = await dbOpration.insertTblTransation(
         localDB.tableName.tblTransaction,
         resultRecentTras.transactionDetails,
+        resultRecentTras.address,
         lastUpdateDate
       );
       if (resultRecentTransaction) {
@@ -153,7 +153,7 @@ export default class PaymentScreen extends React.Component {
           walletsData: resultWallet.temp,
           popupAccountTypeList: resultPopUpAccountTypes.temp
         });
-        loaderHandler.hideLoader();
+      //  loaderHandler.hideLoader();
       }
     }
   }
@@ -190,6 +190,11 @@ export default class PaymentScreen extends React.Component {
         resolve();
       }, 1000);
     });
+  }
+
+  //TODO: func openRecentTrans
+  openRecentTrans(item) {
+    this.props.navigation.navigate("RecentTransactionsScreen");
   }
 
   _renderItem({ item, index }) {
@@ -252,7 +257,7 @@ export default class PaymentScreen extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this.refresh.bind(this)}
-            />
+            />  
           }
         >
           <ImageBackground
@@ -342,7 +347,10 @@ export default class PaymentScreen extends React.Component {
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item }) => (
                       <List>
-                        <ListItem thumbnail>
+                        <ListItem
+                          thumbnail
+                          onPress={() => this.openRecentTrans(item)}
+                        >
                           <Left>
                             <Thumbnail
                               source={require("../../../assets/images/bitcoinLogo.jpg")}
@@ -415,7 +423,6 @@ export default class PaymentScreen extends React.Component {
             </Dialog>
           </ImageBackground>
         </Content>
-        <BusyIndicator />
       </Container>
     );
   }

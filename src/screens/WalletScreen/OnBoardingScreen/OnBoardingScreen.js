@@ -18,7 +18,6 @@ import Dialog, {
   DialogButton
 } from "react-native-popup-dialog";
 import Toast from "react-native-simple-toast";
-import Spinner from "react-native-loading-spinner-overlay";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 
 //TODO: Custome Pages
@@ -53,7 +52,7 @@ export default class OnBoardingScreen extends React.Component {
       spinner: false,
       imageName: require("../../../assets/images/onBoardingScreen/bitcoin.png")
     };
-  }
+  }  
 
   //TODO: Page Life Cycle
   componentWillMount() {
@@ -140,7 +139,6 @@ export default class OnBoardingScreen extends React.Component {
               onPress={() => this.click_SignUP()}
             />
           </View>
-          <Spinner visible={this.state.spinner} textContent={"Loading..."} />
         </Body>
         <CreateTables />
         <Dialog

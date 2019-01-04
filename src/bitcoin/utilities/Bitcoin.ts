@@ -193,14 +193,15 @@ export default class Bitcoin {
       final_n_tx,
       n_tx,
       unconfirmed_n_tx,
-      txs,
+      txs,  
     } = await this.fetchAddressInfo(address);
 
     txs.map((tx) => {
       this.confirmationCat(this.categorizeTx(tx, address));
     });
-
-    return {
+       
+    return {  
+      address:address,
       totalTransactions: final_n_tx,
       confirmedTransactions: n_tx,
       unconfirmedTransactions: unconfirmed_n_tx,
