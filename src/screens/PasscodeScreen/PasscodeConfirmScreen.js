@@ -15,12 +15,16 @@ import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
 import renderIf from "../../constants/validation/renderIf";
 import CardFlip from "react-native-card-flip";
+import { SkypeIndicator } from "react-native-indicators";
+
+
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../constants/Constants";
 var dbOpration = require("../../manager/database/DBOpration");
 
 //TODO: Wallets
 import WalletService from "../../bitcoin/services/WalletService";
+import { transform } from "typescript";
 
 const { height, width } = Dimensions.get("window");
 
@@ -36,9 +40,10 @@ export default class PasscodeConfirmScreen extends Component {
       lastName: "",
       email: "",
       mobileNo: "",
-      countryName: ""
+      countryName: "",
+      isLoading: false
     };
-  }     
+  }  
 
   //TODO: Page Life Cycle
   componentWillMount() {
@@ -53,6 +58,9 @@ export default class PasscodeConfirmScreen extends Component {
   }
   componentWillUnmount() {
     //loaderHandler.hideLoader();
+    this.setState({
+      isLoading: false
+    });
   }
 
   onCheckPincode(code) {
@@ -63,13 +71,16 @@ export default class PasscodeConfirmScreen extends Component {
     });
     this.card.flip();
   }
-  
+
   _onFinishCheckingCode2(isValid, code) {
     //loaderHandler.showLoader("Loading");
     if (isValid) {
+      this.setState({
+        isLoading: true
+      });
       this.saveData();
     } else {
-     // loaderHandler.hideLoader();
+      // loaderHandler.hideLoader();
       this.dropdown.alertWithType(
         "error",
         "Error",
@@ -103,7 +114,7 @@ export default class PasscodeConfirmScreen extends Component {
       const resultInsertUserDetails = await dbOpration.insertUserDetailsData(
         localDB.tableName.tblUser,
         fulldate,
-        firstName,
+        firstName,  
         lastName,
         email,
         country,
@@ -132,6 +143,7 @@ export default class PasscodeConfirmScreen extends Component {
             }
             this.setState({
               success: "Ok!!"
+              //isLoading: false
             });
             const resetAction = StackActions.reset({
               index: 0, // <-- currect active route from actions array
@@ -141,7 +153,7 @@ export default class PasscodeConfirmScreen extends Component {
               ]
             });
             this.props.navigation.dispatch(resetAction);
-          }   
+          }
         }
       }
     }
@@ -198,10 +210,15 @@ export default class PasscodeConfirmScreen extends Component {
           )}
         </CardFlip>
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
+        {renderIf(this.state.isLoading)(
+          <View style={styles.loading}>
+            <SkypeIndicator color={colors.appColor} />
+          </View>
+        )}
       </View>
     );
   }
-}
+}    
 
 let styles = StyleSheet.create({
   container: {
@@ -215,5 +232,16 @@ let styles = StyleSheet.create({
   txtTitle: {
     marginTop: 100,
     fontSize: 40
+  },
+  loading: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.5,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });

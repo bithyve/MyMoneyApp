@@ -38,11 +38,12 @@ import Dialog, {
   DialogContent,
   DialogButton
 } from "react-native-popup-dialog";
-
+import { DotIndicator } from "react-native-indicators";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
+var utils = require("../../../constants/Utils");
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
 
@@ -79,7 +80,9 @@ export default class PaymentScreen extends React.Component {
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       accountTypeVisible: false,
       isOpen: false,
-      refreshing: false
+      refreshing: false,
+      isLoading: false,
+      isNoTranstion: false
     };
     this.click_openPopupAccountType = this.click_openPopupAccountType.bind(
       this
@@ -101,9 +104,10 @@ export default class PaymentScreen extends React.Component {
   }
 
   //TODO: func fetchUserDetails
-  
   async fetchUserDetails() {
-   // loaderHandler.showLoader("Loading");
+    this.setState({
+      isLoading: true
+    });
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const resultUserDetails = await dbOpration.readTablesData(
@@ -120,6 +124,7 @@ export default class PaymentScreen extends React.Component {
     const resultRecentTras = await WalletService.getTransactions(
       resultWallet.temp[0].address
     );
+    console.log("recent transaction = ", { resultRecentTras });
 
     if (resultRecentTras.transactionDetails.length > 0) {
       const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -131,6 +136,10 @@ export default class PaymentScreen extends React.Component {
       if (resultRecentTransaction) {
         this.fetchRecentTransaction(resultWallet.temp[0].address);
       }
+    } else {
+      this.setState({
+        isNoTranstion: true
+      });
     }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
@@ -151,9 +160,9 @@ export default class PaymentScreen extends React.Component {
             resultUserDetails.temp[0].lastName,
           accountTypeList: resultAccount.temp,
           walletsData: resultWallet.temp,
-          popupAccountTypeList: resultPopUpAccountTypes.temp
+          popupAccountTypeList: resultPopUpAccountTypes.temp,
+          isLoading: false
         });
-      //  loaderHandler.hideLoader();
       }
     }
   }
@@ -194,7 +203,9 @@ export default class PaymentScreen extends React.Component {
 
   //TODO: func openRecentTrans
   openRecentTrans(item) {
-    this.props.navigation.navigate("RecentTransactionsScreen");
+    this.props.navigation.navigate("RecentTransactionsScreen", {
+      transationDetails: item
+    });
   }
 
   _renderItem({ item, index }) {
@@ -257,7 +268,7 @@ export default class PaymentScreen extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this.refresh.bind(this)}
-            />  
+            />
           }
         >
           <ImageBackground
@@ -329,8 +340,13 @@ export default class PaymentScreen extends React.Component {
             <View style={styles.viewMainRecentTran}>
               <View style={styles.viewTitleRecentTrans}>
                 <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+                {renderIf(this.state.isLoading)(
+                  <View style={styles.loading}>
+                    <DotIndicator size={5} color={colors.appColor} />
+                  </View>
+                )}
               </View>
-              {renderIf(this.state.tranDetails.length == 0)(
+              {renderIf(this.state.isNoTranstion)(
                 <View style={styles.viewNoTransaction}>
                   <Thumbnail
                     source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
@@ -364,7 +380,7 @@ export default class PaymentScreen extends React.Component {
                               </Text>{" "}
                             </Text>
                             <Text note numberOfLines={1}>
-                              {item.dateCreated}
+                              {utils.getUnixToDateFormat(item.dateCreated)}
                             </Text>
                           </Body>
                           <Right>
@@ -507,7 +523,17 @@ const styles = StyleSheet.create({
     flex: 3
   },
   viewTitleRecentTrans: {
-    marginLeft: 20
+    marginLeft: 20,
+    flexDirection: "row",
+    flex: 0.2 
+  },
+  //Loading
+  loading: {
+    marginLeft: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    alignContent: "center"
   },
   txtRecentTran: {
     fontWeight: "bold",
@@ -527,8 +553,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   recentTransListView: {
-    flex: 1,
-    marginTop: 10
+    flex: 1
   },
   //No Transaction
   viewNoTransaction: {

@@ -21,7 +21,7 @@ export default class CreateTables extends Component {
           localDB.tableName.tblUser +
           " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,firstName TEXT,lastName TEXT,email TEXT,country TEXT,mobileNo TEXT,lastUpdated TEXT)",
         []
-      );   
+      );
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblWallet +
@@ -37,19 +37,19 @@ export default class CreateTables extends Component {
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblAccount +
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,address TEXT,balance TEXT,unit TEXT,accountType TEXT,lastUpdated TEXT,FOREIGN KEY(accountType) REFERENCES tblAccountType(name))",     
-        []     
-      );    
-      txn.executeSql(
-        "CREATE TABLE IF NOT EXISTS " +
-          localDB.tableName.tblTransaction +      
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,accountAddress TEXT,transactionHash TEXT,balance TEXT,unit TEXT,transactionType TEXT,confirmationType TEXT,lastUpdated TEXT,FOREIGN KEY(accountAddress) REFERENCES tblAccount(address))",
-        []   
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,address TEXT,balance TEXT,unit TEXT,accountType TEXT,lastUpdated TEXT,FOREIGN KEY(accountType) REFERENCES tblAccountType(name))",
+        []
       );
+      txn.executeSql(
+        "CREATE TABLE IF NOT EXISTS " +  
+          localDB.tableName.tblTransaction +
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,accountAddress TEXT,transactionHash TEXT,balance INTEGER,unit TEXT,fees INTEGER,transactionType TEXT,confirmationType TEXT,lastUpdated TEXT,FOREIGN KEY(accountAddress) REFERENCES tblAccount(address))",  
+        []  
+      );  
       console.log("create database.");
-    });
+    });  
   }
-    
+
   errorCB(err) {
     console.log("SQL Error: " + err);
   }

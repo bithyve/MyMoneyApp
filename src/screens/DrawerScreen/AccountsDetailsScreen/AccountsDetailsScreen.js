@@ -29,12 +29,12 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
+import { DotIndicator } from "react-native-indicators";
 
 //TODO: Wallets
 //var walletService = require("../../../bitcoin/services/wallet");
@@ -48,7 +48,9 @@ export default class AccountDetailsScreen extends React.Component {
       data: [],
       waletteData: [],
       tranDetails: [],
-      refreshing: false
+      refreshing: false,
+      isLoading: false,
+      isNoTranstion: false
     };
     console.log("2MvwghT7H8Y81v9pSAvTprsNEw5yEqXTDcU");
   }
@@ -78,7 +80,9 @@ export default class AccountDetailsScreen extends React.Component {
 
   //TODO: func loadData
   async fetchloadData() {
-    //loaderHandler.showLoader("Loading");
+    this.setState({
+      isLoading: true
+    });
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const { navigation } = this.props;
@@ -92,12 +96,16 @@ export default class AccountDetailsScreen extends React.Component {
       const resultRecentTransaction = await dbOpration.insertTblTransation(
         localDB.tableName.tblTransaction,
         resultRecentTras.transactionDetails,
-        resultRecentTras.address, 
+        resultRecentTras.address,
         lastUpdateDate
       );
       if (resultRecentTransaction) {
         this.fetchRecentTransaction(navigation.getParam("data").address);
       }
+    } else {
+      this.setState({
+        isNoTranstion: true
+      });
     }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
@@ -111,9 +119,9 @@ export default class AccountDetailsScreen extends React.Component {
           localDB.tableName.tblAccount
         );
         this.setState({
-          data: resultAccount.temp[0]
-        });  
-       // loaderHandler.hideLoader();
+          data: resultAccount.temp[0],
+          isLoading: false
+        });
       }
     }
   }
@@ -192,9 +200,14 @@ export default class AccountDetailsScreen extends React.Component {
           <View style={styles.viewMainRecentTran}>
             <View style={styles.viewTitleRecentTrans}>
               <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+              {renderIf(this.state.isLoading)(
+                <View style={styles.loading}>
+                  <DotIndicator size={5} color={colors.appColor} />
+                </View>
+              )}
             </View>
             <View style={styles.recentTransListView}>
-              {renderIf(this.state.tranDetails.length == 0)(
+              {renderIf(this.state.isNoTranstion)(
                 <View style={styles.viewNoTransaction}>
                   <Thumbnail
                     source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
@@ -285,7 +298,6 @@ export default class AccountDetailsScreen extends React.Component {
             </View>
           </View>
         </Content>
-
       </Container>
     );
   }
@@ -324,14 +336,23 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold"
   },
-
   //Recent Transaction
   viewMainRecentTran: {
     flex: 2
   },
   viewTitleRecentTrans: {
-    marginTop: 10,
-    marginLeft: 20
+    marginLeft: 20,
+    flexDirection: "row",
+    flex: 0.2,
+    alignItems:'center'
+  },
+  //Loading
+  loading: {
+    marginLeft: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    alignContent: "center"
   },
   txtRecentTran: {
     fontWeight: "bold",
@@ -351,8 +372,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   recentTransListView: {
-    flex: 1,
-    marginTop: 10
+    flex: 1
   },
   //No Transaction
   viewNoTransaction: {

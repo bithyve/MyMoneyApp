@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../constants/Constants";
+var utils = require("../../constants/Utils");
+
 import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
@@ -63,8 +65,8 @@ const readRecentTransactionAddressWise = (tableName, address) => {
         "SELECT * FROM " +
           tableName +
           " where accountAddress = '" +
-          address +
-          "' order by id desc limit 0,10",
+          address +     
+          "' order by id asc limit 0,10",
         [],
         (tx, results) => {
           var len = results.rows.length;
@@ -184,41 +186,47 @@ const insertWalletAndCreateAccountType = (
     });
   });
 };
-  
+
 //TODO: Insert tblTransaction
-const insertTblTransation = (tblName, transactionDetails,address,fulldate) => {
+const insertTblTransation = (
+  tblName,
+  transactionDetails,
+  address,
+  fulldate
+) => {
   let bal;
-  if (transactionDetails[0].transactionType == "Received") {
-    bal = transactionDetails[0].totalReceived;
-  } else {
-    bal = transactionDetails[0].totalSpent;
-  }
+
   return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
       //delete
       txn.executeSql(
-        "DELETE FROM " +
-          tblName +
-          " WHERE accountAddress = '" +
-          address +
-          "'"  
-      );      
-      //insert  
-      txn.executeSql(
-        "INSERT INTO " +
-          tblName +
-          "(dateCreated,accountAddress,transactionHash,balance,unit,transactionType,confirmationType,lastUpdated) VALUES (:dateCreated,:accountAddress,:transactionHash,:balance,:unit,:transactionType,:confirmationType,:lastUpdated)",
-        [  
-          transactionDetails[0].received,
-          address,
-          transactionDetails[0].hash,
-          bal,
-          "BTC",
-          transactionDetails[0].transactionType,
-          transactionDetails[0].confirmationType,
-          fulldate  
-        ]
-      );
+        "DELETE FROM " + tblName + " WHERE accountAddress = '" + address + "'"
+      );  
+      console.log("trnasation length=", transactionDetails.length);
+      //insert
+      for (i = 0; i < transactionDetails.length; i++) {
+        if (transactionDetails[i].transactionType == "Received") {
+          bal = transactionDetails[i].totalReceived;
+        } else {
+          bal = transactionDetails[i].totalSpent;
+        }
+        txn.executeSql(
+          "INSERT INTO " +
+            tblName +
+            "(dateCreated,accountAddress,transactionHash,balance,unit,fees,transactionType,confirmationType,lastUpdated) VALUES (:dateCreated,:accountAddress,:transactionHash,:balance,:unit,:fees,:transactionType,:confirmationType,:lastUpdated)",
+          [
+            utils.getUnixTimeDate(transactionDetails[i].received),
+            address,
+            transactionDetails[i].hash,
+            bal,
+            "BTC",
+            transactionDetails[i].fees,
+            transactionDetails[i].transactionType,
+            transactionDetails[i].confirmationType,
+            fulldate
+          ]
+        );
+      }
       resolve(true);
     });
   });

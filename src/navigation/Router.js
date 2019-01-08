@@ -46,8 +46,8 @@ import SentMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/SentM
 import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/ReceiveMoneyScreen/ReceiveMoneyScreen";
 import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/QrcodeScannerScreen/QrcodeScannerScreen";
 
-import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
-import RecentTransactionsScreen from "../screens/DrawerScreen/RecentTransactionsScreen/RecentTransactionsScreen";
+import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";  
+import RecentTransactionsScreen from "../screens/TabBarScreen/PaymentScreen/RecentTransactionsScreen/RecentTransactionsScreen";
 
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -169,7 +169,9 @@ const TabNavigator = createBottomTabNavigator(
       }
     }
   },
+  
   {
+    
     mode: "modal",
     tabBarOptions: {
       activeTintColor: colors.appColor,

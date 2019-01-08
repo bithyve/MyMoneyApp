@@ -1,3 +1,4 @@
+#### any time use:- yarn  --reset-cache
 //Android
 1)base_map.fill(255)<br>
 https://github.com/react-native-community/jsc-android-buildscripts<br>
@@ -5,7 +6,7 @@ https://github.com/react-native-community/jsc-android-buildscripts<br>
 
 import org.pgsqlite.SQLitePluginPackage;<br>
 new SQLitePluginPackage()<br>
-
+  
 ### System update
 
 npm cache clean --force
@@ -75,7 +76,6 @@ build.gradel
       signingConfig signingConfigs.release
 
 ### (IOS) lottie.h file not found
-
 react-native link lottie-react-native<br>
 or<br>
 react-native link lottie-ios<br>
@@ -85,7 +85,12 @@ react-native link lottie-ios<br>
 import PropTypes from 'prop-types';
 
 ### reactDevTools not found check this file
-  
 (node_modules/react-native/Libraries/Core/Devtools/setupDevtools.js)
 add this
 yarn add --dev react-devtools-core@3.4.3
+
+
+  
+### Module `asyncstorage-down` does not exist in the Haste module map
+remove package
+yarn remove https-browserify
