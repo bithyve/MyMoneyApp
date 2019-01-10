@@ -41,7 +41,7 @@ export default class ReceiveMoneyScreen extends React.Component {
     //TODO: Func Copy they code
     click_CopyAddress() {
         Clipboard.setString(this.state.address);
-        Toast.show('Address copy!', Toast.SHORT);
+        Toast.show('Address copyed.!', Toast.SHORT);
     }
 
 

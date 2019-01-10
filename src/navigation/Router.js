@@ -47,15 +47,26 @@ import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/Re
 import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/QrcodeScannerScreen/QrcodeScannerScreen";
 
 import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
-import RecentTransactionsScreen from "../screens/DrawerScreen/RecentTransactionsScreen/RecentTransactionsScreen";
+import RecentTransactionsScreen from "../screens/TabBarScreen/PaymentScreen/RecentTransactionsScreen/RecentTransactionsScreen";
+
+//TODO: Secure Account
+import SecureAccountScreen from "../screens/DrawerScreen/SecureAccountScreen/SecureAccountScreen";
+import SecureSecretKeyScreen from "../screens/DrawerScreen/SecureAccountScreen/SecureSecretKeyScreen/SecureSecretKeyScreen";
+import ValidateSecureAccountScreen from "../screens/DrawerScreen/SecureAccountScreen/ValidateSecureAccountScreen/ValidateSecureAccountScreen";
 
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
+<<<<<<< HEAD
 //joint account
 import CreateJointAccountScreen from "../screens/JointAccount/CreateJointAccountScreen/CreateJointAccountScreen";
 
 //TODO: ONBoarding
+=======
+//TODO: StackNavigator
+
+//TODO: StackNavigator:ONBoarding
+>>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
 const OnBoardingRouter = createStackNavigator(
   {
     OnBoarding: {
@@ -101,7 +112,7 @@ const OnBoardingRouter = createStackNavigator(
   }
 );
 
-//TODO: Login
+//TODO: StackNavigator:LoginRouter
 const LoginRouter = createStackNavigator(
   {
     Login: {
@@ -114,15 +125,31 @@ const LoginRouter = createStackNavigator(
   }
 );
 
-//TODO: Left DrawerNavigator
-const LeftDrawer = createStackNavigator({
-  AccountSettingScreen: {
-    screen: AccountSettingScreen,
-    navigationOptions: { header: null }
+//TODO: StackNavigator:SecureAccountRouter
+const SecureAccountRouter = createStackNavigator(
+  {
+    SecureAccountScreen: {
+      screen: SecureAccountScreen,
+      navigationOptions: { header: null }
+    },
+    SecureSecretKeyScreen: {
+      screen: SecureSecretKeyScreen,
+      navigationOptions: { header: null }
+    },
+    ValidateSecureAccountScreen: {
+      screen: ValidateSecureAccountScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "SecureAccountScreen"
   }
-});
+);
+
 
 //TODO: TabNavigator
+
+//TODO: TabNavigator:TabNavigator
 const TabNavigator = createBottomTabNavigator(
   {
     Payment: {
@@ -172,6 +199,7 @@ const TabNavigator = createBottomTabNavigator(
       }
     }
   },
+
   {
     mode: "modal",
     tabBarOptions: {
@@ -187,6 +215,7 @@ const TabNavigator = createBottomTabNavigator(
 );
 
 //TODO: DrawerNavigator
+//TODO: DrawerNavigator:LeftDrawerNavigator
 const LeftDrawerNavigator = createDrawerNavigator(
   {
     Home: {
@@ -215,19 +244,8 @@ const LeftDrawerNavigator = createDrawerNavigator(
   }
 );
 
-LeftDrawerNavigator.navigationOptions = ({ navigation }) => {
-  //console.log('navigator =' + JSON.stringify(navigation));
-  let drawerLockMode = "unlocked";
-  if (navigation.state.index > 0) {
-    drawerLockMode = "locked-closed";
-  }
-
-  return {
-    drawerLockMode
-  };
-};
-
-//TODO: Model
+//TODO: RootNavigator
+//TODO: RootNavigator:createRootNavigator
 
 export const createRootNavigator = (
   signedIn = false,
@@ -320,16 +338,24 @@ export const createRootNavigator = (
           screen: RecentTransactionsScreen,
           navigationOptions: { header: null }
         },
+<<<<<<< HEAD
         //create joint account screen
         CreateJointAccountScreen:{
           screen: CreateJointAccountScreen,
           navigationOptions: { header: null }
         } 
+=======
+        //SecureAccountRouter
+        SecureAccountRouter: {
+          screen: SecureAccountRouter,
+          navigationOptions: { header: null }
+        }
+>>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
       },
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }
     );
   } else {
@@ -423,12 +449,20 @@ export const createRootNavigator = (
           screen: RecentTransactionsScreen,
           navigationOptions: { header: null }
         },
+<<<<<<< HEAD
         CreateJointAccountScreen:{
           screen: CreateJointAccountScreen,
           navigationOptions: { header: null }
         } 
+=======
+        //SecureAccountRouter
+        SecureAccountRouter: {
+          screen: SecureAccountRouter,
+          navigationOptions: { header: null }
+        }
+>>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
       },
-      {    
+      {
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
         //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"

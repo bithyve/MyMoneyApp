@@ -28,13 +28,21 @@ import {
   Footer
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import {
+  MenuProvider,
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger
+} from "react-native-popup-menu";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
+var utils = require("../../../constants/Utils");
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
+import { DotIndicator } from "react-native-indicators";
 
 //TODO: Wallets
 //var walletService = require("../../../bitcoin/services/wallet");
@@ -48,7 +56,9 @@ export default class AccountDetailsScreen extends React.Component {
       data: [],
       waletteData: [],
       tranDetails: [],
-      refreshing: false
+      refreshing: false,
+      isLoading: false,
+      isNoTranstion: false
     };
     console.log("2MvwghT7H8Y81v9pSAvTprsNEw5yEqXTDcU");
   }
@@ -56,10 +66,11 @@ export default class AccountDetailsScreen extends React.Component {
   //TODO: Page Life Cycle
   componentWillMount() {
     const { navigation } = this.props;
-    console.log("first data = ", JSON.stringify(navigation.getParam("data")));
-    this.setState({
+    this.setState({  
       data: navigation.getParam("data"),
-      waletteData: navigation.getParam("privateKeyJson")[0]
+      waletteData: navigation.getParam("privateKeyJson")[
+        navigation.getParam("indexNo")
+      ]
     });
   }
 
@@ -78,7 +89,9 @@ export default class AccountDetailsScreen extends React.Component {
 
   //TODO: func loadData
   async fetchloadData() {
-    //loaderHandler.showLoader("Loading");
+    this.setState({
+      isLoading: true
+    });
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const { navigation } = this.props;
@@ -92,12 +105,16 @@ export default class AccountDetailsScreen extends React.Component {
       const resultRecentTransaction = await dbOpration.insertTblTransation(
         localDB.tableName.tblTransaction,
         resultRecentTras.transactionDetails,
-        resultRecentTras.address, 
+        resultRecentTras.address,
         lastUpdateDate
       );
       if (resultRecentTransaction) {
         this.fetchRecentTransaction(navigation.getParam("data").address);
       }
+    } else {
+      this.setState({
+        isNoTranstion: true
+      });
     }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
@@ -107,13 +124,13 @@ export default class AccountDetailsScreen extends React.Component {
         lastUpdateDate
       );
       if (resultUpdateTblAccount) {
-        const resultAccount = await dbOpration.readTablesData(
+        const resultAccount = await dbOpration.readAccountTablesData(
           localDB.tableName.tblAccount
         );
         this.setState({
-          data: resultAccount.temp[0]
-        });  
-       // loaderHandler.hideLoader();
+          data: resultAccount.temp[navigation.getParam("indexNo")],
+          isLoading: false
+        });
       }
     }
   }
@@ -140,6 +157,12 @@ export default class AccountDetailsScreen extends React.Component {
       }, 1000);
     });
   }
+  //TODO: func openRecentTrans
+  openRecentTrans(item) {
+    this.props.navigation.navigate("RecentTransactionsScreen", {
+      transationDetails: item
+    });
+  }
 
   render() {
     return (
@@ -154,8 +177,8 @@ export default class AccountDetailsScreen extends React.Component {
           }
         >
           <ImageBackground
-            source={images.accounts.saving}
-            style={styles.backgroundImage}
+            source={images.accounts[this.state.data.accountType]}
+            style={styles[this.state.data.accountType]}
             borderRadius={10}
             imageStyle={{
               resizeMode: "cover" // works only here!
@@ -170,14 +193,28 @@ export default class AccountDetailsScreen extends React.Component {
                   <Icon name="chevron-left" size={25} color="#ffffff" />
                 </Button>
               </Left>
-
               <Right>
-                <Title style={{ color: "#ffffff" }}>options</Title>
+                <MenuProvider>
+                  <Menu style={{ marginTop: 10, color: "#ffffff" }}>
+                    <MenuTrigger
+                      customStyles={{
+                        triggerText: { fontSize: 18, color: "#fff" }
+                      }}
+                      text="options"
+                    />
+                    <MenuOptions customStyles={{ optionText: styles.text }}>
+                      <MenuOption onSelect={() => alert(`Save`)} text="Save" />
+                      <MenuOption onSelect={() => alert(`Delete`)}>
+                        <Text style={{ color: "red" }}>Delete</Text>
+                      </MenuOption>
+                    </MenuOptions>
+                  </Menu>
+                </MenuProvider>
               </Right>
             </View>
             <View style={styles.viewBalInfo}>
               <Text style={[styles.txtTile, styles.txtAccountType]}>
-                {this.state.data.idAccountType}
+                {this.state.data.accountType}
               </Text>
               <View style={{ flexDirection: "row" }}>
                 <Text style={[styles.txtTile, styles.txtBalInfo]}>
@@ -192,9 +229,14 @@ export default class AccountDetailsScreen extends React.Component {
           <View style={styles.viewMainRecentTran}>
             <View style={styles.viewTitleRecentTrans}>
               <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+              {renderIf(this.state.isLoading)(
+                <View style={styles.loading}>
+                  <DotIndicator size={5} color={colors.appColor} />
+                </View>
+              )}
             </View>
             <View style={styles.recentTransListView}>
-              {renderIf(this.state.tranDetails.length == 0)(
+              {renderIf(this.state.isNoTranstion)(
                 <View style={styles.viewNoTransaction}>
                   <Thumbnail
                     source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
@@ -211,7 +253,10 @@ export default class AccountDetailsScreen extends React.Component {
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item }) => (
                       <List>
-                        <ListItem thumbnail>
+                        <ListItem
+                          thumbnail
+                          onPress={() => this.openRecentTrans(item)}
+                        >
                           <Left>
                             <Thumbnail
                               source={require("../../../assets/images/bitcoinLogo.jpg")}
@@ -225,7 +270,7 @@ export default class AccountDetailsScreen extends React.Component {
                               </Text>{" "}
                             </Text>
                             <Text note numberOfLines={1}>
-                              {item.dateCreated}
+                              {utils.getUnixToDateFormat(item.dateCreated)}
                             </Text>
                           </Body>
                           <Right>
@@ -285,7 +330,6 @@ export default class AccountDetailsScreen extends React.Component {
             </View>
           </View>
         </Content>
-
       </Container>
     );
   }
@@ -295,9 +339,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  backgroundImage: {
+  Savings: {
     flex: 1,
-    backgroundColor: "#E6A620",
+    backgroundColor: colors.Saving,
+    width: "100%"
+  },
+  Secure:{
+    flex: 1,
+    backgroundColor: colors.Secure,  
     width: "100%"
   },
   viewBackBtn: {
@@ -324,14 +373,23 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold"
   },
-
   //Recent Transaction
   viewMainRecentTran: {
     flex: 2
   },
   viewTitleRecentTrans: {
-    marginTop: 10,
-    marginLeft: 20
+    marginLeft: 20,
+    flexDirection: "row",
+    flex: 0.2,
+    alignItems: "center"
+  },
+  //Loading
+  loading: {
+    marginLeft: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    alignContent: "center"
   },
   txtRecentTran: {
     fontWeight: "bold",
@@ -351,8 +409,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   recentTransListView: {
-    flex: 1,
-    marginTop: 10
+    flex: 1
   },
   //No Transaction
   viewNoTransaction: {
@@ -375,5 +432,9 @@ const styles = StyleSheet.create({
   txtConfimation: {
     fontSize: 10,
     color: "gray"
+  },
+  //PopupMenu
+  text: {
+    fontSize: 18
   }
 });

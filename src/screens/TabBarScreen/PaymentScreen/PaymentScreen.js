@@ -38,11 +38,12 @@ import Dialog, {
   DialogContent,
   DialogButton
 } from "react-native-popup-dialog";
-
+import { DotIndicator, SkypeIndicator } from "react-native-indicators";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
+var utils = require("../../../constants/Utils");
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
 
@@ -79,7 +80,11 @@ export default class PaymentScreen extends React.Component {
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       accountTypeVisible: false,
       isOpen: false,
-      refreshing: false
+      refreshing: false,
+      isLoading: false,
+      isLoading1: false,
+      isNoTranstion: false,
+      cardIndexNo: 0
     };
     this.click_openPopupAccountType = this.click_openPopupAccountType.bind(
       this
@@ -101,9 +106,11 @@ export default class PaymentScreen extends React.Component {
   }
 
   //TODO: func fetchUserDetails
-  
   async fetchUserDetails() {
-   // loaderHandler.showLoader("Loading");
+    this.setState({
+      isLoading: true,
+      isLoading1: true
+    });
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const resultUserDetails = await dbOpration.readTablesData(
@@ -115,11 +122,14 @@ export default class PaymentScreen extends React.Component {
     const resultPopUpAccountTypes = await dbOpration.readTableAcccountType(
       localDB.tableName.tblAccountType,
       localDB.tableName.tblAccount
+    );    
+    const bal = await WalletService.getBalance(
+      resultWallet.temp[this.state.cardIndexNo].address
     );
-    const bal = await WalletService.getBalance(resultWallet.temp[0].address);
     const resultRecentTras = await WalletService.getTransactions(
-      resultWallet.temp[0].address
+      resultWallet.temp[this.state.cardIndexNo].address
     );
+    console.log("recent transaction = ", { resultRecentTras });
 
     if (resultRecentTras.transactionDetails.length > 0) {
       const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -131,6 +141,14 @@ export default class PaymentScreen extends React.Component {
       if (resultRecentTransaction) {
         this.fetchRecentTransaction(resultWallet.temp[0].address);
       }
+      this.setState({
+        isNoTranstion: false
+      });
+    } else {
+      this.setState({
+        isNoTranstion: true,
+        tranDetails: []
+      });
     }
     if (bal) {
       const resultUpdateTblAccount = await dbOpration.updateTableData(
@@ -140,7 +158,7 @@ export default class PaymentScreen extends React.Component {
         lastUpdateDate
       );
       if (resultUpdateTblAccount) {
-        const resultAccount = await dbOpration.readTablesData(
+        const resultAccount = await dbOpration.readAccountTablesData(
           localDB.tableName.tblAccount
         );
         this.setState({
@@ -151,9 +169,10 @@ export default class PaymentScreen extends React.Component {
             resultUserDetails.temp[0].lastName,
           accountTypeList: resultAccount.temp,
           walletsData: resultWallet.temp,
-          popupAccountTypeList: resultPopUpAccountTypes.temp
+          popupAccountTypeList: resultPopUpAccountTypes.temp,
+          isLoading: false,
+          isLoading1: false
         });
-      //  loaderHandler.hideLoader();
       }
     }
   }
@@ -167,6 +186,74 @@ export default class PaymentScreen extends React.Component {
     this.setState({
       tranDetails: resultRecentTras.temp
     });
+  }
+
+  //TODO: func getSwapCardDetails
+
+  async getSwapCardDetails(index) {
+    console.log("index number =" + index);
+    this.setState({
+      isLoading1: true,
+      cardIndexNo: index
+    });
+    this.setState({ slider1ActiveSlide: index });
+    const dateTime = Date.now();
+    const lastUpdateDate = Math.floor(dateTime / 1000);
+    const resultAccount = await dbOpration.readAccountTablesData(
+      localDB.tableName.tblAccount
+    );
+    if (resultAccount.temp[index].address != "") {
+      console.log("swap card address = " + resultAccount.temp[index].address);
+      const bal = await WalletService.getBalance(
+        resultAccount.temp[index].address
+      );
+      const resultRecentTras = await WalletService.getTransactions(
+        resultAccount.temp[index].address
+      );
+
+      console.log("recent transaction =", { resultRecentTras });
+
+      if (resultRecentTras.transactionDetails.length > 0) {
+        const resultRecentTransaction = await dbOpration.insertTblTransation(
+          localDB.tableName.tblTransaction,
+          resultRecentTras.transactionDetails,
+          resultRecentTras.address,
+          lastUpdateDate
+        );
+        console.log("insert recent trasaction =", { resultRecentTransaction });
+        if (resultRecentTransaction) {
+          this.fetchRecentTransaction(resultAccount.temp[index].address);
+        }
+        this.setState({
+          isNoTranstion: false
+        });
+      } else {
+        this.setState({
+          isNoTranstion: true,
+          tranDetails: []
+        });
+      }
+      if (bal) {
+        const resultUpdateTblAccount = await dbOpration.updateTableData(
+          localDB.tableName.tblAccount,
+          bal.final_balance / 1e8,
+          resultAccount.temp[index].address,
+          lastUpdateDate
+        );
+        if (resultUpdateTblAccount) {
+          this.setState({
+            walletsData: resultAccount.temp,
+            isLoading1: false
+          });
+        }
+      }
+    } else {
+      this.setState({
+        isNoTranstion: true,
+        tranDetails: [],
+        isLoading1: false
+      });
+    }
   }
 
   //TODO: func click_openPopupAccountType
@@ -194,9 +281,19 @@ export default class PaymentScreen extends React.Component {
 
   //TODO: func openRecentTrans
   openRecentTrans(item) {
-    this.props.navigation.navigate("RecentTransactionsScreen");
+    this.props.navigation.navigate("RecentTransactionsScreen", {
+      transationDetails: item
+    });
   }
 
+  //TODO: func cardBgColor
+  cardBgColor(type) {
+    if (type == "Saving") {
+      return "style.cardSlideBgImageSaving";
+    } else {
+      return "style.cardSlideBgImageSecure";
+    }
+  }
   _renderItem({ item, index }) {
     return (
       <View key={"card" + index}>
@@ -218,14 +315,15 @@ export default class PaymentScreen extends React.Component {
             onPress={() =>
               this.props.navigation.push("AccountsDetailsScreen", {
                 data: item,
-                privateKeyJson: this.state.walletsData
+                privateKeyJson: this.state.walletsData,
+                indexNo: index
               })
             }
           >
             <RkCard style={styles.rkCard}>
               <ImageBackground
-                source={images.accounts.saving}
-                style={styles.cardSlideBgImage}
+                source={images.accounts[item.accountType]}
+                style={styles[item.accountType]}
                 borderRadius={10}
                 imageStyle={{
                   resizeMode: "cover" // works only here!
@@ -247,6 +345,17 @@ export default class PaymentScreen extends React.Component {
     );
   }
 
+  //TODO: func createNewAccount
+
+  createNewAccount(type) {
+    if (type == "Secure") {
+      this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
+      this.props.navigation.push("SecureAccountRouter");
+    } else {
+      this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
+    }
+  }
+
   render() {
     const { slider1ActiveSlide } = this.state;
     return (
@@ -257,7 +366,7 @@ export default class PaymentScreen extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this.refresh.bind(this)}
-            />  
+            />
           }
         >
           <ImageBackground
@@ -308,29 +417,39 @@ export default class PaymentScreen extends React.Component {
                 renderItem={this._renderItem.bind(this)}
                 sliderWidth={sliderWidth}
                 itemWidth={itemWidth}
-                onSnapToItem={index => (
-                  console.log(index),
-                  this.setState({ slider1ActiveSlide: index })
-                )}
+                onSnapToItem={index => this.getSwapCardDetails(index)}
               />
-              <Pagination
-                dotsLength={this.state.accountTypeList.length}
-                activeDotIndex={slider1ActiveSlide}
-                containerStyle={styles.paginationContainer}
-                dotColor={"rgba(255, 255, 255, 0.92)"}
-                dotStyle={styles.paginationDot}
-                inactiveDotColor={colors.black}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-                carouselRef={this._slider1Ref}
-                tappableDots={!!this._slider1Ref}
-              />
+              {renderIf(!this.state.isLoading)(
+                <Pagination
+                  dotsLength={this.state.accountTypeList.length}
+                  activeDotIndex={slider1ActiveSlide}
+                  containerStyle={styles.paginationContainer}
+                  dotColor={"rgba(255, 255, 255, 0.92)"}
+                  dotStyle={styles.paginationDot}
+                  inactiveDotColor={colors.black}
+                  inactiveDotOpacity={0.4}
+                  inactiveDotScale={0.6}
+                  carouselRef={this._slider1Ref}
+                  tappableDots={!!this._slider1Ref}
+                />
+              )}
+
+              {renderIf(this.state.isLoading)(
+                <View style={styles.loading}>
+                  <SkypeIndicator color={colors.white} />
+                </View>
+              )}
             </View>
             <View style={styles.viewMainRecentTran}>
               <View style={styles.viewTitleRecentTrans}>
                 <Text style={styles.txtRecentTran}>Recent Transactions</Text>
+                {renderIf(this.state.isLoading1)(
+                  <View style={styles.loading}>
+                    <DotIndicator size={5} color={colors.appColor} />
+                  </View>
+                )}
               </View>
-              {renderIf(this.state.tranDetails.length == 0)(
+              {renderIf(this.state.isNoTranstion)(
                 <View style={styles.viewNoTransaction}>
                   <Thumbnail
                     source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
@@ -364,7 +483,7 @@ export default class PaymentScreen extends React.Component {
                               </Text>{" "}
                             </Text>
                             <Text note numberOfLines={1}>
-                              {item.dateCreated}
+                              {utils.getUnixToDateFormat(item.dateCreated)}
                             </Text>
                           </Body>
                           <Right>
@@ -387,7 +506,6 @@ export default class PaymentScreen extends React.Component {
                 </View>
               )}
             </View>
-
             <Dialog
               width={Dimensions.get("screen").width - 30}
               visible={this.state.accountTypeVisible}
@@ -409,6 +527,7 @@ export default class PaymentScreen extends React.Component {
                         <Button
                           full
                           style={styles.btnAccountTypes}
+<<<<<<< HEAD
                           onPress={() =>{
                             this.setState({ accountTypeVisible: false })
                             if (item.name == 'Joint'){
@@ -416,6 +535,9 @@ export default class PaymentScreen extends React.Component {
                           }
                           }
                           }
+=======
+                          onPress={() => this.createNewAccount(item.name)}
+>>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
                         >
                           <Text>{item.name}</Text>
                         </Button>
@@ -466,10 +588,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: "#787878"
   },
-  cardSlideBgImage: {
+  Savings: {
     flex: 1,
     height: "100%",
-    backgroundColor: "#E6A620",
+    backgroundColor: colors.Saving,
+    borderRadius: 10
+  },
+  Secure: {
+    flex: 1,
+    height: "100%",
+    backgroundColor: colors.Secure,
     borderRadius: 10
   },
   //TODO: CARD
@@ -511,7 +639,17 @@ const styles = StyleSheet.create({
     flex: 3
   },
   viewTitleRecentTrans: {
-    marginLeft: 20
+    marginLeft: 20,
+    flexDirection: "row",
+    flex: 0.2
+  },
+  //Loading
+  loading: {
+    marginLeft: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    alignContent: "center"
   },
   txtRecentTran: {
     fontWeight: "bold",
@@ -531,8 +669,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   recentTransListView: {
-    flex: 1,
-    marginTop: 10
+    flex: 1
   },
   //No Transaction
   viewNoTransaction: {

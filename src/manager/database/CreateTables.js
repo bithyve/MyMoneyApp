@@ -15,17 +15,17 @@ export default class CreateTables extends Component {
     );
 
     db.transaction(function(txn) {
-      //txn.executeSql('DROP TABLE IF EXISTS ' + localDB.tableName.tblLogin, []);
+      //TODO: TABLE
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblUser +
           " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,firstName TEXT,lastName TEXT,email TEXT,country TEXT,mobileNo TEXT,lastUpdated TEXT)",
         []
-      );   
+      );
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblWallet +
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,mnemonic TEXT,privateKey TEXT,address TEXT,lastUpdated TEXT)",
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,mnemonic TEXT,privateKey TEXT,address TEXT,walletType TEXT,lastUpdated TEXT)",
         []
       );
       txn.executeSql(
@@ -37,19 +37,24 @@ export default class CreateTables extends Component {
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblAccount +
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,address TEXT,balance TEXT,unit TEXT,accountType TEXT,lastUpdated TEXT,FOREIGN KEY(accountType) REFERENCES tblAccountType(name))",     
-        []     
-      );    
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,address TEXT,balance TEXT,unit TEXT,accountType TEXT,additionalInfo TEXT,lastUpdated TEXT,FOREIGN KEY(accountType) REFERENCES tblAccountType(name))",
+        []
+      );
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
-          localDB.tableName.tblTransaction +      
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,accountAddress TEXT,transactionHash TEXT,balance TEXT,unit TEXT,transactionType TEXT,confirmationType TEXT,lastUpdated TEXT,FOREIGN KEY(accountAddress) REFERENCES tblAccount(address))",
-        []   
+          localDB.tableName.tblTransaction +
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,accountAddress TEXT,transactionHash TEXT,balance INTEGER,unit TEXT,fees INTEGER,transactionType TEXT,confirmationType TEXT,lastUpdated TEXT,FOREIGN KEY(accountAddress) REFERENCES tblAccount(address))",
+        []
       );
+      //TODO: TRIGGER;
+      // txn.executeSql(
+      //   "CREATE TRIGGER insertLastBeforetblAccount BEFORE INSERT ON tblAccount  BEGIN SELECT * FROM tblAccount where accountType = 'UnKnown'  THEN RAISE (ABORT,'Invalid email address')END;END;",
+      //   []
+      // );  
       console.log("create database.");
     });
   }
-    
+  
   errorCB(err) {
     console.log("SQL Error: " + err);
   }

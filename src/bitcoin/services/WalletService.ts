@@ -7,8 +7,8 @@ class WalletService {
   constructor() {
     this.bitcoin = new Bitcoin();
     this.twoFA = new twoFactorAuthentication();
-  }  
-      
+  }
+
   public createWallet = (passphrase?: string) =>
     this.bitcoin.createHDWallet(passphrase)
 
@@ -18,8 +18,16 @@ class WalletService {
   public getBalance = async (address: string) =>
     await this.bitcoin.checkBalance(address)
 
+  public getTransactionDetails = async (txHash: string) =>
+    await this.bitcoin.fetchTransactionDetails(txHash)
+
   public getTransactions = async (address: string) =>
     await this.bitcoin.fetchTransactions(address)
+
+  public getPubKey = async (privKey: string) => {
+    const keyPair = await this.bitcoin.getKeyPair(privKey);
+    return keyPair.publicKey;
+  }
 
   public createMultiSig = (required: number, pubKeys: string[]) => {
     if (required <= 0 || required > pubKeys.length) {

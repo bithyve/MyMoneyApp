@@ -189,5 +189,5 @@ NSString *documentsDirectory = [paths objectAtIndex:0];
 NSLog(@"path is %@",documentsDirectory);
   
 
-##   Android sdk path set (local.properties)
+##   Android sdk path set (local.properties) 
 sdk.dir = /Users/developer/Library/Android/sdk

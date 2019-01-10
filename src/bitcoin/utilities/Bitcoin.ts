@@ -16,6 +16,7 @@ export default class Bitcoin {
 
   public getKeyPair = (privateKey: string): ECPair =>
     bitcoinJS.ECPair.fromWIF(privateKey, this.network)
+
   public utcNow = (): number => Math.floor(Date.now() / 1000);
 
   public getAddress = (keyPair: ECPair): string =>
@@ -191,7 +192,7 @@ export default class Bitcoin {
   public fetchTransactions = async (address: string): Promise<any> => {
     const {
       final_n_tx,
-      n_tx,
+      n_tx,    
       unconfirmed_n_tx,
       txs,  
     } = await this.fetchAddressInfo(address);
@@ -199,13 +200,13 @@ export default class Bitcoin {
     txs.map((tx) => {
       this.confirmationCat(this.categorizeTx(tx, address));
     });
-       
-    return {  
-      address:address,
+
+    return {
       totalTransactions: final_n_tx,
       confirmedTransactions: n_tx,
       unconfirmedTransactions: unconfirmed_n_tx,
       transactionDetails: txs,
+      address,      
     };
   }
 
@@ -343,6 +344,16 @@ export default class Bitcoin {
       value: unspent.value,
     }));
     return unspent_outputs;
+  }
+
+  public fetchTransactionDetails = async (txHash: string): Promise<any> => {
+    if (this.network === bitcoinJS.networks.testnet) {
+      const { data } = await axios.get(`${TESTNET.BASE}/txs/${txHash}`);
+      return data;
+    } else {
+      const { data } = await axios.get(`MAINNET.BASE/txs/${txHash}`);
+      return data;
+    }
   }
 
   public createTransaction = async (
@@ -706,4 +717,9 @@ class SmokeTest {
 // const bitcoin = new Bitcoin();
 // bitcoin
 //   .fetchUnspentOutputs("2NFb3TpSctXBdax6pJaPaAuJG9tKzuihCrz")
+//   .then(console.log);
+// bitcoin
+//   .fetchTransactionDetails(
+//     "b0a51b5bc6197a568cba195009acde9f943de36a57bb1a8d1a71ba5c17edf6d9",
+//   )
 //   .then(console.log);

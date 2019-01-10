@@ -1,3 +1,5 @@
+#### any time use:- yarn --reset-cache
+
 //Android
 1)base_map.fill(255)<br>
 https://github.com/react-native-community/jsc-android-buildscripts<br>
@@ -85,7 +87,15 @@ react-native link lottie-ios<br>
 import PropTypes from 'prop-types';
 
 ### reactDevTools not found check this file
-  
+
 (node_modules/react-native/Libraries/Core/Devtools/setupDevtools.js)
 add this
 yarn add --dev react-devtools-core@3.4.3
+
+### Module `asyncstorage-down` does not exist in the Haste module map
+
+yarn add asyncstorage-down
+
+### Model not found function
+
+npm run issuemodel

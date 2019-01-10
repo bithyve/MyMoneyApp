@@ -9,7 +9,12 @@ var errorMessage = {
   aPI_FAILED: "Server not responding, please try after some time.",
   internet_ErrorTitle: "No Internet",
   fAILED_INTERNET: "No internet connection available."
-};    
+};
+
+var msg = {
+  secretKeyMsg:
+    "Scan the above QR or enter the secret manually into your Google Authenticator"
+};
 
 //Validation Message
 var errorValidationMessage = {
@@ -20,7 +25,9 @@ var errorValidationMessage = {
 var colors = {
   appColor: "#F5951D",
   black: "#000000",
-  white:"#ffffff"
+  white: "#ffffff",
+  Saving:  "#E6A620",
+  Secure:  "#30A2F3"
 };
 
 const assetsImages = "../assets/images/";
@@ -37,7 +44,7 @@ var images = {
   loginScreen: {
     backgoundImage: require(assetsImages + "loginscreen/loginBackgound.jpg"),
     faceIdImage: require(assetsImages + "loginscreen/faceid.png")
-  },  
+  },
   backupPhraseScreen: {
     backupPhraseLogo: require(assetsImages +
       "backupPhraseScreen/backupPhraseLogo.png")
@@ -49,40 +56,44 @@ var images = {
   paymentScreen: {
     cardSideBitcon: require(assetsImages + "paymentScreen/bitcoin1.jpg"),
     cardSideBitcon1: require(assetsImages + "paymentScreen/bitcoin2.png")
-
   },
-  accounts:{
-    saving: require(assetsImages + "accountTypesCard/btcshape.png"),
-    secure: require(assetsImages + "accountTypesCard/btcshape.png"),
-    vault: require(assetsImages + "accountTypesCard/btcshape.png"),
-    joint: require(assetsImages + "accountTypesCard/btcshape.png"),
-    unknown: require(assetsImages + "accountTypesCard/btcshape.png"),
+  accounts: {
+    Savings: require(assetsImages + "accountTypesCard/Savings.png"),
+    Secure: require(assetsImages + "accountTypesCard/Secure.png"),
+    vault: require(assetsImages + "accountTypesCard/Savings.png"),
+    joint: require(assetsImages + "accountTypesCard/Savings.png"),
+    unknown: require(assetsImages + "accountTypesCard/Savings.png")
+  },
+  secureAccount: {
+    secureLogo: require(assetsImages + "secureAccount/secureAccountLogo.png"),
+    validationKey: require(assetsImages + "secureAccount/validationKey.png")
   }
 };
-
+  
 //Rest Full Api
-const domain = "http://localhost:8080/mymoney/api/";
+const domain = "http://c57eb4c4.ngrok.io/";
 var apiary = {
-  urlRegistion: domain + "registation",
-  urlRegistionWithCode: domain + "registationwithcode",
+  setup2fa: domain + "setup2fa",
+  validate2fasetup: domain + "validate2fasetup",
   urlquestionAndAnswer: domain + "questionAndAnswer"
 };
-  
+
 //Local Database
 var localDB = {
   dbName: "MyMoney.db",
   tableName: {
     tblUser: "tblUser",
-    tblWallet: "tblWallet",   
-    tblAccountType: "tblAccountType",     
-    tblAccount: "tblAccount",   
+    tblWallet: "tblWallet",
+    tblAccountType: "tblAccountType",
+    tblAccount: "tblAccount",
     tblTransaction: "tblTransaction"
   }
 };
-
+  
 export {
   errorMessage,
   errorValidationMessage,
+  msg,
   apiary,
   localDB,
   colors,
