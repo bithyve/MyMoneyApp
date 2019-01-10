@@ -6996,6 +6996,11 @@ react-native-popup-dialog@^0.16.3:
     prop-types "^15.6.0"
     react-native-root-siblings "^3.1.7"
 
+react-native-popup-menu@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.14.2.tgz#c71e6d662ce143cdfd3a640fe22f2c54f2f54eda"
+  integrity sha512-hVy9z4JLj+6/ll2UXwR2O+exzx57b0gdLbUZUY2A1hXrTGOgxDpsQ+sQBHTLeUXoSQDtZxGcunmpIc1ZjdhMHg==
+
 react-native-progress-hud@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-native-progress-hud/-/react-native-progress-hud-1.0.4.tgz#9f711b19b407593aee32728ab46f74d8b500f109"

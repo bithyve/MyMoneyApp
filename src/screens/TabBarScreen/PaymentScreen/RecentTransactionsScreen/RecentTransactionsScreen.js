@@ -24,8 +24,9 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
-import Collapsible from "react-native-collapsible";
+import renderIf from "../../../../constants/validation/renderIf";
 import Accordion from "react-native-collapsible/Accordion";
+import SafariView from "react-native-safari-view";
 
 //TODO: Custome Pages
 import { colors, images } from "../../../../constants/Constants";
@@ -51,8 +52,8 @@ export default class RecentTransactionsScreen extends React.Component {
       sentAndReceivedOn = "Recipient";
     } else {
       sentAndReceivedOn = "Received On";
-    }  
-    var temp = [  
+    }
+    var temp = [
       {
         title: "Hash",
         content: recentTrans.transactionHash
@@ -65,10 +66,10 @@ export default class RecentTransactionsScreen extends React.Component {
         title: "Amount",
         content: recentTrans.balance / 1e8
       },
-      {
-        title: sentAndReceivedOn,
-        content: "pending"
-      },
+      // {
+      //   title: sentAndReceivedOn,
+      //   content: "pending"
+      // },
       {
         title: "Fee",
         content: recentTrans.fees / 1e8
@@ -93,6 +94,22 @@ export default class RecentTransactionsScreen extends React.Component {
     );
   };
 
+  //TODO: func openHashDetails
+  openHashDetails(hashKey) {
+    SafariView.isAvailable()
+      .then(
+        SafariView.show({
+          url: "https://live.blockcypher.com/btc-testnet/tx/" + hashKey,
+          readerMode: true,
+          tintColor: colors.appColor,
+          barTintColor: "#fff"
+        })
+      )
+      .catch(error => {
+        // Fallback WebView code for iOS 8 and earlier
+      });
+  }
+
   renderContent(section, _, isActive) {
     return (
       <Animatable.View
@@ -100,12 +117,31 @@ export default class RecentTransactionsScreen extends React.Component {
         style={[styles.content, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor"
       >
-        <Animatable.Text
-          style={styles.content}
-          animation={isActive ? "bounceIn" : undefined}
-        >
-          {section.content}
-        </Animatable.Text>
+        {renderIf(section.title == "Hash")(
+          <TouchableOpacity
+            key={section.content}
+            onPress={() => this.openHashDetails([section.content])}
+          >
+          <View style={styles.viewHashContent}>
+          <Animatable.Text
+              style={[styles.content,{flex:9}]}
+              animation={isActive ? "bounceIn" : undefined}
+            >
+              {section.content}
+            </Animatable.Text>  
+            <Icon style={{flex:1,alignSelf:'center'}} name="safari" size={25} color={colors.appColor} />
+          </View>
+             
+          </TouchableOpacity>
+        )}
+        {renderIf(section.title != "Hash")(
+          <Animatable.Text
+            style={styles.content}
+            animation={isActive ? "bounceIn" : undefined}
+          >
+            {section.content}
+          </Animatable.Text>
+        )}
       </Animatable.View>
     );
   }
@@ -150,7 +186,7 @@ export default class RecentTransactionsScreen extends React.Component {
                 activeSections={activeSections}
                 sections={this.state.recentRrasactionDetials}
                 renderHeader={this.renderHeader}
-                renderContent={this.renderContent}
+                renderContent={this.renderContent.bind(this)}
                 duration={400}
                 collapsed={false}
               />
@@ -198,5 +234,10 @@ const styles = StyleSheet.create({
   },
   inactive: {
     backgroundColor: "rgba(245,252,255,1)"
+  },
+  //view:viewHashContent
+  viewHashContent:{
+    flex:1,
+    flexDirection:'row'
   }
 });

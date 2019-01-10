@@ -28,6 +28,27 @@ const readTablesData = tableName => {
   });
 };
 
+const readAccountTablesData = tableName => {
+  return new Promise((resolve, reject) => {
+    var temp = [];
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * from " + tableName + " ORDER BY (accountType='UnKnown') ASC",
+        [],
+        (tx, results) => {
+          var len = results.rows.length;
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              temp.push(results.rows.item(i));
+            }
+            resolve({ temp });
+          }
+        }
+      );
+    });
+  });
+};
+
 //TODO: Select tblAccountType
 const readTableAcccountType = (tableName1, tableName2) => {
   return new Promise((resolve, reject) => {
@@ -65,7 +86,7 @@ const readRecentTransactionAddressWise = (tableName, address) => {
         "SELECT * FROM " +
           tableName +
           " where accountAddress = '" +
-          address +     
+          address +
           "' order by id asc limit 0,10",
         [],
         (tx, results) => {
@@ -75,6 +96,59 @@ const readRecentTransactionAddressWise = (tableName, address) => {
               temp.push(results.rows.item(i));
             }
             console.log({ temp });
+            resolve({ temp });
+          }
+        }
+      );
+    });
+  });
+};
+
+//select:readAccountAddress
+
+const readAccountAddress = (tableName, col1) => {
+  return new Promise((resolve, reject) => {
+    var temp = [];
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM " +
+          tableName +
+          " where accountType = '" +
+          col1 +
+          "' limit 0,1",
+        [],
+        (tx, results) => {
+          var len = results.rows.length;
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              temp.push(results.rows.item(i));
+            }
+            resolve({ temp });
+          }
+        }
+      );
+    });
+  });
+};
+
+//select:readWalletAddress
+const readWalletAddress = (tableName, col1) => {
+  return new Promise((resolve, reject) => {
+    var temp = [];
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM " +
+          tableName +
+          " where walletType = '" +
+          col1 +
+          "' limit 0,1",
+        [],
+        (tx, results) => {
+          var len = results.rows.length;
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              temp.push(results.rows.item(i));
+            }
             resolve({ temp });
           }
         }
@@ -125,7 +199,7 @@ const insertAccountTypeData = (tblName, txtDate) => {
   });
 };
 
-//tblUserDetails
+//insert:tblUserDetails
 const insertUserDetailsData = (
   tblName,
   fulldate,
@@ -148,39 +222,64 @@ const insertUserDetailsData = (
   });
 };
 
-//tblWallet and  tblAccount
-const insertWalletAndCreateAccountType = (
+//insert:tblWallet
+
+const insertWallet = (
   tblName,
-  tblName1,
   fulldate,
   mnemonicValue,
   priKeyValue,
-  address
+  address,
+  walletType
 ) => {
   return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
       txn.executeSql(
         "INSERT INTO " +
           tblName +
-          " (dateCreated,mnemonic,privateKey,address,lastUpdated) VALUES (:dateCreated,:mnemonic,:privateKey,:address,:lastUpdated)",
-        [fulldate, mnemonicValue, priKeyValue, address, fulldate]
+          " (dateCreated,mnemonic,privateKey,address,walletType,lastUpdated) VALUES (:dateCreated,:mnemonic,:privateKey,:address,:walletType,:lastUpdated)",
+        [fulldate, mnemonicValue, priKeyValue, address, walletType, fulldate]
       );
+      resolve(true);
     });
+  });
+};
 
+//insert: tblAccount Only First Time
+const insertCreateAccount = (
+  tblName,
+  fulldate,
+  address,
+  unit,
+  accountType,
+  additionalInfo
+) => {
+  return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
       txn.executeSql(
         "INSERT INTO " +
-          tblName1 +
-          "(dateCreated,address,balance,unit,accountType,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:lastUpdated)",
-        [fulldate, address, 0.0, "BTC", "Savings", fulldate]
+          tblName +
+          "(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
+        [fulldate, address, 0.0, unit, accountType, additionalInfo, fulldate]
       );
+      resolve(true);
     });
+  });
+};
+
+const insertLastBeforeCreateAccount = (
+  tblName,
+  fulldate,
+  address,
+  unit,
+  accountType,
+  additionalInfo
+) => {
+  return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
       txn.executeSql(
-        "INSERT INTO " +
-          tblName1 +
-          "(dateCreated,address,balance,unit,accountType,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:lastUpdated)",
-        [fulldate, address, 0.0, "BTC", "UnKnown", fulldate]
+        "INSERT INTO tblAccount(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
+        [fulldate, address, 0.0, unit, accountType, additionalInfo, fulldate]
       );
       resolve(true);
     });
@@ -201,7 +300,7 @@ const insertTblTransation = (
       //delete
       txn.executeSql(
         "DELETE FROM " + tblName + " WHERE accountAddress = '" + address + "'"
-      );  
+      );
       console.log("trnasation length=", transactionDetails.length);
       //insert
       for (i = 0; i < transactionDetails.length; i++) {
@@ -233,12 +332,17 @@ const insertTblTransation = (
 };
 
 module.exports = {
-  readTablesData,
+  readTablesData,  
+  readAccountTablesData,
   readTableAcccountType,
   readRecentTransactionAddressWise,
+  readAccountAddress,
+  readWalletAddress,
   insertAccountTypeData,
   insertUserDetailsData,
-  insertWalletAndCreateAccountType,
+  insertWallet,
+  insertCreateAccount,
+  insertLastBeforeCreateAccount,
   insertTblTransation,
   updateTableData
 };

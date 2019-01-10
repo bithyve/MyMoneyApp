@@ -12,7 +12,7 @@ let NETWORK_TYPE = typeforce.compile({
     public: typeforce.UInt32,
     private: typeforce.UInt32
   }
-})
+})  
 
 let BITCOIN = {
   wif: 0x80,

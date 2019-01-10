@@ -17,7 +17,6 @@ import renderIf from "../../constants/validation/renderIf";
 import CardFlip from "react-native-card-flip";
 import { SkypeIndicator } from "react-native-indicators";
 
-
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../constants/Constants";
 var dbOpration = require("../../manager/database/DBOpration");
@@ -43,7 +42,7 @@ export default class PasscodeConfirmScreen extends Component {
       countryName: "",
       isLoading: false
     };
-  }  
+  }
 
   //TODO: Page Life Cycle
   componentWillMount() {
@@ -114,7 +113,7 @@ export default class PasscodeConfirmScreen extends Component {
       const resultInsertUserDetails = await dbOpration.insertUserDetailsData(
         localDB.tableName.tblUser,
         fulldate,
-        firstName,  
+        firstName,
         lastName,
         email,
         country,
@@ -126,34 +125,52 @@ export default class PasscodeConfirmScreen extends Component {
       );
       if (resultInsertUserDetails) {
         if (resultAccountType) {
-          const resultCreateWallet = await dbOpration.insertWalletAndCreateAccountType(
+          const resultCreateWallet = await dbOpration.insertWallet(
             localDB.tableName.tblWallet,
-            localDB.tableName.tblAccount,
             fulldate,
             mnemonicValue,
             priKeyValue,
-            address
-          );
+            address,
+            "Primary"
+          );   
           if (resultCreateWallet) {
-            try {
-              AsyncStorage.setItem("@Passcode:key", this.state.pincode);
-              AsyncStorage.setItem("@loadingPage:key", "Password");
-            } catch (error) {
-              // Error saving data
+            const resultCreateAccountSaving = await dbOpration.insertCreateAccount(
+              localDB.tableName.tblAccount,
+              fulldate,
+              address,
+              "BTC",
+              "Savings",
+              ""
+            );
+            const resultCreateAccount = await dbOpration.insertCreateAccount(
+              localDB.tableName.tblAccount,
+              fulldate,
+              "",
+              "",
+              "UnKnown",
+              ""
+            );
+            if (resultCreateAccount) {
+              try {
+                AsyncStorage.setItem("@Passcode:key", this.state.pincode);
+                AsyncStorage.setItem("@loadingPage:key", "Password");
+              } catch (error) {
+                // Error saving data
+              }
+              this.setState({
+                success: "Ok!!"
+                //isLoading: false
+              });
+              const resetAction = StackActions.reset({
+                index: 0, // <-- currect active route from actions array
+                key: null,
+                actions: [
+                  NavigationActions.navigate({ routeName: "TabbarBottom" })
+                ]
+              });
+              this.props.navigation.dispatch(resetAction);
             }
-            this.setState({
-              success: "Ok!!"
-              //isLoading: false
-            });
-            const resetAction = StackActions.reset({
-              index: 0, // <-- currect active route from actions array
-              key: null,
-              actions: [
-                NavigationActions.navigate({ routeName: "TabbarBottom" })
-              ]
-            });
-            this.props.navigation.dispatch(resetAction);
-          }
+          }  
         }
       }
     }
@@ -218,7 +235,7 @@ export default class PasscodeConfirmScreen extends Component {
       </View>
     );
   }
-}    
+}
 
 let styles = StyleSheet.create({
   container: {
@@ -239,7 +256,7 @@ let styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    opacity: 0.5,
+    opacity: 0.8,
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center"

@@ -7,8 +7,10 @@
   "scripts": {
     "compile": "tsc",
     "prepare": "cp -r -f ./src/IssueFiles/Buffer/index.js ./node_modules/bip32/index.js",
+    "issuemodel": "cp -r -f ./src/IssueFiles/Model/index.js ./node_modules/source-map-support/source-map-support.js",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "removeall": "rm -rf android rm -rf ios rm -rf node_modules",
+    "rmnode": "rm -rf node_modules",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack",
@@ -16,7 +18,7 @@
     "jest": "node node_modules/jest/bin/jest.js",
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ --fix",
     "unit": "./node_modules/.bin/mocha tests/**/*.js"
-  },
+  },   
   "dependencies": {
     "@babel/preset-env": "^7.2.3",
     "@babel/runtime": "^7.2.0",
@@ -81,6 +83,7 @@
     "react-native-os": "^1.0.1",
     "react-native-pin-code": "^0.5.3",
     "react-native-popup-dialog": "^0.16.3",
+    "react-native-popup-menu": "^0.14.2",
     "react-native-progress-hud": "^1.0.4",
     "react-native-randombytes": "^3.5.1",
     "react-native-rsa": "^0.0.3",

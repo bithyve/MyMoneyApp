@@ -21,7 +21,8 @@ import {
   Label
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import renderIf from "../../../../constants/validation/renderIf";
+import { SkypeIndicator } from "react-native-indicators";
 
 const required = value => (value ? undefined : "This is a required field.");
 const email = value =>
@@ -47,7 +48,8 @@ export default class SentMoneyScreen extends React.Component {
       recipientAddress: "",
       amount: "",
       sentBtnColor: "gray",
-      sentBtnStatus: true
+      sentBtnStatus: true,
+      isLoading: false
     };
   }
 
@@ -85,7 +87,9 @@ export default class SentMoneyScreen extends React.Component {
 
   //TODO: func click_SentMoney
   async click_SentMoney() {
-   // loaderHandler.showLoader("Loading");
+    this.setState({
+      isLoading: true
+    });
     var recAddress = this.state.recipientAddress;
     var amountValue = this.state.amount;
     console.log("first amount=", amountValue);
@@ -114,7 +118,9 @@ export default class SentMoneyScreen extends React.Component {
         );
         if (resultUpdateTblAccount) {
           setTimeout(() => {
-           // loaderHandler.hideLoader();
+            this.setState({
+              isLoading: false
+            });
             this.props.navigation.goBack();
           }, 2000);
         }
@@ -209,6 +215,11 @@ export default class SentMoneyScreen extends React.Component {
               <Text> SEND </Text>
             </Button>
           </Content>
+          {renderIf(this.state.isLoading)(
+            <View style={styles.loading}>
+              <SkypeIndicator color={colors.appColor} />
+            </View>
+          )}
         </ImageBackground>
       </Container>
     );
@@ -237,5 +248,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#000000",
     color: "#ffffff"
+  },
+  loading: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.8,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
