@@ -409,8 +409,12 @@ export default class PaymentScreen extends React.Component {
                         <Button
                           full
                           style={styles.btnAccountTypes}
-                          onPress={() =>
+                          onPress={() =>{
                             this.setState({ accountTypeVisible: false })
+                            if (item.name == 'Joint'){
+                            this.props.navigation.push("CreateJointAccountScreen")
+                          }
+                          }
                           }
                         >
                           <Text>{item.name}</Text>

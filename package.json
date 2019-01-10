@@ -17,7 +17,7 @@
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ --fix",
     "unit": "./node_modules/.bin/mocha tests/**/*.js"
   },
-  "dependencies": {  
+  "dependencies": {
     "@babel/preset-env": "^7.2.3",
     "@tradle/react-native-http": "^2.0.1",
     "@types/bip39": "^2.4.1",

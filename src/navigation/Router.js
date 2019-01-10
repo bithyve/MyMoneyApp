@@ -52,6 +52,9 @@ import RecentTransactionsScreen from "../screens/DrawerScreen/RecentTransactions
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
+//joint account
+import CreateJointAccountScreen from "../screens/JointAccount/CreateJointAccountScreen/CreateJointAccountScreen";
+
 //TODO: ONBoarding
 const OnBoardingRouter = createStackNavigator(
   {
@@ -316,7 +319,12 @@ export const createRootNavigator = (
         RecentTransactionsScreen: {
           screen: RecentTransactionsScreen,
           navigationOptions: { header: null }
-        }
+        },
+        //create joint account screen
+        CreateJointAccountScreen:{
+          screen: CreateJointAccountScreen,
+          navigationOptions: { header: null }
+        } 
       },
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
@@ -414,7 +422,11 @@ export const createRootNavigator = (
         RecentTransactionsScreen: {
           screen: RecentTransactionsScreen,
           navigationOptions: { header: null }
-        }
+        },
+        CreateJointAccountScreen:{
+          screen: CreateJointAccountScreen,
+          navigationOptions: { header: null }
+        } 
       },
       {    
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"

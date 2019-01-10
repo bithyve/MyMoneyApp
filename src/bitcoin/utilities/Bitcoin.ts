@@ -5,13 +5,13 @@ import bip65 from "bip65";
 import bitcoinJS, { ECPair, Network, TransactionBuilder } from "bitcoinjs-lib";
 import coinselect from "coinselect";
 import request from "superagent";
-import config from "../Config";
-const { TESTNET, MAINNET } = config.API_URLS;
+import Config from "../config";
+const { TESTNET, MAINNET } = Config.API_URLS;
 
 export default class Bitcoin {
   public network: Network;
   constructor() {
-    this.network = config.NETWORK;
+    this.network = Config.NETWORK;
   }
 
   public getKeyPair = (privateKey: string): ECPair =>
