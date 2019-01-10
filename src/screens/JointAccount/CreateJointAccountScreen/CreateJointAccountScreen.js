@@ -42,7 +42,7 @@ export default class CreateJointAccountScreen extends React.Component {
                     </Header>
                     <Content>
                         <Text>
-                            This is Create Joint Account screen
+                            This is Create Joint Account
               </Text>
                     </Content>
 

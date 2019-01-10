@@ -18,11 +18,7 @@
     "jest": "node node_modules/jest/bin/jest.js",
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ --fix",
     "unit": "./node_modules/.bin/mocha tests/**/*.js"
-<<<<<<< HEAD
   },
-=======
-  },   
->>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
   "dependencies": {
     "@babel/preset-env": "^7.2.3",
     "@babel/runtime": "^7.2.0",

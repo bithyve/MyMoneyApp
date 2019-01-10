@@ -57,16 +57,15 @@ import ValidateSecureAccountScreen from "../screens/DrawerScreen/SecureAccountSc
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
-<<<<<<< HEAD
 //joint account
 import CreateJointAccountScreen from "../screens/JointAccount/CreateJointAccountScreen/CreateJointAccountScreen";
 
 //TODO: ONBoarding
-=======
+
 //TODO: StackNavigator
 
 //TODO: StackNavigator:ONBoarding
->>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
+
 const OnBoardingRouter = createStackNavigator(
   {
     OnBoarding: {
@@ -338,19 +337,17 @@ export const createRootNavigator = (
           screen: RecentTransactionsScreen,
           navigationOptions: { header: null }
         },
-<<<<<<< HEAD
         //create joint account screen
         CreateJointAccountScreen:{
           screen: CreateJointAccountScreen,
           navigationOptions: { header: null }
-        } 
-=======
+        }, 
         //SecureAccountRouter
         SecureAccountRouter: {
           screen: SecureAccountRouter,
           navigationOptions: { header: null }
         }
->>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
+
       },
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
@@ -449,18 +446,16 @@ export const createRootNavigator = (
           screen: RecentTransactionsScreen,
           navigationOptions: { header: null }
         },
-<<<<<<< HEAD
         CreateJointAccountScreen:{
           screen: CreateJointAccountScreen,
           navigationOptions: { header: null }
-        } 
-=======
+        }, 
         //SecureAccountRouter
         SecureAccountRouter: {
           screen: SecureAccountRouter,
           navigationOptions: { header: null }
         }
->>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
+
       },
       {
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"

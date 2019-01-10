@@ -351,7 +351,10 @@ export default class PaymentScreen extends React.Component {
     if (type == "Secure") {
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
       this.props.navigation.push("SecureAccountRouter");
-    } else {
+    } else if (type == "Joint"){
+      this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
+      this.props.navigation.push("CreateJointAccountScreen");
+    } else{
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
     }
   }
@@ -527,17 +530,13 @@ export default class PaymentScreen extends React.Component {
                         <Button
                           full
                           style={styles.btnAccountTypes}
-<<<<<<< HEAD
+
                           onPress={() =>{
                             this.setState({ accountTypeVisible: false })
-                            if (item.name == 'Joint'){
-                            this.props.navigation.push("CreateJointAccountScreen")
                           }
                           }
-                          }
-=======
+
                           onPress={() => this.createNewAccount(item.name)}
->>>>>>> e9d11a133bffc90035d99e274f4ac2b2ece6085c
                         >
                           <Text>{item.name}</Text>
                         </Button>
