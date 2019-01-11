@@ -6,6 +6,8 @@ import {
   Dimensions,
   StatusBar,
   FlatList,
+  Platform,
+  Linking,
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
@@ -93,6 +95,15 @@ export default class PaymentScreen extends React.Component {
 
   //TODO: Page Life Cycle
   componentDidMount() {
+
+    if (Platform.OS === 'android') {
+      Linking.getInitialURL().then(url => {
+        this.navigate(url);
+      });
+    } else {
+        Linking.addEventListener('url', this.handleOpenURL);
+      }
+
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
@@ -102,7 +113,23 @@ export default class PaymentScreen extends React.Component {
   }
 
   componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenURL);
     this.willFocusSubscription.remove();
+  }
+
+  handleOpenURL = (event) => { // D
+    this.navigate(event.url);
+  }
+
+  navigate = (url) => { // E
+    const { navigate } = this.props.navigation;
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^\/]+)\/?$/)[1];
+    const routeName = route.split('/')[0];
+  
+    if (routeName === 'Joint') {
+      navigate('CreateJointAccountScreen', { id, name: 'chris' })
+    };
   }
 
   //TODO: func fetchUserDetails
