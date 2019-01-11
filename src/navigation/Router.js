@@ -59,6 +59,7 @@ import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/Notif
 
 //joint account
 import CreateJointAccountScreen from "../screens/JointAccount/CreateJointAccountScreen/CreateJointAccountScreen";
+import JoinJointAccount from "../screens/JointAccount/CreateJointAccountScreen/JoinJointAccount";
 
 //TODO: ONBoarding
 
@@ -341,6 +342,10 @@ export const createRootNavigator = (
         CreateJointAccountScreen:{
           screen: CreateJointAccountScreen,
           navigationOptions: { header: null }
+        },
+        JoinJointAccount:{
+          screen: JoinJointAccount,
+          navigationOptions: { header: null }
         }, 
         //SecureAccountRouter
         SecureAccountRouter: {
@@ -449,7 +454,11 @@ export const createRootNavigator = (
         CreateJointAccountScreen:{
           screen: CreateJointAccountScreen,
           navigationOptions: { header: null }
-        }, 
+        },
+        JoinJointAccount:{
+          screen: JoinJointAccount,
+          navigationOptions: { header: null }
+        },  
         //SecureAccountRouter
         SecureAccountRouter: {
           screen: SecureAccountRouter,

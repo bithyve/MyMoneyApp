@@ -11,41 +11,17 @@ import {
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import WalletService from "../../../bitcoin/services/WalletService";
-var dbOpration = require("../../../manager/database/DBOpration");
-import Share, { ShareSheet } from 'react-native-share';
 
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../constants/Constants";
+import { colors, images } from "../../../constants/Constants";
 
 
 
-export default class CreateJointAccountScreen extends React.Component {
-
-    constructor() {
-        super();
-        this.state = ({
-            PubLink: '',
-        });
-    }
-
-    async sendDetails() {
-        const { mnemonic, address, keyPair } = await WalletService.createWallet();
-        let data = "bithyveapp://Joint/"+keyPair.publicKey.toString('hex')
-        this.setState({
-            PubLink: data
-        });
-        console.log(keyPair.publicKey.toString('hex'))
-    }
-
+export default class HelpScreen extends React.Component {
     render() {
-        let shareOptions = {
-            title: "Address",
-            message: this.state.PubLink,
-            url: "",
-            subject: "MyMoney" //  for email
-        };
+        const { id } = this.props.navigation.state.params;
+        console.log("after link",id)
         return (
             <Container>
                 <ImageBackground
@@ -62,15 +38,17 @@ export default class CreateJointAccountScreen extends React.Component {
 
                         <Body>
                             <Title adjustsFontSizeToFit={true}
-                                numberOfLines={1} style={styles.titleUserName}>Create Joint Account</Title>
+                                numberOfLines={1} style={styles.titleUserName}>Join Account</Title>
                         </Body>
                        <Right></Right>
                     </Header>
                     <Content>
                         <Text>
-                            This is Create Joint Account
-                        </Text>
-                        <Button success onPress={() => { this.sendDetails(); Share.open(shareOptions);}}><Text> Create  </Text></Button>              
+                            This is Join Joint Account Section
+              </Text>
+              <Text>
+                            {id}
+              </Text>
                     </Content>
 
                 </ImageBackground>
@@ -88,4 +66,3 @@ const styles = StyleSheet.create({
         color: "#ffffff"
       },
 });
-

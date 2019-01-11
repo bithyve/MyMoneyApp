@@ -128,7 +128,7 @@ export default class PaymentScreen extends React.Component {
     const routeName = route.split('/')[0];
   
     if (routeName === 'Joint') {
-      navigate('CreateJointAccountScreen', { id, name: 'chris' })
+      navigate('JoinJointAccount', { id, name: 'chris' })
     };
   }
 
