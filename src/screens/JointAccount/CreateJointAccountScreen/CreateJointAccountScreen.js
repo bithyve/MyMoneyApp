@@ -30,8 +30,20 @@ export default class CreateJointAccountScreen extends React.Component {
         });
     }
 
+    componentWillMount(){
+        this.sendDetails();
+    }
+
     async sendDetails() {
-        const { mnemonic, address, keyPair } = await WalletService.createWallet();
+        const resultWallet = await dbOpration.readTablesData(
+            localDB.tableName.tblWallet
+          );
+        console.log("mnemonics:",resultWallet.temp[0].mnemonic)
+        const {
+            keyPair
+          } = await WalletService.importWallet(resultWallet.temp[0].mnemonic);
+        //const { mnemonic, address, keyPair } = await WalletService.createWallet();
+
         let data = "bithyveapp://Joint/"+keyPair.publicKey.toString('hex')
         this.setState({
             PubLink: data
@@ -41,7 +53,7 @@ export default class CreateJointAccountScreen extends React.Component {
 
     render() {
         let shareOptions = {
-            title: "Address",
+            title: "Create Bithyve JointAccount Request",
             message: this.state.PubLink,
             url: "",
             subject: "MyMoney" //  for email
@@ -70,7 +82,7 @@ export default class CreateJointAccountScreen extends React.Component {
                         <Text>
                             This is Create Joint Account
                         </Text>
-                        <Button success onPress={() => { this.sendDetails(); Share.open(shareOptions);}}><Text> Create  </Text></Button>              
+                        <Button success onPress={() => { Share.open(shareOptions); this.props.navigation.goBack();}}><Text> Create  </Text></Button>              
                     </Content>
 
                 </ImageBackground>

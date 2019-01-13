@@ -96,7 +96,7 @@ export default class PasscodeConfirmScreen extends Component {
     } = await WalletService.createWallet();
     console.log(mnemonic);
     this.setState({
-      mnemonicValues: mnemonic.split(" ")
+      mnemonicValues: mnemonic
     });
     if (this.state.mnemonicValues.length > 0) {
       //mnemonic key
