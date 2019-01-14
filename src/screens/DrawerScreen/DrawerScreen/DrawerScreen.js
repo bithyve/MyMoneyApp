@@ -34,8 +34,7 @@ import Dialog, {
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
-var dbOpration = require("../../../manager/database/DBOpration"); 
-
+var dbOpration = require("../../../manager/database/DBOpration");
 
 //TODO: Json Files
 import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
@@ -53,27 +52,25 @@ class DrawerScreen extends Component {
   }
 
   //TODO: Page Life Cycle
-  componentDidMount(){
+  componentDidMount() {
     this.getLeftMenuList();
     this.getUserDetails();
   }
 
-async getUserDetails(){
-  const result = await dbOpration.readTablesData(localDB.tableName.tblUser);
-  this.setState({
-    userDetails:result.temp,
-    fullName:result.temp[0].firstName+' '+result.temp[0].lastName
-  });
-}  
-
-  
+  async getUserDetails() {
+    const result = await dbOpration.readTablesData(localDB.tableName.tblUser);
+    this.setState({
+      userDetails: result.temp,
+      fullName: result.temp[0].firstName + " " + result.temp[0].lastName
+    });
+  }
 
   getLeftMenuList() {
     this.setState({
       menuBarList: menuData.menus
     });
   }
- //TODO: Func show logout popup
+  //TODO: Func show logout popup
   click_Logout() {
     Alert.alert("Working");
     this.props.navigation.dispatch(DrawerActions.closeDrawer());
@@ -100,12 +97,27 @@ async getUserDetails(){
       <Container>
         <ImageBackground source={images.slideMenuIcon} style={styles.container}>
           <View style={styles.viewHeading}>
-            <Image
-              style={styles.userProfileIcon}
-              source={require("../../../assets/images/icon/default_user_icon.png")}
-            />
+            <View style={styles.viewUserIcon}>
+              <Image
+                style={styles.userProfileIcon}
+                source={require("../../../assets/images/icon/default_user_icon.png")}
+              />
+              <TouchableOpacity onPress={() => {  
+                this.props.navigation.toggleDrawer();
+                this.props.navigation.push('MyProfileRouter') }
+              }>
+              <Icon
+                name="edit"
+                style={styles.iconEdit}
+                size={25}
+                color="#ffffff"
+              />
+
+              </TouchableOpacity>
+              
+            </View>
             <Text style={styles.txtUserName}>{this.state.fullName}</Text>
-          </View>  
+          </View>
           <ScrollView>
             <View>
               <FlatList
@@ -144,6 +156,14 @@ const styles = StyleSheet.create({
   viewHeading: {
     marginTop: 10,
     alignItems: "center"
+  },
+  viewUserIcon: {
+    flexDirection: "row",
+    alignItems:'flex-end',
+  },
+  iconEdit: {    
+    alignSelf: 'flex-end',
+    marginLeft: -60
   },
   txtUserName: {
     color: "#ffffff",

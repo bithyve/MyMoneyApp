@@ -25,9 +25,9 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { SkypeIndicator } from "react-native-indicators";
 
-//TODO: Custome class  
+//TODO: Custome class
 import renderIf from "../../../constants/validation/renderIf";
-import { colors, images,apiary } from "../../../constants/Constants";
+import { colors, images, apiary } from "../../../constants/Constants";
 var utils = require("../../../constants/Utils");
 const { width, height } = Dimensions.get("screen");
 
@@ -39,53 +39,52 @@ export default class SecureAccountScreen extends React.Component {
     };
   }
 
- 
   //TODO: func click_CreateSecureAccount
   async click_CreateSecureAccount() {
     this.setState({
       isLoading: true
-    });  
+    });
     try {
-      let response = await fetch(apiary.setup2fa);  
+      let response = await fetch(apiary.setup2fa);
       let responseJson = await response.json();
-      this.props.navigation.push("SecureSecretKeyScreen",{data:responseJson});
+      this.props.navigation.push("SecureSecretKeyScreen", {
+        data: responseJson
+      });
       this.setState({
         isLoading: false
       });
-    } catch (error) {  
+    } catch (error) {
       console.error(error);
     }
   }
-  
 
   render() {
     const { activeSections } = this.state;
     return (
       <Container>
-        <ImageBackground
-          source={images.appBackgound}
-          style={styles.backgroundImage}
+        <Content
+          scrollEnabled={false}
         >
-          <Header transparent>
-            <Left>
-              <Button transparent onPress={() => this.props.navigation.pop()}>
-                <Icon name="chevron-left" size={25} color="#ffffff" />
-              </Button>
-            </Left>
-            <Body>
-              <Title
-                adjustsFontSizeToFit={true}
-                numberOfLines={1}
-                style={styles.titleUserName}
-              />
-            </Body>
-            <Right />
-          </Header>
-          <Content
-            contentContainerStyle={styles.container}
-            scrollEnabled={false}
-            padder
+          <ImageBackground
+            source={images.appBackgound}
+            style={styles.backgroundImage}
           >
+            <Header transparent>
+              <Left>
+                <Button transparent onPress={() => this.props.navigation.pop()}>
+                  <Icon name="chevron-left" size={25} color="#ffffff" />
+                </Button>
+              </Left>
+              <Body>
+                <Title
+                  adjustsFontSizeToFit={true}
+                  numberOfLines={1}
+                  style={styles.titleUserName}
+                />
+              </Body>
+              <Right />
+            </Header>
+
             <View style={styles.logoSecureAccount}>
               <Image
                 style={styles.secureLogo}
@@ -119,25 +118,23 @@ export default class SecureAccountScreen extends React.Component {
                 <Icon name="chevron-right" size={25} color="#ffffff" />
               </Button>
             </View>
-          </Content>
-          {renderIf(this.state.isLoading)(
-            <View style={styles.loading}>
-              <SkypeIndicator color={colors.appColor} />
-            </View>
-          )}
-        </ImageBackground>
+            
+          </ImageBackground>
+        </Content>  
+        {renderIf(this.state.isLoading)(
+              <View style={styles.loading}>
+                <SkypeIndicator color={colors.appColor} />
+              </View>
+            )}
       </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
     alignItems: "center"
-  },
-  backgroundImage: {
-    flex: 1
   },
   logoSecureAccount: {
     flex: 4,
@@ -150,7 +147,7 @@ const styles = StyleSheet.create({
   txtTitle: {
     fontWeight: "bold",
     color: "#fff",
-    fontSize: 28
+    fontSize: 28  
   },
   txtNote: {
     fontSize: 18,
@@ -158,9 +155,10 @@ const styles = StyleSheet.create({
   },
   //view:createAccountBtn
   createAccountBtn: {
-    flex: 2
+    flex: 2,
+    marginTop:20
   },
-  txtBtnTitle: {
+  txtBtnTitle: {  
     color: colors.white
   },
   loading: {

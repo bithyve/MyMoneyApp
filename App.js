@@ -7,9 +7,10 @@
  */
 
 import React, { Component } from "react";
-import { AsyncStorage, AppState } from "react-native";
+import { AsyncStorage, AppState, View } from "react-native";
 import { createRootNavigator } from "./src/navigation/Router";
 import { createAppContainer } from "react-navigation";
+import FlashMessage from "react-native-flash-message";
 
 import { colors } from "./src/constants/Constants";
 
@@ -28,7 +29,7 @@ export default class App extends Component {
   //TODO: App Life Cycle
   componentWillMount() {
     this.retrieveData();
-  } 
+  }
 
   // componentDidMount() {
   //   AppState.addEventListener('change', this._handleAppStateChange);
@@ -93,11 +94,14 @@ export default class App extends Component {
     const AppContainer = createAppContainer(Layout);
     // <BusyIndicator />
     return (
-      <AppContainer
-        ref={nav => {
-          this.navigator = nav;
-        }}
-      />
+      
+        <AppContainer
+          ref={nav => {
+            this.navigator = nav;
+          }}
+        />    
+       
+    
     );
   }
 }

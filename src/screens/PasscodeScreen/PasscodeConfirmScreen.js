@@ -1,35 +1,40 @@
+/**
+ * Created by dungtran on 8/20/17.
+ */
 import React, { Component } from "react";
 import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
   Alert,
   AsyncStorage,
   StatusBar,
   Vibration,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Animated
 } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
-import CodeInput from "react-native-confirmation-code-input";
+import CodeInput from "./components/ConfirmationCodeInput";
 import DropdownAlert from "react-native-dropdownalert";
 import renderIf from "../../constants/validation/renderIf";
-import CardFlip from "react-native-card-flip";
 import { SkypeIndicator } from "react-native-indicators";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../constants/Constants";
 var dbOpration = require("../../manager/database/DBOpration");
+var utils = require("../../constants/Utils");
+let isNetwork;
 
 //TODO: Wallets
 import WalletService from "../../bitcoin/services/WalletService";
-import { transform } from "typescript";
 
 const { height, width } = Dimensions.get("window");
 
 export default class PasscodeConfirmScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       mnemonicValues: [],
       status: "choice",
@@ -40,8 +45,10 @@ export default class PasscodeConfirmScreen extends Component {
       email: "",
       mobileNo: "",
       countryName: "",
-      isLoading: false
+      isLoading: false,
+      code: ""
     };
+    isNetwork = utils.getNetwork();
   }
 
   //TODO: Page Life Cycle
@@ -54,9 +61,32 @@ export default class PasscodeConfirmScreen extends Component {
       mobileNo: navigation.getParam("mobileNo"),
       countryName: navigation.getParam("countryName")
     });
+    //for animation
+    this.animatedValue = new Animated.Value(0);
+    this.value = 0;
+    this.animatedValue.addListener(({ value }) => {
+      this.value = value;
+    });
+    this.frontInterpolate = this.animatedValue.interpolate({
+      inputRange: [0, 180],
+      outputRange: ["0deg", "180deg"]
+    });
+    this.backInterpolate = this.animatedValue.interpolate({
+      inputRange: [0, 180],
+      outputRange: ["180deg", "360deg"]
+    });
+    this.frontOpacity = this.animatedValue.interpolate({
+      inputRange: [89, 90],
+      outputRange: [1, 0]
+    });
+    this.backOpacity = this.animatedValue.interpolate({
+      inputRange: [89, 90],
+      outputRange: [0, 1]
+    });
   }
+
+  //TODO: New code
   componentWillUnmount() {
-    //loaderHandler.hideLoader();
     this.setState({
       isLoading: false
     });
@@ -68,18 +98,32 @@ export default class PasscodeConfirmScreen extends Component {
       pincode: code,
       success: "Confirm your PinCode!!"
     });
-    this.card.flip();
+    this.flipCard();
   }
 
+  flipCard() {
+    if (this.value >= 90) {
+      Animated.spring(this.animatedValue, {
+        toValue: 0,
+        friction: 8,
+        tension: 10
+      }).start();
+    } else {
+      Animated.spring(this.animatedValue, {
+        toValue: 180,
+        friction: 8,
+        tension: 10
+      }).start();
+    }
+  }   
+
   _onFinishCheckingCode2(isValid, code) {
-    //loaderHandler.showLoader("Loading");
     if (isValid) {
       this.setState({
         isLoading: true
       });
       this.saveData();
     } else {
-      // loaderHandler.hideLoader();
       this.dropdown.alertWithType(
         "error",
         "Error",
@@ -94,7 +138,7 @@ export default class PasscodeConfirmScreen extends Component {
       address,
       privateKey
     } = await WalletService.createWallet();
-    console.log(mnemonic);
+    console.log("password confirm mneonic key =" + mnemonic);
     this.setState({
       mnemonicValues: mnemonic.split(" ")
     });
@@ -132,7 +176,7 @@ export default class PasscodeConfirmScreen extends Component {
             priKeyValue,
             address,
             "Primary"
-          );   
+          );
           if (resultCreateWallet) {
             const resultCreateAccountSaving = await dbOpration.insertCreateAccount(
               localDB.tableName.tblAccount,
@@ -170,19 +214,32 @@ export default class PasscodeConfirmScreen extends Component {
               });
               this.props.navigation.dispatch(resetAction);
             }
-          }  
+          }
         }
       }
     }
   };
 
   render() {
+    const frontAnimatedStyle = {
+      transform: [{ rotateY: this.frontInterpolate }]
+    };
+    const backAnimatedStyle = {
+      transform: [{ rotateY: this.backInterpolate }]
+    };
     return (
       <View style={styles.container}>
         <Text style={[styles.txtText, styles.txtTitle]}>My Money</Text>
         <Text style={[styles.txtText]}>{this.state.success}</Text>
-        <CardFlip style={styles.cardContainer} ref={card => (this.card = card)}>
-          {renderIf(this.state.status == "choice")(
+
+        {renderIf(this.state.status == "choice")(
+          <Animated.View
+            style={[
+              styles.flipCard,
+              frontAnimatedStyle,
+              { opacity: this.frontOpacity }
+            ]}
+          >
             <CodeInput
               ref="codeInputRef2"
               secureTextEntry
@@ -201,8 +258,17 @@ export default class PasscodeConfirmScreen extends Component {
               codeInputStyle={{ fontWeight: "800" }}
               onFulfill={code => this.onCheckPincode(code)}
             />
-          )}
-          {renderIf(this.state.status == "confirm")(
+          </Animated.View>
+        )}
+        {renderIf(this.state.status == "confirm")(
+          <Animated.View
+            style={[
+              styles.flipCard,
+              styles.flipCardBack,
+              backAnimatedStyle,
+              { opacity: this.backOpacity }
+            ]}
+          >
             <CodeInput
               ref="codeInputRef2"
               secureTextEntry
@@ -224,8 +290,8 @@ export default class PasscodeConfirmScreen extends Component {
                 this._onFinishCheckingCode2(isValid, code)
               }
             />
-          )}
-        </CardFlip>
+          </Animated.View>
+        )}
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
         {renderIf(this.state.isLoading)(
           <View style={styles.loading}>
@@ -237,10 +303,14 @@ export default class PasscodeConfirmScreen extends Component {
   }
 }
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "#F5F6CE"
+  },
+  cardContainer: {
+    flex: 1
   },
   txtText: {
     color: colors.appColor,
@@ -249,6 +319,12 @@ let styles = StyleSheet.create({
   txtTitle: {
     marginTop: 100,
     fontSize: 40
+  },
+  //code:new style
+  inputWrapper3: {
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+    backgroundColor: "#2F0B3A"
   },
   loading: {
     position: "absolute",

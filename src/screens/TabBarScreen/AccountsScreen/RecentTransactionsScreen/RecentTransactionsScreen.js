@@ -17,7 +17,7 @@ import {
   Title,
   Content,
   Button,
-  Left,
+  Left,  
   Right,
   Body,
   Text
@@ -122,16 +122,20 @@ export default class RecentTransactionsScreen extends React.Component {
             key={section.content}
             onPress={() => this.openHashDetails([section.content])}
           >
-          <View style={styles.viewHashContent}>
-          <Animatable.Text
-              style={[styles.content,{flex:9}]}
-              animation={isActive ? "bounceIn" : undefined}
-            >
-              {section.content}
-            </Animatable.Text>  
-            <Icon style={{flex:1,alignSelf:'center'}} name="safari" size={25} color={colors.appColor} />
-          </View>
-             
+            <View style={styles.viewHashContent}>
+              <Animatable.Text
+                style={[styles.content, { flex: 9 }]}
+                animation={isActive ? "bounceIn" : undefined}
+              >
+                {section.content}
+              </Animatable.Text>
+              <Icon
+                style={{ flex: 1, alignSelf: "center" }}
+                name="safari"
+                size={25}
+                color={colors.appColor}
+              />
+            </View>
           </TouchableOpacity>
         )}
         {renderIf(section.title != "Hash")(
@@ -236,8 +240,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(245,252,255,1)"
   },
   //view:viewHashContent
-  viewHashContent:{
-    flex:1,
-    flexDirection:'row'
+  viewHashContent: {
+    flex: 1,
+    flexDirection: "row"
   }
 });

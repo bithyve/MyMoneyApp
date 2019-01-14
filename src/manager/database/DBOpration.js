@@ -78,7 +78,6 @@ const readTableAcccountType = (tableName1, tableName2) => {
 //TODO: Select Recent Transaciton Address Wise
 
 const readRecentTransactionAddressWise = (tableName, address) => {
-  console.log({ tableName, address });
   return new Promise((resolve, reject) => {
     var temp = [];
     db.transaction(tx => {
@@ -95,9 +94,9 @@ const readRecentTransactionAddressWise = (tableName, address) => {
             for (let i = 0; i < len; i++) {
               temp.push(results.rows.item(i));
             }
-            console.log({ temp });
-            resolve({ temp });
           }
+          console.log('total readRecentTransactionAddressWise data ='+ { temp });
+          resolve({ temp });
         }
       );
     });

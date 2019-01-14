@@ -47,12 +47,15 @@ import ReceiveMoneyScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/Re
 import QrcodeScannerScreen from "../screens/DrawerScreen/SentAndReceiveeScreen/QrcodeScannerScreen/QrcodeScannerScreen";
 
 import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
-import RecentTransactionsScreen from "../screens/TabBarScreen/PaymentScreen/RecentTransactionsScreen/RecentTransactionsScreen";
+import RecentTransactionsScreen from "../screens/TabBarScreen/AccountsScreen/RecentTransactionsScreen/RecentTransactionsScreen";
 
 //TODO: Secure Account
 import SecureAccountScreen from "../screens/DrawerScreen/SecureAccountScreen/SecureAccountScreen";
 import SecureSecretKeyScreen from "../screens/DrawerScreen/SecureAccountScreen/SecureSecretKeyScreen/SecureSecretKeyScreen";
 import ValidateSecureAccountScreen from "../screens/DrawerScreen/SecureAccountScreen/ValidateSecureAccountScreen/ValidateSecureAccountScreen";
+
+//TODO: MyProfile
+import MyProfileScreen from "../screens/DrawerScreen/MyProfileScreen/MyProfileScreen";
 
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -139,6 +142,22 @@ const SecureAccountRouter = createStackNavigator(
   }
 );
 
+//TODO: StackNavigator:MyProfileRouter
+const MyProfileRouter = createStackNavigator(
+  {
+    MyProfileScreen: {
+      screen: MyProfileScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "MyProfileScreen"
+  }
+);
+
+
+
+
 
 //TODO: TabNavigator
 
@@ -194,7 +213,7 @@ const TabNavigator = createBottomTabNavigator(
   },
 
   {
-    mode: "modal",
+    initialRouteName: "Accounts",
     tabBarOptions: {
       activeTintColor: colors.appColor,
       labelStyle: {
@@ -335,12 +354,17 @@ export const createRootNavigator = (
         SecureAccountRouter: {
           screen: SecureAccountRouter,
           navigationOptions: { header: null }
+        },
+        //Profile
+        MyProfileRouter:{
+          screen: MyProfileRouter,
+          navigationOptions: { header: null }
         }
-      },
+      },  
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+        // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
       }
     );
   } else {
@@ -437,6 +461,11 @@ export const createRootNavigator = (
         //SecureAccountRouter
         SecureAccountRouter: {
           screen: SecureAccountRouter,
+          navigationOptions: { header: null }
+        },
+        //Profile
+        MyProfileRouter:{
+          screen: MyProfileRouter,
           navigationOptions: { header: null }
         }
       },

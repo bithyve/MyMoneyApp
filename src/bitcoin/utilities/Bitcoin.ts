@@ -80,24 +80,36 @@ export default class Bitcoin {
       network: this.network,
     })
 
-  public checkBalance = async (
-    address: string,
-  ): Promise<{
-    final_balance: string;
-    total_received: string;
-  }> => {
+  public checkBalance = async (address: string): Promise<any> => {
     // fetches balance corresponding to the supplied address
 
     let res: AxiosResponse;
     if (this.network === bitcoinJS.networks.testnet) {
-      res = await axios.get(`${TESTNET.BALANCE_CHECK}${address}`);
+      try {
+        res = await axios.get(`${TESTNET.BALANCE_CHECK}${address}`);
+      } catch (err) {
+        console.log("Error:", err.response.data);
+        return {
+          statusCode: err.response.status,
+          errorMessage: err.response.data,
+        };
+      }
     } else {
       // throttled endPoint (required: full node/corresponding paid service));
-      res = await axios.get(`${MAINNET.BALANCE_CHECK}${address}`);
+      try {
+        res = await axios.get(`${MAINNET.BALANCE_CHECK}${address}`);
+      } catch (err) {
+        console.log("Error:", err.response.data);
+        return {
+          statusCode: err.response.status,
+          errorMessage: err.response.data,
+        };
+      }
     }
 
     const { final_balance, total_received } = res.data[address];
     return {
+      statusCode: res.status,
       final_balance,
       total_received,
     };
@@ -130,14 +142,11 @@ export default class Bitcoin {
 
   public fetchAddressInfo = async (address: string): Promise<any> => {
     // fetches information corresponding to the  supplied address (including txns)
-
-    let res: AxiosResponse;
     if (this.network === bitcoinJS.networks.testnet) {
-      res = await axios.get(`${TESTNET.BASE}/addrs/${address}/full`);
+      return await axios.get(`${TESTNET.BASE}/addrs/${address}/full`);
     } else {
-      res = await axios.get(`${MAINNET.BASE}/addrs/${address}/full`);
+      return await axios.get(`${MAINNET.BASE}/addrs/${address}/full`);
     }
-    return res.data;
   }
 
   public categorizeTx = (tx: any, walletAddress: string) => {
@@ -147,13 +156,16 @@ export default class Bitcoin {
     let totalReceived: number = 0;
     let totalSpent: number = 0;
 
+    console.log({inputs, outputs})
     inputs.forEach((input) => {
       const { addresses } = input;
-      addresses.forEach((address) => {
-        if (address === walletAddress) {
-          sent = true;
-        }
-      });
+      if(addresses){
+        addresses.forEach((address) => {
+          if (address === walletAddress) {
+            sent = true;
+          }
+        });
+      }  
     });
 
     outputs.forEach((output) => {
@@ -171,6 +183,8 @@ export default class Bitcoin {
     } else {
       tx.totalReceived = totalReceived;
     }
+
+    console.log({tx})
     return tx;
   }
 
@@ -190,23 +204,31 @@ export default class Bitcoin {
   }
 
   public fetchTransactions = async (address: string): Promise<any> => {
-    const {
-      final_n_tx,
-      n_tx,    
-      unconfirmed_n_tx,
-      txs,  
-    } = await this.fetchAddressInfo(address);
+    let res: AxiosResponse;
+    try {
+      console.log({address});
+      res = await this.fetchAddressInfo(address);
+      console.log({res});
+    } catch (err) {
+      return {
+        statusCode: err.response.status,
+        errorMessage: err.response.data,
+      };
+    }
 
+    const { final_n_tx, n_tx, unconfirmed_n_tx, txs } = res.data;
     txs.map((tx) => {
+      console.log({tx})
       this.confirmationCat(this.categorizeTx(tx, address));
     });
 
     return {
+      statusCode: res.status,
       totalTransactions: final_n_tx,
       confirmedTransactions: n_tx,
       unconfirmedTransactions: unconfirmed_n_tx,
       transactionDetails: txs,
-      address,      
+      address,
     };
   }
 

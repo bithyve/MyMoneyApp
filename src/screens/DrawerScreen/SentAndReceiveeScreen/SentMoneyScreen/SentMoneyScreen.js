@@ -3,7 +3,8 @@ import {
   StyleSheet,
   ImageBackground,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated
 } from "react-native";
 import {
   Container,
@@ -43,14 +44,21 @@ import WalletService from "../../../../bitcoin/services/WalletService";
 export default class SentMoneyScreen extends React.Component {
   constructor() {
     super();
-
     this.state = {
+      data: [],
       recipientAddress: "",
       amount: "",
       sentBtnColor: "gray",
       sentBtnStatus: true,
       isLoading: false
     };
+  }
+
+  componentWillMount() {
+    const { navigation } = this.props;
+    this.setState({
+      data: navigation.getParam("address")
+    });
   }
 
   //TODO: func validation
@@ -87,42 +95,45 @@ export default class SentMoneyScreen extends React.Component {
 
   //TODO: func click_SentMoney
   async click_SentMoney() {
-    this.setState({
-      isLoading: true
-    });
-    var recAddress = this.state.recipientAddress;
-    var amountValue = this.state.amount;
-    console.log("first amount=", amountValue);
-    const dateTime = Date.now();
-    const lastUpdateDate = Math.floor(dateTime / 1000);
-    const { navigation } = this.props;
-    console.log("address =  " + navigation.getParam("address"));
-    console.log("keypair = " + navigation.getParam("privateKey"));
-    const { success, txid } = await WalletService.transfer(
-      navigation.getParam("address"),
-      recAddress,
-      parseFloat(amountValue) * 1e8,
-      navigation.getParam("privateKey")
-    );
-    if (success) {
-      const bal = await WalletService.getBalance(
-        navigation.getParam("address")
+    if (this.state.data.accountType == "Secure") {
+    } else {
+      this.setState({
+        isLoading: true
+      });
+      var recAddress = this.state.recipientAddress;
+      var amountValue = this.state.amount;
+      console.log("first amount=", amountValue);
+      const dateTime = Date.now();
+      const lastUpdateDate = Math.floor(dateTime / 1000);
+      const { navigation } = this.props;
+      console.log("address =  " + navigation.getParam("address"));
+      console.log("keypair = " + navigation.getParam("privateKey"));
+      const { success, txid } = await WalletService.transfer(
+        navigation.getParam("address"),
+        recAddress,
+        parseFloat(amountValue) * 1e8,
+        navigation.getParam("privateKey")
       );
-      if (bal) {
-        console.log("change bal = ", bal);
-        const resultUpdateTblAccount = await dbOpration.updateTableData(
-          localDB.tableName.tblAccount,
-          bal.final_balance / 1e8,
-          navigation.getParam("address"),
-          lastUpdateDate
+      if (success) {
+        const bal = await WalletService.getBalance(
+          navigation.getParam("address")
         );
-        if (resultUpdateTblAccount) {
-          setTimeout(() => {
-            this.setState({
-              isLoading: false
-            });
-            this.props.navigation.goBack();
-          }, 2000);
+        if (bal) {
+          console.log("change bal = ", bal);
+          const resultUpdateTblAccount = await dbOpration.updateTableData(
+            localDB.tableName.tblAccount,
+            bal.final_balance / 1e8,
+            navigation.getParam("address"),
+            lastUpdateDate
+          );
+          if (resultUpdateTblAccount) {
+            setTimeout(() => {
+              this.setState({
+                isLoading: false
+              });
+              this.props.navigation.goBack();
+            }, 2000);
+          }
         }
       }
     }
@@ -259,5 +270,25 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center"
+  },
+  //For flip
+  flipCard: {
+    width: 200,
+    height: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "blue",
+    backfaceVisibility: "hidden"
+  },
+  flipCardBack: {
+    backgroundColor: "red",
+    position: "absolute",
+    top: 0
+  },
+  flipText: {
+    width: 90,
+    fontSize: 20,
+    color: "white",
+    fontWeight: "bold"
   }
 });

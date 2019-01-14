@@ -35,11 +35,13 @@ import {
   MenuOption,
   MenuTrigger
 } from "react-native-popup-menu";
+import DropdownAlert from "react-native-dropdownalert";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
 var utils = require("../../../constants/Utils");
+let isNetwork;
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
 import { DotIndicator } from "react-native-indicators";
@@ -60,13 +62,14 @@ export default class AccountDetailsScreen extends React.Component {
       isLoading: false,
       isNoTranstion: false
     };
-    console.log("2MvwghT7H8Y81v9pSAvTprsNEw5yEqXTDcU");
-  }
+    isNetwork = utils.getNetwork();
+  }  
 
   //TODO: Page Life Cycle
   componentWillMount() {
     const { navigation } = this.props;
-    this.setState({  
+    console.log("data =" + JSON.stringify(navigation.getParam("data")));   
+    this.setState({
       data: navigation.getParam("data"),
       waletteData: navigation.getParam("privateKeyJson")[
         navigation.getParam("indexNo")
@@ -78,6 +81,7 @@ export default class AccountDetailsScreen extends React.Component {
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
+        isNetwork = utils.getNetwork();
         this.fetchloadData();
       }
     );
@@ -95,54 +99,80 @@ export default class AccountDetailsScreen extends React.Component {
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const { navigation } = this.props;
-    const bal = await WalletService.getBalance(
-      navigation.getParam("data").address
+    const resultAccount = await dbOpration.readAccountTablesData(
+      localDB.tableName.tblAccount
     );
-    const resultRecentTras = await WalletService.getTransactions(
-      navigation.getParam("data").address
-    );
-    if (resultRecentTras.transactionDetails.length > 0) {
-      const resultRecentTransaction = await dbOpration.insertTblTransation(
-        localDB.tableName.tblTransaction,
-        resultRecentTras.transactionDetails,
-        resultRecentTras.address,
-        lastUpdateDate
+    if (isNetwork) {
+      const bal = await WalletService.getBalance(
+        navigation.getParam("data").address
       );
-      if (resultRecentTransaction) {
-        this.fetchRecentTransaction(navigation.getParam("data").address);
+      if (bal.statusCode == 200) {
+        const resultRecentTras = await WalletService.getTransactions(
+          navigation.getParam("data").address
+        );
+        if (resultRecentTras.statusCode == 200) {
+          if (resultRecentTras.transactionDetails.length > 0) {
+            const resultRecentTransaction = await dbOpration.insertTblTransation(
+              localDB.tableName.tblTransaction,
+              resultRecentTras.transactionDetails,
+              resultRecentTras.address,
+              lastUpdateDate
+            );
+            if (resultRecentTransaction) {
+              this.fetchRecentTransaction(navigation.getParam("data").address);
+            }
+          } else {
+            this.setState({
+              isNoTranstion: true
+            });
+          }
+          const resultUpdateTblAccount = await dbOpration.updateTableData(
+            localDB.tableName.tblAccount,
+            bal.final_balance / 1e8,
+            navigation.getParam("data").address,
+            lastUpdateDate
+          );
+          if (resultUpdateTblAccount) {
+            this.setState({
+              data: resultAccount.temp[navigation.getParam("indexNo")],
+              isLoading: false
+            });
+          }
+        } else {
+          this.dropdown.alertWithType(
+            "error",
+            "OH!!",
+            resultRecentTras.errorMessage
+          );
+        }
       }
     } else {
+      this.fetchRecentTransaction(navigation.getParam("data").address);
       this.setState({
-        isNoTranstion: true
+        data: resultAccount.temp[navigation.getParam("indexNo")],
+        isLoading: false
       });
-    }
-    if (bal) {
-      const resultUpdateTblAccount = await dbOpration.updateTableData(
-        localDB.tableName.tblAccount,
-        bal.final_balance / 1e8,
-        navigation.getParam("data").address,
-        lastUpdateDate
-      );
-      if (resultUpdateTblAccount) {
-        const resultAccount = await dbOpration.readAccountTablesData(
-          localDB.tableName.tblAccount
-        );
-        this.setState({
-          data: resultAccount.temp[navigation.getParam("indexNo")],
-          isLoading: false
-        });
-      }
     }
   }
 
   //TODO: func fetchRecentTransaction
   async fetchRecentTransaction(address) {
+    let transation;
+    let flag_noTrasation;
     const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
       localDB.tableName.tblTransaction,
       address
     );
+    if (resultRecentTras.temp.length > 0) {
+      transation = resultRecentTras.temp;
+      flag_noTrasation = false;
+    } else {
+      transation = [];
+      flag_noTrasation = true;
+    }
     this.setState({
-      tranDetails: resultRecentTras.temp
+      tranDetails: transation,
+      isNoTranstion: flag_noTrasation
     });
   }
 
@@ -306,12 +336,21 @@ export default class AccountDetailsScreen extends React.Component {
             >
               <Button
                 transparent
-                onPress={() =>
-                  this.props.navigation.push("SentMoneyScreen", {
-                    address: this.state.data.address,
-                    privateKey: this.state.waletteData.privateKey
-                  })
-                }
+                onPress={() => {
+                  if (isNetwork) {
+                    this.props.navigation.push("SentMoneyScreen", {
+                      data: this.state.data,
+                      address: this.state.data.address,
+                      privateKey: this.state.waletteData.privateKey
+                    });  
+                  } else {
+                    this.dropdown.alertWithType(
+                      "info",
+                      "OH!!",
+                      "Sorry You're Not Connected to the Internet"
+                    );
+                  }
+                }}
               >
                 <Icon name="angle-up" size={25} color="#ffffff" />
                 <Text style={styles.txtTile}>Send</Text>
@@ -330,6 +369,7 @@ export default class AccountDetailsScreen extends React.Component {
             </View>
           </View>
         </Content>
+        <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </Container>
     );
   }
@@ -344,16 +384,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Saving,
     width: "100%"
   },
-  Secure:{
+  Secure: {
     flex: 1,
-    backgroundColor: colors.Secure,  
+    backgroundColor: colors.Secure,
     width: "100%"
   },
   viewBackBtn: {
     flex: 2,
     flexDirection: "row",
     padding: 15,
-    marginTop: 10
+    marginTop: Platform.OS == "ios" ? 10 : 25
   },
   viewBalInfo: {
     flex: 5,

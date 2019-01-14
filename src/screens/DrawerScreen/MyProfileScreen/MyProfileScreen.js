@@ -42,22 +42,35 @@ export default class MyProfileScreen extends React.Component {
   render() {
     return (
       <Container>
-        <View style={styles.container}>
-          <Header transparent style={{ backgroundColor: colors.appColor }}>
+        <ImageBackground source={images.appBackgound} style={styles.container}>
+          <Header transparent>
             <Left>
               <Button
                 transparent
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => this.props.navigation.pop()}
               >
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>
             </Left>
 
             <Body>
-              <Title>Notification</Title>
+              <Title
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
+                style={styles.titleUserName}
+              >
+                My Profile
+              </Title>
             </Body>
+            <Right />
           </Header>
-        </View>
+          <Content
+            contentContainerStyle={styles.container}
+            scrollEnabled={false}
+          >
+            <Text>Profile</Text>
+          </Content>
+        </ImageBackground>
       </Container>
     );
   }
@@ -66,11 +79,9 @@ export default class MyProfileScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-  },
-  notificationIcon: {
-    height: 50,
-    width: 50,
-    borderRadius: 25
-  }
+    backgroundColor: '#fff',
+},
+titleUserName: {
+    color: "#ffffff"
+},
 });
