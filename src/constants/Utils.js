@@ -12,6 +12,9 @@ const getUnixTimeDate = date => {
 const getUnixToDateFormat = unixDate => {
   return moment.unix(unixDate).format("DD-MM-YYYY HH:mm:ss");
 };
+const getUnixToNormaDateFormat = unixDate => {
+  return moment.unix(unixDate).format("DD-MM-YYYY");
+}
 
 //TODO: Network check
 let isNetwork;
@@ -34,5 +37,6 @@ const getNetwork = value => {
 module.exports = {
   getUnixTimeDate,
   getUnixToDateFormat,
-  getNetwork
+  getUnixToNormaDateFormat,
+  getNetwork  
 };

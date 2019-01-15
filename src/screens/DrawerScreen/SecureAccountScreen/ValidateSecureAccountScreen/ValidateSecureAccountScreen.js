@@ -174,7 +174,6 @@ export default class ValidateSecureAccountScreen extends React.Component {
   }
 
   async connection_SaveSecureAccount(fulldate, address, bhPubKey) {
-    console.log("call =", { fulldate, address, bhPubKey });
     const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
       localDB.tableName.tblAccount,
       fulldate,

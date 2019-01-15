@@ -905,6 +905,11 @@ accepts@~1.3.3, accepts@~1.3.5:
     mime-types "~2.1.18"
     negotiator "0.6.1"
 
+accordion-collapse-react-native@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/accordion-collapse-react-native/-/accordion-collapse-react-native-0.1.9.tgz#8833c9696fbaa8f0e9a0e91b6ea4efe53574a957"
+  integrity sha512-s6/ps0Ba0RVxWkpMiDignC28B36QoXt0Qsxmj6T+fR583AS5f5KQT5wll0MPL6exKmUYDMbHPhMBSZ0Y1UgRbA==
+
 acorn-globals@^4.1.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/acorn-globals/-/acorn-globals-4.3.0.tgz#e3b6f8da3c1552a95ae627571f7dd6923bb54103"
@@ -5378,10 +5383,20 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
+lodash.get@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+  integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
+
 lodash.isempty@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.isempty/-/lodash.isempty-4.4.0.tgz#6f86cbedd8be4ec987be9aaf33c9684db1b31e7e"
   integrity sha1-b4bL7di+TsmHvpqvM8loTbGzHn4=
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash.memoize@^4.1.2:
   version "4.1.2"
@@ -5973,7 +5988,7 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.23.0:
+moment@^2.22.0, moment@^2.23.0:
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
   integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
@@ -6912,7 +6927,7 @@ prop-types@15.6.0:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   integrity sha512-3pboPvLiWD7dkI3qf3KbUe6hKFKa52w+AE0VCqECtf+QHAKgOL37tTaNCnuX1nAAQ4ZhyP+kYVKf8rLmJ/feDQ==
@@ -7097,7 +7112,7 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-native-animatable@^1.3.1:
+react-native-animatable@^1.2.4, react-native-animatable@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.1.tgz#f004a7e9de6838d0fbf210d642593cff7affd9ef"
   integrity sha512-NoE6OAgCrhggWBRV6rBJup5vLAGoTjx168Tku1RZmjUGIdYRAyGesP/MoqvxiNJjhTAgwYx2LT63VTT1xO8g4Q==
@@ -7120,6 +7135,16 @@ react-native-barcode-scanners@^1.0.4:
     react-native-camera "^1.1.2"
     react-native-image-picker "^0.26.7"
     react-native-lewin-qrcode "^1.0.1"
+
+react-native-calendars@^1.21.0:
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.21.0.tgz#c8df92a131c7ebd3f9cf38d271e1b1cba4f8792d"
+  integrity sha512-L1tG96BGMzZSwdz5LRJAK7VnW2g/iW4bLjo5gLqXeKDurXRP5sNpGvZ6nwG6x/3+LK7JDDLVK4ymIz7h8Skkzw==
+  dependencies:
+    lodash.get "^4.4.2"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.5.10"
+    xdate "^0.8.0"
 
 react-native-camera@^1.1.2, react-native-camera@^1.6.3:
   version "1.8.0"
@@ -7189,12 +7214,24 @@ react-native-crypto@^2.0.1, react-native-crypto@^2.1.2:
     pbkdf2 "3.0.8"
     public-encrypt "^4.0.0"
 
+react-native-custom-datepicker-ios@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-custom-datepicker-ios/-/react-native-custom-datepicker-ios-0.0.5.tgz#1aecf71ae8ec4dc323fe28d4bf35fadfb21a7a35"
+  integrity sha512-ySJM+yhJSX9N5fP7vjinM0qz5upinD5wtgjQMxEhazPBPOTeCkmi4mozNbmDLvA+Ev61+YirGX6uGFDbaGnLlA==
+
 react-native-custom-qr-codes@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-custom-qr-codes/-/react-native-custom-qr-codes-2.0.0.tgz#95fc813e1cbb5190cbdaf2657d361c5220a4feef"
   integrity sha512-tUQipLzDorDgv/gzuhAISSqCCNOTtM+QveAUTnV1deeEKDAtdfdzY9QJIqLZYmfYvusySpXOK1Sdu9X+6AR2Jg==
   dependencies:
     prop-types "^15.5.10"
+
+react-native-datepicker@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz#58d0822591a0ac9b32aba082650222a0ee29669d"
+  integrity sha1-WNCCJZGgrJsyq6CCZQIioO4pZp0=
+  dependencies:
+    moment "^2.22.0"
 
 react-native-device-info@^0.24.3:
   version "0.24.3"
@@ -7358,6 +7395,24 @@ react-native-lewin-qrcode@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-lewin-qrcode/-/react-native-lewin-qrcode-1.0.2.tgz#360e78a9ce6ed861a9711a5a35e3b1ecffe8d452"
   integrity sha512-kjF/hEfAPrlxTviW/mZjhsKCHQ7yUJAaoV8964J5XHZtBc0JxybHsqcA2qF3JU8XyqerzITaXyb1Zf2/Zh2+OQ==
 
+react-native-material-buttons@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-material-buttons/-/react-native-material-buttons-0.5.0.tgz#ab2b3e3fc3f500ca713f51e9d75978aff602152a"
+  integrity sha1-qys+P8P1AMpxP1Hp11l4r/YCFSo=
+  dependencies:
+    prop-types "^15.5.9"
+    react-native-material-ripple "^0.7.0"
+
+react-native-material-dropdown@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/react-native-material-dropdown/-/react-native-material-dropdown-0.11.1.tgz#c0fe434a8e617941ef910ba44d2f07c8f37584fe"
+  integrity sha1-wP5DSo5heUHvkQukTS8HyPN1hP4=
+  dependencies:
+    prop-types "^15.5.9"
+    react-native-material-buttons "^0.5.0"
+    react-native-material-ripple "^0.8.0"
+    react-native-material-textfield "^0.12.0"
+
 react-native-material-kit@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/react-native-material-kit/-/react-native-material-kit-0.5.1.tgz#fc05605273bfa0d145c6e36cca755cbde5b8db3a"
@@ -7366,10 +7421,47 @@ react-native-material-kit@^0.5.1:
     prop-types "^15.5.10"
     ramda "^0.24.1"
 
+react-native-material-ripple@^0.7.0:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/react-native-material-ripple/-/react-native-material-ripple-0.7.5.tgz#e2af5110680532f14aea3c3a438247be2ffef659"
+  integrity sha1-4q9REGgFMvFK6jw6Q4JHvi/+9lk=
+  dependencies:
+    prop-types "^15.5.10"
+
+react-native-material-ripple@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-material-ripple/-/react-native-material-ripple-0.8.0.tgz#b8c24e6fdea2af2a21e8468b1f40b35483019e2f"
+  integrity sha1-uMJOb96iryoh6EaLH0CzVIMBni8=
+  dependencies:
+    prop-types "^15.5.10"
+
+react-native-material-textfield@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-material-textfield/-/react-native-material-textfield-0.12.0.tgz#3fba19d76ab89f67052c81e082152fc243d82a3f"
+  integrity sha1-P7oZ12q4n2cFLIHgghUvwkPYKj8=
+  dependencies:
+    prop-types "^15.5.9"
+
+react-native-modal-datetime-picker@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-6.0.0.tgz#8018994524122ad48fd6bc66f26f623c75a49fb3"
+  integrity sha512-O8brvSXgvRtfHzAyCNSrPcylE05cyK30D8/7rM0kjXLnlDcoiXtEl62qDQw8wnJOAL6kQFGn/iQ8H4mGXptiHw==
+  dependencies:
+    prop-types "^15.6.1"
+    react-native-modal "^6.2.0"
+
 react-native-modal-picker@^0.0.16:
   version "0.0.16"
   resolved "https://registry.yarnpkg.com/react-native-modal-picker/-/react-native-modal-picker-0.0.16.tgz#c9324d880a3bb8f36b772f378164977e2f431cbc"
   integrity sha1-yTJNiAo7uPNrdy83gWSXfi9DHLw=
+
+react-native-modal@^6.2.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-6.5.0.tgz#46220b2289a41597d344c1db17454611b426a758"
+  integrity sha512-ewchdETAGd32xLGLK93NETEGkRcePtN7ZwjmLSQnNW1Zd0SRUYE8NqftjamPyfKvK0i2DZjX4YAghGZTqaRUbA==
+  dependencies:
+    prop-types "^15.6.1"
+    react-native-animatable "^1.2.4"
 
 react-native-os@^1.0.1:
   version "1.2.2"
@@ -9426,6 +9518,11 @@ xcode@^1.0.0:
   dependencies:
     simple-plist "^0.2.1"
     uuid "^3.3.2"
+
+xdate@^0.8.0:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/xdate/-/xdate-0.8.2.tgz#d7b033c00485d02695baf0044f4eacda3fc961a3"
+  integrity sha1-17AzwASF0CaVuvAET06s2j/JYaM=
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

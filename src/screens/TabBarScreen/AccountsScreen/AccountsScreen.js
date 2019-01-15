@@ -94,7 +94,7 @@ export default class AccountsScreen extends React.Component {
     };
     this.click_openPopupAccountType = this.click_openPopupAccountType.bind(
       this
-    );  
+    );
     isNetwork = utils.getNetwork();
   }
 
@@ -179,7 +179,7 @@ export default class AccountsScreen extends React.Component {
               isNoTranstion: true,
               tranDetails: []
             });
-          }    
+          }
           const resultUpdateTblAccount = await dbOpration.updateTableData(
             localDB.tableName.tblAccount,
             bal.final_balance / 1e8,
@@ -194,7 +194,7 @@ export default class AccountsScreen extends React.Component {
               isLoading: false,
               isLoading1: false
             });
-          }      
+          }
         } else {
           this.dropdown.alertWithType(
             "error",
@@ -239,8 +239,8 @@ export default class AccountsScreen extends React.Component {
   }
 
   //TODO: func getSwapCardDetails
-  async getSwapCardDetails(index) { 
-    isNetwork = utils.getNetwork(); 
+  async getSwapCardDetails(index) {
+    isNetwork = utils.getNetwork();
     this.setState({
       isLoading1: true,
       cardIndexNo: index
@@ -252,20 +252,18 @@ export default class AccountsScreen extends React.Component {
       localDB.tableName.tblAccount
     );
     if (resultAccount.temp[index].address != "") {
-      console.log('address ='+resultAccount.temp[index].address)
+      console.log("address =" + resultAccount.temp[index].address);
       if (isNetwork) {
         const bal = await WalletService.getBalance(
           resultAccount.temp[index].address
         );
-        console.log("bal" + JSON.stringify(bal));   
+        console.log("bal" + JSON.stringify(bal));
         if (bal.statusCode == 200) {
           const resultRecentTras = await WalletService.getTransactions(
             resultAccount.temp[index].address
           );
-          console.log("recent transation =" + JSON.stringify(resultRecentTras ));
+          console.log("recent transation =" + JSON.stringify(resultRecentTras));
           if (resultRecentTras.statusCode == 200) {
-           
-          
             if (resultRecentTras.transactionDetails.length > 0) {
               const resultRecentTransaction = await dbOpration.insertTblTransation(
                 localDB.tableName.tblTransaction,
@@ -424,8 +422,9 @@ export default class AccountsScreen extends React.Component {
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
       this.props.navigation.push("SecureAccountRouter");
     } else {
+      this.props.navigation.push("VaultAccountRouter");
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
-    }
+    }  
   }
 
   render() {

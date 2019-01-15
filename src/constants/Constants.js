@@ -71,7 +71,7 @@ var images = {
 };
   
 //Rest Full Api
-const domain = "http://c57eb4c4.ngrok.io/";
+const domain = "https://bh-server-alpha.herokuapp.com/";
 var apiary = {
   setup2fa: domain + "setup2fa",
   validate2fasetup: domain + "validate2fasetup",

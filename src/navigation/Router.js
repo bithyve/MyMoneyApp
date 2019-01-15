@@ -57,6 +57,9 @@ import ValidateSecureAccountScreen from "../screens/DrawerScreen/SecureAccountSc
 //TODO: MyProfile
 import MyProfileScreen from "../screens/DrawerScreen/MyProfileScreen/MyProfileScreen";
 
+//VaultAccount Screen
+import VaultAccountScreen from "../screens/DrawerScreen/VaultAccountScreen/VaultAccountScreen";
+
 //Right DrawerScreen
 import NotificationScreen from "../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
@@ -155,9 +158,19 @@ const MyProfileRouter = createStackNavigator(
   }
 );
 
+//TODO: StackNavigator:VaultAccountRouter
 
-
-
+const VaultAccountRouter = createStackNavigator(
+  {
+    VaultAccountScreen: {
+      screen: VaultAccountScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "VaultAccountScreen"
+  }
+);
 
 //TODO: TabNavigator
 
@@ -258,7 +271,6 @@ const LeftDrawerNavigator = createDrawerNavigator(
 
 //TODO: RootNavigator
 //TODO: RootNavigator:createRootNavigator
-
 export const createRootNavigator = (
   signedIn = false,
   screenName = "Password"
@@ -356,11 +368,16 @@ export const createRootNavigator = (
           navigationOptions: { header: null }
         },
         //Profile
-        MyProfileRouter:{
+        MyProfileRouter: {
           screen: MyProfileRouter,
           navigationOptions: { header: null }
+        },
+        //VaultAccountRouter
+        VaultAccountRouter: {
+          screen: VaultAccountRouter,
+          navigationOptions: { header: null }
         }
-      },  
+      },
       {
         initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
         // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
@@ -464,8 +481,13 @@ export const createRootNavigator = (
           navigationOptions: { header: null }
         },
         //Profile
-        MyProfileRouter:{
+        MyProfileRouter: {
           screen: MyProfileRouter,
+          navigationOptions: { header: null }
+        },
+        //VaultAccountRouter
+        VaultAccountRouter: {
+          screen: VaultAccountRouter,
           navigationOptions: { header: null }
         }
       },

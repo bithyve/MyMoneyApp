@@ -24,6 +24,7 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { SkypeIndicator } from "react-native-indicators";
+import DropdownAlert from "react-native-dropdownalert";
 
 //TODO: Custome class
 import renderIf from "../../../constants/validation/renderIf";
@@ -41,30 +42,45 @@ export default class SecureAccountScreen extends React.Component {
 
   //TODO: func click_CreateSecureAccount
   async click_CreateSecureAccount() {
-    this.setState({
-      isLoading: true
-    });
+    this.stopLoading(true);
     try {
-      let response = await fetch(apiary.setup2fa);
-      let responseJson = await response.json();
-      this.props.navigation.push("SecureSecretKeyScreen", {
-        data: responseJson
-      });
-      this.setState({
-        isLoading: false
-      });
+      fetch(apiary.setup2fa, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          this.props.navigation.push("SecureSecretKeyScreen", {
+            data: responseJson
+          });
+          this.stopLoading(false);
+        })
+        .catch(error => {
+          this.dropdown.alertWithType("error", "OH!!", error);
+          this.stopLoading(false);
+        });
     } catch (error) {
-      console.error(error);
+      this.dropdown.alertWithType("error", "OH!!", error);
+      this.stopLoading(false);
     }
+  }
+
+  //TODO: func stopLoading
+
+  stopLoading(value) {
+    this.setState({
+      isLoading: value
+    });
   }
 
   render() {
     const { activeSections } = this.state;
     return (
       <Container>
-        <Content
-          scrollEnabled={false}
-        >
+        <Content contentContainerStyle={styles.container} scrollEnabled={false}>
           <ImageBackground
             source={images.appBackgound}
             style={styles.backgroundImage}
@@ -118,20 +134,23 @@ export default class SecureAccountScreen extends React.Component {
                 <Icon name="chevron-right" size={25} color="#ffffff" />
               </Button>
             </View>
-            
           </ImageBackground>
-        </Content>  
+        </Content>
         {renderIf(this.state.isLoading)(
-              <View style={styles.loading}>
-                <SkypeIndicator color={colors.appColor} />
-              </View>
-            )}
+          <View style={styles.loading}>
+            <SkypeIndicator color={colors.appColor} />
+          </View>
+        )}
+        <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   backgroundImage: {
     flex: 1,
     alignItems: "center"
@@ -147,7 +166,7 @@ const styles = StyleSheet.create({
   txtTitle: {
     fontWeight: "bold",
     color: "#fff",
-    fontSize: 28  
+    fontSize: 28
   },
   txtNote: {
     fontSize: 18,
@@ -156,9 +175,9 @@ const styles = StyleSheet.create({
   //view:createAccountBtn
   createAccountBtn: {
     flex: 2,
-    marginTop:20
+    marginTop: 20
   },
-  txtBtnTitle: {  
+  txtBtnTitle: {
     color: colors.white
   },
   loading: {
