@@ -92,11 +92,7 @@ export default class SecureAccountScreen extends React.Component {
                 </Button>
               </Left>
               <Body>
-                <Title
-                  adjustsFontSizeToFit={true}
-                  numberOfLines={1}
-                  style={styles.titleUserName}
-                />
+                <Title />
               </Body>
               <Right />
             </Header>
@@ -111,11 +107,7 @@ export default class SecureAccountScreen extends React.Component {
                 First of all, you need to realize that there’s a huge difference
                 between a blockchain and cryptocurrencies. Blockchain is a
                 technology which is used to create crypto money like bitcoin or
-                ethereum. But it’s only one of the variants how you can use
-                blockchains. I believe that the technology is really very
-                helpful and has bright future. And the one thing that doesn't
-                let you think the same is a pile of myths which surround
-                Blockchain technology. Let’s dispel them.
+                ethereum.
               </Text>
             </View>
             <View style={styles.createAccountBtn}>
@@ -152,16 +144,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
   backgroundImage: {
-    flex: 1,
-    alignItems: "center"
+    flex: 1
   },
   logoSecureAccount: {
     flex: 4,
     alignItems: "center"
   },
   secureLogo: {
-    height: 150,
-    width: 150
+    height: 120,
+    width: 120
   },
   txtTitle: {
     fontWeight: "bold",
@@ -169,13 +160,15 @@ const styles = StyleSheet.create({
     fontSize: 28
   },
   txtNote: {
+    padding: 10,
     fontSize: 18,
     marginTop: 20
   },
   //view:createAccountBtn
   createAccountBtn: {
     flex: 2,
-    marginTop: 20
+    marginTop: 20,
+    alignSelf: "center"
   },
   txtBtnTitle: {
     color: colors.white

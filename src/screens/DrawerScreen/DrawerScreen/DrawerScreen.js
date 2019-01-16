@@ -98,27 +98,28 @@ class DrawerScreen extends Component {
         <ImageBackground source={images.slideMenuIcon} style={styles.container}>
           <View style={styles.viewHeading}>
             <View style={styles.viewUserIcon}>
-              <Image
-                style={styles.userProfileIcon}
-                source={require("../../../assets/images/icon/default_user_icon.png")}
-              />
-              <TouchableOpacity onPress={() => {  
-                this.props.navigation.toggleDrawer();
-                this.props.navigation.push('MyProfileRouter') }
-              }>
-              <Icon
-                name="edit"
-                style={styles.iconEdit}
-                size={25}
-                color="#ffffff"
-              />
-
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.toggleDrawer();
+                  this.props.navigation.push("MyProfileRouter");
+                }}
+              >
+                <Image
+                  style={styles.userProfileIcon}
+                  source={require("../../../assets/images/icon/default_user_icon.png")}
+                />
+                <Icon
+                  name="edit"
+                  style={styles.iconEdit}
+                  size={25}
+                  color="#ffffff"
+                />
               </TouchableOpacity>
-              
             </View>
             <Text style={styles.txtUserName}>{this.state.fullName}</Text>
           </View>
-          <ScrollView>
+
+          <ScrollView style={styles.viewScrollingList}>
             <View>
               <FlatList
                 data={this.state.menuBarList}
@@ -148,24 +149,25 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30
   },
+  viewHeading: {
+    flex: 0.5,
+    marginTop: 10,
+    alignItems: "center"
+  },
   userProfileIcon: {
     width: 140,
     height: 140,
     borderRadius: 70
   },
-  viewHeading: {
-    marginTop: 10,
-    alignItems: "center"
-  },
-  viewUserIcon: {
+  viewUserIcon: {       
     flexDirection: "row",
-    alignItems:'flex-end',
+    alignItems: "flex-end"
   },
-  iconEdit: {    
-    alignSelf: 'flex-end',
-    marginLeft: -60
+  iconEdit: {
+    alignSelf: "flex-end",
+    marginTop: -30
   },
-  txtUserName: {
+  txtUserName: {   
     color: "#ffffff",
     fontWeight: "bold",
     fontSize: 24,
@@ -183,6 +185,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: "#ffffff",
     fontSize: 20
+  },
+  //Scrolling:viewScrollingList
+  viewScrollingList: {
+    flex: 1
   }
 });
 

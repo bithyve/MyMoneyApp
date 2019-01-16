@@ -41,9 +41,7 @@ import Dialog, {
 } from "react-native-popup-dialog";
 import { DotIndicator, SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
-
-import { showMessage, hideMessage } from "react-native-flash-message";
-
+   
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
@@ -424,7 +422,7 @@ export default class AccountsScreen extends React.Component {
     } else {
       this.props.navigation.push("VaultAccountRouter");
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
-    }  
+    }
   }
 
   render() {

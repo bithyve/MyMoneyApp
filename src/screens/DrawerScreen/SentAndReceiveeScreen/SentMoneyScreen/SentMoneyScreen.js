@@ -4,7 +4,10 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
-  Animated
+  Animated,
+  Dimensions,
+  Alert,
+  TextInput
 } from "react-native";
 import {
   Container,
@@ -24,6 +27,12 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import renderIf from "../../../../constants/validation/renderIf";
 import { SkypeIndicator } from "react-native-indicators";
+import Dialog, {
+  SlideAnimation,
+  DialogTitle,
+  DialogContent,
+  DialogButton
+} from "react-native-popup-dialog";
 
 const required = value => (value ? undefined : "This is a required field.");
 const email = value =>
@@ -50,14 +59,15 @@ export default class SentMoneyScreen extends React.Component {
       amount: "",
       sentBtnColor: "gray",
       sentBtnStatus: true,
-      isLoading: false
+      isLoading: false,
+      isSecureAccountPopup: false
     };
   }
 
   componentWillMount() {
     const { navigation } = this.props;
     this.setState({
-      data: navigation.getParam("address")
+      data: navigation.getParam("data")
     });
   }
 
@@ -96,6 +106,7 @@ export default class SentMoneyScreen extends React.Component {
   //TODO: func click_SentMoney
   async click_SentMoney() {
     if (this.state.data.accountType == "Secure") {
+      this.setState({ isSecureAccountPopup: true });
     } else {
       this.setState({
         isLoading: true
@@ -226,6 +237,90 @@ export default class SentMoneyScreen extends React.Component {
               <Text> SEND </Text>
             </Button>
           </Content>
+
+          <Dialog
+            width={Dimensions.get("screen").width - 30}
+            visible={this.state.isSecureAccountPopup}
+            onTouchOutside={() => {
+              this.setState({ isSecureAccountPopup: false });
+            }}
+            dialogAnimation={
+              new SlideAnimation({
+                slideFrom: "bottom"
+              })
+            }
+            dialogStyle={styles.dialogSecureAccount}
+          >
+            <DialogContent containerStyle={styles.dialogContainerSecureAccount}>
+              <View style={styles.accountTypePopUP}>
+                <Text style={[styles.txtTitle, { fontSize: 20 }]}>
+                  New Transaction
+                </Text>
+
+                <View style={styles.viewFeeShow}>
+                  <View style={[styles.viewLineText]}>
+                    <Text style={[styles.txtTitle, { flex: 1 }]}>Amount:</Text>
+                    <Text
+                      style={[styles.txtTitle, { flex: 1, fontWeight: "bold" }]}
+                    >
+                      $ {this.state.amount}
+                    </Text>
+                  </View>
+                  <View style={[styles.viewLineText]}>
+                    <Text style={[styles.txtTitle, { flex: 1 }]}>Fee:</Text>
+                    <Text
+                      style={[styles.txtTitle, { flex: 1, fontWeight: "bold" }]}
+                    >
+                      $ 0.001
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.viewReceipint}>
+                  <Text style={[styles.txtTitle, { fontSize: 18 }]}>
+                    Recipient:
+                  </Text>
+                  <Text
+                    style={[
+                      styles.txtTitle,
+                      { textAlign: "center", fontSize: 18, fontWeight: "bold" }
+                    ]}
+                  >
+                    {this.state.recipientAddress}
+                  </Text>
+                </View>
+
+                <View style={styles.view2FaInput}>
+                  <TextInput
+                    name={this.state.txt2FA}
+                    value={this.state.txt2FA}
+                    keyboardType={"default"}
+                    placeholder="2FA gauth code"
+                    placeholderTextColor="#EA4336"
+                    style={styles.input2FA}
+                  />
+                </View>  
+                <View style={styles.viewBtn}>
+                  <Button
+                    transparent
+                    danger
+                    onPress={() =>
+                      this.setState({ isSecureAccountPopup: false })
+                    }
+                  >  
+                    <Text>CANCEL</Text>
+                  </Button>
+                  <Button transparent danger onPress={() => {
+                      this.setState({ isSecureAccountPopup: false })
+                      alert('working')  
+                  }}>
+                    <Text>SEND</Text>
+                  </Button>
+                </View>
+              </View>
+            </DialogContent>
+          </Dialog>
+
           {renderIf(this.state.isLoading)(
             <View style={styles.loading}>
               <SkypeIndicator color={colors.appColor} />
@@ -290,5 +385,39 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     fontWeight: "bold"
+  },
+  //popup
+  dialogSecureAccount: {
+    borderRadius: 5,
+    backgroundColor: "#1F1E25"
+  },
+  dialogContainerSecureAccount: {},
+  accountTypePopUP: {
+    padding: 10,
+    marginTop:20
+  },
+  viewFeeShow: {
+    marginTop: 20,
+    marginBottom: 10
+  },
+  viewLineText: {
+    flexDirection: "row"
+  },
+  viewReceipint: {},
+  view2FaInput: {
+    marginTop: 20
+  },
+  input2FA: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#EA4336",
+    color: "#EA4336",
+    fontSize: 18
+  },
+  //view:Button
+  viewBtn: {
+    flexDirection: "row",
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "flex-end"
   }
 });

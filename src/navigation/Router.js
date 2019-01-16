@@ -247,11 +247,11 @@ const LeftDrawerNavigator = createDrawerNavigator(
       screen: TabNavigator,
       navigationOptions: {
         drawerLabel: "Home",
-        drawerLockMode: "locked-open",
         drawerIcon: ({ tintColor }) => <Icon name="home" size={17} />
       }
     }
   },
+
   {
     initialRouteName: "Home",
     contentComponent: DrawerScreen,

@@ -10,6 +10,7 @@ import {
   Alert,
   ImageBackground,
   Dimensions,
+  DatePickerIOS,
   TextInput
 } from "react-native";
 import {
@@ -27,13 +28,8 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
-import { Dropdown } from "react-native-material-dropdown";
-import DateTimePicker from "react-native-modal-datetime-picker";
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody
-} from "accordion-collapse-react-native";
+import { RkCard } from "react-native-ui-kitten";
+import DatePicker from "react-native-datepicker";
 import moment from "moment";
 
 //TODO: Custome class
@@ -48,10 +44,11 @@ export default class VaultAccountScreen extends React.Component {
     this.state = {
       isLoading: false,
       date: moment(new Date()).format("DD-MM-YYYY"),
-      days: "0",  
+      days: "0",
       periodType: "",
       isPeriodTypeDialog: false
     };
+    this.changeDateAndroid = this.changeDateAndroid.bind(this);
   }
 
   //TODO: Page Life Cycle
@@ -63,29 +60,33 @@ export default class VaultAccountScreen extends React.Component {
     });
   }
 
-  showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
-
-  hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
-
-  handleDatePicked = date => {
-    let start = moment(date, "YYYY-MM-DD");
-    let end = moment(new Date(), "YYYY-MM-DD");
-    //Difference in number of days
-    let diff = Math.round((start - end) / (1000 * 60 * 60 * 24));
-    this.setState({
-      date: moment(date).format("DD-MM-YYYY"),
-      days: diff
-    });
-
-    this.hideDateTimePicker();
-  };
-
   //TODO: func changeDaysValue
   changeDaysValue(val) {
     let newDate = this.addDays(new Date(), val);
     this.setState({
       date: moment(newDate).format("DD-MM-YYYY"),
       days: val
+    });
+  }  
+
+  handleDatePicked = date => {
+    let start = moment(this.addDays(date, 1), "DD-MM-YYYY");
+    let end = moment(new Date(), "DD-MM-YYYY");
+    let diff = Math.round((start - end) / (1000 * 60 * 60 * 24));
+    console.log("change date =" + diff);
+    this.setState({
+      date: moment(date).format("DD-MM-YYYY"),
+      days: diff.toString()
+    });
+  };
+
+  changeDateAndroid(date) {
+    let start = moment(date, "DD-MM-YYYY");
+    let end = moment(new Date(), "DD-MM-YYYY");
+    let diff = Math.round((start - end) / (1000 * 60 * 60 * 24));
+    this.setState({
+      date: date,
+      days: diff.toString()
     });
   }
 
@@ -127,46 +128,84 @@ export default class VaultAccountScreen extends React.Component {
             </View>
 
             <View style={styles.viewSelectPeriod}>
-              <View style={styles.viewDays}>
-                <Text style={{ flex: 3, alignSelf: "center" }}>
-                  Days Wise :
-                </Text>
-                <TextInput
-                  name={this.state.days}
-                  value={this.state.days}
-                  placeholder="Total Days"
-                  keyboardType={"numeric"}
-                  placeholderTextColor="#000"
-                  style={styles.input}
-                  onChangeText={val => this.changeDaysValue(val)}
-                  onChange={val => this.changeDaysValue(val)}
-                />
-              </View>
-              <View style={styles.viewDateWise}>
-                <Text style={{ flex: 3, alignSelf: "center" }}>Date Wise:</Text>
-                <DateTimePicker
-                  isVisible={true}
-                  mode={"date"}
-                  minimumDate={new Date()}
-                  date={this.state.date}
-                  onDateChange={this.handleDatePicked.bind(this)}
-                  onConfirm={this.handleDatePicked.bind(this)}
-                />
-              </View>
-
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ flex: 3 }} />
-                <View style={{ flex: 8 }}>
-                  <Text
-                    style={{ alignSelf: "center", textAlign: "center" }}
-                    note
-                  >
-                    Date: {this.state.date} / Days : {this.state.days}
+              <RkCard style={styles.rkCard}>
+                <View style={styles.viewDays}>
+                  <Text style={{ flex: 3, alignSelf: "center" }}>
+                    No. Days:
                   </Text>
+                  <TextInput
+                    name={this.state.days}
+                    value={this.state.days}
+                    placeholder="Total Days"
+                    keyboardType={"numeric"}
+                    placeholderTextColor="#000"
+                    style={styles.input}
+                    onChangeText={val => this.changeDaysValue(val)}
+                    onChange={val => this.changeDaysValue(val)}
+                  />
                 </View>
-              </View>
+                <View style={styles.viewDateWise}>
+                  <Text style={{ flex: 3, alignSelf: "center" }}>
+                    Mutual Date:
+                  </Text>
+                  {renderIf(Platform.OS == "ios")(
+                    <DatePicker
+                      date={this.state.date}
+                      mode="date"
+                      showIcon={false}
+                      hideText={true}
+                      format="DD-MM-YYYY"
+                      minDate={new Date()}
+                      onDateChange={date => this.handleDatePicked(date)}
+                    />
+                  )}
+                  {renderIf(Platform.OS == "android")(
+                    <DatePicker
+                      date={this.state.date}
+                      mode="date"
+                      placeholder="Select date"
+                      format="DD-MM-YYYY"
+                      minDate={new Date()}
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      customStyles={{
+                        dateIcon: {
+                          position: "absolute",
+                          left: 0,
+                          top: 4,
+                          marginLeft: 0
+                        },
+                        dateInput: {
+                          marginLeft: 36,
+                          borderLeftWidth: 0,
+                          borderTopWidth: 0,
+                          borderRightWidth: 0,
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#000000"
+                        }
+                        // ... You can check the source to find the other keys.
+                      }}
+                      onDateChange={date => {
+                        this.changeDateAndroid(date);
+                      }}
+                    />
+                  )}
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 3 }} />
+                  <View style={{ flex: 8 }}>
+                    <Text
+                      style={{ alignSelf: "center", textAlign: "center" }}
+                      note
+                    >
+                      Date: {this.state.date} / Days : {this.state.days}
+                    </Text>
+                  </View>
+                </View>
+              </RkCard>
             </View>
-            <View style={styles.viewBtnNext}>
+            <View style={[styles.viewBtnNext]}>
               <Button
                 style={[
                   styles.btnSent,
@@ -174,7 +213,7 @@ export default class VaultAccountScreen extends React.Component {
                 ]}
                 full
                 disabled={this.state.sentBtnStatus}
-                onPress={() => this.click_SentMoney()}
+                onPress={() => alert("working")}
               >
                 <Text> NEXT </Text>
               </Button>
@@ -204,7 +243,7 @@ const styles = StyleSheet.create({
   },
   //View:logoSecureAccount
   logoSecureAccount: {
-    flex: 2.5,
+    flex: 2.6,
     alignItems: "center"
   },
   secureLogo: {
@@ -222,11 +261,12 @@ const styles = StyleSheet.create({
   },
   //view:viewSelectPeriod
   viewSelectPeriod: {
-    flex: 2,
+    flex: 2.4,
     padding: 10
   },
   viewDays: {
-    flexDirection: "row"
+    flexDirection: "row",
+    marginBottom: 10
   },
   //input:days
   input: {
@@ -237,11 +277,16 @@ const styles = StyleSheet.create({
   },
   //view:datewise
   viewDateWise: {
-    flexDirection: "row"
+    flexDirection: "row",
+    marginBottom: 5
+  },
+  //card:rkCard
+  rkCard: {
+    padding: 10
   },
   //view:viewBtnNext
   viewBtnNext: {
-    flex: 0.4,
+    flex: 0.3,
     padding: 20
   },
   loading: {

@@ -161,6 +161,6 @@ const styles = StyleSheet.create({
   },
   //createAccountBtn
   createAccountBtn: {
-    flex: 2
+    flex: 1
   }
 });

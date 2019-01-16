@@ -178,7 +178,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
       localDB.tableName.tblAccount,
       fulldate,
       address,
-      "BTC",  
+      "BTC",
       "Secure",
       bhPubKey
     );
@@ -226,7 +226,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
                 value={this.state.tokenKey}
                 placeholder="Enter Token Key"
                 keyboardType={"numeric"}
-                placeholderTextColor="#fff"
+                placeholderTextColor={Platform.OS == "ios" ? "#fff" : "#000"}
                 style={styles.input}
                 onChangeText={val => this.validation(val)}
                 onChange={val => this.validation(val)}
@@ -262,20 +262,20 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1
   },
-  logoSecureAccount: {
+  logoSecureAccount: {    
     flex: 2,
     alignItems: "center"
   },
   input: {
     marginTop: 10,
     width: width / 1.1,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1,  
     borderBottomColor: "#000000",
-    color: "#ffffff"
-  },  
+    color: Platform.OS == "ios" ? "#fff" : "#000"
+  },
   secureLogo: {
-    height: 150,
-    width: 150
+    height: 120,
+    width: 120
   },
   txtTitle: {
     fontWeight: "bold",
