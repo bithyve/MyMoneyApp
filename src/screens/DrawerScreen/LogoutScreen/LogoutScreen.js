@@ -32,7 +32,7 @@ export default class LogoutScreen extends React.Component {
                             </Button>
                         </Left>
 
-                        <Body>
+                        <Body style={{flex: 0,alignItems:'center'}}>
                             <Title>Header</Title>
                         </Body>
                        

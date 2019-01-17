@@ -43,6 +43,7 @@ export default class PasscodeConfirmScreen extends Component {
       firstName: "",
       lastName: "",
       email: "",
+      cca2: "",
       mobileNo: "",
       countryName: "",
       isLoading: false,
@@ -58,6 +59,7 @@ export default class PasscodeConfirmScreen extends Component {
       firstName: navigation.getParam("firstName"),
       lastName: navigation.getParam("lastName"),
       email: navigation.getParam("email"),
+      cca2: navigation.getParam("cca2"),
       mobileNo: navigation.getParam("mobileNo"),
       countryName: navigation.getParam("countryName")
     });
@@ -115,7 +117,7 @@ export default class PasscodeConfirmScreen extends Component {
         tension: 10
       }).start();
     }
-  }   
+  }
 
   _onFinishCheckingCode2(isValid, code) {
     if (isValid) {
@@ -159,8 +161,9 @@ export default class PasscodeConfirmScreen extends Component {
         fulldate,
         firstName,
         lastName,
-        email,
+        email,    
         country,
+        this.state.cca2,
         mobileNumber
       );
       const resultAccountType = await dbOpration.insertAccountTypeData(
@@ -307,7 +310,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#fff"  
+    backgroundColor: "#fff"
   },
   cardContainer: {
     flex: 1

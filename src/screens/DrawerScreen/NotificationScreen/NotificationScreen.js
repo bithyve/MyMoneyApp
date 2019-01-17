@@ -62,7 +62,7 @@ export default class NotificationScreen extends React.Component {
                             </Button>
                         </Left>
 
-                        <Body>
+                        <Body style={{flex: 0,alignItems:'center'}}>
                             <Title adjustsFontSizeToFit={true}
                                 numberOfLines={1} style={styles.titleUserName}>Notification</Title>
                         </Body>

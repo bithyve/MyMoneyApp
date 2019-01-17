@@ -100,9 +100,9 @@ class DrawerScreen extends Component {
             <View style={styles.viewUserIcon}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.toggleDrawer();
+                  this.props.navigation.closeDrawer();
                   this.props.navigation.push("MyProfileRouter");
-                }}
+                }}   
               >
                 <Image
                   style={styles.userProfileIcon}

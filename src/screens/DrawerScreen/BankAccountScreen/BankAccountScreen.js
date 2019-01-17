@@ -31,7 +31,7 @@ export default class BankAccountScreen extends React.Component {
                             </Button>
                         </Left>
 
-                        <Body>
+                        <Body style={{flex: 3,alignItems:'center'}}>
                             <Title adjustsFontSizeToFit={true}
                                 numberOfLines={1} style={styles.titleUserName}>Bank Account</Title>
                         </Body>

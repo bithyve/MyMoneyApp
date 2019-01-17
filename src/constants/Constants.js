@@ -24,10 +24,11 @@ var errorValidationMessage = {
 //Colors
 var colors = {
   appColor: "#F5951D",
-  black: "#000000",
+  black: "#000000",  
   white: "#ffffff",
   Saving:  "#E6A620",
-  Secure:  "#30A2F3"
+  Secure:  "#30A2F3",
+  placeholder: "#5F5F5F"
 };
 
 const assetsImages = "../assets/images/";

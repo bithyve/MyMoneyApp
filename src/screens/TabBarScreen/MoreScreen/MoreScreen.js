@@ -65,7 +65,7 @@ export default class MoreScreen extends React.Component {
               </Button>
             </Left>
 
-            <Body>
+            <Body style={{flex: 0,alignItems:'center'}}>
               <Title>Anant Tapadia</Title>
             </Body>
             <Right>

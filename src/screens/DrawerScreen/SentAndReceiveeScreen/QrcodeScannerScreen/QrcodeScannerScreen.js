@@ -22,8 +22,8 @@ const options = {
     storageOptions: {
         skipBackup: true,
         path: 'images',
-    },
-};  
+    },  
+};     
 
 //TODO: Custome Pages
 import { colors, images } from "../../../../constants/Constants";

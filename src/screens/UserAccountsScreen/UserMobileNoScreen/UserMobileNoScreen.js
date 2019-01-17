@@ -36,10 +36,12 @@ import { StackActions, NavigationActions } from "react-navigation";
 import { colors, images } from "../../../constants/Constants";
 
 import closeImgLight from "../../../assets/images/mobileNoDetailsScreen/countryPickerClose.png";
+
 const INDIA = ["IN"];
 const DARK_COLOR = "#18171C";
 const PLACEHOLDER_COLOR = "rgba(255,255,255,0.2)";
 const LIGHT_COLOR = "#FFF";
+
 export default class UserMobileNoScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -130,7 +132,8 @@ export default class UserMobileNoScreen extends React.Component {
     // var privateJson = JSON.parse(privateKey);
     // AsyncStorage.setItem("@publicKey:key", publicJson["n"]);
     // AsyncStorage.setItem("@privateKey:key", privateJson["n"]);
-    const mobileNumber = "+" + this.state.callingCode + this.state.mobileNo;
+    //const callingCodde = "+" + this.state.callingCode ;
+    const mobileNumber = this.state.mobileNo;
     const resetAction = StackActions.reset({
       index: 0, // <-- currect active route from actions array
       key: null,
@@ -141,7 +144,8 @@ export default class UserMobileNoScreen extends React.Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
-            mobileNo: mobileNumber,
+            cca2: this.state.cca2,        
+            mobileNo: mobileNumber,  
             countryName: this.state.countryName
           }
         })

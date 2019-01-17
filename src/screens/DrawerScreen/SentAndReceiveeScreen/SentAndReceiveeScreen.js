@@ -108,7 +108,7 @@ export default class SentAndReceiveeScreen extends React.Component {
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>
             </Left>
-            <Body>
+            <Body style={{flex: 0,alignItems:'center'}}>
               <Title>My Money</Title>
             </Body>
           </Header>

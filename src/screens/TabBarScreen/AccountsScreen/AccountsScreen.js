@@ -32,7 +32,7 @@ import { RkCard } from "react-native-ui-kitten";
 import { StackActions, NavigationActions } from "react-navigation";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import CardFlip from "react-native-card-flip";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import Dialog, {
   SlideAnimation,
   DialogTitle,
@@ -41,7 +41,8 @@ import Dialog, {
 } from "react-native-popup-dialog";
 import { DotIndicator, SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
-   
+import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
+
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
@@ -454,7 +455,7 @@ export default class AccountsScreen extends React.Component {
                   <Icon name="bars" size={25} color="#ffffff" />
                 </Button>
               </Left>
-              <Body>
+              <Body style={{ flex: 0, alignItems: "center" }}>
                 <Title
                   adjustsFontSizeToFit={true}
                   numberOfLines={1}
@@ -576,46 +577,32 @@ export default class AccountsScreen extends React.Component {
                 </View>
               )}
             </View>
-            <Dialog
-              width={Dimensions.get("screen").width}
-              visible={this.state.accountTypeVisible}
-              onTouchOutside={() => {
-                this.setState({ accountTypeVisible: false });
-              }}
-              dialogAnimation={
-                new SlideAnimation({
-                  slideFrom: "bottom"
-                })
-              }
-              dialogStyle={styles.dialogAccountType}
-            >
-              <DialogContent containerStyle={styles.dialogContainerAccountType}>
-                <Icon
-                  name="plus-circle"
-                  size={80}
-                  style={styles.iconPopUP}
-                  color={colors.appColor}
-                />
-                <View style={styles.accountTypePopUP}>
-                  <FlatList
-                    data={this.state.popupAccountTypeList}
-                    renderItem={({ item }) => (
-                      <View style={styles.btnGroupAccountTypes}>
-                        <Button
-                          full
-                          style={styles.btnAccountTypes}
-                          onPress={() => this.createNewAccount(item.name)}
-                        >
-                          <Text>{item.name}</Text>
-                        </Button>
-                      </View>
-                    )}
-                  />
-                </View>
-              </DialogContent>
-            </Dialog>
           </ImageBackground>
         </Content>
+
+        <SCLAlert
+          theme="success"
+          show={this.state.accountTypeVisible}
+          cancellable={true}
+          onRequestClose={() => this.setState({ accountTypeVisible: false })}
+          headerIconComponent={
+            <Icon name="plus-circle" size={60} color="#fff" />
+          }
+        >
+          <FlatList
+            data={this.state.popupAccountTypeList}
+            style={{ marginTop: -80 }}
+            renderItem={({ item }) => (
+              <SCLAlertButton
+                theme="success"
+                onPress={() => this.createNewAccount(item.name)}
+              >
+                {item.name}
+              </SCLAlertButton>
+            )}
+          />
+        </SCLAlert>
+
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </Container>
     );

@@ -64,7 +64,7 @@ export default class ReceiveMoneyScreen extends React.Component {
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
                             </Button>
                         </Left>
-                        <Body>
+                        <Body style={{flex: 0,alignItems:'center'}}>
                             <Title adjustsFontSizeToFit={true}
                                 numberOfLines={1}
                                 style={styles.titleUserName}>Receive</Title>

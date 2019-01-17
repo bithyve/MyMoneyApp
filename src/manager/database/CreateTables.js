@@ -18,9 +18,9 @@ export default class CreateTables extends Component {
       //TODO: TABLE
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
-          localDB.tableName.tblUser +
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,firstName TEXT,lastName TEXT,email TEXT,country TEXT,mobileNo TEXT,lastUpdated TEXT)",
-        []
+          localDB.tableName.tblUser +  
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,firstName TEXT,lastName TEXT,email TEXT,country TEXT,cca2 TEXT,mobileNo TEXT,imagePath TEXT,lastUpdated TEXT)",
+        []  
       );
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +

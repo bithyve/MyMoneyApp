@@ -34,7 +34,7 @@ export default class HelpScreen extends React.Component {
                             </Button>
                         </Left>
 
-                        <Body>
+                        <Body style={{flex: 0,alignItems:'center'}}>
                             <Title adjustsFontSizeToFit={true}
                                 numberOfLines={1} style={styles.titleUserName}>Help</Title>
                         </Body>

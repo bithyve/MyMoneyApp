@@ -108,7 +108,7 @@ export default class VaultAccountScreen extends React.Component {
                   <Icon name="chevron-left" size={25} color="#ffffff" />
                 </Button>
               </Left>
-              <Body>
+              <Body style={{flex: 0,alignItems:'center'}}>
                 <Title />
               </Body>
               <Right />

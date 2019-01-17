@@ -95,7 +95,9 @@ const readRecentTransactionAddressWise = (tableName, address) => {
               temp.push(results.rows.item(i));
             }
           }
-          console.log('total readRecentTransactionAddressWise data ='+ { temp });
+          console.log(
+            "total readRecentTransactionAddressWise data =" + { temp }
+          );
           resolve({ temp });
         }
       );
@@ -158,7 +160,7 @@ const readWalletAddress = (tableName, col1) => {
 
 //TODO: Update
 
-//tblAmount
+//update:tblAmount
 const updateTableData = (tblName, balance, address, lastUdateDate) => {
   return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
@@ -167,6 +169,40 @@ const updateTableData = (tblName, balance, address, lastUdateDate) => {
           tblName +
           " set balance = :amount,lastUpdated = :lastUpdated where address = :address",
         [balance, lastUdateDate, address]
+      );
+      resolve(true);
+    });
+  });
+};
+
+//update:tblUser
+const updateUserDetails = (
+  tblName,
+  firstName,
+  lastName,
+  country,
+  cca2,   
+  mobileNo,
+  email,
+  lastUpdateDate,
+  id
+) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(function(txn) {
+      txn.executeSql(
+        "update " +
+          tblName +   
+          " set firstName = :firstName,lastName = :lastName,email = :email,country =:country,cca2 = :cca2,mobileNo = :mobileNo,lastUpdated = :lastUpdated where id = :id",
+        [
+          firstName,
+          lastName,
+          email,
+          country,
+          cca2,
+          mobileNo,
+          lastUpdateDate,
+          id
+        ]
       );
       resolve(true);
     });
@@ -206,6 +242,7 @@ const insertUserDetailsData = (
   lastName,
   email,
   country,
+  cca2,
   mobileNumber
 ) => {
   return new Promise((resolve, reject) => {
@@ -213,8 +250,18 @@ const insertUserDetailsData = (
       txn.executeSql(
         "INSERT INTO " +
           tblName +
-          " (dateCreated,firstName,lastName,email,country,mobileNo,lastUpdated) VALUES (:dateCreated,:firstName,:lastName,:email,:country,:mobileNo,:lastUpdated)",
-        [fulldate, firstName, lastName, email, country, mobileNumber, fulldate]
+          " (dateCreated,firstName,lastName,email,country,cca2,mobileNo,imagePath,lastUpdated) VALUES (:dateCreated,:firstName,:lastName,:email,:country,:callingCode,:mobileNo,:imagePath,:lastUpdated)",
+        [
+          fulldate,
+          firstName,
+          lastName,
+          email,
+          country,
+          cca2,
+          mobileNumber,
+          "MyMoney/src/assets/images/icon/default_user_icon.png",
+          fulldate
+        ]
       );
       resolve(true);
     });
@@ -331,7 +378,7 @@ const insertTblTransation = (
 };
 
 module.exports = {
-  readTablesData,  
+  readTablesData,
   readAccountTablesData,
   readTableAcccountType,
   readRecentTransactionAddressWise,
@@ -343,5 +390,6 @@ module.exports = {
   insertCreateAccount,
   insertLastBeforeCreateAccount,
   insertTblTransation,
-  updateTableData
+  updateTableData,
+  updateUserDetails
 };
