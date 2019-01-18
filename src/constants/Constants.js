@@ -24,10 +24,10 @@ var errorValidationMessage = {
 //Colors
 var colors = {
   appColor: "#F5951D",
-  black: "#000000",  
+  black: "#000000",
   white: "#ffffff",
-  Saving:  "#E6A620",
-  Secure:  "#30A2F3",
+  Saving: "#E6A620",
+  Secure: "#30A2F3",
   placeholder: "#5F5F5F"
 };
 
@@ -70,7 +70,7 @@ var images = {
     validationKey: require(assetsImages + "secureAccount/validationKey.png")
   }
 };
-  
+
 //Rest Full Api
 const domain = "https://bh-server-alpha.herokuapp.com/";
 var apiary = {
@@ -88,9 +88,13 @@ var localDB = {
     tblAccountType: "tblAccountType",
     tblAccount: "tblAccount",
     tblTransaction: "tblTransaction"
-  }
+  }  
+};   
+
+var notification = {
+  notifi_UserDetialsChange: "notifi_UserDetialsChange"
 };
-  
+
 export {
   errorMessage,
   errorValidationMessage,
@@ -98,5 +102,6 @@ export {
   apiary,
   localDB,
   colors,
-  images
+  images,
+  notification
 };

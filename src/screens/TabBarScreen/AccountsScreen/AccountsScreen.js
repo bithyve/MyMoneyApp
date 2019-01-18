@@ -44,7 +44,12 @@ import DropdownAlert from "react-native-dropdownalert";
 import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../constants/Constants";
+import {
+  colors,
+  images,
+  localDB,
+  notification
+} from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
 var utils = require("../../../constants/Utils");
 let isNetwork;
@@ -95,6 +100,10 @@ export default class AccountsScreen extends React.Component {
       this
     );
     isNetwork = utils.getNetwork();
+    window.EventBus.on(
+      notification.notifi_UserDetialsChange,
+      this.notifi_UserDetailsChange
+    );
   }
 
   //TODO: Page Life Cycle
@@ -113,6 +122,11 @@ export default class AccountsScreen extends React.Component {
   componentWillUnmount() {
     this.willFocusSubscription.remove();
   }
+
+  //TODO: NSNotification
+  notifi_UserDetailsChange = () => {
+    this.getUserDetails();
+  };
 
   //TODO: func getUserDetails
   async getUserDetails() {

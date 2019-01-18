@@ -34,6 +34,9 @@ import CountryPicker, {
 } from "react-native-country-picker-modal";
 import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
 import ImagePicker from "react-native-image-picker";
+import BackboneEvents from "backbone-events-standalone";
+
+window.EventBus = BackboneEvents.mixin({});
 
 import closeImgLight from "MyMoney/src/assets/images/mobileNoDetailsScreen/countryPickerClose.png";
 const INDIA = ["IN"];
@@ -42,32 +45,25 @@ const PLACEHOLDER_COLOR = "rgba(255,255,255,0.2)";
 const LIGHT_COLOR = "#FFF";
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "MyMoney/src/constants/Constants";
+import {
+  colors,
+  images,
+  localDB,
+  notification
+} from "MyMoney/src/constants/Constants";
 var dbOpration = require("MyMoney/src/manager/database/DBOpration");
 var utils = require("MyMoney/src/constants/Utils");
 let isNetwork;
 //import styles from './Styles';
 import renderIf from "MyMoney/src/constants/validation/renderIf";
+import { Response } from "superagent";
 
 export default class MyProfileScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      popUpMessage: [
-        {
-          status: ""
-        },
-        {
-          title: ""
-        },
-        {
-          message: ""
-        },
-        {
-          icon: ""
-        }
-      ],
+      popUpMessage: [],
       id: null,
       firstName: null,
       lastName: null,
@@ -91,7 +87,6 @@ export default class MyProfileScreen extends React.Component {
       localDB.tableName.tblUser
     );
     let countryCode = resultUserDetails.temp[0].cca2;
-    console.log({ resultUserDetails });
     const userCountryData = getAllCountries()
       .filter(country => countryCode.includes(country.cca2))
       .pop();
@@ -103,11 +98,10 @@ export default class MyProfileScreen extends React.Component {
       countryName: resultUserDetails.temp[0].country,
       mobileNo: resultUserDetails.temp[0].mobileNo,
       email: resultUserDetails.temp[0].email,
-      imagePath: resultUserDetails.temp[0].imagePath,
+      imagePath: { uri: resultUserDetails.temp[0].imagePath },
       cca2: resultUserDetails.temp[0].cca2,
       callingCode: userCountryData.callingCode,
-      isMessagePopup: false,
-      avatarSource: null
+      isMessagePopup: false
     });
   }
 
@@ -132,13 +126,35 @@ export default class MyProfileScreen extends React.Component {
     );
     if (resultRecentTransaction) {
       this.setState({
-        isMessagePopup: true
+        isMessagePopup: true,
+        popUpMessage: [
+          {
+            status: "success",
+            title: "Success!!",
+            message: "Profile updated.",
+            icon: "smile",
+            flagGoBack: true
+          }
+        ]
+      });
+    } else {
+      this.setState({
+        isMessagePopup: true,
+        popUpMessage: [
+          {
+            status: "danger",
+            title: "Ooops!!",
+            message: "No profile updated.",
+            icon: "frown",
+            flagGoBack: false
+          }
+        ]
       });
     }
   }
 
   //TODO: func click_SelectImage
-  selectPhotoTapped() {
+  async selectPhotoTapped() {
     const options = {
       quality: 1.0,
       maxWidth: 500,
@@ -150,7 +166,6 @@ export default class MyProfileScreen extends React.Component {
 
     ImagePicker.showImagePicker(options, response => {
       console.log("Response = ", response);
-
       if (response.didCancel) {
         console.log("User cancelled photo picker");
       } else if (response.error) {
@@ -159,40 +174,78 @@ export default class MyProfileScreen extends React.Component {
         console.log("User tapped custom button: ", response.customButton);
       } else {
         let source = { uri: response.uri };
-
         // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-        CameraRoll.saveToCameraRoll(response.uri, "photo")
-          .then(function(result) {
-            console.log("save succeeded " + result);
-            alert(result);
-          })
-          .catch(function(error) {
-            console.log("save failed " + error);
-            alert(error);
-          });
-        this.setState({
-          isMessagePopup: true,
-          popUpMessage: [
-            {
-              status: "success"
-            },
-            {
-              title: "Success!!"
-            },
-            {
-              message: "Image saved."
-            },
-            {
-              icon: "smile"
+        //let sourcebase64 = { uri: "data:image/jpeg;base64," + response.data };
+        //update imagePath in database tbluser
+        (async () => {
+          try {
+            const resultRecentTransaction = await dbOpration.updateUserProfilePic(
+              localDB.tableName.tblUser,
+              response.uri,
+              this.state.id
+            );
+            if (resultRecentTransaction) {
+              window.EventBus.trigger(    
+                notification.notifi_UserDetialsChange,
+                "success"
+              );
+              let status = await this.getStatusSaveIamge(response.uri);
+              if (status) {
+                this.setState({
+                  isMessagePopup: true,
+                  popUpMessage: [
+                    {
+                      status: "success",
+                      title: "Success!!",
+                      message: "Profile Picture Changed.",
+                      icon: "smile",
+                      flagGoBack: false
+                    }
+                  ],
+                  imagePath: source
+                });
+              }
+            } else {
+              this.setState({
+                isMessagePopup: true,
+                popUpMessage: [
+                  {
+                    status: "danger",
+                    title: "Ooops!!",
+                    message: "No profile picture changed.",
+                    icon: "frown",
+                    flagGoBack: false
+                  }
+                ],
+                imagePath: source
+              });
             }
-          ],
-          avatarSource: source
-        });
-
-        console.log(JSON.stringify(this.state.popUpMessage));
+          } catch (err) {
+            console.log(err);
+          }
+        })();
       }
     });
+  }
+
+  getStatusSaveIamge(uri) {
+    return new Promise(resolve => {
+      // CameraRoll.saveToCameraRoll(uri, "photo")
+      //   .then(function(result) {
+      //     console.log("save succeeded " + result);
+      //     resolve(true);
+      //   })
+      //   .catch(function(error) {
+      //     console.log("save failed " + error);
+      //     resolve(false);
+      //   });
+      resolve(true);
+    });
+  }
+
+  //TODO: Show Popup
+  showMessage(flag) {
+    console.log(flag);
   }
 
   render() {
@@ -222,21 +275,21 @@ export default class MyProfileScreen extends React.Component {
             scrollEnabled={true}
           >
             <View style={styles.viewProfileIcon}>
-              {this.state.avatarSource === null ? (
-                <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+              <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                {renderIf(JSON.stringify(this.state.imagePath).length < 15)(
+                  <Image
+                    style={[styles.userProfileIcon, { marginBottom: -150 }]}
+                    source={require("MyMoney/src/assets/images/icon/default_user_icon.png")}
+                  />
+                )}
+                {renderIf(JSON.stringify(this.state.imagePath).length > 15)}
+                {
                   <Image
                     style={styles.userProfileIcon}
-                    source={require("MyMoney/src//assets/images/icon/default_user_icon.png")}
+                    source={this.state.imagePath}
                   />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-                  <Image
-                    style={styles.userProfileIcon}
-                    source={this.state.avatarSource}
-                  />
-                </TouchableOpacity>
-              )}
+                }
+              </TouchableOpacity>
               <Button
                 transparent
                 style={styles.btnChangeIcon}
@@ -343,22 +396,52 @@ export default class MyProfileScreen extends React.Component {
         </ImageBackground>
 
         <SCLAlert
-          theme={this.state.popUpMessage[0].status}
+          theme={
+            this.state.popUpMessage.length != 0
+              ? this.state.popUpMessage[0].status
+              : null
+          }
           show={this.state.isMessagePopup}
           cancellable={false}
           headerIconComponent={
-            <Icon name={this.state.popUpMessage.icon} size={50} color="#fff" />
+            <Icon
+              name={
+                this.state.popUpMessage.length != 0
+                  ? this.state.popUpMessage[0].icon
+                  : null
+              }
+              size={50}
+              color="#fff"
+            />
           }
-          title={this.state.popUpMessage.title}
-          subtitle={this.state.popUpMessage.message}
+          title={
+            this.state.popUpMessage.length != 0
+              ? this.state.popUpMessage[0].title
+              : null
+          }
+          subtitle={
+            this.state.popUpMessage.length != 0
+              ? this.state.popUpMessage[0].message
+              : null
+          }
         >
           <SCLAlertButton
-            theme={this.state.popUpMessage.status}
+            theme={
+              this.state.popUpMessage.length != 0
+                ? this.state.popUpMessage[0].status
+                : null
+            }
             onPress={() => {
               this.setState({
                 isMessagePopup: false
               });
-              this.props.navigation.pop();
+              if (this.state.popUpMessage[0].flagGoBack) {
+                window.EventBus.trigger(
+                  notification.notifi_UserDetialsChange,
+                  "success"
+                );
+                this.props.navigation.pop();
+              }
             }}
           >
             Ok

@@ -143,7 +143,7 @@ export default class VaultAccountScreen extends React.Component {
                     onChangeText={val => this.changeDaysValue(val)}
                     onChange={val => this.changeDaysValue(val)}
                   />
-                </View>
+                </View>  
                 <View style={styles.viewDateWise}>
                   <Text style={{ flex: 3, alignSelf: "center" }}>
                     Mutual Date:

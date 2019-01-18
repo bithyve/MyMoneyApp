@@ -181,7 +181,7 @@ const updateUserDetails = (
   firstName,
   lastName,
   country,
-  cca2,   
+  cca2,
   mobileNo,
   email,
   lastUpdateDate,
@@ -191,7 +191,7 @@ const updateUserDetails = (
     db.transaction(function(txn) {
       txn.executeSql(
         "update " +
-          tblName +   
+          tblName +
           " set firstName = :firstName,lastName = :lastName,email = :email,country =:country,cca2 = :cca2,mobileNo = :mobileNo,lastUpdated = :lastUpdated where id = :id",
         [
           firstName,
@@ -203,6 +203,19 @@ const updateUserDetails = (
           lastUpdateDate,
           id
         ]
+      );
+      resolve(true);
+    });
+  });
+};
+
+//update:tblUser Profile Pic image
+const updateUserProfilePic = (tblName, imagePath, id) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(function(txn) {
+      txn.executeSql(
+        "update " + tblName + " set imagePath = :imagePath where id = :id",
+        [imagePath, id]
       );
       resolve(true);
     });
@@ -259,7 +272,7 @@ const insertUserDetailsData = (
           country,
           cca2,
           mobileNumber,
-          "MyMoney/src/assets/images/icon/default_user_icon.png",
+          "",
           fulldate
         ]
       );
@@ -391,5 +404,6 @@ module.exports = {
   insertLastBeforeCreateAccount,
   insertTblTransation,
   updateTableData,
-  updateUserDetails
+  updateUserDetails,
+  updateUserProfilePic
 };

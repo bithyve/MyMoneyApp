@@ -33,8 +33,14 @@ import Dialog, {
 } from "react-native-popup-dialog";
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../constants/Constants";
+import {
+  colors,
+  images,
+  localDB,
+  notification
+} from "../../../constants/Constants";
 var dbOpration = require("../../../manager/database/DBOpration");
+import renderIf from "MyMoney/src/constants/validation/renderIf";
 
 //TODO: Json Files
 import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
@@ -42,13 +48,19 @@ import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
 class DrawerScreen extends Component {
   constructor(props) {
     super(props);
-
+  
     this.state = {
       menuBarList: [],
       userDetails: [],
-      fullName: ""
+      fullName: "",
+      imagePath: "",  
+      flagImage: false
     };
     this.click_Logout = this.click_Logout.bind(this);
+    window.EventBus.on(
+      notification.notifi_UserDetialsChange,
+      this.notifi_UserDetailsChange
+    );
   }
 
   //TODO: Page Life Cycle
@@ -57,12 +69,21 @@ class DrawerScreen extends Component {
     this.getUserDetails();
   }
 
+  //TODO: NSNotification
+
+  notifi_UserDetailsChange = () => {
+    this.getUserDetails();
+  };
+
   async getUserDetails() {
     const result = await dbOpration.readTablesData(localDB.tableName.tblUser);
     this.setState({
       userDetails: result.temp,
-      fullName: result.temp[0].firstName + " " + result.temp[0].lastName
+      fullName: result.temp[0].firstName + " " + result.temp[0].lastName,
+      imagePath: { uri: result.temp[0].imagePath }
     });
+
+    console.log(JSON.stringify(this.state.imagePath).length);
   }
 
   getLeftMenuList() {
@@ -102,12 +123,21 @@ class DrawerScreen extends Component {
                 onPress={() => {
                   this.props.navigation.closeDrawer();
                   this.props.navigation.push("MyProfileRouter");
-                }}   
+                }}
               >
-                <Image
-                  style={styles.userProfileIcon}
-                  source={require("../../../assets/images/icon/default_user_icon.png")}
-                />
+                {renderIf(JSON.stringify(this.state.imagePath).length === 10)(
+                  <Image
+                    style={[styles.userProfileIcon, { marginBottom: -140 }]}
+                    source={require("MyMoney/src/assets/images/icon/default_user_icon.png")}
+                  />
+                )}
+                {renderIf(JSON.stringify(this.state.imagePath).length > 15)}
+                {
+                  <Image
+                    style={styles.userProfileIcon}
+                    source={this.state.imagePath}
+                  />
+                }
                 <Icon
                   name="edit"
                   style={styles.iconEdit}
@@ -159,7 +189,7 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 70
   },
-  viewUserIcon: {       
+  viewUserIcon: {
     flexDirection: "row",
     alignItems: "flex-end"
   },
@@ -167,7 +197,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginTop: -30
   },
-  txtUserName: {   
+  txtUserName: {
     color: "#ffffff",
     fontWeight: "bold",
     fontSize: 24,

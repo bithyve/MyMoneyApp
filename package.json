@@ -65,7 +65,7 @@
     "react-native-barcode-builder": "^1.0.5",
     "react-native-barcode-scanners": "^1.0.4",
     "react-native-calendars": "^1.21.0",
-    "react-native-camera": "^1.6.3",
+    "react-native-camera": "^1.6.3",   
     "react-native-card-flip": "^1.0.4",
     "react-native-cards-slider": "^0.1.2",
     "react-native-collapsible": "^1.4.0",
