@@ -97,7 +97,7 @@ class DrawerScreen extends Component {
                     </View>
                   </TouchableOpacity>
                 )}
-                keyExtractor={item => item.id}
+                keyExtractor={(item,index) => index}
               />
             </View>
           </ScrollView>

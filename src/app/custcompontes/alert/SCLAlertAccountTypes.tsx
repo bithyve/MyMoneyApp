@@ -23,6 +23,8 @@ export default class SCLAlertAccountTypes extends Component<Props, State> {
     return (
       <SCLAlert
         theme="success"
+        title=""
+        subtitle=""
         show={this.props.status}
         onRequestClose={() => this.props.onRequestClose()}
         cancellable={true}
@@ -39,6 +41,7 @@ export default class SCLAlertAccountTypes extends Component<Props, State> {
               {item.name}
             </SCLAlertButton>
           )}
+          keyExtractor={(item,index) => index}
         />
       </SCLAlert>
     );

@@ -28,6 +28,7 @@ var utils = require("../../../app/constants/Utils");
 
 interface Props {
   data: [];
+  openRecentTrans: Function;
 }
 
 export default class ViewRecentTransaction extends Component<Props, any> {
@@ -41,7 +42,7 @@ export default class ViewRecentTransaction extends Component<Props, any> {
         <View style={styles.viewTitleRecentTrans}>
           <Text style={styles.txtRecentTran}>
             {this.props.data.length != 0 ? this.props.data[0].title : null}
-          </Text>  
+          </Text>
           {renderIf(
             this.props.data.length != 0 ? this.props.data[0].isLoading1 : null
           )(
@@ -79,7 +80,7 @@ export default class ViewRecentTransaction extends Component<Props, any> {
                 <List>
                   <ListItem
                     thumbnail
-                    onPress={() => this.openRecentTrans(item)}
+                    onPress={() => this.props.openRecentTrans(item)}
                   >
                     <Left>
                       <Thumbnail
@@ -91,7 +92,7 @@ export default class ViewRecentTransaction extends Component<Props, any> {
                         {item.transactionType}{" "}
                         <Text style={styles.txtConfimation}>
                           {item.confirmationType}{" "}
-                        </Text>{" "}
+                        </Text>{" "}  
                       </Text>
                       <Text note numberOfLines={1}>
                         {utils.getUnixToDateFormat(item.dateCreated)}
@@ -111,8 +112,8 @@ export default class ViewRecentTransaction extends Component<Props, any> {
                     </Right>
                   </ListItem>
                 </List>
-              )}
-              keyExtractor={item => item.hash}
+              )}  
+              keyExtractor={(item,index) => index}
             />
           </View>
         )}
@@ -123,12 +124,12 @@ export default class ViewRecentTransaction extends Component<Props, any> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,  
+    flex: 1
   },
   viewTitleRecentTrans: {
     marginLeft: 20,
-    flexDirection: "row",  
-    flex: 0.2,
+    flexDirection: "row",
+    flex: 0.2
   },
 
   txtRecentTran: {
@@ -162,5 +163,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     paddingTop: 5
+  },
+  txtConfimation: {
+    fontSize: 10,
+    color: "gray"
   }
 });

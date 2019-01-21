@@ -143,6 +143,7 @@ export default class AccountsScreen extends React.Component<any, any> {
         const resultRecentTras = await WalletService.getTransactions(
           resultWallet.temp[this.state.cardIndexNo].address
         );
+
         if (resultRecentTras.statusCode == 200) {
           if (resultRecentTras.transactionDetails.length > 0) {
             const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -152,14 +153,22 @@ export default class AccountsScreen extends React.Component<any, any> {
               lastUpdateDate
             );
             if (resultRecentTransaction) {
-              const {
-                tranDetails,
-                isNoTranstion
-              } = await this.fetchRecentTransaction(
-                resultAccount.temp[index].address
+              let transation: [] = [];
+              let flag_noTrasation: boolean;
+              const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+                localDB.tableName.tblTransaction,
+                resultAccount.temp[this.state.cardIndexNo].address
               );
-  
-              console.log("transaction = " + { tranDetails, isNoTranstion });
+
+              if (resultRecentTras.temp.length > 0) {
+                transation = resultRecentTras.temp;
+                flag_noTrasation = false;
+              } else {
+                transation = [];
+                flag_noTrasation = true;
+              }
+              tranDetails = transation;
+              isNoTranstion = flag_noTrasation;
             }
           } else {
             isNoTranstion = true;
@@ -172,7 +181,7 @@ export default class AccountsScreen extends React.Component<any, any> {
             lastUpdateDate
           );
           if (resultUpdateTblAccount) {
-            isLoading1: false;
+            isLoading1 = false;
             this.setState({
               accountTypeList: resultAccount.temp,
               walletsData: resultWallet.temp,
@@ -197,10 +206,24 @@ export default class AccountsScreen extends React.Component<any, any> {
         this.dropdown.alertWithType("error", "OH!!", bal.errorMessage);
       }
     } else {
-      const { tranDetails, isNoTranstion } = this.fetchRecentTransaction(
-        resultAccount.temp[index].address
+      let transation: [] = [];
+      let flag_noTrasation: boolean;
+      const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+        localDB.tableName.tblTransaction,
+        resultAccount.temp[this.state.cardIndexNo].address
       );
-      isLoading1: false;
+
+      if (resultRecentTras.temp.length > 0) {
+        transation = resultRecentTras.temp;
+        flag_noTrasation = false;
+      } else {
+        transation = [];
+        flag_noTrasation = true;
+      }
+      tranDetails = transation;
+      isNoTranstion = flag_noTrasation;
+
+      isLoading1 = false;
       this.setState({
         accountTypeList: resultAccount.temp,
         walletsData: resultWallet.temp,
@@ -226,35 +249,16 @@ export default class AccountsScreen extends React.Component<any, any> {
       ]
     });
   }
- 
-  //TODO: func fetchRecentTransaction
-  async fetchRecentTransaction(address) {
-    let transation: [] = [];
-    let flag_noTrasation: boolean;
-    const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
-      localDB.tableName.tblTransaction,
-      address
-    );
-    if (resultRecentTras.temp.length > 0) {
-      transation = resultRecentTras.temp;
-      flag_noTrasation = false;
-    } else {
-      transation = [];
-      flag_noTrasation = true;
-    }
-    return { transation, flag_noTrasation };
-  }
 
   //TODO: func getSwapCardDetails
   async getSwapCardDetails(index: number) {
+    let isLoading1: boolean = true;
+    let isNoTranstion: boolean = false;
+    let tranDetails: [] = [];
+    let title: string;
     isNetwork = utils.getNetwork();
+    isLoading1 = true;
     this.setState({
-      recentTransactionData: [
-        {
-          recentTransactionData: "new card",
-          isLoading1: true
-        }
-      ],
       cardIndexNo: index
     });
     this.setState({ slider1ActiveSlide: index });
@@ -263,18 +267,21 @@ export default class AccountsScreen extends React.Component<any, any> {
     const resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
+    if (resultAccount.temp[index].accountType != "UnKnown") {
+      title = resultAccount.temp[index].accountType + " Recent Transactions";
+    } else {
+      title = "";
+    }
+
     if (resultAccount.temp[index].address != "") {
-      console.log("address =" + resultAccount.temp[index].address);
       if (isNetwork) {
         const bal = await WalletService.getBalance(
           resultAccount.temp[index].address
         );
-        console.log("bal" + JSON.stringify(bal));
         if (bal.statusCode == 200) {
           const resultRecentTras = await WalletService.getTransactions(
             resultAccount.temp[index].address
           );
-          console.log("recent transation =" + JSON.stringify(resultRecentTras));
           if (resultRecentTras.statusCode == 200) {
             if (resultRecentTras.transactionDetails.length > 0) {
               const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -284,22 +291,26 @@ export default class AccountsScreen extends React.Component<any, any> {
                 lastUpdateDate
               );
               if (resultRecentTransaction) {
-                const {
-                  tranDetails,
-                  isNoTranstion
-                } = this.fetchRecentTransaction(
+                let transation: [] = [];
+                let flag_noTrasation: boolean;
+                const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+                  localDB.tableName.tblTransaction,
                   resultAccount.temp[index].address
                 );
+
+                if (resultRecentTras.temp.length > 0) {
+                  transation = resultRecentTras.temp;
+                  flag_noTrasation = false;
+                } else {
+                  transation = [];
+                  flag_noTrasation = true;
+                }
+                tranDetails = transation;
+                isNoTranstion = flag_noTrasation;
               }
             } else {
-              this.setState({
-                recentTransactionData: [
-                  {
-                    isNoTranstion: true,
-                    tranDetails: []
-                  }
-                ]
-              });
+              isNoTranstion = true;
+              tranDetails = [];
             }
             const resultUpdateTblAccount = await dbOpration.updateTableData(
               localDB.tableName.tblAccount,
@@ -308,13 +319,9 @@ export default class AccountsScreen extends React.Component<any, any> {
               lastUpdateDate
             );
             if (resultUpdateTblAccount) {
+              isLoading1 = false;
               this.setState({
-                walletsData: resultAccount.temp,
-                recentTransactionData: [
-                  {
-                    isLoading1: false
-                  }
-                ]
+                walletsData: resultAccount.temp
               });
             }
           } else {
@@ -328,30 +335,43 @@ export default class AccountsScreen extends React.Component<any, any> {
           this.dropdown.alertWithType("error", "OH!!", bal.errorMessage);
         }
       } else {
-        const { tranDetails, isNoTranstion } = this.fetchRecentTransaction(
+        isLoading1 = false;
+        let transation: [] = [];
+        let flag_noTrasation: boolean;
+        const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+          localDB.tableName.tblTransaction,
           resultAccount.temp[index].address
         );
+
+        if (resultRecentTras.temp.length > 0) {
+          transation = resultRecentTras.temp;
+          flag_noTrasation = false;
+        } else {
+          transation = [];
+          flag_noTrasation = true;
+        }
+        tranDetails = transation;
+        isNoTranstion = flag_noTrasation;
+
         this.setState({
-          walletsData: resultAccount.temp,
-          recentTransactionData: [
-            {
-              isLoading1: false
-            }
-          ]
+          walletsData: resultAccount.temp
         });
       }
     } else {
-      this.setState({
-        recentTransactionData: [
-          {
-            isNoTranstion: true,
-            tranDetails: [],
-            isLoading1: false
-          }
-        ]
-      });
+      (isNoTranstion = true), (tranDetails = []), (isLoading1 = false);
     }
-  }
+
+    this.setState({
+      recentTransactionData: [
+        {
+          title,
+          isLoading1,
+          isNoTranstion,
+          tranDetails
+        }
+      ]
+    });
+  }  
 
   //TODO: func click_openPopupAccountType
   click_openPopupAccountType() {
@@ -537,7 +557,8 @@ export default class AccountsScreen extends React.Component<any, any> {
                   inactiveDotScale={0.6}
                   carouselRef={this._slider1Ref}
                   tappableDots={!!this._slider1Ref}
-                />
+                  
+                />  
               )}
 
               {renderIf(this.state.isLoading)(
@@ -547,7 +568,10 @@ export default class AccountsScreen extends React.Component<any, any> {
               )}
             </View>
             <View style={styles.viewMainRecentTran}>
-              <ViewRecentTransaction data={this.state.recentTransactionData} />
+              <ViewRecentTransaction
+                data={this.state.recentTransactionData}
+                openRecentTrans={(val: any) => this.openRecentTrans(val)}
+              />
             </View>
           </ImageBackground>
         </Content>
@@ -773,9 +797,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     height: 50
-  },
-  txtConfimation: {
-    fontSize: 10,
-    color: "gray"
   }
 });

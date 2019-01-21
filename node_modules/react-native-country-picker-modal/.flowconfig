@@ -1,0 +1,84 @@
+[ignore]
+
+# We fork some components by platform.
+.*/*[.]android.js
+
+# Ignore templates with `!!flow` in header
+.*/local-cli/generator.*
+
+# Ignore malformed json
+.*/node_modules/y18n/test/.*\.json
+
+# Ignore duplicate module providers
+# For RN Apps installed via npm, "Libraries" folder is inside node_modules/react-native but in the source repo it is in the root
+.*/Libraries/react-native/React.js
+.*/Libraries/react-native/ReactNative.js
+.*/Libraries/Components/StaticContainer.js
+.*/node_modules/jest-runtime/build/__tests__/.*
+.*/node_modules/fbemitter/lib/.*
+
+# Ignore
+.*/node_modules/react-native/Libraries/.*
+.*/node_modules/@expo/ex-navigation/.*
+.*/node_modules/react-native-tab-view/.*
+.*/node_modules/react-native/Examples/.*
+.*/node_modules/react-native/IntegrationTests/.*
+.*/node_modules/react-native/packager/.*
+.*/node_modules/react-native/local-cli/.*
+.*/node_modules/react-native/lib/.*
+.*/node_modules/react-native/flow/.*
+.*/node_modules/react-native/jest/.*
+.*/node_modules/react-native/RNTester/.*
+.*/node_modules/react-native/ReactAndroid/.*
+.*/node_modules/react-native-slack-webhook/.*
+.*/node_modules/react-native-fbads/.*
+.*/node_modules/expo/.*
+.*/node_modules/sentry-expo/.*
+.*/node_modules/jest-resolve/.*
+.*/node_modules/metro-bundler/.*
+.*/node_modules/prop-types/node_modules/.*
+.*/node_modules/react-test-renderer/node_modules/.*
+.*/node_modules/react-native/node_modules/.*
+.*/node_modules/react/.*
+.*/example/.*
+
+.*/coverage/.*
+.*/e2e/.*
+
+[include]
+
+[libs]
+node_modules/react-native/Libraries/react-native/react-native-interface.js
+node_modules/react-native/flow/Map.js
+node_modules/react-native/flow/Position.js
+node_modules/react-native/flow/Promise.js
+node_modules/react-native/flow/Set.js
+node_modules/react-native/flow/console.js
+# node_modules/react-native/flow/create-react-class.js
+node_modules/react-native/flow/fbjs.js
+# node_modules/react-native/flow/prop-types.js
+node_modules/react-native/flow/react.js
+
+[options]
+module.system=haste
+
+esproposal.decorators=ignore
+esproposal.class_static_fields=enable
+esproposal.class_instance_fields=enable
+esproposal.export_star_as=enable
+
+unsafe.enable_getters_and_setters=true
+
+module.name_mapper='^image![a-zA-Z0-9$_-]+$' -> 'GlobalImageStub'
+module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> 'RelativeImageStub'
+
+suppress_type=$FlowIssue
+suppress_type=$FlowFixMe
+suppress_type=$FixMe
+
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe\\($\\|[^(]\\|(\\(>=0\\.\\(3[0-2]\\|[1-2][0-9]\\|[0-9]\\).[0-9]\\)? *\\(site=[a-z,_]*react_native[a-z,_]*\\)?)\\)
+suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(>=0\\.\\(3[0-2]\\|1[0-9]\\|[1-2][0-9]\\).[0-9]\\)? *\\(site=[a-z,_]*react_native[a-z,_]*\\)?)\\)?:? #[0-9]+
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
+suppress_comment=\\(.\\|\n\\)*\\$DisableFlow
+
+[version]

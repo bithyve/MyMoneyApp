@@ -89,7 +89,7 @@ export default class PasscodeScreen extends Component {
         <Text style={{ color: "#000", marginTop: 10 }}>
           {this.state.success}
         </Text>
-        <CodeInput
+        <CodeInput  
           ref="codeInputRef2"
           secureTextEntry
           keyboardType="numeric"
