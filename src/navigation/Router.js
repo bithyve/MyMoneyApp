@@ -50,6 +50,7 @@ import AccountsDetailsScreen from "../screens/DrawerScreen/AccountsDetailsScreen
 import RecentTransactionsScreen from "../screens/TabBarScreen/AccountsScreen/RecentTransactionsScreen/RecentTransactionsScreen";
 
 //TODO: Secure Account
+import AccountDetailsOnboardingScreen from "../screens/DrawerScreen/AccountDetailsOnboardingScreen/AccountDetailsOnboardingScreen";
 import SecureAccountScreen from "../screens/DrawerScreen/SecureAccountScreen/SecureAccountScreen";
 import SecureSecretKeyScreen from "../screens/DrawerScreen/SecureAccountScreen/SecureSecretKeyScreen/SecureSecretKeyScreen";
 import ValidateSecureAccountScreen from "../screens/DrawerScreen/SecureAccountScreen/ValidateSecureAccountScreen/ValidateSecureAccountScreen";
@@ -142,6 +143,31 @@ const SecureAccountRouter = createStackNavigator(
   },
   {
     initialRouteName: "SecureAccountScreen"
+  }
+);
+
+//TODO: StackNavigator:AccountDetailsOnboardingRouter
+const AccountDetailsOnboardingRouter = createStackNavigator(
+  {
+    AccountDetailsOnboardingScreen: {
+      screen: AccountDetailsOnboardingScreen,
+      navigationOptions: { header: null }
+    },   
+    SecureAccountScreen: {
+      screen: SecureAccountScreen,
+      navigationOptions: { header: null }
+    },
+    SecureSecretKeyScreen: {
+      screen: SecureSecretKeyScreen,
+      navigationOptions: { header: null }
+    },
+    ValidateSecureAccountScreen: {
+      screen: ValidateSecureAccountScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "AccountDetailsOnboardingScreen"
   }
 );
 
@@ -376,6 +402,11 @@ export const createRootNavigator = (
         VaultAccountRouter: {
           screen: VaultAccountRouter,
           navigationOptions: { header: null }
+        },
+        //AccountDetailsOnboardingRouter
+        AccountDetailsOnboardingRouter: {
+          screen: AccountDetailsOnboardingRouter,
+          navigationOptions: { header: null }
         }
       },
       {
@@ -488,6 +519,11 @@ export const createRootNavigator = (
         //VaultAccountRouter
         VaultAccountRouter: {
           screen: VaultAccountRouter,
+          navigationOptions: { header: null }
+        },     
+        //AccountDetailsOnboardingRouter
+        AccountDetailsOnboardingRouter: {
+          screen: AccountDetailsOnboardingRouter,
           navigationOptions: { header: null }
         }
       },

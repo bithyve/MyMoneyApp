@@ -50,9 +50,11 @@ import {
   localDB,
   notification
 } from "../../../constants/Constants";
+
 var dbOpration = require("../../../manager/database/DBOpration");
 var utils = require("../../../constants/Utils");
 let isNetwork;
+
 //import styles from './Styles';
 import renderIf from "../../../constants/validation/renderIf";
 
@@ -74,6 +76,7 @@ const SLIDER_1_FIRST_ITEM = 0;
 
 //TODO: Wallets
 import WalletService from "../../../bitcoin/services/WalletService";
+
 
 export default class AccountsScreen extends React.Component {
   constructor(props) {

@@ -67,7 +67,7 @@ export default class VaultAccountScreen extends React.Component {
       date: moment(newDate).format("DD-MM-YYYY"),
       days: val
     });
-  }  
+  }
 
   handleDatePicked = date => {
     let start = moment(this.addDays(date, 1), "DD-MM-YYYY");
@@ -108,7 +108,7 @@ export default class VaultAccountScreen extends React.Component {
                   <Icon name="chevron-left" size={25} color="#ffffff" />
                 </Button>
               </Left>
-              <Body style={{flex: 0,alignItems:'center'}}>
+              <Body style={{ flex: 0, alignItems: "center" }}>
                 <Title />
               </Body>
               <Right />
@@ -132,7 +132,7 @@ export default class VaultAccountScreen extends React.Component {
                 <View style={styles.viewDays}>
                   <Text style={{ flex: 3, alignSelf: "center" }}>
                     No. Days:
-                  </Text>
+                  </Text>  
                   <TextInput
                     name={this.state.days}
                     value={this.state.days}
@@ -143,7 +143,7 @@ export default class VaultAccountScreen extends React.Component {
                     onChangeText={val => this.changeDaysValue(val)}
                     onChange={val => this.changeDaysValue(val)}
                   />
-                </View>  
+                </View>
                 <View style={styles.viewDateWise}>
                   <Text style={{ flex: 3, alignSelf: "center" }}>
                     Mutual Date:

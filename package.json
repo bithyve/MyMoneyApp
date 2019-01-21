@@ -6,7 +6,7 @@
   "license": "ISC",
   "scripts": {
     "compile": "tsc",
-    "prepare": "cp -r -f ./src/IssueFiles/Buffer/index.js ./node_modules/bip32/index.js",
+    "prepare": "cp -r -f ./src/IssueFiles/Buffer/index.js ./node_modules/bip32/index.js && cp -r -f ./src/IssueFiles/Model/index.js ./node_modules/source-map-support/source-map-support.js && cp -r -f ./src/IssueFiles/slideMenuAndroid/MainActivity.java ./android/app/src/main/java/com/mymoney/MainActivity.java && rn-nodeify --install --hack && react-native link",
     "issuemodel": "cp -r -f ./src/IssueFiles/Model/index.js ./node_modules/source-map-support/source-map-support.js",
     "issueBuffer": "cp -r -f ./src/IssueFiles/Buffer/index.js ./node_modules/bip32/index.js",
     "issueSlideMenuAndroid": "cp -r -f ./src/IssueFiles/slideMenuAndroid/MainActivity.java ./android/app/src/main/java/com/mymoney/MainActivity.java",
@@ -21,7 +21,7 @@
     "jest": "node node_modules/jest/bin/jest.js",
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ --fix",
     "unit": "./node_modules/.bin/mocha tests/**/*.js"
-  },    
+  },
   "dependencies": {
     "@babel/preset-env": "^7.2.3",
     "@babel/runtime": "^7.2.0",
@@ -65,7 +65,7 @@
     "react-native-barcode-builder": "^1.0.5",
     "react-native-barcode-scanners": "^1.0.4",
     "react-native-calendars": "^1.21.0",
-    "react-native-camera": "^1.6.3",   
+    "react-native-camera": "^1.6.3",
     "react-native-card-flip": "^1.0.4",
     "react-native-cards-slider": "^0.1.2",
     "react-native-collapsible": "^1.4.0",
@@ -93,6 +93,7 @@
     "react-native-material-dropdown": "^0.11.1",
     "react-native-material-kit": "^0.5.1",
     "react-native-modal-picker": "^0.0.16",
+    "react-native-onboarding-swiper": "^1.0.0",
     "react-native-os": "^1.0.1",
     "react-native-pin-code": "^0.5.3",
     "react-native-popup-dialog": "^0.16.3",

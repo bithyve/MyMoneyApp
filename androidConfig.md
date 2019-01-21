@@ -57,20 +57,21 @@ signingConfig signingConfigs.release
 
 Custom node_modules/react-native/react.gradle to solve the Duplicate file error perfectly. Add following code into currentBundleTask's creation block (after doFirst block)
 
-            def moveFunc = { resSuffix ->
-                File originalDir = file("${resourcesDir}/drawable-${resSuffix}");
-                if (originalDir.exists()) {
-                    File destDir = file("$buildDir/../src/main/res/drawable-${resSuffix}");
-                    ant.move(file: originalDir, tofile: destDir);
-                }
-            }
-            moveFunc.curry("ldpi").call()
-            moveFunc.curry("mdpi").call()
-            moveFunc.curry("hdpi").call()
-            moveFunc.curry("xhdpi").call()
-            moveFunc.curry("xxhdpi").call()
-            moveFunc.curry("xxxhdpi").call()
+         doLast {
+    def moveFunc = { resSuffix ->
+        File originalDir = file("${resourcesDir}/drawable-${resSuffix}")
+        if (originalDir.exists()) {
+            File destDir = file("${resourcesDir}/drawable-${resSuffix}-v4")
+            ant.move(file: originalDir, tofile: destDir)
         }
+    }
+    moveFunc.curry("ldpi").call()
+    moveFunc.curry("mdpi").call()
+    moveFunc.curry("hdpi").call()
+    moveFunc.curry("xhdpi").call()
+    moveFunc.curry("xxhdpi").call()
+    moveFunc.curry("xxxhdpi").call()
+}
 
 cd android
 ./gradlew assembleRelease

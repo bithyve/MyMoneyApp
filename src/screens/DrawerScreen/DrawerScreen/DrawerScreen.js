@@ -20,7 +20,7 @@ import {
   Content,
   Button,
   Left,
-  Right,
+  Right,   
   Thumbnail
 } from "native-base";
 import { DrawerActions } from "react-navigation";
@@ -48,12 +48,12 @@ import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
 class DrawerScreen extends Component {
   constructor(props) {
     super(props);
-  
+
     this.state = {
       menuBarList: [],
       userDetails: [],
       fullName: "",
-      imagePath: "",  
+      imagePath: "",
       flagImage: false
     };
     this.click_Logout = this.click_Logout.bind(this);

@@ -7452,6 +7452,13 @@ react-native-modal-picker@^0.0.16:
   resolved "https://registry.yarnpkg.com/react-native-modal-picker/-/react-native-modal-picker-0.0.16.tgz#c9324d880a3bb8f36b772f378164977e2f431cbc"
   integrity sha1-yTJNiAo7uPNrdy83gWSXfi9DHLw=
 
+react-native-onboarding-swiper@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-onboarding-swiper/-/react-native-onboarding-swiper-1.0.0.tgz#9374778483cd4a32685157fb40818de6a7862aae"
+  integrity sha512-R6BpVdfmOixN5TxdzhPBM7JZCjuzUWueA+yJhHrGqZrMV9qbLqlN+Q/X3vypebzxzAwqaZknx/q7/rvyE8aBAw==
+  dependencies:
+    tinycolor2 "^1.4.1"
+
 react-native-os@^1.0.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-native-os/-/react-native-os-1.2.2.tgz#402cee00ac00a0588200a66b90e1d2b5a593fec0"
@@ -8940,6 +8947,11 @@ tiny-secp256k1@^1.0.0:
     create-hmac "^1.1.7"
     elliptic "^6.4.0"
     nan "^2.10.0"
+
+tinycolor2@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.1.tgz#f4fad333447bc0b07d4dc8e9209d8f39a8ac77e8"
+  integrity sha1-9PrTM0R7wLB9TcjpIJ2POaisd+g=
 
 tmp@^0.0.33:
   version "0.0.33"

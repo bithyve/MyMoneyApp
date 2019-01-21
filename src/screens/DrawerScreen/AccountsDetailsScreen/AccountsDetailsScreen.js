@@ -47,7 +47,6 @@ import renderIf from "../../../constants/validation/renderIf";
 import { DotIndicator } from "react-native-indicators";
 
 //TODO: Wallets
-//var walletService = require("../../../bitcoin/services/wallet");
 import WalletService from "../../../bitcoin/services/WalletService";
 
 export default class AccountDetailsScreen extends React.Component {
