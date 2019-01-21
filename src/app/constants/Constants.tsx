@@ -39,8 +39,9 @@ var images = {
   appIcon: require(assetsImages + "appLogo.png"),
   slideMenuIcon: require(assetsImages + "icon/slideMenuImage.jpg"),
   onBoardingScreen: {
-    cardSideBitcon: require(assetsImages + "onBoardingScreen/bitcoin.png"),
-    cardSideBitcon1: require(assetsImages + "onBoardingScreen/bitcoin1.png")
+    onB1: require(assetsImages + "onBoardingScreen/onB1.png"),
+    onB2: require(assetsImages + "onBoardingScreen/onB2.png"),
+    onB3: require(assetsImages + "onBoardingScreen/onB3.png")  
   },
   loginScreen: {
     backgoundImage: require(assetsImages + "loginscreen/loginBackgound.jpg"),
@@ -88,9 +89,9 @@ var localDB = {
     tblAccountType: "tblAccountType",
     tblAccount: "tblAccount",
     tblTransaction: "tblTransaction"
-  }  
-};   
-  
+  }
+};
+
 var notification = {
   notifi_UserDetialsChange: "notifi_UserDetialsChange"
 };

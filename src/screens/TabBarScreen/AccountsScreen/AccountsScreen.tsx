@@ -33,30 +33,33 @@ import { StackActions, NavigationActions } from "react-navigation";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import CardFlip from "react-native-card-flip";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import Dialog, {
-  SlideAnimation,
-  DialogTitle,
-  DialogContent,
-  DialogButton
-} from "react-native-popup-dialog";
 import { DotIndicator, SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
 import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
-  
+
+//Custome Compontes
+import SCLAlertAccountTypes from "../../../app/custcompontes/alert/SCLAlertAccountTypes";
+import ViewRecentTransaction from "../../../app/custcompontes/view/ViewRecentTransaction";
+
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import {
+  colors,
+  images,
+  localDB,
+  notification
+} from "../../../app/constants/Constants";
 var dbOpration = require("../../../app/manager/database/DBOpration");
 var utils = require("../../../app/constants/Utils");
 import renderIf from "../../../app/constants/validation/renderIf";
 
-let isNetwork;
+let isNetwork: boolean;
 
 const { width, height } = Dimensions.get("window");
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
   "window"
 );
 
-function wp(percentage) {
+function wp(percentage: number) {
   const value = (percentage * viewportWidth) / 100;
   return Math.round(value);
 }
@@ -70,20 +73,19 @@ const SLIDER_1_FIRST_ITEM = 0;
 //TODO: Wallets
 import WalletService from "../../../bitcoin/services/WalletService";
 
-export default class AccountsScreen extends React.Component {
-  constructor(props) {
+export default class AccountsScreen extends React.Component<any, any> {
+  constructor(props: any) {
     super(props);
     StatusBar.setBackgroundColor(colors.appColor, true);
     this.state = {
       isNetwork: true,
       tranDetails: [],
       accountTypeList: [],
-      popupAccountTypeList: [],
-      walletsData: [],
-      userDetails: [],
-      fullName: "",
-      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       accountTypeVisible: false,
+      popupData: [],
+      recentTransactionData: [],
+      walletsData: [],
+      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
       isOpen: false,
       refreshing: false,
       isLoading: false,
@@ -95,16 +97,11 @@ export default class AccountsScreen extends React.Component {
       this
     );
     isNetwork = utils.getNetwork();
-    window.EventBus.on(
-      notification.notifi_UserDetialsChange,
-      this.notifi_UserDetailsChange
-    );
   }
 
   //TODO: Page Life Cycle
   componentDidMount() {
     //TODO:User Deails read
-    this.getUserDetails();
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
@@ -118,37 +115,13 @@ export default class AccountsScreen extends React.Component {
     this.willFocusSubscription.remove();
   }
 
-  //TODO: NSNotification
-  notifi_UserDetailsChange = () => {
-    this.getUserDetails();
-  };
-
-  //TODO: func getUserDetails
-  async getUserDetails() {
-    if (!isNetwork) {
-      this.dropdown.alertWithType(
-        "info",
-        "OH!!",
-        "Sorry You're Not Connected to the Internet"
-      );
-    }
-    const resultUserDetails = await dbOpration.readTablesData(
-      localDB.tableName.tblUser
-    );
-    this.setState({
-      userDetails: resultUserDetails.temp,
-      fullName:
-        resultUserDetails.temp[0].firstName +
-        " " +
-        resultUserDetails.temp[0].lastName
-    });
-  }
-
   //TODO: func connnection_FetchData
   async connnection_FetchData() {
+    let isLoading1: boolean = true;
+    let isNoTranstion: boolean = false;
+    let tranDetails: [] = [];
     this.setState({
-      isLoading: true,
-      isLoading1: true
+      isLoading: true
     });
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
@@ -162,7 +135,6 @@ export default class AccountsScreen extends React.Component {
     const resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
-    let recentTransation;
     if (isNetwork) {
       const bal = await WalletService.getBalance(
         resultWallet.temp[this.state.cardIndexNo].address
@@ -180,13 +152,18 @@ export default class AccountsScreen extends React.Component {
               lastUpdateDate
             );
             if (resultRecentTransaction) {
-              this.fetchRecentTransaction(resultWallet.temp[0].address);
+              const {
+                tranDetails,
+                isNoTranstion
+              } = await this.fetchRecentTransaction(
+                resultAccount.temp[index].address
+              );
+  
+              console.log("transaction = " + { tranDetails, isNoTranstion });
             }
           } else {
-            this.setState({
-              isNoTranstion: true,
-              tranDetails: []
-            });
+            isNoTranstion = true;
+            tranDetails = [];
           }
           const resultUpdateTblAccount = await dbOpration.updateTableData(
             localDB.tableName.tblAccount,
@@ -195,12 +172,18 @@ export default class AccountsScreen extends React.Component {
             lastUpdateDate
           );
           if (resultUpdateTblAccount) {
+            isLoading1: false;
             this.setState({
               accountTypeList: resultAccount.temp,
               walletsData: resultWallet.temp,
-              popupAccountTypeList: resultPopUpAccountTypes.temp,
-              isLoading: false,
-              isLoading1: false
+              popupData: [
+                {
+                  success: "success",
+                  icon: "plus-circle",
+                  data: resultPopUpAccountTypes.temp
+                }
+              ],
+              isLoading: false
             });
           }
         } else {
@@ -214,21 +197,40 @@ export default class AccountsScreen extends React.Component {
         this.dropdown.alertWithType("error", "OH!!", bal.errorMessage);
       }
     } else {
-      this.fetchRecentTransaction(resultWallet.temp[0].address);
+      const { tranDetails, isNoTranstion } = this.fetchRecentTransaction(
+        resultAccount.temp[index].address
+      );
+      isLoading1: false;
       this.setState({
         accountTypeList: resultAccount.temp,
         walletsData: resultWallet.temp,
-        popupAccountTypeList: resultPopUpAccountTypes.temp,
-        isLoading: false,
-        isLoading1: false
+        popupData: [
+          {
+            success: "success",
+            icon: "plus-circle",
+            data: resultPopUpAccountTypes.temp
+          }
+        ],
+        isLoading: false
       });
     }
-  }
 
+    this.setState({
+      recentTransactionData: [
+        {
+          title: "Savings Recent Transactions",
+          isLoading1,
+          isNoTranstion,
+          tranDetails
+        }
+      ]
+    });
+  }
+ 
   //TODO: func fetchRecentTransaction
   async fetchRecentTransaction(address) {
-    let transation;
-    let flag_noTrasation;
+    let transation: [] = [];
+    let flag_noTrasation: boolean;
     const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
       localDB.tableName.tblTransaction,
       address
@@ -240,17 +242,19 @@ export default class AccountsScreen extends React.Component {
       transation = [];
       flag_noTrasation = true;
     }
-    this.setState({
-      tranDetails: transation,
-      isNoTranstion: flag_noTrasation
-    });
+    return { transation, flag_noTrasation };
   }
 
   //TODO: func getSwapCardDetails
-  async getSwapCardDetails(index) {
+  async getSwapCardDetails(index: number) {
     isNetwork = utils.getNetwork();
     this.setState({
-      isLoading1: true,
+      recentTransactionData: [
+        {
+          recentTransactionData: "new card",
+          isLoading1: true
+        }
+      ],
       cardIndexNo: index
     });
     this.setState({ slider1ActiveSlide: index });
@@ -280,12 +284,21 @@ export default class AccountsScreen extends React.Component {
                 lastUpdateDate
               );
               if (resultRecentTransaction) {
-                this.fetchRecentTransaction(resultAccount.temp[index].address);
+                const {
+                  tranDetails,
+                  isNoTranstion
+                } = this.fetchRecentTransaction(
+                  resultAccount.temp[index].address
+                );
               }
             } else {
               this.setState({
-                isNoTranstion: true,
-                tranDetails: []
+                recentTransactionData: [
+                  {
+                    isNoTranstion: true,
+                    tranDetails: []
+                  }
+                ]
               });
             }
             const resultUpdateTblAccount = await dbOpration.updateTableData(
@@ -297,7 +310,11 @@ export default class AccountsScreen extends React.Component {
             if (resultUpdateTblAccount) {
               this.setState({
                 walletsData: resultAccount.temp,
-                isLoading1: false
+                recentTransactionData: [
+                  {
+                    isLoading1: false
+                  }
+                ]
               });
             }
           } else {
@@ -311,23 +328,32 @@ export default class AccountsScreen extends React.Component {
           this.dropdown.alertWithType("error", "OH!!", bal.errorMessage);
         }
       } else {
-        this.fetchRecentTransaction(resultAccount.temp[index].address);
+        const { tranDetails, isNoTranstion } = this.fetchRecentTransaction(
+          resultAccount.temp[index].address
+        );
         this.setState({
           walletsData: resultAccount.temp,
-          isLoading1: false
+          recentTransactionData: [
+            {
+              isLoading1: false
+            }
+          ]
         });
       }
     } else {
       this.setState({
-        isNoTranstion: true,
-        tranDetails: [],
-        isLoading1: false
+        recentTransactionData: [
+          {
+            isNoTranstion: true,
+            tranDetails: [],
+            isLoading1: false
+          }
+        ]
       });
     }
   }
 
   //TODO: func click_openPopupAccountType
-
   click_openPopupAccountType() {
     if (isNetwork) {
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
@@ -346,21 +372,21 @@ export default class AccountsScreen extends React.Component {
     return new Promise(resolve => {
       setTimeout(() => {
         this.setState({ refreshing: false });
-        this.fetchUserDetails();
+        this.connnection_FetchData();
         resolve();
       }, 1000);
     });
   }
 
   //TODO: func openRecentTrans
-  openRecentTrans(item) {
+  openRecentTrans(item: any) {
     this.props.navigation.navigate("RecentTransactionsScreen", {
       transationDetails: item
     });
   }
 
   //TODO: func cardBgColor
-  cardBgColor(type) {
+  cardBgColor(type: string) {
     if (type == "Saving") {
       return "style.cardSlideBgImageSaving";
     } else {
@@ -425,7 +451,7 @@ export default class AccountsScreen extends React.Component {
 
   //TODO: func createNewAccount
 
-  createNewAccount(type) {
+  createNewAccount(type: string) {
     if (type == "Secure") {
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
       this.props.navigation.push("SecureAccountRouter");
@@ -470,7 +496,7 @@ export default class AccountsScreen extends React.Component {
                   numberOfLines={1}
                   style={styles.titleUserName}
                 >
-                  {this.state.fullName}
+                  My Money
                 </Title>
               </Body>
               <Right>
@@ -521,96 +547,16 @@ export default class AccountsScreen extends React.Component {
               )}
             </View>
             <View style={styles.viewMainRecentTran}>
-              <View style={styles.viewTitleRecentTrans}>
-                <Text style={styles.txtRecentTran}>Recent Transactions</Text>
-                {renderIf(this.state.isLoading1)(
-                  <View style={styles.loading}>
-                    <DotIndicator size={5} color={colors.appColor} />
-                  </View>
-                )}
-              </View>
-              {renderIf(this.state.isNoTranstion)(
-                <View style={styles.viewNoTransaction}>
-                  <Thumbnail
-                    source={require("../../../assets/images/faceIcon/normalFaceIcon.png")}
-                  />
-                  <Text style={styles.txtNoTransaction} note>
-                    No Transactions
-                  </Text>
-                </View>
-              )}
-              {renderIf(this.state.tranDetails.length != 0)(
-                <View style={styles.recentTransListView}>
-                  <FlatList
-                    data={this.state.tranDetails}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item }) => (
-                      <List>
-                        <ListItem
-                          thumbnail
-                          onPress={() => this.openRecentTrans(item)}
-                        >
-                          <Left>
-                            <Thumbnail
-                              source={require("../../../assets/images/bitcoinLogo.jpg")}
-                            />
-                          </Left>
-                          <Body>
-                            <Text style={styles.txtTransTitle}>
-                              {item.transactionType}{" "}
-                              <Text style={styles.txtConfimation}>
-                                {item.confirmationType}{" "}
-                              </Text>{" "}
-                            </Text>
-                            <Text note numberOfLines={1}>
-                              {utils.getUnixToDateFormat(item.dateCreated)}
-                            </Text>
-                          </Body>
-                          <Right>
-                            {renderIf(item.transactionType == "Sent")(
-                              <Text style={styles.txtAmoundSent}>
-                                - {item.balance / 1e8}
-                              </Text>
-                            )}
-                            {renderIf(item.transactionType == "Received")(
-                              <Text style={styles.txtAmoundRec}>
-                                + {item.balance / 1e8}
-                              </Text>
-                            )}
-                          </Right>
-                        </ListItem>
-                      </List>
-                    )}
-                    keyExtractor={item => item.hash}
-                  />
-                </View>
-              )}
+              <ViewRecentTransaction data={this.state.recentTransactionData} />
             </View>
           </ImageBackground>
         </Content>
-
-        <SCLAlert
-          theme="success"
-          show={this.state.accountTypeVisible}
-          cancellable={true}
+        <SCLAlertAccountTypes
+          status={this.state.accountTypeVisible}
           onRequestClose={() => this.setState({ accountTypeVisible: false })}
-          headerIconComponent={
-            <Icon name="plus-circle" size={60} color="#fff" />
-          }
-        >
-          <FlatList
-            data={this.state.popupAccountTypeList}
-            style={{ marginTop: -80 }}
-            renderItem={({ item }) => (
-              <SCLAlertButton
-                theme="success"
-                onPress={() => this.createNewAccount(item.name)}
-              >
-                {item.name}
-              </SCLAlertButton>
-            )}
-          />
-        </SCLAlert>
+          data={this.state.popupData}
+          onPress={(val: string) => this.createNewAccount(val)}
+        />
 
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </Container>
@@ -686,10 +632,9 @@ const styles = StyleSheet.create({
   },
   //TODO: swip card:fotter
   cardFotter: {
-    flex: 1,
+    flex: 2,
     alignItems: "flex-end",
-    marginRight: 20,
-    marginBottom: 10
+    marginRight: 20
   },
   //Amount Infomation
   viewAmountInfo: {

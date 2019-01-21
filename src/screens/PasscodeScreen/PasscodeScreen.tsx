@@ -14,7 +14,6 @@ import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
 
-   
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../app/constants/Constants";
 import SQLite from "react-native-sqlite-storage";
@@ -82,17 +81,21 @@ export default class PasscodeScreen extends Component {
   };
 
   render() {
-    return (
+    return (  
       <View style={styles.container}>
-        <Text style={[styles.txtText,styles.txtTitle]}>My Money</Text>
-        <Text style={[styles.txtText]}>{this.state.message}</Text>
+        <Text style={[styles.txtTitle, { color: "#000", fontWeight: "bold" }]}>
+          My Money
+        </Text>
+        <Text style={{ color: "#000", marginTop: 10 }}>
+          {this.state.success}
+        </Text>
         <CodeInput
           ref="codeInputRef2"
           secureTextEntry
           keyboardType="numeric"
           codeLength={4}
-          activeColor={colors.appColor}
-          inactiveColor={colors.appColor}
+          activeColor={colors.black}
+          inactiveColor={colors.black}
           className="border-circle"
           compareWithCode={this.state.pincode}
           cellBorderWidth={2}
@@ -106,26 +109,27 @@ export default class PasscodeScreen extends Component {
           containerStyle={styles.codeInput}
           onFulfill={(isValid, code) =>
             this._onFinishCheckingCode2(isValid, code)
-          }   
+          }
         />
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </View>
     );
-  }  
-}  
+  }
+}
 
 let styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: "#FFD900"
   },
-  txtText:{
-    color:colors.appColor,
+  txtText: {
+    color: colors.appColor,
     fontFamily: "Lalezar"
   },
- txtTitle: {
-     marginTop: 100,
-     fontSize: 40,
-  }  
+  txtTitle: {
+    marginTop: 100,
+    fontSize: 40
+  }
 });

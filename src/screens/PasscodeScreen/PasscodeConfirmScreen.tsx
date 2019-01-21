@@ -6,12 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
-  Alert,
   AsyncStorage,
-  StatusBar,
-  Vibration,
-  TouchableOpacity,
   Dimensions,
   Animated
 } from "react-native";
@@ -19,7 +14,7 @@ import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
 import { SkypeIndicator } from "react-native-indicators";
-    
+
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../app/constants/Constants";
 var dbOpration = require("../../app/manager/database/DBOpration");
@@ -41,30 +36,13 @@ export default class PasscodeConfirmScreen extends Component {
       status: "choice",
       pincode: "",
       success: "Enter a PinCode!!",
-      firstName: "",
-      lastName: "",
-      email: "",
-      cca2: "",
-      mobileNo: "",
-      countryName: "",
-      isLoading: false,
-      code: ""
+      isLoading: false
     };
     isNetwork = utils.getNetwork();
-  }  
-  
+  }
+
   //TODO: Page Life Cycle
   componentWillMount() {
-    const { navigation } = this.props;
-    this.setState({
-      firstName: navigation.getParam("firstName"),
-      lastName: navigation.getParam("lastName"),
-      email: navigation.getParam("email"),
-      cca2: navigation.getParam("cca2"),
-      mobileNo: navigation.getParam("mobileNo"),
-      countryName: navigation.getParam("countryName")
-    });
-    //for animation
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
     this.animatedValue.addListener(({ value }) => {
@@ -141,7 +119,6 @@ export default class PasscodeConfirmScreen extends Component {
       address,
       privateKey
     } = await WalletService.createWallet();
-    console.log("password confirm mneonic key =" + mnemonic);
     this.setState({
       mnemonicValues: mnemonic.split(" ")
     });
@@ -152,72 +129,55 @@ export default class PasscodeConfirmScreen extends Component {
       //User Details Data
       const dateTime = Date.now();
       const fulldate = Math.floor(dateTime / 1000);
-      const firstName = this.state.firstName;
-      const lastName = this.state.lastName;
-      const email = this.state.email;
-      const country = this.state.countryName;
-      const mobileNumber = this.state.mobileNo;
-      const resultInsertUserDetails = await dbOpration.insertUserDetailsData(
-        localDB.tableName.tblUser,
-        fulldate,
-        firstName,
-        lastName,
-        email,
-        country,
-        this.state.cca2,
-        mobileNumber
-      );
       const resultAccountType = await dbOpration.insertAccountTypeData(
         localDB.tableName.tblAccountType,
         fulldate
       );
-      if (resultInsertUserDetails) {
-        if (resultAccountType) {
-          const resultCreateWallet = await dbOpration.insertWallet(
-            localDB.tableName.tblWallet,
+      if (resultAccountType) {
+        const resultCreateWallet = await dbOpration.insertWallet(
+          localDB.tableName.tblWallet,
+          fulldate,
+          mnemonicValue,
+          priKeyValue,
+          address,
+          "Primary"
+        );
+        if (resultCreateWallet) {
+          const resultCreateAccountSaving = await dbOpration.insertCreateAccount(
+            localDB.tableName.tblAccount,
             fulldate,
-            mnemonicValue,
-            priKeyValue,
             address,
-            "Primary"
+            "BTC",
+            "Savings",
+            ""
           );
-          if (resultCreateWallet) {
-            const resultCreateAccountSaving = await dbOpration.insertCreateAccount(
-              localDB.tableName.tblAccount,
-              fulldate,
-              address,
-              "BTC",
-              "Savings",
-              ""
-            );
-            const resultCreateAccount = await dbOpration.insertCreateAccount(
-              localDB.tableName.tblAccount,
-              fulldate,
-              "",
-              "",
-              "UnKnown",
-              ""
-            );
-            if (resultCreateAccount) {
-              try {
-                AsyncStorage.setItem("@Passcode:key", this.state.pincode);
-                AsyncStorage.setItem("@loadingPage:key", "Password");
-              } catch (error) {
-                // Error saving data
-              }
-              this.setState({
-                success: "Ok!!"
-                //isLoading: false
-              });
-              const resetAction = StackActions.reset({
-                index: 0, // <-- currect active route from actions array
-                key: null,
-                actions: [
-                  NavigationActions.navigate({ routeName: "TabbarBottom" })
-                ]
-              });
-              this.props.navigation.dispatch(resetAction);
+          const resultCreateAccount = await dbOpration.insertCreateAccount(
+            localDB.tableName.tblAccount,
+            fulldate,
+            "",
+            "",
+            "UnKnown",
+            ""
+          );
+          if (resultCreateAccount) {
+            try {
+              AsyncStorage.setItem("@Passcode:key", this.state.pincode);
+              AsyncStorage.setItem("@loadingPage:key", "Password");
+            } catch (error) {
+              // Error saving data
             }
+            this.setState({
+              success: "Ok!!"
+              //isLoading: false
+            });
+            const resetAction = StackActions.reset({
+              index: 0, // <-- currect active route from actions array
+              key: null,
+              actions: [
+                NavigationActions.navigate({ routeName: "TabbarBottom" })
+              ]
+            });
+            this.props.navigation.dispatch(resetAction);
           }
         }
       }
@@ -233,9 +193,12 @@ export default class PasscodeConfirmScreen extends Component {
     };
     return (
       <View style={styles.container}>
-        <Text style={[styles.txtText, styles.txtTitle]}>My Money</Text>
-        <Text style={[styles.txtText]}>{this.state.success}</Text>
-
+        <Text style={[styles.txtTitle, { color: "#000", fontWeight: "bold" }]}>
+          My Money
+        </Text>
+        <Text style={{ color: "#000", marginTop: 10 }}>
+          {this.state.success}
+        </Text>
         {renderIf(this.state.status == "choice")(
           <Animated.View
             style={[
@@ -249,8 +212,8 @@ export default class PasscodeConfirmScreen extends Component {
               secureTextEntry
               keyboardType="numeric"
               codeLength={4}
-              activeColor={colors.appColor}
-              inactiveColor={colors.appColor}
+              activeColor={colors.black}
+              inactiveColor={colors.black}
               className="border-circle"
               cellBorderWidth={2}
               autoFocus={true}
@@ -278,8 +241,8 @@ export default class PasscodeConfirmScreen extends Component {
               secureTextEntry
               keyboardType="numeric"
               codeLength={4}
-              activeColor={colors.appColor}
-              inactiveColor={colors.appColor}
+              activeColor={colors.black}
+              inactiveColor={colors.black}
               className="border-circle"
               cellBorderWidth={2}
               compareWithCode={this.state.pincode}
@@ -311,7 +274,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#fff"
+    backgroundColor: "#FFD900"
   },
   cardContainer: {
     flex: 1
