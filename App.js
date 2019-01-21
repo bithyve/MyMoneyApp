@@ -8,11 +8,9 @@
 
 import React, { Component } from "react";
 import { AsyncStorage, AppState, View } from "react-native";
-import { createRootNavigator } from "./src/navigation/Router";
+import { createRootNavigator } from "./src/app/router/router";
 import { createAppContainer } from "react-navigation";
 
-
-import { colors } from "./src/constants/Constants";
 
 export default class App extends Component {
   navigator = null;
