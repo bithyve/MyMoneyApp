@@ -36,6 +36,7 @@ export default class QrcodeScannerScreen extends React.Component {
         this.state = ({
             address: '',
         });
+        
     }
 
     onBarCodeRead(res:any) {
@@ -56,6 +57,7 @@ export default class QrcodeScannerScreen extends React.Component {
                     <BarcodeScanner
                         Title={'QRCode Scanner'}
                         styles={styles.barcodeScanner}
+                        cameraProps={{captureAudio: false}}
                         onBack={() => this.goBack()}  
                         onBarCodeReadByGalleryStart={(data) => this.onBarCodeRead.call(this, data)}
                         onReadBarCodeByGalleryFailure={() => this.onReadBarCodeByGalleryFailure.call(this)}

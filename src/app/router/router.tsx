@@ -51,6 +51,9 @@ import MyProfileScreen from "../../screens/DrawerScreen/MyProfileScreen/MyProfil
 //VaultAccount Screen
 import VaultAccountScreen from "../../screens/DrawerScreen/VaultAccountScreen/VaultAccountScreen";
 
+//Joint Account Screens
+import CreateJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/CreateJointAccountScreen";
+
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
@@ -165,6 +168,18 @@ const VaultAccountRouter = createStackNavigator(
   },
   {
     initialRouteName: "VaultAccountScreen"
+  }
+);
+
+const JointAccountRouter = createStackNavigator(
+  {
+    CreateJointAccountScreen: {
+      screen: CreateJointAccountScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "CreateJointAccountScreen"
   }
 );
 
@@ -373,6 +388,10 @@ export const createRootNavigator = (
           screen: VaultAccountRouter,
           navigationOptions: { header: null }
         },
+        JointAccountRouter: {
+          screen: JointAccountRouter,
+          navigationOptions: { header: null}
+        },
         //AccountDetailsOnboardingRouter
         AccountDetailsOnboardingRouter: {
           screen: AccountDetailsOnboardingRouter,
@@ -490,6 +509,10 @@ export const createRootNavigator = (
         VaultAccountRouter: {
           screen: VaultAccountRouter,
           navigationOptions: { header: null }
+        },
+        JointAccountRouter: {
+          screen: JointAccountRouter,
+          navigationOptions: { header: null}
         },
         //AccountDetailsOnboardingRouter
         AccountDetailsOnboardingRouter: {

@@ -2,7 +2,7 @@
   "name": "MyMoney",
   "version": "0.0.1",
   "private": true,
-  "author": "Bithyve",  
+  "author": "Bithyve",
   "license": "ISC",
   "scripts": {
     "compile": "tsc",
@@ -14,7 +14,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "removeall": "rm -rf android rm -rf ios rm -rf node_modules",
     "rmnode": "rm -rf node_modules",
-    "android": "react-native run-android",  
+    "android": "react-native run-android",
     "ios": "react-native run-ios",
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack",
     "test": "npm run unit && npm run jest && npm run lint",
