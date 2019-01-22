@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>9</integer>
+	<key>logs</key>
+	<dict>
+		<key>DD6D420E-6FC7-4A29-AB29-859C29319537</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>DD6D420E-6FC7-4A29-AB29-859C29319537.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>W</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>MyMoney project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>MyMoney</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>569841197.48717999</real>
+			<key>timeStoppedRecording</key>
+			<real>569841207.29082501</real>
+			<key>title</key>
+			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>DD6D420E-6FC7-4A29-AB29-859C29319537</string>
+		</dict>
+		<key>E037D134-E992-48EB-AD3B-0F919B5D06C7</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E037D134-E992-48EB-AD3B-0F919B5D06C7.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>W</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>MyMoney project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>MyMoney</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>569791585.42017698</real>
+			<key>timeStoppedRecording</key>
+			<real>569791587.49876499</real>
+			<key>title</key>
+			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>E037D134-E992-48EB-AD3B-0F919B5D06C7</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

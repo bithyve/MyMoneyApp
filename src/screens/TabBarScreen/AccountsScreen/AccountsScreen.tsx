@@ -475,8 +475,11 @@ export default class AccountsScreen extends React.Component<any, any> {
     if (type == "Secure") {
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
       this.props.navigation.push("SecureAccountRouter");
-    } else {
+    } else if(type == "Vault"){
       this.props.navigation.push("VaultAccountRouter");
+      this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
+    } else {
+      this.props.navigation.push("JointAccountRouter");
       this.setState({ accountTypeVisible: !this.state.accountTypeVisible });
     }
   }

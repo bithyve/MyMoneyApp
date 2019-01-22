@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/developer/Documents/appasaheb4/project/react-native/MyMoney/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v24/values-v24.xml",
+            "outputFile": "/Users/susmit/Desktop/Movies/MyMoneyApp/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/413b4e3ecd02b29cc5a204d121509084/res/values-v24/values-v24.xml",
+                    "source": "/Users/susmit/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/da5942704f6af91f470ec1b9fdf02129/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/1fb4463707a31f25d84cacbbdfdf59ee/res/values-v24/values-v24.xml",
+                    "source": "/Users/susmit/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/93beade2fd7181d0691ec4b2eeb7a9e6/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

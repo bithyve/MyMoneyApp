@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/developer/Documents/appasaheb4/project/react-native/MyMoney/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-as/values-as.xml",
+            "outputFile": "/Users/susmit/Desktop/Movies/MyMoneyApp/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-as/values-as.xml",
             "map": [
                 {
-                    "source": "/Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/ff8f7c22ad2ff378b394fb78789496b1/res/values-as/values.xml",
+                    "source": "/Users/susmit/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/f9daecbb3db8d78260a9f2440c2264f5/res/values-as/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/b58dd963764f6881afb5e375e3c75938/res/values-as/values.xml",
+                    "source": "/Users/susmit/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/b0a2be4d9b6fb5803a8e8da8f3510a97/res/values-as/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
