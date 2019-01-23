@@ -6,7 +6,7 @@
 	<integer>9</integer>
 	<key>logs</key>
 	<dict>
-		<key>DD6D420E-6FC7-4A29-AB29-859C29319537</key>
+		<key>4832F8C5-9E7D-457F-98FE-CFA054CBAAF9</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>DD6D420E-6FC7-4A29-AB29-859C29319537.xcactivitylog</string>
+			<string>4832F8C5-9E7D-457F-98FE-CFA054CBAAF9.xcactivitylog</string>
 			<key>highLevelStatus</key>
 			<string>W</string>
 			<key>schemeIdentifier-containerName</key>
@@ -27,15 +27,15 @@
 			<key>signature</key>
 			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>569841197.48717999</real>
+			<real>569915226.93261898</real>
 			<key>timeStoppedRecording</key>
-			<real>569841207.29082501</real>
+			<real>569915232.39817095</real>
 			<key>title</key>
 			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>DD6D420E-6FC7-4A29-AB29-859C29319537</string>
+			<string>4832F8C5-9E7D-457F-98FE-CFA054CBAAF9</string>
 		</dict>
-		<key>E037D134-E992-48EB-AD3B-0F919B5D06C7</key>
+		<key>489EEAC5-A823-428E-8807-19C4B2DBF01A</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -44,7 +44,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>E037D134-E992-48EB-AD3B-0F919B5D06C7.xcactivitylog</string>
+			<string>489EEAC5-A823-428E-8807-19C4B2DBF01A.xcactivitylog</string>
 			<key>highLevelStatus</key>
 			<string>W</string>
 			<key>schemeIdentifier-containerName</key>
@@ -56,13 +56,13 @@
 			<key>signature</key>
 			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>569791585.42017698</real>
+			<real>569913971.79891002</real>
 			<key>timeStoppedRecording</key>
-			<real>569791587.49876499</real>
+			<real>569913979.00296795</real>
 			<key>title</key>
 			<string>Building project MyMoney with scheme MyMoney and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>E037D134-E992-48EB-AD3B-0F919B5D06C7</string>
+			<string>489EEAC5-A823-428E-8807-19C4B2DBF01A</string>
 		</dict>
 	</dict>
 </dict>
