@@ -53,6 +53,7 @@ import VaultAccountScreen from "../../screens/DrawerScreen/VaultAccountScreen/Va
 
 //Joint Account Screens
 import CreateJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/CreateJointAccountScreen";
+import CreatorJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/CreatorJointAccountScreen";
 
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -176,6 +177,10 @@ const JointAccountRouter = createStackNavigator(
     CreateJointAccountScreen: {
       screen: CreateJointAccountScreen,
       navigationOptions: { header: null }
+    },
+    CreatorJointAccountScreen: {
+      screen: CreatorJointAccountScreen,
+      navigationOptions: {header:null}
     }
   },
   {

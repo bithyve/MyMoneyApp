@@ -19,7 +19,7 @@ import { colors, images, localDB } from "../../../app/constants/Constants";
 
 
 
-export default class CreateJointAccountScreen extends React.Component {
+export default class CreatorJointAccountScreen extends React.Component {
     render() {
         return (
             <Container>
@@ -37,19 +37,14 @@ export default class CreateJointAccountScreen extends React.Component {
 
                         <Body style={{flex: 0,alignItems:'center'}}>
                             <Title adjustsFontSizeToFit={true}
-                                numberOfLines={1} style={styles.titleUserName}>Create Joint Account</Title>
+                                numberOfLines={1} style={styles.titleUserName}>Send Joint Account Merge Request</Title>
                         </Body>
                        <Right></Right>
                     </Header>
                     <Content>
                         <Text>
-                            This is Create Joint Account Screen
+                            This is send Joint Account merge request screen
                         </Text>
-                        <Button success onPress={() => this.props.navigation.push("CreatorJointAccountScreen")}><Text> Create </Text></Button>
-                        <Text>
-                            Or
-                        </Text>
-                        <Button warning onPress={() => this.props.navigation.push("QrcodeScannerScreen")}><Text> Merge </Text></Button>
                     </Content>
 
                 </ImageBackground>
