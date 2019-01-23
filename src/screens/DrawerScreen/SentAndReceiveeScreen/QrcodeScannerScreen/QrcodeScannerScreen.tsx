@@ -47,7 +47,7 @@ export default class QrcodeScannerScreen extends React.Component {
     }
 
     onReadBarCodeByGalleryFailure() {
-        Alert.alert('Note', 'Not found barcode!')
+        Alert.alert('Note', 'Not found Qrcode!')
     }
 
     render() {  
@@ -58,7 +58,7 @@ export default class QrcodeScannerScreen extends React.Component {
                         Title={'QRCode Scanner'}
                         styles={styles.barcodeScanner}
                         cameraProps={{captureAudio: false}}
-                        onBack={() => this.goBack()}  
+                        onBack={() => this.props.navigation.goBack()}  
                         onBarCodeReadByGalleryStart={(data) => this.onBarCodeRead.call(this, data)}
                         onReadBarCodeByGalleryFailure={() => this.onReadBarCodeByGalleryFailure.call(this)}
                         onBarCodeRead={(data) => this.onBarCodeRead.call(this, data)}
