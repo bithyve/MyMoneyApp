@@ -1,4 +1,0 @@
-#Wed Jan 23 11:22:29 IST 2019
-base.0=/Users/susmit/Desktop/Movies/MyMoneyApp/android/app/build/intermediates/transforms/dexMerger/debug/0
-path.0=classes.dex
-renamed.0=classes.dex
