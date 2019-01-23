@@ -1,6 +1,0 @@
-const PREFIX = 'native.calendar';
-
-module.exports = {
-  CHANGE_MONTH_LEFT_ARROW: `${PREFIX}.CHANGE_MONTH_LEFT_ARROW`,
-  CHANGE_MONTH_RIGHT_ARROW: `${PREFIX}.CHANGE_MONTH_RIGHT_ARROW`
-};
