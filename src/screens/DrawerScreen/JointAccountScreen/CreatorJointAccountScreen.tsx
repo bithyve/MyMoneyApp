@@ -8,12 +8,16 @@ import {
     View,
     Alert,
     ImageBackground,
+    Dimensions,
+    Clipboard,
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import WalletService from "../../../bitcoin/services/WalletService";
 var dbOpration = require("../../../app/manager/database/DBOpration");
-
+import { QRCode } from "react-native-custom-qr-codes";
+import Toast from "react-native-simple-toast";
+import { AsyncStorage } from "react-native"
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
@@ -25,15 +29,29 @@ export default class CreatorJointAccountScreen extends React.Component {
     constructor() {
         super();
         this.state = ({
-            PubLink: '',
+            JsonString: "Test",
         });
     }
 
     componentWillMount() {
-        this.sendDetails();
+        this.fetchDetails();
     }
 
-    async sendDetails() {
+    storeData = async (key, value) => {
+        try {
+            await AsyncStorage.setItem(key, value);
+        } catch (error) {
+            // Error saving data
+        }
+    }
+    
+
+    click_CopyAddress() {
+        Clipboard.setString(this.state.JsonString);
+        Toast.show("Copied !!", Toast.SHORT);
+    }
+
+    async fetchDetails() {
         const resultWallet = await dbOpration.readTablesData(
             localDB.tableName.tblWallet
         );
@@ -43,11 +61,25 @@ export default class CreatorJointAccountScreen extends React.Component {
         } = await WalletService.importWallet(resultWallet.temp[0].mnemonic);
         //const { mnemonic, address, keyPair } = await WalletService.createWallet();
 
-        let data = keyPair.publicKey.toString('hex')
-        this.setState({
-            PubLink: data
-        });
-        console.log(data)
+        let Joint = {
+            CName: "usr1",
+            MName: "usr2",
+            WName: "Jnt",
+            CPkey: "cpub",
+            Mpkey: "mpub",
+            Addrs: "adrs"
+          }
+
+        Joint.CName = this.props.navigation.getParam("Name")
+        Joint.WName = this.props.navigation.getParam("WalletName")
+        Joint.CPkey = keyPair.publicKey.toString('hex')
+        this.storeData("Joint",JSON.stringify(Joint))
+
+        console.log(Joint.CPkey)
+        console.log(Joint.CName)
+        this.setState({ JsonString: JSON.stringify(Joint) })
+        console.log(JSON.stringify(Joint))
+
     }
 
     render() {
@@ -67,14 +99,31 @@ export default class CreatorJointAccountScreen extends React.Component {
 
                         <Body style={{ flex: 0, alignItems: 'center' }}>
                             <Title adjustsFontSizeToFit={true}
-                                numberOfLines={1} style={styles.titleUserName}>Send Joint Account Merge Request</Title>
+                                numberOfLines={1} style={styles.titleUserName}> Joint Account Merge Request</Title>
                         </Body>
                         <Right></Right>
                     </Header>
-                    <Content>
+                    <Content contentContainerStyle={styles.sample}>
                         <Text>
-                            This is send Joint Account merge request screen
+                            Joint Account merge request 
                         </Text>
+                        <View style={styles.viewShowQRcode}>
+                            <QRCode
+                                logo={images.appIcon}
+                                content={this.state.JsonString}
+                                size={Dimensions.get("screen").width - 40}
+                                codeStyle="square"
+                                outerEyeStyle="square"
+                                innerEyeStyle="square"
+                                //linearGradient={['rgb(255,0,0)','rgb(0,255,255)']}
+                                padding={1}
+                            />
+                            <TouchableOpacity onPress={() => this.click_CopyAddress()}>
+                                <Text style={styles.txtBarcode} note>
+                                    {this.state.JsonString}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </Content>
 
                 </ImageBackground>
@@ -88,7 +137,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    txtBarcode: {
+        marginTop: 40,
+        marginBottom: 20,
+        fontSize: 16,
+        textAlign: "center"
+    },
+    viewShowQRcode: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
     titleUserName: {
         color: "#ffffff"
+    },
+    sample: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '10%',
+        paddingTop: 40
     },
 });
