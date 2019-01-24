@@ -36,15 +36,10 @@ const getNetwork = value => {
   return isNetwork;
 };
 
-const getPacode = async () => {
-  const passcodeValues = await AsyncStorage.getItem("@Passcode:key");
-  return passcodeValues;
-};
-
 const encrypt = (data: any, password: string) => {
   let ciphertext = CryptoJS.AES.encrypt(data, password);
   return ciphertext.toString();
-};  
+};
 
 const decrypt = (data: any, password: string) => {
   let bytes = CryptoJS.AES.decrypt(data, password);
@@ -60,7 +55,6 @@ module.exports = {
   getUnixToDateFormat,
   getUnixToNormaDateFormat,
   getNetwork,
-  getPacode,
   encrypt,
   decrypt
 };

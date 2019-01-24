@@ -51,7 +51,7 @@ import SCLAlertSimpleConfirmation from "../../../app/custcompontes/alert/SCLAler
 import SCLAlertOk from "../../../app/custcompontes/alert/SCLAlertOk";
 
 //TODO: Wallets
-import WalletService from "../../../bitcoin/services/WalletService";
+import RegularAccount from "../../../bitcoin/services/RegularAccount";
 
 interface Props {}
 
@@ -132,11 +132,11 @@ export default class AccountDetailsScreen extends React.Component<
         })
       }
 
-      const bal = await WalletService.getBalance(
+      const bal = await RegularAccount.getBalance(
         navigation.getParam("data").address
       );
       if (bal.statusCode == 200) {
-        const resultRecentTras = await WalletService.getTransactions(
+        const resultRecentTras = await RegularAccount.getTransactions(
           navigation.getParam("data").address
         );
         if (resultRecentTras.statusCode == 200) {

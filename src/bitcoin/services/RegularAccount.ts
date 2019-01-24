@@ -1,12 +1,9 @@
 import Bitcoin from "../utilities/Bitcoin";
-import twoFactorAuthentication from "../utilities/TwoFactorAuthentication";
 
-class WalletService {
+class RegularAccount {
   public bitcoin: Bitcoin;
-  public twoFA: twoFactorAuthentication;
   constructor() {
     this.bitcoin = new Bitcoin();
-    this.twoFA = new twoFactorAuthentication();
   }
 
   public createWallet = (passphrase?: string) =>
@@ -17,7 +14,7 @@ class WalletService {
 
   public getBalance = async (address: string) =>
     await this.bitcoin.checkBalance(address)
-
+  
   public getTransactionDetails = async (txHash: string) =>
     await this.bitcoin.fetchTransactionDetails(txHash)
 
@@ -57,7 +54,7 @@ class WalletService {
 
     const keyPair = this.bitcoin.getKeyPair(privateKey);
     const p2sh = this.bitcoin.getP2SH(keyPair);
-    const txnHash = this.bitcoin.signTransaction(
+    const txb = this.bitcoin.signTransaction(
       txnObj.inputs,
       txnObj.txb,
       [keyPair],
@@ -65,34 +62,31 @@ class WalletService {
     );
     console.log("---- Transaction Signed ----");
 
-    const res = await this.bitcoin.broadcastTransaction(txnHash);
+    const txHex = txb.build().toHex();
+    const res = await this.bitcoin.broadcastTransaction(txHex);
     console.log("---- Transaction Broadcasted ----");
 
     return res;
   }
-
-  public generate2faQR = async (userID: string) => this.twoFA.generator(userID);
-  public validate2faToken = async (secret: string, token: string) =>
-    this.twoFA.validator(secret, token)
 }
 
-export default new WalletService();
+export default new RegularAccount();
 
 class SmokeTest {
-  public walletService: WalletService;
+  public regularAccount: RegularAccount;
   constructor() {
-    this.walletService = new WalletService();
+    this.regularAccount = new RegularAccount();
   }
 
   public testCycle = async () => {
     // 1. Import an HD Wallet (With a pre-funded address)
     const mnemonic =
       "spray danger ostrich volume soldier scare shed excess jeans scheme hammer exist";
-    const { address, privateKey } = this.walletService.importWallet(mnemonic);
+    const { address, privateKey } = this.regularAccount.importWallet(mnemonic);
     // 2. Fund the account (for testing transfer fxn) // Already funded
 
     // 3. Transfer
-    const { success, txid } = await this.walletService.transfer(
+    const { success, txid } = await this.regularAccount.transfer(
       address,
       "2NFb3TpSctXBdax6pJaPaAuJG9tKzuihCrz",
       3e4,
@@ -107,7 +101,7 @@ class SmokeTest {
   }
 }
 
-// //// SMOKE TEST ZONE //////
+////// SMOKE TEST ZONE //////
 
 // createWallet();
 
@@ -127,7 +121,7 @@ class SmokeTest {
 //   )
 // );
 
-// const ws = new WalletService();
+// const ws = new RegularAccount();
 // ws.getTransactions("2NAtR7EZFv9aKo8jkygvioZb8NLKY9acYkd").then(console.log);
 
 // const smokeTest = new SmokeTest();

@@ -33,7 +33,7 @@ import Share, { ShareSheet } from "react-native-share";
 import { colors, images, localDB } from "../../../app/constants/Constants";
 
 //TODO: Wallets
-import WalletService from "../../../bitcoin/services/WalletService";
+import RegularAccount from "../../../bitcoin/services/RegularAccount";
 
 export default class BackupPhraseScreen extends React.Component {
   constructor(props) {
@@ -54,7 +54,7 @@ export default class BackupPhraseScreen extends React.Component {
 
 
   async getWalletsData() {
-    const { mnemonic, address, keyPair } = await WalletService.createWallet();
+    const { mnemonic, address, keyPair } = await RegularAccount.createWallet();
     this.setState({
       mnemonicValues: mnemonic.split(" ")
     });

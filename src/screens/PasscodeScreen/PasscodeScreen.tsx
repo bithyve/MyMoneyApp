@@ -22,7 +22,7 @@ var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
 //TODO: Wallets
 //var createWallet = require('../../bitcoin/services/wallet');
-import WalletService from "../../bitcoin/services/WalletService";
+import RegularAccount from "../../bitcoin/services/RegularAccount";
 import { string } from "prop-types";
 
 const { height, width } = Dimensions.get("window");
@@ -40,8 +40,7 @@ export default class PasscodeScreen extends Component {
       email: "",
       mobileNo: "",
       message: "Enter your PIN"
-    };    
-    console.log(utils.getPacode());
+    };
   }
 
   //TODO: Page Life Cycle
@@ -55,7 +54,7 @@ export default class PasscodeScreen extends Component {
       this.setState({
         pincode: passcodeValues
       });
-    } catch (error) {  
+    } catch (error) {
       console.log(error);
     }
   };
@@ -77,13 +76,12 @@ export default class PasscodeScreen extends Component {
   onSuccess = (code: string) => {
     const resultEncrypt = utils.encrypt(code, code);
     console.log({ resultEncrypt });
-
-    // const resetAction = StackActions.reset({
-    //   index: 0, // <-- currect active route from actions array
-    //   key: null,
-    //   actions: [NavigationActions.navigate({ routeName: "TabbarBottom" })]
-    // });
-    // this.props.navigation.dispatch(resetAction);
+    const resetAction = StackActions.reset({
+      index: 0, // <-- currect active route from actions array
+      key: null,
+      actions: [NavigationActions.navigate({ routeName: "TabbarBottom" })]
+    });
+    this.props.navigation.dispatch(resetAction);
   };
 
   render() {

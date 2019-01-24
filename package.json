@@ -36,6 +36,7 @@
     "backbone-events-standalone": "^0.2.7",
     "bip39": "^2.5.0",
     "bip65": "^1.0.3",
+    "bitcoin-core": "^2.0.0",
     "bitcoinjs-lib": "^4.0.2",
     "browserify-zlib": "^0.1.4",
     "buffer": "^5.2.1",

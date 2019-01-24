@@ -45,9 +45,9 @@ import {
 var dbOpration = require("../../../app/manager/database/DBOpration");
 var utils = require("../../../app/constants/Utils");
 import renderIf from "../../../app/constants/validation/renderIf";
+import Singleton from "../../../app/constants/Singleton";
 
-let isNetwork: boolean;
-
+let isNetwork: boolean, passcode: string;
 const { width, height } = Dimensions.get("window");
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
   "window"
@@ -65,7 +65,7 @@ const itemWidth = slideWidth + itemHorizontalMargin * 2;
 const SLIDER_1_FIRST_ITEM = 0;
 
 //TODO: Wallets
-import WalletService from "../../../bitcoin/services/WalletService";
+import RegularAccount from "../../../bitcoin/services/RegularAccount";
 
 export default class AccountsScreen extends React.Component<any, any> {
   constructor(props: any) {
@@ -91,10 +91,11 @@ export default class AccountsScreen extends React.Component<any, any> {
       this
     );
     isNetwork = utils.getNetwork();
+    let commonData = Singleton.getInstance();
+    passcode = commonData.getPasscode();
   }
 
   //TODO: Page Life Cycle
-
   componentDidMount() {
     //TODO:User Deails read
     this.willFocusSubscription = this.props.navigation.addListener(
@@ -118,28 +119,33 @@ export default class AccountsScreen extends React.Component<any, any> {
     let title: string;
     this.setState({
       isLoading: true
-    });    
+    });
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const resultWallet = await dbOpration.readTablesData(
       localDB.tableName.tblWallet
-    );  
+    );
     const resultPopUpAccountTypes = await dbOpration.readTableAcccountType(
       localDB.tableName.tblAccountType,
       localDB.tableName.tblAccount
     );
+
     const resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
 
-    if (isNetwork && this.state.cardIndexNo != resultWallet.temp.length) {
+    if (isNetwork && this.state.cardIndexNo != resultAccount.temp.length - 1) {
+      console.log("index number=" + this.state.cardIndexNo);
+
       title = "Savings Recent Transactions";
-      const bal = await WalletService.getBalance(
+      const bal = await RegularAccount.getBalance(
         resultWallet.temp[this.state.cardIndexNo].address
       );
 
+      console.log("bal", JSON.stringify(bal));
+
       if (bal.statusCode == 200) {
-        const resultRecentTras = await WalletService.getTransactions(
+        const resultRecentTras = await RegularAccount.getTransactions(
           resultWallet.temp[this.state.cardIndexNo].address
         );
 
@@ -276,11 +282,11 @@ export default class AccountsScreen extends React.Component<any, any> {
 
     if (resultAccount.temp[index].address != "") {
       if (isNetwork) {
-        const bal = await WalletService.getBalance(
+        const bal = await RegularAccount.getBalance(
           resultAccount.temp[index].address
         );
         if (bal.statusCode == 200) {
-          const resultRecentTras = await WalletService.getTransactions(
+          const resultRecentTras = await RegularAccount.getTransactions(
             resultAccount.temp[index].address
           );
           if (resultRecentTras.statusCode == 200) {

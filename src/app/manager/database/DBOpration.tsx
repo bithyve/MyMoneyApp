@@ -1,6 +1,12 @@
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
 var utils = require("../../../app/constants/Utils");
+import Singleton from "../../constants/Singleton";
+
+const getPasscode = () => {
+  let commonData = Singleton.getInstance();
+  return commonData.getPasscode();
+};
 
 import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
@@ -10,6 +16,7 @@ import accountTypeData from "../../../assets/jsonfiles/tblAccountType/tblAccount
 
 //TODO: Select All Table Data
 const readTablesData = tableName => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     var temp = [];
     db.transaction(tx => {
@@ -17,28 +24,57 @@ const readTablesData = tableName => {
         var len = results.rows.length;
         if (len > 0) {
           for (let i = 0; i < len; i++) {
-            temp.push(results.rows.item(i));
+            let data = results.rows.item(i);
+            if (tableName == "tblWallet") {
+              data.id = data.id;
+              data.address = utils.decrypt(data.address, passcode);
+              data.privateKey = utils.decrypt(data.privateKey, passcode);
+              data.dateCreated = data.dateCreated;
+              data.lastUpdated = data.lastUpdated;
+              data.walletType = data.walletType;
+              temp.push(data);
+            } else {
+              temp.push(data);
+            }
           }
           resolve({ temp });
         }
       });
     });
   });
-};  
+};
 
 const readAccountTablesData = tableName => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     var temp = [];
     db.transaction(tx => {
       tx.executeSql(
-        "SELECT * from " + tableName + " ORDER BY (accountType='UnKnown') ASC",
+        "SELECT * from " +
+          tableName +
+          " ORDER BY (accountType='" +
+          utils.encrypt("Unknown", passcode) +
+          "') ASC",
         [],
         (tx, results) => {
           var len = results.rows.length;
           if (len > 0) {
             for (let i = 0; i < len; i++) {
-              temp.push(results.rows.item(i));
+              let data = results.rows.item(i);
+              data.id = data.id;
+              data.dateCreated = data.dateCreated;
+              data.lastUpdated = data.lastUpdated;
+              data.accountType = utils.decrypt(data.accountType, passcode);
+              data.address = utils.decrypt(data.address, passcode);
+              data.additionalInfo = data.additionalInfo;
+              data.balance = utils.decrypt(data.balance, passcode);
+              data.unit = data.unit;
+
+              console.log({ data });
+
+              temp.push(data);
             }
+
             resolve({ temp });
           }
         }
@@ -48,27 +84,51 @@ const readAccountTablesData = tableName => {
 };
 
 //TODO: Select tblAccountType
-const readTableAcccountType = (tableName1, tableName2) => {
+const readTableAcccountType = async (tableName1, tableName2) => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     var temp = [];
+    var temp2 = [];
+    var finalTemp = [];
     db.transaction(tx => {
-      tx.executeSql(
-        "select name from " +
-          tableName1 +
-          " where name not in (select accountType from " +
-          tableName2 +
-          ")",
-        [],
-        (tx, results) => {
-          var len = results.rows.length;
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              temp.push(results.rows.item(i));
-            }
-            resolve({ temp });
+      tx.executeSql("select name  from " + tableName1, [], (tx, results) => {
+        var len = results.rows.length;
+        if (len > 0) {
+          for (let i = 0; i < len; i++) {
+            var data = results.rows.item(i);
+            data.name = utils.decrypt(results.rows.item(i).name, passcode);
+            temp.push(data);
           }
+
+          delete temp.splice(0, 1);
+          delete temp.splice(3, 3);
+
+          tx.executeSql(
+            "select accountType  from " + tableName2,
+            [],
+            (tx2, results2) => {
+              var len2 = results2.rows.length;
+              if (len2 > 0) {
+                for (let i2 = 0; i2 < len2; i2++) {
+                  var data2 = {};
+                  data2.name = utils.decrypt(
+                    results2.rows.item(i2).accountType,
+                    passcode
+                  );
+                  //in future this code change very very basic code
+                  if (data2.name == "Secure") {
+                  } else if (data2.name == "Joint") {
+                  }
+
+                  temp2.push(data2);
+                }
+              }
+            }
+          );
+
+          resolve({ temp });
         }
-      );
+      });
     });
   });
 };
@@ -93,9 +153,7 @@ const readRecentTransactionAddressWise = (tableName, address) => {
               temp.push(results.rows.item(i));
             }
           }
-          console.log(
-            "total readRecentTransactionAddressWise data =" + { temp }
-          );
+
           resolve({ temp });
         }
       );
@@ -161,15 +219,23 @@ const readWalletAddress = (tableName, col1) => {
 //update:tblAmount
 const updateTableData = (tblName, balance, address, lastUdateDate) => {
   return new Promise((resolve, reject) => {
-    db.transaction(function(txn) {
-      txn.executeSql(
-        "update " +
-          tblName +
-          " set balance = :amount,lastUpdated = :lastUpdated where address = :address",
-        [balance, lastUdateDate, address]
-      );
-      resolve(true);
-    });
+    try {
+      db.transaction(function(txn) {
+        txn.executeSql(
+          "update " +
+            tblName +
+            " set balance = :amount,lastUpdated = :lastUpdated where address = :address",
+          [
+            utils.encrypt(balance.toString(), getPasscode()),
+            lastUdateDate,
+            utils.encrypt(address, getPasscode())
+          ]
+        );
+        resolve(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   });
 };
 
@@ -235,7 +301,7 @@ const insertAccountTypeData = (tblName, txtDate) => {
               "INSERT INTO " +
                 tblName +
                 " (dateCreated,name,lastUpdated) VALUES (:dateCreated,:name,:lastUpdated)",
-              [txtDate, utils.encrypt(data.name, "1234"), txtDate]
+              [txtDate, utils.encrypt(data.name, getPasscode()), txtDate]
             );
           }
         }
@@ -317,7 +383,15 @@ const insertCreateAccount = (
         "INSERT INTO " +
           tblName +
           "(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
-        [fulldate, address, 0.0, unit, accountType, additionalInfo, fulldate]
+        [   
+          fulldate,  
+          address,
+          utils.encrypt("0.0", getPasscode()),
+          unit,
+          accountType,
+          additionalInfo,
+          fulldate
+        ]
       );
       resolve(true);
     });
@@ -358,7 +432,7 @@ const insertTblTransation = (
       txn.executeSql(
         "DELETE FROM " + tblName + " WHERE accountAddress = '" + address + "'"
       );
-      console.log("trnasation length=", transactionDetails.length);
+
       //insert
       for (i = 0; i < transactionDetails.length; i++) {
         if (transactionDetails[i].transactionType == "Received") {

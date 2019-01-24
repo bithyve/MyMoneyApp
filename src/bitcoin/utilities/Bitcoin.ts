@@ -2,17 +2,31 @@ import axios, { AxiosResponse } from "axios";
 import bip32 from "bip32";
 import bip39 from "bip39";
 import bip65 from "bip65";
-import bitcoinJS, { ECPair, Network, TransactionBuilder } from "bitcoinjs-lib";
+import Client from "bitcoin-core";
+import bitcoinJS, {
+  ECPair,
+  Network,
+  Transaction,
+  TransactionBuilder,
+} from "bitcoinjs-lib";
 import coinselect from "coinselect";
 import request from "superagent";
-import Config from "../Config";   
-const { TESTNET, MAINNET } = Config.API_URLS;
-  
+import config from "../Config";
+
+const { TESTNET, MAINNET } = config.API_URLS;
+
 export default class Bitcoin {
   public network: Network;
+  public client: Client;
   constructor() {
-    this.network = Config.NETWORK;
-  }  
+    this.network = config.NETWORK;
+    this.client = new Client({
+      network: "testnet",
+      username: "parsh",
+      password: "6fAFgA77liXshpoMQKx4RrsLKcCClTo33MUBQ27rsuo=",
+      port: 18332,
+    });
+  }
 
   public getKeyPair = (privateKey: string): ECPair =>
     bitcoinJS.ECPair.fromWIF(privateKey, this.network)
@@ -156,16 +170,15 @@ export default class Bitcoin {
     let totalReceived: number = 0;
     let totalSpent: number = 0;
 
-    console.log({inputs, outputs})
     inputs.forEach((input) => {
       const { addresses } = input;
-      if(addresses){
+      if (addresses) {
         addresses.forEach((address) => {
           if (address === walletAddress) {
             sent = true;
           }
         });
-      }  
+      }
     });
 
     outputs.forEach((output) => {
@@ -183,8 +196,6 @@ export default class Bitcoin {
     } else {
       tx.totalReceived = totalReceived;
     }
-
-    console.log({tx})
     return tx;
   }
 
@@ -206,9 +217,7 @@ export default class Bitcoin {
   public fetchTransactions = async (address: string): Promise<any> => {
     let res: AxiosResponse;
     try {
-      console.log({address});
       res = await this.fetchAddressInfo(address);
-      console.log({res});
     } catch (err) {
       return {
         statusCode: err.response.status,
@@ -218,7 +227,6 @@ export default class Bitcoin {
 
     const { final_n_tx, n_tx, unconfirmed_n_tx, txs } = res.data;
     txs.map((tx) => {
-      console.log({tx})
       this.confirmationCat(this.categorizeTx(tx, address));
     });
 
@@ -373,7 +381,7 @@ export default class Bitcoin {
       const { data } = await axios.get(`${TESTNET.BASE}/txs/${txHash}`);
       return data;
     } else {
-      const { data } = await axios.get(`MAINNET.BASE/txs/${txHash}`);
+      const { data } = await axios.get(`${MAINNET.BASE}/txs/${txHash}`);
       return data;
     }
   }
@@ -448,9 +456,11 @@ export default class Bitcoin {
     keyPairs: ECPair[],
     redeemScript: any,
     witnessScript?: any,
-  ): string => {
+  ): any => {
+    console.log("------ Transaction Signing ----------");
     let vin = 0;
     inputs.forEach((input) => {
+      console.log("Signing Input:", input);
       keyPairs.forEach((keyPair) => {
         txb.sign(
           vin,
@@ -464,8 +474,7 @@ export default class Bitcoin {
       vin += 1;
     });
 
-    const txHash = txb.build().toHex();
-    return txHash;
+    return txb;
   }
 
   public signPartialTxn = (
@@ -490,17 +499,33 @@ export default class Bitcoin {
       vin += 1;
     });
 
-    const txHash = txb.buildIncomplete();
-    return txHash;
+    const txHex = txb.buildIncomplete();
+    return txHex;
   }
 
   public broadcastTransaction = async (txHash: string): Promise<any> => {
     if (this.network === bitcoinJS.networks.testnet) {
-      const { data } = await axios.post(TESTNET.BROADCAST, { hex: txHash });
-      return data;
+      try {
+        const { data } = await axios.post(TESTNET.BROADCAST, { hex: txHash });
+        return { success: true, data };
+      } catch (err) {
+        console.log(err.response.data.error);
+        return { success: false, err: err.response.data.err };
+      }
     } else {
       const { data } = await axios.post(MAINNET.BROADCAST, { hex: txHash });
       return data;
+    }
+  }
+
+  public broadcastLocally = async (txHex: string): Promise<any> => {
+    // to send txn via cli: (while bitcoind --testnet is running) bitcoin-cli --testnet sendrawtransaction <txHex>
+
+    try {
+      const txHash = await this.client.sendRawTransaction(txHex);
+      return txHash;
+    } catch (err) {
+      console.log("An error occured while broadcasting", err);
     }
   }
 
@@ -592,18 +617,20 @@ class SmokeTest {
     );
     console.log("Transaction Object:", txnObj);
 
-    const txnHash = this.bitcoin.signTransaction(
+    const txb = this.bitcoin.signTransaction(
       txnObj.inputs,
       txnObj.txb,
       [keyPair],
       p2sh.redeem.output,
     );
-    console.log("Transaction Hash", txnHash);
-    const res = await this.bitcoin.broadcastTransaction(txnHash);
+
+    const txHex = txb.build().toHex();
+    console.log("Transaction Hex", txHex);
+    const res = await this.bitcoin.broadcastTransaction(txHex);
     console.log(res);
   }
 
-  public testnetMultiSigTxn = async (): Promise<void> => {
+  public testnetMSigWithTxn = async () => {
     const privateKeys = [
       this.bitcoin.generateTestnetKeys(this.bitcoin.rng1),
       this.bitcoin.generateTestnetKeys(this.bitcoin.rng2),
@@ -634,19 +661,26 @@ class SmokeTest {
           this.bitcoin.generateTestnetKeys(this.bitcoin.rng1),
         ),
       ),
-      3e4,
+      4e3,
     );
     console.log("Transaction Object:", txnObj);
+    return { txnObj, keyPairs, multiSig };
+  }
 
-    const txnHash = this.bitcoin.signTransaction(
+  public testnetMultiSigTxn = async (): Promise<void> => {
+    const { txnObj, keyPairs, multiSig } = await this.testnetMSigWithTxn();
+
+    const txb = this.bitcoin.signTransaction(
       txnObj.inputs,
       txnObj.txb,
       keyPairs,
       multiSig.p2sh.redeem.output,
       multiSig.p2wsh.redeem.output,
     );
-    console.log("Transaction Hash", txnHash);
-    const res = await this.bitcoin.broadcastTransaction(txnHash);
+
+    const txHex = txb.build().toHex();
+    console.log("Transaction Hex", txHex);
+    const res = await this.bitcoin.broadcastTransaction(txHex);
     console.log(res);
     // decodeTransaction(txnHash);
   }
@@ -710,6 +744,231 @@ class SmokeTest {
 
     console.log("Signed Partial Txn:", tx.toHex());
   }
+
+  public recoverableMultiSigs = (pointer: number) => {
+    if (this.bitcoin.network === bitcoinJS.networks.bitcoin) {
+      const mnemonic1 =
+        "discover scorpion response syrup rough swear pass skirt slot peanut physical juice end olympic thunder section grow wide vicious pear venture close orient royal";
+
+      const mnemonic2 =
+        "laugh world burst auction pride miracle muscle reflect truth steak opera bulb again    trend soccer field sign fiber dream muffin sun wine sell knife";
+
+      const gaXpub = bip32.fromBase58(
+        "xpub7ByyA3Xt3nTXUtx9WQskXSiemfjFCP7o1JyBf8fHpmvqPzFuLeYCAVxEWTAaBkUECRftmM21eKGwsHjKdf1du4vwLoYBgkpCrEwPhsPCAbR",
+      );
+
+      const seed1 = bip39.mnemonicToSeed(mnemonic1);
+      const root1 = bip32.fromSeed(seed1);
+
+      const seed2 = bip39.mnemonicToSeed(mnemonic2);
+      const root2 = bip32.fromSeed(seed2);
+
+      const path = config.WALLET_XPUB_PATH + pointer;
+
+      const childXpriv1 = root1.derivePath(path);
+      const childXpriv2 = root2.derivePath(path);
+      const gachildXpub = gaXpub.derivePath("m/" + pointer);
+
+      const childPub1 = childXpriv1.publicKey.toString("hex");
+      const childPub2 = childXpriv2.publicKey.toString("hex");
+      const gaChildPub = gachildXpub.publicKey.toString("hex");
+
+      const pubs = [gaChildPub, childPub1, childPub2];
+      console.log({ gaChildPub, childPub1, childPub2 });
+
+      const bitcoin = new Bitcoin();
+      const multiSig = bitcoin.generateMultiSig(2, pubs);
+      console.log({ multiSigAddress: multiSig.address });
+    } else {
+      // const wallet1 = await this.bitcoin.createHDWallet();
+      // const mnemonic1 = wallet1.mnemonic;
+      const primaryMnemonic =
+        "much false truck sniff extend infant pony venture path imitate tongue pluck";
+      // const wallet2 = await this.bitcoin.createHDWallet();
+      // const mnemonic2 = wallet2.mnemonic;
+      const secondaryMnemonic =
+        "frost drive safe pause come apology jungle fortune myself stable talent country";
+      // const bhWallet = await this.bitcoin.createHDWallet();
+      // const mnemonicBH = bhWallet.mnemonic;
+      const bhMnemonic =
+        "aware illness leaf birth raise puzzle start search vivid nephew accuse tank";
+
+      const primarySeed = bip39.mnemonicToSeed(primaryMnemonic);
+      const primaryRoot = bip32.fromSeed(primarySeed, this.bitcoin.network);
+
+      const secondarySeed = bip39.mnemonicToSeed(secondaryMnemonic);
+      const secondaryRoot = bip32.fromSeed(secondarySeed, this.bitcoin.network);
+
+      const path = config.WALLET_XPUB_PATH + pointer;
+
+      const primaryChildXpriv = primaryRoot.derivePath(path);
+      const secondaryChildXpriv = secondaryRoot.derivePath(path);
+
+      const bhSeed = bip39.mnemonicToSeed(bhMnemonic);
+      const bhRoot = bip32.fromSeed(bhSeed, this.bitcoin.network);
+      // const childBHXPub = bhRoot.derivePath(config.BH_XPUB_PATH);
+      const xpubBH = bhRoot.neutered();
+      xpubBH.index = 1;
+      console.log({ xpubBH: xpubBH.toBase58() });
+      // const xpubBH = bip32.fromBase58(
+      //   "tpubD6NzVbkrYhZ4a8d969JrFHNcDMHyTnpbnfTzs5CVoFsiK6E7tgPjTrnTCuV1nM5eQsWWSYZnszsbQki3yvr8D9DkHeGnnA4SUkuNjoBWJNC",
+      // ); // this is the master XPub
+      const childXpubBH = xpubBH.derivePath("m/" + pointer);
+      const correspondingXpriv = bhRoot.derivePath("m/" + pointer);
+
+      const primaryChildPub = primaryChildXpriv.publicKey.toString("hex");
+      const secondaryChildPub = secondaryChildXpriv.publicKey.toString("hex");
+      const childPubBH = childXpubBH.publicKey.toString("hex");
+
+      const pubs = [childPubBH, primaryChildPub, secondaryChildPub];
+      console.log({ childPubBH, primaryChildPub, secondaryChildPub });
+
+      const bitcoin = new Bitcoin();
+      const multiSig = bitcoin.generateMultiSig(2, pubs);
+      console.log({ multiSigAddress: multiSig.address });
+      return {
+        multiSig,
+        primaryChildXpriv,
+        bhXpriv: correspondingXpriv,
+        secondaryChildXpriv,
+      };
+    }
+  }
+  public testingCollabTxn = async () => {
+    // none of the present api's, as can be seen from the error thrown below,
+    // seems to work therefore we'll be using our own testnet to broadcast the raw txn.
+
+    const { txnObj, keyPairs, multiSig } = await this.testnetMSigWithTxn();
+
+    const txb = this.bitcoin.signTransaction(
+      txnObj.inputs,
+      txnObj.txb,
+      [keyPairs[0]],
+      multiSig.p2sh.redeem.output,
+      multiSig.p2wsh.redeem.output,
+    );
+
+    const txHex = txb.buildIncomplete().toHex();
+    console.log("Transaction Hex", txHex);
+
+    const regenTx: Transaction = bitcoinJS.Transaction.fromHex(txHex);
+    console.log({ regenTx });
+    const regenIns = regenTx.ins;
+    console.log("Ins:", regenIns);
+
+    const regenTxb: TransactionBuilder = bitcoinJS.TransactionBuilder.fromTransaction(
+      regenTx,
+      this.bitcoin.network,
+    );
+    console.log({ regenTxb });
+    // console.log({ bhRoot });
+    // regenTxb.sign(
+    //   0,
+    //   keyPairs[1],
+    //   multiSig.p2sh.redeem.output,
+    //   null,
+    //   3e3,
+    //   multiSig.p2wsh.redeem.output,
+    // );
+
+    const regenSignTx = this.bitcoin.signTransaction(
+      txnObj.inputs,
+      regenTxb,
+      [keyPairs[1]],
+      multiSig.p2sh.redeem.output,
+      multiSig.p2wsh.redeem.output,
+    );
+
+    console.log("---- Transaction Signed by User (2 for 2/3 Sigs)----");
+    const reHex = regenSignTx.build().toHex();
+    console.log(reHex);
+
+    // broadcasting via smartbit api due to issues in blocypher
+    await this.bitcoin.broadcastTransaction(txHex);
+  }
+
+  public testingServerless2FACollabTxn = async () => {
+    const { multiSig, primaryChildXpriv, bhXpriv } = this.recoverableMultiSigs(
+      0,
+    );
+    const senderAddress = multiSig.address;
+    console.log({ senderAddress });
+    const recipientAddress = "2N4qBb5f1KyfbpHxtLM86QgbZ7qcxsFf9AL";
+    const amount = 5000;
+
+    const balance = await this.bitcoin.checkBalance(senderAddress);
+    console.log({ balance });
+    if (parseInt(balance.final_balance, 10) <= amount) {
+      // logic for fee inclusion can also be accomodated
+      throw new Error("Insufficient balance");
+    }
+
+    const { inputs, txb } = await this.bitcoin.createTransaction(
+      senderAddress,
+      recipientAddress,
+      amount,
+    );
+
+    console.log("---- Transaction Created ----");
+
+    const signedTxb = this.bitcoin.signTransaction(
+      inputs,
+      txb,
+      [primaryChildXpriv],
+      multiSig.p2sh.redeem.output,
+      multiSig.p2wsh.redeem.output,
+    );
+    console.log("---- Transaction Signed by User (1 for 2/3 MultiSig)----");
+    const txHex = signedTxb.buildIncomplete().toHex();
+    console.log(txHex);
+
+    // reconstructing and signing the transaction from the txHex (executed @Server)
+    const regenTx: Transaction = bitcoinJS.Transaction.fromHex(txHex);
+    console.log({ regenTx });
+    const regenIns = regenTx.ins;
+    console.log("Ins:", regenIns);
+
+    const recoveredInputs = [];
+    await Promise.all(
+      regenIns.map(async (inp) => {
+        const txId = inp.hash
+          .toString("hex")
+          .match(/.{2}/g)
+          .reverse()
+          .join("");
+        const vout = inp.index;
+        console.log(txId);
+        const data = await this.bitcoin.fetchTransactionDetails(txId);
+        const value = data.outputs[vout].value;
+        recoveredInputs.push({ txId, vout, value });
+      }),
+    );
+
+    const recoveredScripts = {
+      p2sh: regenTx.ins[0].script.slice(1), // slicing because the first element of the buffer isn't actually a part of the redeem script
+      p2wsh: regenTx.ins[0].witness[4],
+    };
+
+    console.log({ recoveredScripts });
+    const regenTxb: TransactionBuilder = bitcoinJS.TransactionBuilder.fromTransaction(
+      regenTx,
+      this.bitcoin.network,
+    );
+    console.log({ regenTxb });
+
+    const regenSignTx = this.bitcoin.signTransaction(
+      recoveredInputs,
+      regenTxb,
+      [bhXpriv],
+      recoveredScripts.p2sh,
+      recoveredScripts.p2wsh,
+    );
+    console.log("---- Transaction Signed by User (2 for 2/3 MultiSig)----");
+    const reHex = regenSignTx.build().toHex();
+    console.log(reHex);
+
+    await this.bitcoin.broadcastLocally(reHex);
+  }
 }
 
 ////////// SMOKE TEST ZONE /////////////////
@@ -745,3 +1004,12 @@ class SmokeTest {
 //     "b0a51b5bc6197a568cba195009acde9f943de36a57bb1a8d1a71ba5c17edf6d9",
 //   )
 //   .then(console.log);
+
+// const smokeTest = new SmokeTest();
+// for (let pointer = 0; pointer < config.BREADTH; pointer++) {
+//   smokeTest.recoverableMultiSigs(pointer);
+// }
+
+// const smokeTest = new SmokeTest();
+// // smokeTest.testingCollabTxn();
+// smokeTest.testingServerless2FACollabTxn();

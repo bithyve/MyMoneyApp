@@ -28,7 +28,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { QRCode } from "react-native-custom-qr-codes";
 import Toast from "react-native-simple-toast";
 import Share, { ShareSheet } from "react-native-share";
-//TODO: Custome Pages  
+//TODO: Custome Pages
 import { colors, images, localDB } from "../../../../app/constants/Constants";
 
 export default class ReceiveMoneyScreen extends React.Component {
@@ -36,7 +36,7 @@ export default class ReceiveMoneyScreen extends React.Component {
     super(props);
     this.state = {
       address: ""
-    };  
+    };
   }
 
   componentWillMount() {

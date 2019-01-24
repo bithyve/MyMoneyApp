@@ -3,7 +3,14 @@ import bitcoinJS, { Network } from "bitcoinjs-lib";
 class Config {
   public ENVIRONMENT: string;
   public NETWORK: Network;
+  public WALLET_XPUB_PATH: string = "m/2147483651/2147483649/1/";
+  public BH_XPUB_PATH: string = "m/0/0/0/0/2147483649/";
+  public BREADTH: number = 5;
   public API_URLS = {
+    BH_SERVER: {
+      DEV: "http://localhost:3000",
+      PROD: "https://bh-server-alpha.herokuapp.com",
+    },
     TESTNET: {
       BASE: "https://api.blockcypher.com/v1/btc/test3",
       BALANCE_CHECK: "https://testnet.blockchain.info/balance?active=",

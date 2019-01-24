@@ -43,7 +43,7 @@ const { width, height } = Dimensions.get("screen");
 import SCLAlertOk from "../../../../../app/custcompontes/alert/SCLAlertOk";
 
 //TODO: Wallets
-import WalletService from "../../../../../bitcoin/services/WalletService";
+import RegularAccount from "../../../../../bitcoin/services/RegularAccount";
 
 export default class ValidateSecureAccountScreen extends React.Component {
   constructor(props: any) {
@@ -103,7 +103,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
           mnemonic,
           address,
           privateKey
-        } = await WalletService.createWallet();
+        } = await RegularAccount.createWallet();
         mnemonicValues = mnemonic.split(" ");
         if (mnemonicValues.length > 0) {
           const dateTime = Date.now();
@@ -120,19 +120,19 @@ export default class ValidateSecureAccountScreen extends React.Component {
             const recoveryWalletAddress = await dbOpration.readWalletAddress(
               localDB.tableName.tblWallet,
               "RecoveryWallet"
-            );  
+            );
             if (recoveryWalletAddress.temp[0].address) {
-              let primaryPubKey = await WalletService.getPubKey(
+              let primaryPubKey = await RegularAccount.getPubKey(
                 primaryWalletAddress.temp[0].privateKey
               );
-              let recoveryPubKey = await WalletService.getPubKey(
+              let recoveryPubKey = await RegularAccount.getPubKey(
                 recoveryWalletAddress.temp[0].privateKey
               );
               let bhPubKey = Buffer.from(
                 JSON.parse(this.state.data.bhPubKey).data
               );
 
-              const multiSigAddress = await WalletService.createMultiSig(2, [
+              const multiSigAddress = await RegularAccount.createMultiSig(2, [
                 primaryPubKey,
                 recoveryPubKey,
                 bhPubKey
@@ -151,6 +151,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
               })
                 .then(response => response.json())
                 .then(responseJson => {
+                  console.log({ responseJson });
                   if (responseJson.setupSuccessful) {
                     this.connection_SaveSecureAccount(
                       fulldate,

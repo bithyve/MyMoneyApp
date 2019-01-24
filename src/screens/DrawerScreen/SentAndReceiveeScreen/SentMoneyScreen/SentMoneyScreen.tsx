@@ -48,7 +48,7 @@ var dbOpration = require("../../../../app/manager/database/DBOpration");
 import renderIf from "../../../../app/constants/validation/renderIf";
 
 //TODO: Wallets
-import WalletService from "../../../../bitcoin/services/WalletService";
+import RegularAccount from "../../../../bitcoin/services/RegularAccount";
 
 export default class SentMoneyScreen extends React.Component {
   constructor() {
@@ -122,14 +122,14 @@ export default class SentMoneyScreen extends React.Component {
       const { navigation } = this.props;
       console.log("address =  " + navigation.getParam("address"));
       console.log("keypair = " + navigation.getParam("privateKey"));
-      const { success, txid } = await WalletService.transfer(
+      const { success, txid } = await RegularAccount.transfer(
         navigation.getParam("address"),
         recAddress,
         parseFloat(amountValue) * 1e8,
         navigation.getParam("privateKey")
       );
       if (success) {
-        const bal = await WalletService.getBalance(
+        const bal = await RegularAccount.getBalance(
           navigation.getParam("address")
         );
         if (bal) {

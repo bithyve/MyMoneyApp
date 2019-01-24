@@ -20,11 +20,12 @@ import { colors, images, localDB } from "../../app/constants/Constants";
 var dbOpration = require("../../app/manager/database/DBOpration");
 var utils = require("../../app/constants/Utils");
 import renderIf from "../../app/constants/validation/renderIf";
+import Singleton from "../../app/constants/Singleton";
 
 let isNetwork;
 
 //TODO: Wallets
-import WalletService from "../../bitcoin/services/WalletService";
+import RegularAccount from "../../bitcoin/services/RegularAccount";
 
 const { height, width } = Dimensions.get("window");
 
@@ -39,8 +40,7 @@ export default class PasscodeConfirmScreen extends Component {
       isLoading: false
     };
     isNetwork = utils.getNetwork();
-   
-  }  
+  }
 
   //TODO: Page Life Cycle
   componentWillMount() {
@@ -108,17 +108,21 @@ export default class PasscodeConfirmScreen extends Component {
   }
 
   saveData = async (code: string) => {
+    let commonData = Singleton.getInstance();
+    commonData.setPasscode(code);
     const {
       mnemonic,
       address,
       privateKey
-    } = await WalletService.createWallet();
+    } = await RegularAccount.createWallet();
     this.setState({
       mnemonicValues: mnemonic.split(" ")
     });
     if (this.state.mnemonicValues.length > 0) {
       //mnemonic key
       var mnemonicValue = this.state.mnemonicValues;
+
+      console.log("mnemonic key =", mnemonicValue.toString());
       var priKeyValue = privateKey;
       //User Details Data
       const dateTime = Date.now();
@@ -131,26 +135,26 @@ export default class PasscodeConfirmScreen extends Component {
         const resultCreateWallet = await dbOpration.insertWallet(
           localDB.tableName.tblWallet,
           fulldate,
-          mnemonicValue,
-          priKeyValue,
-          address,
+          utils.encrypt(mnemonicValue.toString(), code),
+          utils.encrypt(priKeyValue, code),
+          utils.encrypt(address, code),
           "Primary"
         );
         if (resultCreateWallet) {
           const resultCreateAccountSaving = await dbOpration.insertCreateAccount(
             localDB.tableName.tblAccount,
             fulldate,
-            address,
+            utils.encrypt(address, code),
             "BTC",
-            "Savings",
+            utils.encrypt("Savings", code),
             ""
           );
           const resultCreateAccount = await dbOpration.insertCreateAccount(
             localDB.tableName.tblAccount,
             fulldate,
+            utils.encrypt(address, code),
             "",
-            "",
-            "UnKnown",
+            utils.encrypt("UnKnown", code),
             ""
           );
           if (resultCreateAccount) {
