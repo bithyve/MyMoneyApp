@@ -67,6 +67,8 @@ export default class CreatorJointAccountScreen extends React.Component {
             WN: "Jnt",     //wallet name
             CPky: "cpub", //creator public key
             MPky: "mpub", //merger public key
+            p2wsh: "",
+            p2sh: "",
             Add: "adrs"  //multisig address
           }
 
