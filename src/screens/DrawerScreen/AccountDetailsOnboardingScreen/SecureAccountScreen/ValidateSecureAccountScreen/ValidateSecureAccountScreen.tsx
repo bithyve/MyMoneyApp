@@ -24,8 +24,8 @@ import {
   Input
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { SkypeIndicator } from "react-native-indicators";
 import Toast from "react-native-simple-toast";
+import Loader from "react-native-modal-loader";
 
 //TODO: Custome Pages
 import {
@@ -44,6 +44,8 @@ import SCLAlertOk from "../../../../../app/custcompontes/alert/SCLAlertOk";
 
 //TODO: Wallets
 import RegularAccount from "../../../../../bitcoin/services/RegularAccount";
+//TODO: SecureAccount
+import SecureAccount from "../../../../../bitcoin/services/SecureAccount";
 
 export default class ValidateSecureAccountScreen extends React.Component {
   constructor(props: any) {
@@ -53,6 +55,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
       validBtnBgColor: "gray",
       validBtnStaus: true,
       data: [],
+      mnemonic: null,
       alertPopupData: [],
       isLoading: false
     };
@@ -62,8 +65,10 @@ export default class ValidateSecureAccountScreen extends React.Component {
   componentWillMount() {
     const { navigation } = this.props;
     let data = navigation.getParam("data");
+    console.log({ data });
     this.setState({
-      data: data
+      data: data,
+      mnemonic: navigation.getParam("mnemonic")
     });
   }
 
@@ -86,126 +91,82 @@ export default class ValidateSecureAccountScreen extends React.Component {
 
   //TODO: func click_Validation
   async click_Validation() {
-    let mnemonicValues;
     this.setState({
       isLoading: true
     });
     try {
-      // Generating the secondary mnemonic
-      const primaryWalletAddress = await dbOpration.readWalletAddress(
-        localDB.tableName.tblWallet,
-        "Primary"
+      const dateTime = Date.now();
+      const fulldate = Math.floor(dateTime / 1000);
+      const secureAccount = new SecureAccount(this.state.mnemonic);
+      const res = await secureAccount.validateSecureAccountSetup(
+        this.state.tokenKey,
+        this.state.data.setupData.secret,
+        this.state.data.walletID
       );
-      console.log("saving data =" + JSON.stringify(primaryWalletAddress));
-      if (primaryWalletAddress.temp[0].privateKey) {
-        //new Wallet create
-        const {
-          mnemonic,
-          address,
-          privateKey
-        } = await RegularAccount.createWallet();
-        mnemonicValues = mnemonic.split(" ");
-        if (mnemonicValues.length > 0) {
-          const dateTime = Date.now();
-          const fulldate = Math.floor(dateTime / 1000);
-          const resultRecoveryWallet = await dbOpration.insertWallet(
-            localDB.tableName.tblWallet,
+      if (res.statusCode == 200) {
+        if (res.data.setupSuccessful) {
+          this.connection_SaveSecureAccount(
             fulldate,
-            mnemonicValues,
-            privateKey,
-            address,
-            "RecoveryWallet"
+            this.state.data.multiSig.address,
+            this.state.data
           );
-          if (resultRecoveryWallet) {
-            const recoveryWalletAddress = await dbOpration.readWalletAddress(
-              localDB.tableName.tblWallet,
-              "RecoveryWallet"
-            );
-            if (recoveryWalletAddress.temp[0].address) {
-              let primaryPubKey = await RegularAccount.getPubKey(
-                primaryWalletAddress.temp[0].privateKey
-              );
-              let recoveryPubKey = await RegularAccount.getPubKey(
-                recoveryWalletAddress.temp[0].privateKey
-              );
-              let bhPubKey = Buffer.from(
-                JSON.parse(this.state.data.bhPubKey).data
-              );
-
-              const multiSigAddress = await RegularAccount.createMultiSig(2, [
-                primaryPubKey,
-                recoveryPubKey,
-                bhPubKey
-              ]);
-              fetch(apiary.validate2fasetup, {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  token: this.state.tokenKey,
-                  secret: this.state.data.secret,
-                  multiSigAddress: multiSigAddress.address
-                })
-              })
-                .then(response => response.json())
-                .then(responseJson => {
-                  console.log({ responseJson });
-                  if (responseJson.setupSuccessful) {
-                    this.connection_SaveSecureAccount(
-                      fulldate,
-                      multiSigAddress.address,
-                      this.state.data.bhPubKey
-                    );
-                  } else {
-                    this.setState({
-                      alertPopupData: [
-                        {
-                          theme: "danger",
-                          status: true,
-                          icon: "frown",
-                          title: "Oops!!",
-                          subtitle:
-                            "Invalid token number.Please enter correct token number.!!",
-                          goBackStatus: false
-                        }
-                      ]
-                    });
-                  }
-                  this.setState({
-                    isLoading: false
-                  });
-                })
-                .catch(error => {
-                  Toast.show(error, Toast.SHORT);
-                });
-            }
-          }
+        } else {
+          this.setState({
+            alertPopupData: [
+              {
+                theme: "danger",
+                status: true,
+                icon: "frown",
+                title: "Oops",
+                subtitle: "Setup failed.",
+                goBackStatus: false
+              }
+            ]
+          });
         }
+      } else {
+        this.setState({
+          alertPopupData: [
+            {
+              theme: "danger",
+              status: true,
+              icon: "frown",
+              title: "Oops",
+              subtitle:
+                "Invalid token number.Please enter correct token number.",
+              goBackStatus: false
+            }
+          ]
+        });
       }
+      this.setState({
+        isLoading: false
+      });
+      console.log({ res });
     } catch (error) {
       console.error(error);
     }
   }
 
-  async connection_SaveSecureAccount(fulldate, address, bhPubKey) {
+  async connection_SaveSecureAccount(fulldate, address, sercureData) {
+    console.log({ sercureData });  
     const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
       localDB.tableName.tblAccount,
       fulldate,
       address,
       "BTC",
       "Secure",
-      bhPubKey
+      sercureData
     );
     if (resultCreateAccount) {
       this.setState({
+        isLoading: false,
         alertPopupData: [
           {
             theme: "success",
             status: true,
             icon: "smile",
-            title: "Success!!",
+            title: "Success",
             subtitle: "Secure account Created.",
             goBackStatus: true
           }
@@ -274,11 +235,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
             </View>
           </Content>
         </ImageBackground>
-        {renderIf(this.state.isLoading)(
-          <View style={styles.loading}>
-            <SkypeIndicator color={colors.appColor} />
-          </View>
-        )}
+        <Loader loading={this.state.isLoading} color={colors.appColor} />
         <SCLAlertOk
           data={this.state.alertPopupData}
           click_Ok={(status: boolean) => {
@@ -327,16 +284,5 @@ const styles = StyleSheet.create({
   viewValidBtn: {
     flex: 3,
     marginTop: 20
-  },
-  loading: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    opacity: 0.8,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center"
   }
 });

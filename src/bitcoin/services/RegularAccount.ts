@@ -14,7 +14,7 @@ class RegularAccount {
 
   public getBalance = async (address: string) =>
     await this.bitcoin.checkBalance(address)
-  
+
   public getTransactionDetails = async (txHash: string) =>
     await this.bitcoin.fetchTransactionDetails(txHash)
 
@@ -121,7 +121,7 @@ class SmokeTest {
 //   )
 // );
 
-// const ws = new RegularAccount();
+// const ws = new WalletService();
 // ws.getTransactions("2NAtR7EZFv9aKo8jkygvioZb8NLKY9acYkd").then(console.log);
 
 // const smokeTest = new SmokeTest();

@@ -29,6 +29,7 @@ const readTablesData = tableName => {
               data.id = data.id;
               data.address = utils.decrypt(data.address, passcode);
               data.privateKey = utils.decrypt(data.privateKey, passcode);
+              data.mnemonic = utils.decrypt(data.mnemonic, passcode);
               data.dateCreated = data.dateCreated;
               data.lastUpdated = data.lastUpdated;
               data.walletType = data.walletType;
@@ -44,8 +45,9 @@ const readTablesData = tableName => {
   });
 };
 
+
+
 const readAccountTablesData = tableName => {
-  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     var temp = [];
     db.transaction(tx => {
@@ -62,19 +64,18 @@ const readAccountTablesData = tableName => {
             for (let i = 0; i < len; i++) {
               let data = results.rows.item(i);
               data.id = data.id;
-              data.dateCreated = data.dateCreated;
-              data.lastUpdated = data.lastUpdated;
+              data.dateCreated = utils.decrypt(data.dateCreated, passcode);
+              data.lastUpdated = utils.decrypt(data.lastUpdated, passcode);
               data.accountType = utils.decrypt(data.accountType, passcode);
               data.address = utils.decrypt(data.address, passcode);
-              data.additionalInfo = data.additionalInfo;
+              data.additionalInfo = utils.decrypt(
+                data.additionalInfo,
+                passcode
+              );
               data.balance = utils.decrypt(data.balance, passcode);
-              data.unit = data.unit;
-
-              console.log({ data });
-
+              data.unit = utils.decrypt(data.unit, passcode);
               temp.push(data);
             }
-
             resolve({ temp });
           }
         }
@@ -82,6 +83,71 @@ const readAccountTablesData = tableName => {
     });
   });
 };
+
+
+//TODO: working
+
+// const readAccountTablesData = tableName => {
+//   let passcode = getPasscode();
+//   return new Promise((resolve, reject) => {
+//     var temp = [];
+//     db.transaction(tx => {
+//       let accountId: any;
+//       tx.executeSql("SELECT * FROM " + tableName, [], (tx, results) => {
+//         var len = results.rows.length;
+//         if (len > 0) {
+//           for (let i = 0; i < len; i++) {
+//             let dbaccountType = utils.decrypt(
+//               results.rows.item(i).accountType,
+//               passcode
+//             );
+//             if (dbaccountType == "UnKnown") {
+//               accountId = results.rows.item(i).id;
+//             }
+//             console.log({ accountId });
+//             tx.executeSql(
+//               "SELECT * from " + tableName + " ORDER BY (id = 2) ASC",
+//               [],  
+//               (tx2, results2) => {
+//                 var len2 = results2.rows.length;
+//                 if (len2 > 0) {   
+//                   for (let i2 = 0; i2 < len2; i2++) {
+//                     let data = results2.rows.item(i2);
+//                     data.id = data.id;
+//                     data.dateCreated = utils.decrypt(
+//                       data.dateCreated,
+//                       passcode
+//                     );
+//                     data.lastUpdated = utils.decrypt(
+//                       data.lastUpdated,
+//                       passcode
+//                     );
+//                     data.accountType = utils.decrypt(
+//                       data.accountType,
+//                       passcode
+//                     );
+//                     data.address = utils.decrypt(data.address, passcode);
+//                     data.additionalInfo = utils.decrypt(
+//                       data.additionalInfo,
+//                       passcode
+//                     );
+//                     data.balance = utils.decrypt(data.balance, passcode);
+//                     data.unit = utils.decrypt(data.unit, passcode);
+//                     temp.push(data);
+//                   }   
+
+//                   console.log({ temp });
+//                   resolve({ temp });
+//                 }
+//               }
+//             );
+//             resolve(true);
+//           }
+//         }
+//       });
+//     });
+//   });
+// };   
 
 //TODO: Select tblAccountType
 const readTableAcccountType = async (tableName1, tableName2) => {
@@ -162,7 +228,6 @@ const readRecentTransactionAddressWise = (tableName, address) => {
 };
 
 //select:readAccountAddress
-
 const readAccountAddress = (tableName, col1) => {
   return new Promise((resolve, reject) => {
     var temp = [];
@@ -215,23 +280,39 @@ const readWalletAddress = (tableName, col1) => {
 };
 
 //TODO: Update
-
 //update:tblAmount
 const updateTableData = (tblName, balance, address, lastUdateDate) => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     try {
       db.transaction(function(txn) {
-        txn.executeSql(
-          "update " +
-            tblName +
-            " set balance = :amount,lastUpdated = :lastUpdated where address = :address",
-          [
-            utils.encrypt(balance.toString(), getPasscode()),
-            lastUdateDate,
-            utils.encrypt(address, getPasscode())
-          ]
-        );
-        resolve(true);
+        //select all data form tblAccount
+        let accountId;
+        txn.executeSql("SELECT * FROM " + tblName, [], (tx, results) => {
+          var len = results.rows.length;
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              let dbdecryptAddress = utils.decrypt(
+                results.rows.item(i).address,
+                passcode
+              );
+              if (dbdecryptAddress == address) {
+                accountId = results.rows.item(i).id;
+              }
+              txn.executeSql(
+                "update " +
+                  tblName +
+                  " set balance = :amount,lastUpdated = :lastUpdated where id = :id",
+                [
+                  utils.encrypt(balance.toString(), passcode),
+                  lastUdateDate,
+                  accountId
+                ]
+              );
+              resolve(true);
+            }
+          }
+        });
       });
     } catch (error) {
       console.log(error);
@@ -377,20 +458,21 @@ const insertCreateAccount = (
   accountType,
   additionalInfo
 ) => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     db.transaction(function(txn) {
       txn.executeSql(
         "INSERT INTO " +
           tblName +
           "(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
-        [   
-          fulldate,  
-          address,
-          utils.encrypt("0.0", getPasscode()),
-          unit,
-          accountType,
-          additionalInfo,
-          fulldate
+        [
+          utils.encrypt(fulldate.toString(), passcode),
+          utils.encrypt(address.toString(), passcode),
+          utils.encrypt("0.0", passcode),
+          utils.encrypt(unit.toString(), passcode),
+          utils.encrypt(accountType.toString(), passcode),
+          utils.encrypt(JSON.stringify(additionalInfo).toString(), passcode),
+          utils.encrypt(fulldate.toString(), passcode)
         ]
       );
       resolve(true);
@@ -406,11 +488,22 @@ const insertLastBeforeCreateAccount = (
   accountType,
   additionalInfo
 ) => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
+    let date = utils.encrypt(fulldate.toString(), passcode);
+    let add = utils.encrypt(address.toString(), passcode);
+    let amount = utils.encrypt("0.0", passcode);
+    let unitvalue = utils.encrypt(unit.toString(), passcode);
+    let accountTypesValue = utils.encrypt(accountType.toString(), passcode);
+    let moreInfo = utils.encrypt(
+      JSON.stringify(additionalInfo).toString(),
+      passcode
+    );
+
     db.transaction(function(txn) {
       txn.executeSql(
         "INSERT INTO tblAccount(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
-        [fulldate, address, 0.0, unit, accountType, additionalInfo, fulldate]
+        [date, add, amount, unitvalue, accountTypesValue, moreInfo, date]
       );
       resolve(true);
     });

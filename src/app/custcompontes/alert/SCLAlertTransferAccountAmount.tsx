@@ -33,7 +33,7 @@ export default class SCLAlertTransferAccountAmount extends Component<
     return (
       <SCLAlert
         theme="info"
-        title="TRANSFER AMOUNT!!"
+        title="TRANSFER AMOUNT"
         slideAnimationDuration={0}
         subtitle={
           this.props.data.length != 0 ? this.props.data[0].subtitle : false

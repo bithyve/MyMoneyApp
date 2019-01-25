@@ -24,6 +24,7 @@ export default class Bitcoin {
       network: "testnet",
       username: "parsh",
       password: "6fAFgA77liXshpoMQKx4RrsLKcCClTo33MUBQ27rsuo=",
+      // host: "0b4f4482.ngrok.io",
       port: 18332,
     });
   }
@@ -507,7 +508,7 @@ export default class Bitcoin {
     if (this.network === bitcoinJS.networks.testnet) {
       try {
         const { data } = await axios.post(TESTNET.BROADCAST, { hex: txHash });
-        return { success: true, data };
+        return data;
       } catch (err) {
         console.log(err.response.data.error);
         return { success: false, err: err.response.data.err };
@@ -967,7 +968,9 @@ class SmokeTest {
     const reHex = regenSignTx.build().toHex();
     console.log(reHex);
 
-    await this.bitcoin.broadcastLocally(reHex);
+    // this.bitcoin.broadcastLocally(reHex).then(console.log);
+    const res = await this.bitcoin.broadcastTransaction(reHex); // broadcasting api functional
+    console.log(res);
   }
 }
 
@@ -1011,5 +1014,5 @@ class SmokeTest {
 // }
 
 // const smokeTest = new SmokeTest();
-// // smokeTest.testingCollabTxn();
+// // // smokeTest.testingCollabTxn();
 // smokeTest.testingServerless2FACollabTxn();

@@ -129,21 +129,18 @@ export default class AccountsScreen extends React.Component<any, any> {
       localDB.tableName.tblAccountType,
       localDB.tableName.tblAccount
     );
-
-    const resultAccount = await dbOpration.readAccountTablesData(
+    var resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
 
+    console.log({ resultAccount });  
+
     if (isNetwork && this.state.cardIndexNo != resultAccount.temp.length - 1) {
       console.log("index number=" + this.state.cardIndexNo);
-
       title = "Savings Recent Transactions";
       const bal = await RegularAccount.getBalance(
         resultWallet.temp[this.state.cardIndexNo].address
       );
-
-      console.log("bal", JSON.stringify(bal));
-
       if (bal.statusCode == 200) {
         const resultRecentTras = await RegularAccount.getTransactions(
           resultWallet.temp[this.state.cardIndexNo].address
@@ -186,39 +183,42 @@ export default class AccountsScreen extends React.Component<any, any> {
             lastUpdateDate
           );
           if (resultUpdateTblAccount) {
-            isLoading1 = false;
-            this.setState({
-              accountTypeList: resultAccount.temp,
-              walletsData: resultWallet.temp,
-              popupData: [
-                {
-                  success: "success",
-                  icon: "plus-circle",
-                  data: resultPopUpAccountTypes.temp
-                }
-              ],
-              isLoading: false
-            });
+            resultAccount = await dbOpration.readAccountTablesData(
+              localDB.tableName.tblAccount
+            );
+            if (resultAccount.temp.length > 0) {
+              isLoading1 = false;
+              this.setState({
+                accountTypeList: resultAccount.temp,
+                walletsData: resultWallet.temp,
+                popupData: [
+                  {
+                    success: "success",
+                    icon: "plus-circle",
+                    data: resultPopUpAccountTypes.temp
+                  }
+                ],
+                isLoading: false
+              });
+            }
           }
         } else {
           this.dropdown.alertWithType(
             "error",
-            "OH!!",
+            "OH",
             resultRecentTras.errorMessage
           );
         }
       } else {
-        this.dropdown.alertWithType("error", "OH!!", bal.errorMessage);
+        this.dropdown.alertWithType("error", "OH", bal.errorMessage);
       }
     } else {
-      console.log("no =" + this.state.cardIndexNo);
       let transation: [] = [];
       let flag_noTrasation: boolean;
       const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
         localDB.tableName.tblTransaction,
         resultAccount.temp[this.state.cardIndexNo].address
       );
-
       if (resultRecentTras.temp.length > 0) {
         transation = resultRecentTras.temp;
         flag_noTrasation = false;
@@ -228,7 +228,6 @@ export default class AccountsScreen extends React.Component<any, any> {
       }
       tranDetails = transation;
       isNoTranstion = flag_noTrasation;
-
       isLoading1 = false;
       this.setState({
         accountTypeList: resultAccount.temp,
@@ -243,7 +242,6 @@ export default class AccountsScreen extends React.Component<any, any> {
         isLoading: false
       });
     }
-
     this.setState({
       recentTransactionData: [
         {
@@ -273,6 +271,7 @@ export default class AccountsScreen extends React.Component<any, any> {
     const resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
+    console.log({ resultAccount });
     if (resultAccount.temp[index].accountType != "UnKnown") {
       title = resultAccount.temp[index].accountType + " Recent Transactions";
     } else {
@@ -328,18 +327,18 @@ export default class AccountsScreen extends React.Component<any, any> {
             if (resultUpdateTblAccount) {
               isLoading1 = false;
               this.setState({
-                walletsData: resultAccount.temp
+                accountTypeList: resultAccount.temp
               });
             }
           } else {
             this.dropdown.alertWithType(
               "error",
-              "OH!!",
+              "OH",
               resultRecentTras.errorMessage
             );
           }
         } else {
-          this.dropdown.alertWithType("error", "OH!!", bal.errorMessage);
+          this.dropdown.alertWithType("error", "OH", bal.errorMessage);
         }
       } else {
         isLoading1 = false;
@@ -361,7 +360,7 @@ export default class AccountsScreen extends React.Component<any, any> {
         isNoTranstion = flag_noTrasation;
 
         this.setState({
-          walletsData: resultAccount.temp
+          accountTypeList: resultAccount.temp
         });
       }
     } else {
@@ -387,7 +386,7 @@ export default class AccountsScreen extends React.Component<any, any> {
     } else {
       this.dropdown.alertWithType(
         "info",
-        "OH!!",
+        "OH",
         "Sorry You're Not Connected to the Internet"
       );
     }
@@ -441,7 +440,7 @@ export default class AccountsScreen extends React.Component<any, any> {
             onPress={() =>
               this.props.navigation.push("AccountsDetailsScreen", {
                 data: item,
-                privateKeyJson: this.state.walletsData,
+                walletsData: this.state.walletsData,
                 indexNo: index
               })
             }

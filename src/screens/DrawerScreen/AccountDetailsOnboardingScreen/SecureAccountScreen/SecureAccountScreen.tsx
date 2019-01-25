@@ -14,46 +14,54 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
+import Loader from "react-native-modal-loader";
 
 //TODO: Custome class
-import { colors, images, apiary, localDB } from "../../../../app/constants/Constants";
-import renderIf from "../../../../app/constants/validation/renderIf";  
+import {
+  colors,
+  images,
+  apiary,
+  localDB
+} from "../../../../app/constants/Constants";
+import renderIf from "../../../../app/constants/validation/renderIf";
+var dbOpration = require("../../../../app/manager/database/DBOpration");
+var utils = require("../../../../app/constants/Utils");
+
+//TODO: SecureAccount
+import SecureAccount from "../../../../bitcoin/services/SecureAccount";
 
 export default class SecureAccountScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false
+      isLoading: false,
     };
   }
 
   //TODO: func click_CreateSecureAccount
   async click_CreateSecureAccount() {
-    this.stopLoading(true);
-    try {
-      fetch(apiary.setup2fa, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }  
-      })
-        .then(response => response.json())
-        .then(responseJson => {
-          this.props.navigation.push("SecureSecretKeyScreen", {
-            data: responseJson
-          });
-          this.stopLoading(false);
-        })
-        .catch(error => {
-          this.dropdown.alertWithType("error", "OH!!", error);
-          this.stopLoading(false);
-        });
-    } catch (error) {
-      this.dropdown.alertWithType("error", "OH!!", error);
-      this.stopLoading(false);
+    this.setState({ isLoading: true });
+    const resultWallet = await dbOpration.readTablesData(
+      localDB.tableName.tblWallet
+    );
+    console.log({ resultWallet });
+    var mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
+    const secureAccount = new SecureAccount(mnemonic);
+    const secureAccountAssets = await secureAccount.setupSecureAccount();
+    if (secureAccountAssets.statusCode == 200) {
+      this.props.navigation.push("SecureSecretKeyScreen", {
+        data: secureAccountAssets.data,
+        mnemonicKey:mnemonic
+      });
+    } else {
+      this.dropdown.alertWithType(
+        "error",
+        "OH",
+        secureAccountAssets.errorMessage
+      );
     }
-  }
+    this.setState({ isLoading: false });
+  }    
 
   //TODO: func stopLoading
 
@@ -115,11 +123,7 @@ export default class SecureAccountScreen extends React.Component {
             </View>
           </ImageBackground>
         </Content>
-        {renderIf(this.state.isLoading)(
-          <View style={styles.loading}>
-            <SkypeIndicator color={colors.appColor} />
-          </View>
-        )}
+        <Loader loading={this.state.isLoading} color={colors.appColor} />
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </Container>
     );
@@ -159,16 +163,5 @@ const styles = StyleSheet.create({
   },
   txtBtnTitle: {
     color: colors.white
-  },
-  loading: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    opacity: 0.8,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center"
   }
 });

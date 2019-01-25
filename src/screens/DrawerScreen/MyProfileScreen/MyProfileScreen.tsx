@@ -125,7 +125,7 @@ export default class MyProfileScreen extends React.Component {
         popUpMessage: [
           {
             status: "success",
-            title: "Success!!",
+            title: "Success",
             message: "Profile updated.",
             icon: "smile",
             flagGoBack: true
@@ -138,7 +138,7 @@ export default class MyProfileScreen extends React.Component {
         popUpMessage: [
           {
             status: "danger",
-            title: "Ooops!!",
+            title: "Ooops",
             message: "No profile updated.",
             icon: "frown",
             flagGoBack: false
@@ -191,7 +191,7 @@ export default class MyProfileScreen extends React.Component {
                   popUpMessage: [
                     {
                       status: "success",
-                      title: "Success!!",
+                      title: "Success",
                       message: "Profile Picture Changed.",
                       icon: "smile",
                       flagGoBack: false
@@ -206,7 +206,7 @@ export default class MyProfileScreen extends React.Component {
                 popUpMessage: [
                   {
                     status: "danger",
-                    title: "Ooops!!",
+                    title: "Ooops",
                     message: "No profile picture changed.",
                     icon: "frown",
                     flagGoBack: false

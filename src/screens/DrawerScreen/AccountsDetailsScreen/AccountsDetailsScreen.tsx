@@ -85,14 +85,16 @@ export default class AccountDetailsScreen extends React.Component<
   //TODO: Page Life Cycle
   componentWillMount() {
     const { navigation } = this.props;
-    console.log("data =" + JSON.stringify(navigation.getParam("data")));
+    let data = navigation.getParam("data");
+    let walletsData = navigation.getParam("walletsData");
+
+    console.log({ data });
+
     this.setState({
-      data: navigation.getParam("data"),
-      waletteData: navigation.getParam("privateKeyJson")[
-        navigation.getParam("indexNo")
-      ]
+      data: data,
+      waletteData: walletsData
     });
-  }
+  }   
 
   componentDidMount() {
     this.willFocusSubscription = this.props.navigation.addListener(
@@ -119,19 +121,16 @@ export default class AccountDetailsScreen extends React.Component<
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
 
-    const resultAccount = await dbOpration.readAccountTablesData(
+    var resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
     if (isNetwork) {
       //TODO: for transfer btn and details
       if (resultAccount.temp.length > 2) {
-
         this.setState({
-          isTransferBtn:true,
-
-        })
+          isTransferBtn: true
+        });
       }
-
       const bal = await RegularAccount.getBalance(
         navigation.getParam("data").address
       );
@@ -174,15 +173,20 @@ export default class AccountDetailsScreen extends React.Component<
             lastUpdateDate
           );
           if (resultUpdateTblAccount) {
-            isLoading = false;
-            this.setState({
-              data: resultAccount.temp[navigation.getParam("indexNo")]
-            });
+            resultAccount = await dbOpration.readAccountTablesData(
+              localDB.tableName.tblAccount
+            );
+            if (resultAccount.temp.length > 0) {
+              isLoading = false;
+              this.setState({
+                data: resultAccount.temp[navigation.getParam("indexNo")]
+              });
+            }
           }
         } else {
           this.dropdown.alertWithType(
             "error",
-            "OH!!",
+            "OH",
             resultRecentTras.errorMessage
           );
         }
@@ -233,6 +237,7 @@ export default class AccountDetailsScreen extends React.Component<
       }, 1000);
     });
   }
+
   //TODO: func openRecentTrans
   openRecentTrans(item) {
     this.props.navigation.navigate("RecentTransactionsScreen", {
@@ -343,7 +348,7 @@ export default class AccountDetailsScreen extends React.Component<
                     } else {
                       this.dropdown.alertWithType(
                         "info",
-                        "OH!!",
+                        "OH",
                         "Sorry You're Not Connected to the Internet"
                       );
                     }
@@ -360,12 +365,12 @@ export default class AccountDetailsScreen extends React.Component<
                     this.props.navigation.push("SentMoneyScreen", {
                       data: this.state.data,
                       address: this.state.data.address,
-                      privateKey: this.state.waletteData.privateKey
+                      waletteData: this.state.waletteData
                     });
                   } else {
                     this.dropdown.alertWithType(
                       "info",
-                      "OH!!",
+                      "OH",
                       "Sorry You're Not Connected to the Internet"
                     );
                   }
@@ -412,7 +417,7 @@ export default class AccountDetailsScreen extends React.Component<
             });
           }}
           onError={error => {
-            this.dropdown.alertWithType("error", "OH!!", error);
+            this.dropdown.alertWithType("error", "OH", error);
           }}
         />
         <SCLAlertSimpleConfirmation
@@ -425,7 +430,7 @@ export default class AccountDetailsScreen extends React.Component<
                     theme: "success",
                     status: true,
                     icon: "smile",
-                    title: "Success!!",
+                    title: "Success",
                     subtitle: "Amount Transfer successfully.",
                     goBackStatus: false
                   }

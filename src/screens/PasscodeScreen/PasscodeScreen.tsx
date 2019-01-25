@@ -34,7 +34,7 @@ export default class PasscodeScreen extends Component {
       mnemonicValues: [],
       status: "choice",
       pincode: null,
-      success: "Enter a PinCode!!",
+      success: "Enter a PinCode",
       firstName: "",
       lastName: "",
       email: "",
@@ -68,7 +68,7 @@ export default class PasscodeScreen extends Component {
       this.dropdown.alertWithType(
         "error",
         "Error",
-        "Oh!! Please enter correct password"
+        "Oh Please enter correct password"
       );
     }
   }

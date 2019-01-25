@@ -50,11 +50,15 @@ import renderIf from "../../../../app/constants/validation/renderIf";
 //TODO: Wallets
 import RegularAccount from "../../../../bitcoin/services/RegularAccount";
 
+//TODO: SecureAccount
+import SecureAccount from "../../../../bitcoin/services/SecureAccount";
+
 export default class SentMoneyScreen extends React.Component {
   constructor() {
     super();
     this.state = {
       data: [],
+      waletteData: [],
       alertPopupData: [],
       recipientAddress: "",
       amount: "",
@@ -67,8 +71,14 @@ export default class SentMoneyScreen extends React.Component {
 
   componentWillMount() {
     const { navigation } = this.props;
+    let data = navigation.getParam("data");
+    let waletteJson = navigation.getParam("waletteData");
+
+    console.log({ data, waletteJson });
+
     this.setState({
-      data: navigation.getParam("data")
+      data: data,
+      waletteData: waletteJson
     });
   }
 
@@ -103,9 +113,7 @@ export default class SentMoneyScreen extends React.Component {
       });
     }
   }
-   
 
-  
   //TODO: func click_SentMoney
   async click_SentMoney() {
     if (this.state.data.accountType == "Secure") {
@@ -147,7 +155,7 @@ export default class SentMoneyScreen extends React.Component {
                   theme: "success",
                   status: true,
                   icon: "smile",
-                  title: "Success!!",
+                  title: "Success",
                   subtitle: "Transaction Successfully Completed.",
                   goBackStatus: true
                 }
@@ -160,7 +168,7 @@ export default class SentMoneyScreen extends React.Component {
                   theme: "danger",
                   status: true,
                   icon: "frown",
-                  title: "Oops!!",
+                  title: "Oops",
                   subtitle: "Transaction Not Completed.",
                   goBackStatus: false
                 }
@@ -185,6 +193,19 @@ export default class SentMoneyScreen extends React.Component {
       recipientAddress: data.barcode
     });
   };
+
+  //TODO: func click
+  click_SecureAccountSendMoney() {
+    var mnemonic = this.state.waletteData[0].mnemonic.replace(/,/g, " ");
+    console.log({ mnemonic });
+    const secureAccount = new SecureAccount(mnemonic);
+
+    // secureAccount.secureTransaction({
+    //   senderAddress
+    // })
+
+    this.setState({ isSecureAccountPopup: false });
+  }
 
   render() {
     return (
@@ -313,7 +334,7 @@ export default class SentMoneyScreen extends React.Component {
                     name={this.state.txt2FA}
                     value={this.state.txt2FA}
                     keyboardType={"default"}
-                    placeholder="2FA gauth code"
+                    placeholder="2FA gauth token"
                     placeholderTextColor="#EA4336"
                     style={styles.input2FA}
                   />
@@ -331,10 +352,7 @@ export default class SentMoneyScreen extends React.Component {
                   <Button
                     transparent
                     danger
-                    onPress={() => {
-                      this.setState({ isSecureAccountPopup: false });
-                      alert("working");
-                    }}
+                    onPress={() => this.click_SecureAccountSendMoney()}
                   >
                     <Text>SEND</Text>
                   </Button>

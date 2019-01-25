@@ -35,9 +35,17 @@ ConnectivityTracker.init({
 const getNetwork = value => {
   return isNetwork;
 };
-
+  
 const encrypt = (data: any, password: string) => {
   let ciphertext = CryptoJS.AES.encrypt(data, password);
+  return ciphertext.toString();   
+};
+
+const encryptAgain = (data: any, password: string) => {
+  let ciphertext = CryptoJS.AES.encrypt(data, password, {
+    mode: CryptoJS.mode.ECB
+  });
+  console.log({ ciphertext });
   return ciphertext.toString();
 };
 
@@ -56,5 +64,6 @@ module.exports = {
   getUnixToNormaDateFormat,
   getNetwork,
   encrypt,
+  encryptAgain,
   decrypt
 };

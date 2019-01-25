@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SQLite from "react-native-sqlite-storage";
 import { colors, images, localDB } from "../../../app/constants/Constants";
-  
+
 export default class CreateTables extends Component {
   constructor(props) {
     super(props);
@@ -16,12 +16,6 @@ export default class CreateTables extends Component {
 
     db.transaction(function(txn) {
       //TODO: TABLE
-      txn.executeSql(
-        "CREATE TABLE IF NOT EXISTS " +
-          localDB.tableName.tblUser +  
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,firstName TEXT,lastName TEXT,email TEXT,country TEXT,cca2 TEXT,mobileNo TEXT,imagePath TEXT,lastUpdated TEXT)",
-        []  
-      );
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblWallet +
@@ -46,15 +40,10 @@ export default class CreateTables extends Component {
           " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,accountAddress TEXT,transactionHash TEXT,balance INTEGER,unit TEXT,fees INTEGER,transactionType TEXT,confirmationType TEXT,lastUpdated TEXT,FOREIGN KEY(accountAddress) REFERENCES tblAccount(address))",
         []
       );
-      //TODO: TRIGGER;
-      // txn.executeSql(
-      //   "CREATE TRIGGER insertLastBeforetblAccount BEFORE INSERT ON tblAccount  BEGIN SELECT * FROM tblAccount where accountType = 'UnKnown'  THEN RAISE (ABORT,'Invalid email address')END;END;",
-      //   []
-      // );  
       console.log("create database.");
     });
   }
-  
+
   errorCB(err) {
     console.log("SQL Error: " + err);
   }

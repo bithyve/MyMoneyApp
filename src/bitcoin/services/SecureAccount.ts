@@ -1,7 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import bip32 from "bip32";
 import bip39 from "bip39";
-import { ECPair } from "bitcoinjs-lib";
 import crypto from "crypto";
 import config from "../Config";
 import Bitcoin from "../utilities/Bitcoin";
@@ -40,11 +39,10 @@ class SecureAccount {
     return xpriv;
   }
 
-  public deriveChildXKey = (extendedKey: string, childIndex: number) => {
-    // non-functional; have to execute direct derivation from the master key
-
+  public deriveChildXKey = (extendedKey: string, childIndex: number = 0) => {
     const xKey = bip32.fromBase58(extendedKey, this.bitcoin.network);
-    return xKey.derivePath("/" + childIndex);
+    const childXKey = xKey.derivePath("m/" + childIndex);
+    return childXKey.toBase58();
   }
 
   public getPub = (extendedKey: string) => {
@@ -84,8 +82,7 @@ class SecureAccount {
   public createSecureMultiSig = ({ xpubs }, bhXpub: string) => {
     const childPrimaryPub = this.getPub(xpubs.primary);
     const childRecoveryPub = this.getPub(xpubs.recovery);
-    const childBHPub = this.getPub(bhXpub);
-
+    const childBHPub = this.getPub(this.deriveChildXKey(bhXpub));
     const pubs = [childPrimaryPub, childRecoveryPub, childBHPub];
     const multiSig = this.bitcoin.generateMultiSig(2, pubs);
 
@@ -97,13 +94,25 @@ class SecureAccount {
     let res;
     try {
       res = await axios.get(BH_SERVER.PROD + "/setup2FA");
-    } catch (err) {
+      const initMultiSig = this.createSecureMultiSig(assets, res.data.bhXpub);
+      const multiSig = {
+        scripts: {
+          redeem: initMultiSig.p2sh.redeem.output.toString("hex"),
+          witness: initMultiSig.p2wsh.redeem.output.toString("hex"),
+        },
+        address: initMultiSig.address,
+      };
       return {
+        statusCode: res.status,
+        data: { ...assets, setupData: res.data, multiSig },
+      };
+    } catch (err) {
+      console.log("An error occured:", err);
+      return {
+        statusCode: err.response.status,
         err: err.response.data,
       };
     }
-    const initMultiSig = this.createSecureMultiSig(assets, res.data.bhXpub);
-    return { ...assets, dataSA: res.data, multiSig: initMultiSig };
   }
 
   public validateSecureAccountSetup = async (
@@ -112,14 +121,16 @@ class SecureAccount {
     walletID: string,
   ) => {
     try {
-      const { data } = await axios.post(BH_SERVER.PROD, {
+      const res = await axios.post(BH_SERVER.PROD + "/validate2FASetup", {
         token,
         secret,
         walletID,
       });
-      return data;
+      return { statusCode: res.status, data: res.data };
     } catch (err) {
+      console.log("Error:", err.response.data);
       return {
+        statusCode: err.response.status,
         err: err.response.data,
       };
     }
@@ -130,7 +141,7 @@ class SecureAccount {
     recipientAddress,
     amount,
     primaryXpriv,
-    multiSig,
+    scripts,
     token,
     walletID,
     childIndex = 0,
@@ -139,17 +150,17 @@ class SecureAccount {
     recipientAddress: string;
     amount: number;
     primaryXpriv: string;
-    multiSig: any;
+    scripts: any;
     token: number;
     walletID: string;
     childIndex: number;
   }) => {
-    const balance = await this.bitcoin.checkBalance(senderAddress);
-    console.log({ balance });
-    if (parseInt(balance.final_balance, 10) <= amount) {
-      // logic for fee inclusion can also be accomodated
-      throw new Error("Insufficient balance");
-    }
+    // const balance = await this.bitcoin.checkBalance(senderAddress);
+    // console.log({ balance });
+    // if (parseInt(balance.final_balance, 10) <= amount) {
+    //   // logic for fee inclusion can also be accomodated
+    //   throw new Error("Insufficient balance");
+    // }
 
     console.log("---- Creating Transaction ----");
     const { inputs, txb } = await this.bitcoin.createTransaction(
@@ -164,8 +175,8 @@ class SecureAccount {
       inputs,
       txb,
       [bip32.fromBase58(primaryXpriv, this.bitcoin.network)],
-      multiSig.p2sh.redeem.output,
-      multiSig.p2wsh.redeem.output,
+      Buffer.from(scripts.redeem, "hex"),
+      Buffer.from(scripts.witness, "hex"),
     );
     console.log(
       "---- Transaction Signed by User (1st sig for 2/3 MultiSig)----",
@@ -173,22 +184,34 @@ class SecureAccount {
     const txHex = signedTxb.buildIncomplete().toHex();
     console.log(txHex);
 
+    let res: AxiosResponse;
     try {
-      const { data } = await axios.post(BH_SERVER.PROD + "/secureTranasction", {
+      res = await axios.post(BH_SERVER.PROD + "/secureTranasction", {
         walletID,
         token,
         txHex,
         childIndex,
       });
+
       console.log(
         "---- Transaction Signed by BH Server (2nd sig for 2/3 MultiSig)----",
       );
-      console.log(data.txHex);
+      console.log(res.data.txHex);
       console.log("------ Broadcasting Transaction --------");
-      const txHash = await this.bitcoin.broadcastLocally(data.txHex); // TODO: globally expose the tesnet RPC (via ngRox maybe)
-      console.log("Transaction successful, txHash:", txHash);
+      // const txHash = await this.bitcoin.broadcastLocally(data.txHex); // TODO: If API falls; globally expose the tesnet RPC (via ngRox maybe)
+      const { txid } = await this.bitcoin.broadcastTransaction(res.data.txHex);
+      console.log("Transaction successful, txHash:", txid);
+
+      return {
+        statusCode: res.status,
+        data: { txid },
+      };
     } catch (err) {
-      console.log("An error occured:", err.response.data);
+      console.log("An error occured:", err);
+      return {
+        statusCode: err.response.status,
+        err: err.response.data,
+      };
     }
   }
 }
@@ -299,12 +322,55 @@ class SmokeTest {
   // }
 
   public testSecureAccountFlow = async (token?: number) => {
-    const secureAccountData = await this.secureAccount.setupSecureAccount();
-    console.log(secureAccountData);
+    // STEP 1. Setting up a Secure Account
+    // const secureAccountData = await this.secureAccount.setupSecureAccount();
+    // console.log(secureAccountData);
+    // const scripts = {
+    //   redeem: secureAccountData.multiSig.p2sh.redeem.output.toString("hex"),
+    //   witness: secureAccountData.multiSig.p2wsh.redeem.output.toString("hex"),
+    // };
+    // console.log(scripts);
+
+    // STEP 2. Validating Secure Account Setup
+    const secret = "KZVXAKZVM4ZES4TPOFRTSOCIORETKQLC"; // logs from step 1
+    const walletID =
+      "dd2631ee3c5a0ab4da603f3ada062ef32b3c5acccd69567d120e9830d5c94a9b4aa63c598ec96faf85f781f4ae9e34f899ed27db2b86c05d3e91399eb04d3eae";
+
+    // const {
+    //   setupSuccessful,
+    // } = await this.secureAccount.validateSecureAccountSetup(
+    //   token,
+    //   secret,
+    //   walletID,
+    // );
+    // console.log({ setupSuccessful });
+
+    // STEP 3. Perform a secure transaction (pre fund the multiSig)
+
+    const multiSig = {
+      address: "2N6gXd8pP11inu7zg9nCDPhzE6PKDkv9vMP",
+      scripts: {
+        redeem:
+          "00207387ad8382818f7e22e53cc4306ddbcaf20ab2cc75737989aae9a7accf244a2d",
+        witness:
+          "522103fd74cc5d84670c2c824cc0baf9d54a0192381b755da4fba63d3369642ab368fa2103b8a377bcf4bf80b78cc6a0acaba6f2024c045d84acbe008c0b5ff1e953251d092102c63ffb98b4b9f36f60795e93da604f78e2d1dedcea709f46baf63a78338992b953ae",
+      },
+    };
+    const res = await this.secureAccount.secureTransaction({
+      senderAddress: multiSig.address,
+      recipientAddress: "2N4qBb5f1KyfbpHxtLM86QgbZ7qcxsFf9AL",
+      amount: 4500,
+      primaryXpriv:
+        "tprv8iyKeMegiswEQ9BNpEW7BRVyNGbjPGPBM7BwCs2qsPMK6v1CFfDhj86FnCe9kSiRbb8xjKp6PgXy2goLKajZSyNp71zkLjFFUpo6gwZFfgh",
+      scripts: multiSig.scripts,
+      token,
+      childIndex: 0,
+      walletID,
+    });
   }
-}
+}    
 
 ////// SMOKE TEST ZONE //////
 // const smokeTest = new SmokeTest();
 // // smokeTest.testSecureTransaction(parseInt(process.argv[2], 10));
-// smokeTest.testSecureAccountFlow();
+// smokeTest.testSecureAccountFlow(parseInt(process.argv[2], 10));

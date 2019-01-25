@@ -29,31 +29,33 @@ import Toast from "react-native-simple-toast";
 //TODO: Custome Pages
 import {
   colors,
-  images,  
+  images,
   msg,
   apiary
 } from "../../../../../app/constants/Constants";
-  
-export default class SecureSecretKeyScreen extends React.Component<any,any> {
-  constructor(props:any) {
+
+export default class SecureSecretKeyScreen extends React.Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       qrData: "",
-      secretKey: "",
-      bhAddress: "",
-      data: []
+      secret: "",
+      bhXpub: "",
+      data: [],
+      mnemonic: null
     };
   }
 
   componentWillMount() {
     const { navigation } = this.props;
     let data = navigation.getParam("data");
-    console.log(JSON.stringify(data));
+
     this.setState({
       data: data,
-      qrData: data.qrData,
-      secretKey: data.secret,
-      bhAddress: data.bhAddress
+      mnemonic: navigation.getParam("mnemonic"),
+      qrData: data.setupData.qrData,
+      secret: data.setupData.secret,
+      bhXpub: data.setupData.bhXpub
     });
   }
 
@@ -102,9 +104,9 @@ export default class SecureSecretKeyScreen extends React.Component<any,any> {
                 innerEyeStyle="square"
                 padding={1}
               />
-              <Text style={[styles.txtSecretKeyTitle]}>Secret Key</Text>
+              <Text style={[styles.txtSecretKeyTitle]}>Secret</Text>
               <TouchableOpacity onPress={() => this.click_CopySecretKey()}>
-                <Text>{this.state.secretKey}</Text>
+                <Text>{this.state.secret}</Text>
               </TouchableOpacity>
               <Text style={styles.txtStaticMsg} note>
                 {msg.secretKeyMsg}
@@ -122,7 +124,8 @@ export default class SecureSecretKeyScreen extends React.Component<any,any> {
                 }}
                 onPress={() =>
                   this.props.navigation.push("ValidateSecureAccountScreen", {
-                    data: this.state.data
+                    data: this.state.data,
+                    mnemonic: this.state.mnemonic
                   })
                 }
               >

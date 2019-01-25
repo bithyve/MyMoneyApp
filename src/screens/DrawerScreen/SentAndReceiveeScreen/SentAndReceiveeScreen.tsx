@@ -75,7 +75,7 @@ export default class SentAndReceiveeScreen extends React.Component {
               privateKey: privateKeyValue
             });
           } else {
-            Alert.alert("Address not found!!");
+            Alert.alert("Address not found");
           }
         }
       );

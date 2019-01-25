@@ -2,7 +2,7 @@
 var errorMessage = {
   cancel: "CANCEL",
   ok: "OK",
-  thanks: "Thanks!!",
+  thanks: "Thanks",
   logout_Title: "Logout",
   logout_message: "Are you sure you want to logout?",
   aLERT_Title: "Message",

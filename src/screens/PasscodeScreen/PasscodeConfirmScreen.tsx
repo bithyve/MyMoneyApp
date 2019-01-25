@@ -21,12 +21,10 @@ var dbOpration = require("../../app/manager/database/DBOpration");
 var utils = require("../../app/constants/Utils");
 import renderIf from "../../app/constants/validation/renderIf";
 import Singleton from "../../app/constants/Singleton";
-
 let isNetwork;
 
-//TODO: Wallets
+//TODO: RegularAccount
 import RegularAccount from "../../bitcoin/services/RegularAccount";
-
 const { height, width } = Dimensions.get("window");
 
 export default class PasscodeConfirmScreen extends Component {
@@ -36,7 +34,7 @@ export default class PasscodeConfirmScreen extends Component {
       mnemonicValues: [],
       status: "choice",
       pincode: "",
-      success: "Enter a PinCode!!",
+      success: "Enter a PinCode",
       isLoading: false
     };
     isNetwork = utils.getNetwork();
@@ -71,7 +69,7 @@ export default class PasscodeConfirmScreen extends Component {
     this.setState({
       status: "confirm",
       pincode: code,
-      success: "Confirm your PinCode!!"
+      success: "Confirm your PinCode"
     });
     this.flipCard();
   }
@@ -102,7 +100,7 @@ export default class PasscodeConfirmScreen extends Component {
       this.dropdown.alertWithType(
         "error",
         "Error",
-        "Oh!! Please enter correct password"
+        "Oh Please enter correct password"
       );
     }
   }
@@ -144,17 +142,17 @@ export default class PasscodeConfirmScreen extends Component {
           const resultCreateAccountSaving = await dbOpration.insertCreateAccount(
             localDB.tableName.tblAccount,
             fulldate,
-            utils.encrypt(address, code),
+            address,
             "BTC",
-            utils.encrypt("Savings", code),
+            "Savings",
             ""
           );
           const resultCreateAccount = await dbOpration.insertCreateAccount(
             localDB.tableName.tblAccount,
             fulldate,
-            utils.encrypt(address, code),
             "",
-            utils.encrypt("UnKnown", code),
+            "",
+            "UnKnown",
             ""
           );
           if (resultCreateAccount) {

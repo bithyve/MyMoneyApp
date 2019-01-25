@@ -15,7 +15,7 @@ class MyMoney extends React.Component {
   constructor(props) {
     super(props);
     this.state = { status: true, isStartPage: "OnBoardingNavigator" };
-  }
+  }   
 
   onComplited(status, pageName) {
     this.setState({
@@ -36,7 +36,7 @@ class MyMoney extends React.Component {
           onComplited={(status: boolean, pageName: string) =>
             this.onComplited(status, pageName)
           }
-        />  
+        />
       ) : (
         <AppContainer />
       )
