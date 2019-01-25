@@ -62,21 +62,21 @@ export default class CreatorJointAccountScreen extends React.Component {
         //const { mnemonic, address, keyPair } = await WalletService.createWallet();
 
         let Joint = {
-            CName: "usr1",
-            MName: "usr2",
-            WName: "Jnt",
-            CPkey: "cpub",
-            Mpkey: "mpub",
-            Addrs: "adrs"
+            CN: "usr1",    //creator name
+            MN: "usr2",    //merger name
+            WN: "Jnt",     //wallet name
+            CPky: "cpub", //creator public key
+            MPky: "mpub", //merger public key
+            Add: "adrs"  //multisig address
           }
 
-        Joint.CName = this.props.navigation.getParam("Name")
-        Joint.WName = this.props.navigation.getParam("WalletName")
-        Joint.CPkey = keyPair.publicKey.toString('hex')
+        Joint.CN = this.props.navigation.getParam("Name")
+        Joint.WN = this.props.navigation.getParam("WalletName")
+        Joint.CPky = keyPair.publicKey.toString('hex')
         this.storeData("Joint",JSON.stringify(Joint))
 
-        console.log(Joint.CPkey)
-        console.log(Joint.CName)
+        console.log(Joint.CPky)
+        console.log(Joint.CN)
         this.setState({ JsonString: JSON.stringify(Joint) })
         console.log(JSON.stringify(Joint))
 

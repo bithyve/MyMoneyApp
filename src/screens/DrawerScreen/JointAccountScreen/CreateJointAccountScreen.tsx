@@ -39,6 +39,7 @@ export default class CreateJointAccountScreen extends React.Component {
         this.setState({
             JsonString: data.barcode
         });
+        this.props.navigation.navigate("MergeConfirmJointAccountScreen",{JsonString:data.barcode})
     };
 
     render() {
@@ -51,7 +52,7 @@ export default class CreateJointAccountScreen extends React.Component {
 
                     <Header transparent>
                         <Left>
-                            <Button transparent onPress={() => this.props.navigation.goBack()}>
+                            <Button transparent onPress={() => this.props.navigation.goBack(null)}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
                             </Button>
                         </Left>
