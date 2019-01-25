@@ -15,6 +15,7 @@ import { Container, Header, Title, Content, Button, Left, Right, Body, Text } fr
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AsyncStorage } from "react-native"
 import { QRCode } from "react-native-custom-qr-codes";
+import Toast from "react-native-simple-toast";
 
 
 //TODO: Custome Pages
@@ -37,6 +38,7 @@ export default class AcknowledgeJointAccountScreen extends React.Component {
 	}
 
 	retrieveResolveData = async () => {
+		
 		try {
 			const value = await AsyncStorage.getItem("Joint");
 			if (value !== null) {
@@ -52,7 +54,7 @@ export default class AcknowledgeJointAccountScreen extends React.Component {
 		}
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.retrieveResolveData()
 	}
 
@@ -79,7 +81,7 @@ export default class AcknowledgeJointAccountScreen extends React.Component {
 						<Right></Right>
 					</Header>
 					<Content>
-						{/* <View style={styles.viewShowQRcode}>
+						<View style={styles.viewShowQRcode}>
 							<QRCode
 								logo={images.appIcon}
 								content={this.state.JsonString}
@@ -95,7 +97,7 @@ export default class AcknowledgeJointAccountScreen extends React.Component {
 									{this.state.JsonString}
 								</Text>
 							</TouchableOpacity>
-						</View> */}
+						</View>
 						<Text>
 							Please ask other party to scan the following code by going into joint account and click merge button
 						</Text>

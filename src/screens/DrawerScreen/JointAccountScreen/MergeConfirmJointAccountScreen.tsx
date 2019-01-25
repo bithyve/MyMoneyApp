@@ -53,8 +53,8 @@ export default class MergeConfirmJointAccountScreen extends React.Component {
         }
 	}
 	
-	handlePress(){
-		this.CreateMultisigAndStore(this.props.navigation.getParam('JsonString', "Empty"),this.state.Name)
+	async handlePress(){
+		await this.CreateMultisigAndStore(this.props.navigation.getParam('JsonString', "Empty"),this.state.Name)
 		this.props.navigation.push("AcknowledgeJointAccountScreen")
 	}
 
