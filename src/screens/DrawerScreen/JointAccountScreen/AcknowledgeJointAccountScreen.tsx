@@ -45,6 +45,8 @@ export default class AcknowledgeJointAccountScreen extends React.Component {
 				let Joint = JSON.parse(value)
 				Joint.p2sh = ""
 				Joint.p2wsh = ""
+				Joint.CPky = ""
+				Joint.Typ = "ACK"
 				this.setState({
 					JsonString: JSON.stringify(Joint)
 				})
@@ -85,7 +87,7 @@ export default class AcknowledgeJointAccountScreen extends React.Component {
 							<QRCode
 								logo={images.appIcon}
 								content={this.state.JsonString}
-								size={Dimensions.get("screen").width - 40}
+								size={Dimensions.get("screen").width - 10}
 								codeStyle="square"
 								outerEyeStyle="square"
 								innerEyeStyle="square"

@@ -77,6 +77,7 @@ export default class MergeConfirmJointAccountScreen extends React.Component {
 		Joint.p2wsh = p2wsh
 		Joint.p2sh  = p2sh
 		Joint.Add  = address
+		Joint.Typ  = "IMP"
 		await this.storeData("Joint",JSON.stringify(Joint))
 	}
 

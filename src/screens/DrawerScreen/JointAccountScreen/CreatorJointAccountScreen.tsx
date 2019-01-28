@@ -69,14 +69,15 @@ export default class CreatorJointAccountScreen extends React.Component {
             MPky: "mpub", //merger public key
             p2wsh: "",
             p2sh: "",
-            Add: "adrs"  //multisig address
+            Add: "adrs",  //multisig address
+            Typ: ""
           }
 
         Joint.CN = this.props.navigation.getParam("Name")
         Joint.WN = this.props.navigation.getParam("WalletName")
         Joint.CPky = keyPair.publicKey.toString('hex')
         this.storeData("Joint",JSON.stringify(Joint))
-
+        Joint.Typ = "CNF"
         console.log(Joint.CPky)
         console.log(Joint.CN)
         this.setState({ JsonString: JSON.stringify(Joint) })
