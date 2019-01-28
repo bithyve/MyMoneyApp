@@ -72,6 +72,7 @@ export default class AccountDetailsScreen extends React.Component<
       confirmPopupData: [],
       successOkPopupData: [],
       tranDetails: [],
+      arr_transferAccountList: [],
       refreshing: false,
       isLoading: false,
       isNoTranstion: false,
@@ -94,7 +95,7 @@ export default class AccountDetailsScreen extends React.Component<
       data: data,
       waletteData: walletsData
     });
-  }   
+  }
 
   componentDidMount() {
     this.willFocusSubscription = this.props.navigation.addListener(
@@ -126,7 +127,25 @@ export default class AccountDetailsScreen extends React.Component<
     );
     if (isNetwork) {
       //TODO: for transfer btn and details
-      if (resultAccount.temp.length > 2) {
+      if (
+        resultAccount.temp.length > 2 &&
+        parseFloat(this.state.data.balance) > 0
+      ) {
+        var resultAccount = await dbOpration.readAccountTablesData(
+          localDB.tableName.tblAccount
+        );
+        resultAccount.temp.pop();
+        for (var i = 0; i < resultAccount.temp.length; i++) {
+          if (
+            resultAccount.temp[i].accountType === this.state.data.accountType
+          ) {
+            resultAccount.temp.splice(i, 1);
+            break;
+          }
+        }
+        this.setState({
+          arr_transferAccountList: resultAccount.temp
+        });
         this.setState({
           isTransferBtn: true
         });
@@ -333,15 +352,11 @@ export default class AccountDetailsScreen extends React.Component<
                         transferAmountPopupDAta: [
                           {
                             status: true,
-                            subtitle: "Savings to",
-                            data: [
-                              {
-                                name: "Secure"
-                              },
-                              {
-                                name: "Vault"
-                              }
-                            ]
+                            subtitle:
+                              "From " +
+                              this.state.data.accountType.toLowerCase() +
+                              " to",
+                            data: this.state.arr_transferAccountList
                           }
                         ]
                       });

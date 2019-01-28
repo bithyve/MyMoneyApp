@@ -45,7 +45,7 @@ import SCLAlertOk from "../../../../../app/custcompontes/alert/SCLAlertOk";
 //TODO: Wallets
 import RegularAccount from "../../../../../bitcoin/services/RegularAccount";
 //TODO: SecureAccount
-import SecureAccount from "../../../../../bitcoin/services/SecureAccount";
+import secureAccount from "../../../../../bitcoin/services/SecureAccount";
 
 export default class ValidateSecureAccountScreen extends React.Component {
   constructor(props: any) {
@@ -97,7 +97,6 @@ export default class ValidateSecureAccountScreen extends React.Component {
     try {
       const dateTime = Date.now();
       const fulldate = Math.floor(dateTime / 1000);
-      const secureAccount = new SecureAccount(this.state.mnemonic);
       const res = await secureAccount.validateSecureAccountSetup(
         this.state.tokenKey,
         this.state.data.setupData.secret,

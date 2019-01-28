@@ -44,14 +44,11 @@ import AccountDetailsOnboardingScreen from "../../screens/DrawerScreen/AccountDe
 import SecureAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/SecureAccountScreen";
 import SecureSecretKeyScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/SecureSecretKeyScreen/SecureSecretKeyScreen";
 import ValidateSecureAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/ValidateSecureAccountScreen/ValidateSecureAccountScreen";
-import CreateJointAccountScreen from '../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreateJointAccountScreen';
-import CreatorJointAccountScreen from '../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreatorJointAccountScreen';
-   
-  
+import CreateJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreateJointAccountScreen";
+import CreatorJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreatorJointAccountScreen";
+
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
-
-
 
 //TODO: StackNavigator
 
@@ -80,8 +77,6 @@ const OnBoardingRouter = createStackNavigator(
     initialRouteName: "OnBoarding"
   }
 );
-
-
 
 //TODO: StackNavigator:LoginRouter
 const LoginRouter = createStackNavigator(
@@ -115,11 +110,11 @@ const AccountDetailsOnboardingRouter = createStackNavigator(
       screen: ValidateSecureAccountScreen,
       navigationOptions: { header: null }
     },
-    CreateJointAccountScreen:{
+    CreateJointAccountScreen: {
       screen: CreateJointAccountScreen,
       navigationOptions: { header: null }
     },
-    CreatorJointAccountScreen:{
+    CreatorJointAccountScreen: {
       screen: CreatorJointAccountScreen,
       navigationOptions: { header: null }
     }
@@ -230,207 +225,103 @@ const LeftDrawerNavigator = createDrawerNavigator(
 //TODO: RootNavigator:createRootNavigator
 export const createRootNavigator = (
   signedIn = false,
-  screenName = "OnBoardingNavigator"
+  screenName = "PasscodeScreen"
 ) => {
-  if (screenName == "OnBoardingNavigator") {
-    return createStackNavigator(
-      {
-        PasscodeScreen: {
-          screen: PasscodeScreen,
-          navigationOptions: { header: null }
-        },
-        OnBoardingNavigator: {
-          screen: OnBoardingRouter,
-          navigationOptions: { header: null }
-        },
-        PasscodeConfirmScreen: {
-          screen: PasscodeConfirmScreen,
-          navigationOptions: { header: null }
-        },
-        TabbarBottom: {
-          screen: LeftDrawerNavigator,
-          navigationOptions: { header: null }
-        },
-        //Drwaer Navigation
-        AccountSettingScreen: {
-          screen: AccountSettingScreen,
-          navigationOptions: { header: null }
-        },
-        SecurityScreen: {
-          screen: SecurityScreen,
-          navigationOptions: { header: null }
-        },
-        HelpScreen: {
-          screen: HelpScreen,
-          navigationOptions: { header: null }
-        },
-        InviteScreen: {
-          screen: InviteScreen,
-          navigationOptions: { header: null }
-        },
-        BankAccountScreen: {
-          screen: BankAccountScreen,
-          navigationOptions: { header: null }
-        },
-        LogoutScreen: {
-          screen: LogoutScreen,
-          navigationOptions: { header: null }
-        },
-        NotificationScreen: {
-          screen: NotificationScreen,
-          navigationOptions: { header: null }
-        },
-        //SentMoney And Receive Money
-        SentAndReceiveeScreen: {
-          screen: SentAndReceiveeScreen,
-          navigationOptions: {
-            header: null
-          }
-        },
-        SentMoneyScreen: {
-          screen: SentMoneyScreen,
-          navigationOptions: { header: null }
-        },
-        ReceiveMoneyScreen: {
-          screen: ReceiveMoneyScreen,
-          navigationOptions: { header: null }
-        },
-        QrcodeScannerScreen: {
-          screen: QrcodeScannerScreen,
-          navigationOptions: { header: null }
-        },
-        //Backup Phrase
-        BackupPhraseScreen: {
-          screen: BackupPhraseScreen,
-          navigationOptions: { header: null }
-        },
-        VerifyBackupPhraseScreen: {
-          screen: VerifyBackupPhraseScreen,
-          navigationOptions: { header: null }
-        },
-        //AccountDetailsScrenn
-        AccountsDetailsScreen: {
-          screen: AccountsDetailsScreen,
-          navigationOptions: { header: null }
-        },
-        //RecentTransactionsScreen
-        RecentTransactionsScreen: {
-          screen: RecentTransactionsScreen,
-          navigationOptions: { header: null }
-        },
-        //AccountDetailsOnboardingRouter
-        AccountDetailsOnboardingRouter: {
-          screen: AccountDetailsOnboardingRouter,
-          navigationOptions: { header: null }
+  return createStackNavigator(
+    {
+      PasscodeScreen: {
+        screen: PasscodeScreen,
+        navigationOptions: { header: null }
+      },
+      OnBoardingNavigator: {
+        screen: OnBoardingRouter,
+        navigationOptions: { header: null }
+      },
+      PasscodeConfirmScreen: {
+        screen: PasscodeConfirmScreen,
+        navigationOptions: { header: null }
+      },
+      TabbarBottom: {
+        screen: LeftDrawerNavigator,
+        navigationOptions: { header: null }
+      },
+      //Drwaer Navigation
+      AccountSettingScreen: {
+        screen: AccountSettingScreen,
+        navigationOptions: { header: null }
+      },
+      SecurityScreen: {
+        screen: SecurityScreen,
+        navigationOptions: { header: null }
+      },
+      HelpScreen: {
+        screen: HelpScreen,
+        navigationOptions: { header: null }
+      },
+      InviteScreen: {
+        screen: InviteScreen,
+        navigationOptions: { header: null }
+      },
+      BankAccountScreen: {
+        screen: BankAccountScreen,
+        navigationOptions: { header: null }
+      },
+      LogoutScreen: {
+        screen: LogoutScreen,
+        navigationOptions: { header: null }
+      },
+      NotificationScreen: {
+        screen: NotificationScreen,
+        navigationOptions: { header: null }
+      },
+      //SentMoney And Receive Money
+      SentAndReceiveeScreen: {
+        screen: SentAndReceiveeScreen,
+        navigationOptions: {
+          header: null
         }
       },
-      {
-        initialRouteName: signedIn ? "OnBoardingNavigator" : "PasscodeScreen"
-        // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
-      }
-    );
-  } else {
-    return createStackNavigator(
-      {
-        PasscodeScreen: {
-          screen: PasscodeScreen,
-          navigationOptions: { header: null }
-        },
-        OnBoardingNavigator: {
-          screen: OnBoardingRouter,
-          navigationOptions: { header: null }
-        },
-        PasscodeConfirmScreen: {
-          screen: PasscodeConfirmScreen,
-          navigationOptions: { header: null }
-        },
-        LoginNavigator: {
-          screen: LoginRouter,
-          navigationOptions: { header: null }
-        },
-        TabbarBottom: {
-          screen: LeftDrawerNavigator,
-          navigationOptions: { header: null }
-        },
-        //Drwaer Navigation
-        AccountSettingScreen: {
-          screen: AccountSettingScreen,
-          navigationOptions: { header: null }
-        },
-        SecurityScreen: {
-          screen: SecurityScreen,
-          navigationOptions: { header: null }
-        },
-        HelpScreen: {
-          screen: HelpScreen,
-          navigationOptions: { header: null }
-        },
-        InviteScreen: {
-          screen: InviteScreen,
-          navigationOptions: { header: null }
-        },
-        BankAccountScreen: {
-          screen: BankAccountScreen,
-          navigationOptions: { header: null }
-        },
-        LogoutScreen: {
-          screen: LogoutScreen,
-          navigationOptions: { header: null }
-        },
-        NotificationScreen: {
-          screen: NotificationScreen,
-          navigationOptions: { header: null }
-        },
-        //SentMoney And Receive Money
-        SentAndReceiveeScreen: {
-          screen: SentAndReceiveeScreen,
-          navigationOptions: {
-            header: null
-          }
-        },
-        SentMoneyScreen: {
-          screen: SentMoneyScreen,
-          navigationOptions: { header: null }
-        },
-        ReceiveMoneyScreen: {
-          screen: ReceiveMoneyScreen,
-          navigationOptions: { header: null }
-        },
-        QrcodeScannerScreen: {
-          screen: QrcodeScannerScreen,
-          navigationOptions: { header: null }
-        },
-        //Backup Phrase
-        BackupPhraseScreen: {
-          screen: BackupPhraseScreen,
-          navigationOptions: { header: null }
-        },
-        VerifyBackupPhraseScreen: {
-          screen: VerifyBackupPhraseScreen,
-          navigationOptions: { header: null }
-        },
-        //AccountDetailsScrenn
-        AccountsDetailsScreen: {
-          screen: AccountsDetailsScreen,
-          navigationOptions: { header: null }
-        },
-        //RecentTransactionsScreen
-        RecentTransactionsScreen: {
-          screen: RecentTransactionsScreen,
-          navigationOptions: { header: null }
-        },
-        //AccountDetailsOnboardingRouter
-        AccountDetailsOnboardingRouter: {
-          screen: AccountDetailsOnboardingRouter,
-          navigationOptions: { header: null }
-        }
+      SentMoneyScreen: {
+        screen: SentMoneyScreen,
+        navigationOptions: { header: null }
       },
-      {
-        initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"
-        //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
-        //initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+      ReceiveMoneyScreen: {
+        screen: ReceiveMoneyScreen,
+        navigationOptions: { header: null }
+      },
+      QrcodeScannerScreen: {
+        screen: QrcodeScannerScreen,
+        navigationOptions: { header: null }
+      },
+      //Backup Phrase
+      BackupPhraseScreen: {
+        screen: BackupPhraseScreen,
+        navigationOptions: { header: null }
+      },
+      VerifyBackupPhraseScreen: {
+        screen: VerifyBackupPhraseScreen,
+        navigationOptions: { header: null }
+      },
+      //AccountDetailsScrenn
+      AccountsDetailsScreen: {
+        screen: AccountsDetailsScreen,
+        navigationOptions: { header: null }
+      },
+      //RecentTransactionsScreen
+      RecentTransactionsScreen: {
+        screen: RecentTransactionsScreen,
+        navigationOptions: { header: null }
+      },
+      //AccountDetailsOnboardingRouter
+      AccountDetailsOnboardingRouter: {
+        screen: AccountDetailsOnboardingRouter,
+        navigationOptions: { header: null }
       }
-    );
-  }
+    },  
+    {
+      initialRouteName: signedIn ? "OnBoardingNavigator" : screenName
+      // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
+      // initialRouteName: signedIn ? "TabbarBottom" : "TabbarBottom"
+    }
+  );
 };

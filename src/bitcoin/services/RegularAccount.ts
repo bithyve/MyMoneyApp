@@ -65,7 +65,6 @@ class RegularAccount {
     const txHex = txb.build().toHex();
     const res = await this.bitcoin.broadcastTransaction(txHex);
     console.log("---- Transaction Broadcasted ----");
-
     return res;
   }
 }

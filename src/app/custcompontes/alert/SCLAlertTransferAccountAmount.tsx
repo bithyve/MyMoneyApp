@@ -71,7 +71,7 @@ export default class SCLAlertTransferAccountAmount extends Component<
               onPress={() => {
                 if (this.state.amount > 0) {
                   this.props.onPress(
-                    item.name,
+                    item.accountType,   
                     this.state.amount,
                     "Amount " +
                       this.state.amount +
@@ -82,7 +82,7 @@ export default class SCLAlertTransferAccountAmount extends Component<
                 }
               }}
             >
-              {item.name}
+              {item.accountType}
             </SCLAlertButton>
           )}
           keyExtractor={(item, index) => index}

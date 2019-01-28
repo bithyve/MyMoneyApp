@@ -2,7 +2,7 @@
 import React from "react";
 import { AppRegistry } from "react-native";
 import { createAppContainer } from "react-navigation";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, AppState } from "react-native";
 
 import App from "./App";
 import "./shim";
@@ -14,8 +14,35 @@ import EncryptionScreen from "./src/screens/EncryptionScreen/EncryptionScreen";
 class MyMoney extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { status: true, isStartPage: "OnBoardingNavigator" };
-  }   
+    this.state = {
+      status: true,
+      isStartPage: "OnBoardingNavigator",
+      appState: AppState.currentState
+    };
+  }
+
+  componentDidMount() {
+    AppState.addEventListener("change", this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener("change", this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = async nextAppState => {
+    var value = await AsyncStorage.getItem("PasscodeCreateStatus");
+    let status = JSON.parse(value);
+    if (status) {
+      this.setState({ appState: AppState.currentState });
+      if (this.state.appState.match(/inactive|background/)) {
+        console.log({ status });
+        this.setState({
+          status: true
+        });  
+        console.log("forgound = " + this.state.status, this.state.isStartPage);
+      }
+    }
+  };
 
   onComplited(status, pageName) {
     this.setState({
@@ -23,23 +50,19 @@ class MyMoney extends React.Component {
       isStartPage: pageName
     });
   }
-
   render() {
     const Layout = createRootNavigator(
       this.state.status,
       this.state.isStartPage
     );
+    console.log("first = " + this.state.status, this.state.isStartPage);
     const AppContainer = createAppContainer(Layout);
     return this.state.status ? (
-      this.state.isStartPage == "OnBoardingNavigator" ? (
-        <EncryptionScreen
-          onComplited={(status: boolean, pageName: string) =>
-            this.onComplited(status, pageName)
-          }
-        />
-      ) : (
-        <AppContainer />
-      )
+      <EncryptionScreen
+        onComplited={(status: boolean, pageName: string) =>
+          this.onComplited(status, pageName)
+        }
+      />
     ) : (
       <AppContainer />
     );

@@ -25,7 +25,7 @@ import {
   Label
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { SkypeIndicator } from "react-native-indicators";
+import Loader from "react-native-modal-loader";
 import Dialog, {
   SlideAnimation,
   DialogTitle,
@@ -51,14 +51,14 @@ import renderIf from "../../../../app/constants/validation/renderIf";
 import RegularAccount from "../../../../bitcoin/services/RegularAccount";
 
 //TODO: SecureAccount
-import SecureAccount from "../../../../bitcoin/services/SecureAccount";
+import secureAccount from "../../../../bitcoin/services/SecureAccount";
 
 export default class SentMoneyScreen extends React.Component {
   constructor() {
     super();
     this.state = {
       data: [],
-      waletteData: [],
+      walletJSON: [],
       alertPopupData: [],
       recipientAddress: "",
       amount: "",
@@ -72,13 +72,10 @@ export default class SentMoneyScreen extends React.Component {
   componentWillMount() {
     const { navigation } = this.props;
     let data = navigation.getParam("data");
-    let waletteJson = navigation.getParam("waletteData");
-
-    console.log({ data, waletteJson });
-
+    let walletJSON = navigation.getParam("waletteData");
     this.setState({
       data: data,
-      waletteData: waletteJson
+      walletJSON: walletJSON
     });
   }
 
@@ -105,7 +102,7 @@ export default class SentMoneyScreen extends React.Component {
     if (
       this.state.recipientAddress.length < 0 ||
       this.state.amount.length < 0 ||
-      val == ""
+      val == ""  
     ) {
       this.setState({
         sentBtnColor: "gray",
@@ -116,32 +113,33 @@ export default class SentMoneyScreen extends React.Component {
 
   //TODO: func click_SentMoney
   async click_SentMoney() {
+    let isLoading = false;
     if (this.state.data.accountType == "Secure") {
       this.setState({ isSecureAccountPopup: true });
     } else {
+      isLoading = true;
       this.setState({
-        isLoading: true
+        isLoading: isLoading
       });
       var recAddress = this.state.recipientAddress;
       var amountValue = this.state.amount;
-      console.log("first amount=", amountValue);
       const dateTime = Date.now();
       const lastUpdateDate = Math.floor(dateTime / 1000);
       const { navigation } = this.props;
-      console.log("address =  " + navigation.getParam("address"));
-      console.log("keypair = " + navigation.getParam("privateKey"));
-      const { success, txid } = await RegularAccount.transfer(
+      const res = await RegularAccount.transfer(
         navigation.getParam("address"),
         recAddress,
         parseFloat(amountValue) * 1e8,
-        navigation.getParam("privateKey")
+        this.state.walletJSON[0].privateKey
       );
-      if (success) {
+
+      console.log({ res });
+
+      if (res.statusCode == 200) {
         const bal = await RegularAccount.getBalance(
           navigation.getParam("address")
         );
         if (bal) {
-          console.log("change bal = ", bal);
           const resultUpdateTblAccount = await dbOpration.updateTableData(
             localDB.tableName.tblAccount,
             bal.final_balance / 1e8,
@@ -149,35 +147,40 @@ export default class SentMoneyScreen extends React.Component {
             lastUpdateDate
           );
           if (resultUpdateTblAccount) {
-            this.setState({
-              alertPopupData: [
-                {
-                  theme: "success",
-                  status: true,
-                  icon: "smile",
-                  title: "Success",
-                  subtitle: "Transaction Successfully Completed.",
-                  goBackStatus: true
-                }
-              ]
-            });
+            (isLoading = false),
+              this.setState({
+                alertPopupData: [
+                  {
+                    theme: "success",
+                    status: true,
+                    icon: "smile",
+                    title: "Success",
+                    subtitle: "Transaction Successfully Completed.",
+                    goBackStatus: true
+                  }
+                ]
+              });
           } else {
-            this.setState({
-              alertPopupData: [
-                {
-                  theme: "danger",
-                  status: true,
-                  icon: "frown",
-                  title: "Oops",
-                  subtitle: "Transaction Not Completed.",
-                  goBackStatus: false
-                }
-              ]
-            });
+            (isLoading = false),
+              this.setState({
+                alertPopupData: [
+                  {
+                    theme: "danger",
+                    status: true,
+                    icon: "frown",
+                    title: "Oops",
+                    subtitle: "Transaction Not Completed.",
+                    goBackStatus: false
+                  }
+                ]
+              });
           }
         }
       }
     }
+    this.setState({
+      isLoading: isLoading
+    });
   }
 
   //TODO: func openQRCodeScanner
@@ -195,14 +198,73 @@ export default class SentMoneyScreen extends React.Component {
   };
 
   //TODO: func click
-  click_SecureAccountSendMoney() {
-    var mnemonic = this.state.waletteData[0].mnemonic.replace(/,/g, " ");
-    console.log({ mnemonic });
-    const secureAccount = new SecureAccount(mnemonic);
-
-    // secureAccount.secureTransaction({
-    //   senderAddress
-    // })
+  async click_SecureAccountSendMoney() {
+    let isLoading = true;
+    this.setState({
+      isLoading: isLoading
+    });
+    var mnemonic = this.state.walletJSON[0].mnemonic.replace(/,/g, " ");
+    var amountValue = this.state.amount;
+    var tokenNo = this.state.txt2FA;
+    const dateTime = Date.now();
+    const lastUpdateDate = Math.floor(dateTime / 1000);
+    const { navigation } = this.props;
+    const data = JSON.parse(this.state.data.additionalInfo);
+    const res = await secureAccount.secureTransaction({
+      senderAddress: data.multiSig.address,
+      recipientAddress: this.state.recipientAddress,
+      amount: parseFloat(amountValue) * 1e8,
+      primaryXpriv: data.xpriv.primary,
+      scripts: data.multiSig.scripts,
+      token: parseInt(tokenNo),
+      walletID: data.walletID,
+      childIndex: 0
+    });
+    if (res.statusCode == 200) {
+      const bal = await RegularAccount.getBalance(
+        navigation.getParam("address")
+      );
+      if (bal) {
+        const resultUpdateTblAccount = await dbOpration.updateTableData(
+          localDB.tableName.tblAccount,
+          bal.final_balance / 1e8,
+          navigation.getParam("address"),
+          lastUpdateDate
+        );
+        if (resultUpdateTblAccount) {
+          isLoading = false;
+          this.setState({
+            alertPopupData: [
+              {
+                theme: "success",
+                status: true,
+                icon: "smile",
+                title: "Success",
+                subtitle: "Transaction Successfully Completed.",
+                goBackStatus: true
+              }
+            ]
+          });
+        } else {
+          isLoading = false;
+          this.setState({
+            alertPopupData: [
+              {
+                theme: "danger",
+                status: true,
+                icon: "frown",
+                title: "Oops",
+                subtitle: "Transaction Not Completed.",
+                goBackStatus: false
+              }
+            ]
+          });
+        }
+      }
+    }
+    this.setState({
+      isLoading: isLoading
+    });
 
     this.setState({ isSecureAccountPopup: false });
   }
@@ -337,6 +399,8 @@ export default class SentMoneyScreen extends React.Component {
                     placeholder="2FA gauth token"
                     placeholderTextColor="#EA4336"
                     style={styles.input2FA}
+                    onChangeText={val => this.setState({ txt2FA: val })}
+                    onChange={val => this.setState({ txt2FA: val })}
                   />
                 </View>
                 <View style={styles.viewBtn}>
@@ -360,12 +424,6 @@ export default class SentMoneyScreen extends React.Component {
               </View>
             </DialogContent>
           </Dialog>
-
-          {renderIf(this.state.isLoading)(
-            <View style={styles.loading}>
-              <SkypeIndicator color={colors.appColor} />
-            </View>
-          )}
         </ImageBackground>
         <SCLAlertOk
           data={this.state.alertPopupData}
@@ -380,6 +438,7 @@ export default class SentMoneyScreen extends React.Component {
               });
           }}
         />
+        <Loader loading={this.state.isLoading} color={colors.appColor} />
       </Container>
     );
   }
@@ -408,17 +467,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#000000",
     color: "#ffffff"
   },
-  loading: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    opacity: 0.8,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center"
-  },
+
   //For flip
   flipCard: {
     width: 200,

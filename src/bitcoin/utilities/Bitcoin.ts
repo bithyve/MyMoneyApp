@@ -504,18 +504,23 @@ export default class Bitcoin {
     return txHex;
   }
 
-  public broadcastTransaction = async (txHash: string): Promise<any> => {
-    if (this.network === bitcoinJS.networks.testnet) {
-      try {
-        const { data } = await axios.post(TESTNET.BROADCAST, { hex: txHash });
-        return data;
-      } catch (err) {
-        console.log(err.response.data.error);
-        return { success: false, err: err.response.data.err };
+  public broadcastTransaction = async (txHex: string): Promise<any> => {
+    let res: AxiosResponse;
+    try {
+      if (this.network === bitcoinJS.networks.testnet) {
+        res = await axios.post(TESTNET.BROADCAST, { hex: txHex });
+      } else {
+        res = await axios.post(MAINNET.BROADCAST, { hex: txHex });
       }
-    } else {
-      const { data } = await axios.post(MAINNET.BROADCAST, { hex: txHash });
-      return data;
+      return {
+        statusCode: res.status,
+        data: res.data,
+      };
+    } catch (err) {
+      return {
+        statusCode: err.response.status,
+        errorMessage: err.response.data.err,
+      };
     }
   }
 

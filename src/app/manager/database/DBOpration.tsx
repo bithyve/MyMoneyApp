@@ -2,6 +2,7 @@
 import { colors, images, localDB } from "../../../app/constants/Constants";
 var utils = require("../../../app/constants/Utils");
 import Singleton from "../../constants/Singleton";
+import "../../../assets/static/js/sugar.js";
 
 const getPasscode = () => {
   let commonData = Singleton.getInstance();
@@ -45,117 +46,65 @@ const readTablesData = tableName => {
   });
 };
 
-
-
 const readAccountTablesData = tableName => {
+  let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     var temp = [];
     db.transaction(tx => {
-      tx.executeSql(
-        "SELECT * from " +
-          tableName +
-          " ORDER BY (accountType='" +
-          utils.encrypt("Unknown", passcode) +
-          "') ASC",
-        [],
-        (tx, results) => {
-          var len = results.rows.length;
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let data = results.rows.item(i);
-              data.id = data.id;
-              data.dateCreated = utils.decrypt(data.dateCreated, passcode);
-              data.lastUpdated = utils.decrypt(data.lastUpdated, passcode);
-              data.accountType = utils.decrypt(data.accountType, passcode);
-              data.address = utils.decrypt(data.address, passcode);
-              data.additionalInfo = utils.decrypt(
-                data.additionalInfo,
-                passcode
-              );
-              data.balance = utils.decrypt(data.balance, passcode);
-              data.unit = utils.decrypt(data.unit, passcode);
-              temp.push(data);
+      let accountId: number;
+      tx.executeSql("SELECT * FROM " + tableName, [], (tx, results) => {
+        var len = results.rows.length;
+        if (len > 0) {
+          for (let i = 0; i < len; i++) {
+            let dbaccountType = utils.decrypt(
+              results.rows.item(i).accountType,
+              passcode
+            );
+            if (dbaccountType == "UnKnown") {
+              accountId = parseInt(results.rows.item(i).id);
+              break;
             }
-            resolve({ temp });
           }
         }
-      );
+        tx.executeSql(
+          "SELECT * from " +
+            tableName +
+            " ORDER BY (id= " +
+            accountId +
+            ") ASC",
+          [],
+          (tx, results) => {
+            var len = results.rows.length;
+            if (len > 0) {
+              for (let i = 0; i < len; i++) {
+                let data = results.rows.item(i);
+                data.id = data.id;
+                data.dateCreated = utils.decrypt(data.dateCreated, passcode);
+                data.lastUpdated = utils.decrypt(data.lastUpdated, passcode);
+                data.accountType = utils.decrypt(data.accountType, passcode);
+                data.address = utils.decrypt(data.address, passcode);
+                data.additionalInfo = utils.decrypt(
+                  data.additionalInfo,
+                  passcode
+                );
+                data.balance = utils.decrypt(data.balance, passcode);
+                data.unit = utils.decrypt(data.unit, passcode);
+                temp.push(data);
+              }
+              resolve({ temp });
+            }
+          }
+        );
+      });
     });
   });
 };
-
-
-//TODO: working
-
-// const readAccountTablesData = tableName => {
-//   let passcode = getPasscode();
-//   return new Promise((resolve, reject) => {
-//     var temp = [];
-//     db.transaction(tx => {
-//       let accountId: any;
-//       tx.executeSql("SELECT * FROM " + tableName, [], (tx, results) => {
-//         var len = results.rows.length;
-//         if (len > 0) {
-//           for (let i = 0; i < len; i++) {
-//             let dbaccountType = utils.decrypt(
-//               results.rows.item(i).accountType,
-//               passcode
-//             );
-//             if (dbaccountType == "UnKnown") {
-//               accountId = results.rows.item(i).id;
-//             }
-//             console.log({ accountId });
-//             tx.executeSql(
-//               "SELECT * from " + tableName + " ORDER BY (id = 2) ASC",
-//               [],  
-//               (tx2, results2) => {
-//                 var len2 = results2.rows.length;
-//                 if (len2 > 0) {   
-//                   for (let i2 = 0; i2 < len2; i2++) {
-//                     let data = results2.rows.item(i2);
-//                     data.id = data.id;
-//                     data.dateCreated = utils.decrypt(
-//                       data.dateCreated,
-//                       passcode
-//                     );
-//                     data.lastUpdated = utils.decrypt(
-//                       data.lastUpdated,
-//                       passcode
-//                     );
-//                     data.accountType = utils.decrypt(
-//                       data.accountType,
-//                       passcode
-//                     );
-//                     data.address = utils.decrypt(data.address, passcode);
-//                     data.additionalInfo = utils.decrypt(
-//                       data.additionalInfo,
-//                       passcode
-//                     );
-//                     data.balance = utils.decrypt(data.balance, passcode);
-//                     data.unit = utils.decrypt(data.unit, passcode);
-//                     temp.push(data);
-//                   }   
-
-//                   console.log({ temp });
-//                   resolve({ temp });
-//                 }
-//               }
-//             );
-//             resolve(true);
-//           }
-//         }
-//       });
-//     });
-//   });
-// };   
 
 //TODO: Select tblAccountType
 const readTableAcccountType = async (tableName1, tableName2) => {
   let passcode = getPasscode();
   return new Promise((resolve, reject) => {
     var temp = [];
-    var temp2 = [];
-    var finalTemp = [];
     db.transaction(tx => {
       tx.executeSql("select name  from " + tableName1, [], (tx, results) => {
         var len = results.rows.length;
@@ -165,10 +114,8 @@ const readTableAcccountType = async (tableName1, tableName2) => {
             data.name = utils.decrypt(results.rows.item(i).name, passcode);
             temp.push(data);
           }
-
-          delete temp.splice(0, 1);
-          delete temp.splice(3, 3);
-
+          temp.shift();
+          temp.pop();
           tx.executeSql(
             "select accountType  from " + tableName2,
             [],
@@ -181,17 +128,23 @@ const readTableAcccountType = async (tableName1, tableName2) => {
                     results2.rows.item(i2).accountType,
                     passcode
                   );
-                  //in future this code change very very basic code
                   if (data2.name == "Secure") {
+                    for (var i = 0; i < temp.length; i++)
+                      if (temp[i].name === "Secure") {
+                        temp.splice(i, 1);
+                        break;
+                      }
                   } else if (data2.name == "Joint") {
+                    for (var i = 0; i < temp.length; i++)
+                      if (temp[i].name === "Joint") {
+                        temp.splice(i, 1);
+                        break;
+                      }
                   }
-
-                  temp2.push(data2);
-                }
+                }  
               }
             }
           );
-
           resolve({ temp });
         }
       });

@@ -71,6 +71,7 @@ Custom node_modules/react-native/react.gradle to solve the Duplicate file error 
     moveFunc.curry("xhdpi").call()
     moveFunc.curry("xxhdpi").call()
     moveFunc.curry("xxxhdpi").call()
+
 }
 
 cd android
@@ -160,10 +161,3 @@ return "Example";
 - };
 - }
   }
-
-
-
-
-
-
-

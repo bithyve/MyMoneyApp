@@ -15,17 +15,18 @@ export default class EncryptionScreen extends Component<Props, any> {
 
   async componentDidMount() {
     let commonData = Singleton.getInstance();
-    var status = await AsyncStorage.getItem("PasscodeCreateStatus");
+    let value = await AsyncStorage.getItem("PasscodeCreateStatus");
+    let status = JSON.parse(value);
     var passcode = await AsyncStorage.getItem("@Passcode:key");
     commonData.setPasscode(passcode);
     setTimeout(() => {
       if (status) {
-        this.props.onComplited(false);
+        this.props.onComplited(false, "PasscodeScreen");
       } else {
-        this.props.onComplited(true);
+        this.props.onComplited(false, "OnBoardingNavigator");
       }
     }, 1000);
-  }  
+  }
 
   render() {
     return (

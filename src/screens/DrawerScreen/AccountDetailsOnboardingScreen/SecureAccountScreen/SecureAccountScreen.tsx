@@ -28,7 +28,7 @@ var dbOpration = require("../../../../app/manager/database/DBOpration");
 var utils = require("../../../../app/constants/Utils");
 
 //TODO: SecureAccount
-import SecureAccount from "../../../../bitcoin/services/SecureAccount";
+import secureAccount from "../../../../bitcoin/services/SecureAccount";
 
 export default class SecureAccountScreen extends React.Component {
   constructor(props) {
@@ -46,8 +46,7 @@ export default class SecureAccountScreen extends React.Component {
     );
     console.log({ resultWallet });
     var mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
-    const secureAccount = new SecureAccount(mnemonic);
-    const secureAccountAssets = await secureAccount.setupSecureAccount();
+    const secureAccountAssets = await secureAccount.setupSecureAccount(mnemonic);
     if (secureAccountAssets.statusCode == 200) {
       this.props.navigation.push("SecureSecretKeyScreen", {
         data: secureAccountAssets.data,

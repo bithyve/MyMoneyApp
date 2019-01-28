@@ -9,10 +9,8 @@ const { BH_SERVER } = config.API_URLS;
 
 class SecureAccount {
   public bitcoin: Bitcoin;
-  public primaryMnemonic: string;
-  constructor(primaryMnemonic: string) {
+  constructor() {
     this.bitcoin = new Bitcoin();
-    this.primaryMnemonic = primaryMnemonic;
   }
 
   public getRecoveryMnemonic = async () => {
@@ -50,19 +48,19 @@ class SecureAccount {
     return xKey.publicKey.toString("hex");
   }
 
-  public getAssets = async (childIndex: number = 0) => {
+  public getAssets = async (
+    primaryMnemonic: string,
+    childIndex: number = 0,
+  ) => {
     const recoveryMnemonic = await this.getRecoveryMnemonic();
 
-    const primaryXpub = this.getRecoverableXPub(
-      this.primaryMnemonic,
-      childIndex,
-    );
-    const primaryXpriv = this.getXpriv(this.primaryMnemonic);
+    const primaryXpub = this.getRecoverableXPub(primaryMnemonic, childIndex);
+    const primaryXpriv = this.getXpriv(primaryMnemonic);
 
     const recoveryXpub = this.getRecoverableXPub(recoveryMnemonic, childIndex);
 
     const hash = crypto.createHash("sha512");
-    const seed = bip39.mnemonicToSeed(this.primaryMnemonic);
+    const seed = bip39.mnemonicToSeed(primaryMnemonic);
     hash.update(seed);
     const walletID = hash.digest("hex");
 
@@ -89,8 +87,8 @@ class SecureAccount {
     return multiSig;
   }
 
-  public setupSecureAccount = async () => {
-    const assets = await this.getAssets();
+  public setupSecureAccount = async (primaryMnemonic) => {
+    const assets = await this.getAssets(primaryMnemonic);
     let res;
     try {
       res = await axios.get(BH_SERVER.PROD + "/setup2FA");
@@ -110,7 +108,7 @@ class SecureAccount {
       console.log("An error occured:", err);
       return {
         statusCode: err.response.status,
-        err: err.response.data,
+        errorMessage: err.response.data,
       };
     }
   }
@@ -131,7 +129,7 @@ class SecureAccount {
       console.log("Error:", err.response.data);
       return {
         statusCode: err.response.status,
-        err: err.response.data,
+        errorMessage: err.response.data,
       };
     }
   }
@@ -199,24 +197,19 @@ class SecureAccount {
       console.log(res.data.txHex);
       console.log("------ Broadcasting Transaction --------");
       // const txHash = await this.bitcoin.broadcastLocally(data.txHex); // TODO: If API falls; globally expose the tesnet RPC (via ngRox maybe)
-      const { txid } = await this.bitcoin.broadcastTransaction(res.data.txHex);
-      console.log("Transaction successful, txHash:", txid);
-
-      return {
-        statusCode: res.status,
-        data: { txid },
-      };
+      const bRes = await this.bitcoin.broadcastTransaction(res.data.txHex);
+      return bRes;
     } catch (err) {
       console.log("An error occured:", err);
       return {
         statusCode: err.response.status,
-        err: err.response.data,
+        errorMessage: err.response.data,
       };
     }
   }
 }
 
-export default SecureAccount;
+export default new SecureAccount();
 
 class SmokeTest {
   public secureAccount: SecureAccount;
@@ -224,7 +217,7 @@ class SmokeTest {
     "much false truck sniff extend infant pony venture path imitate tongue pluck";
 
   constructor() {
-    this.secureAccount = new SecureAccount(this.primaryMnemonic);
+    this.secureAccount = new SecureAccount();
   }
 
   public testAssets = () => {
@@ -234,9 +227,7 @@ class SmokeTest {
     const bhMnemonic =
       "aware illness leaf birth raise puzzle start search vivid nephew accuse tank";
 
-    const primarySeed = bip39.mnemonicToSeed(
-      this.secureAccount.primaryMnemonic,
-    );
+    const primarySeed = bip39.mnemonicToSeed(this.primaryMnemonic);
     const primaryRoot = bip32.fromSeed(
       primarySeed,
       this.secureAccount.bitcoin.network,
@@ -323,19 +314,15 @@ class SmokeTest {
 
   public testSecureAccountFlow = async (token?: number) => {
     // STEP 1. Setting up a Secure Account
-    // const secureAccountData = await this.secureAccount.setupSecureAccount();
-    // console.log(secureAccountData);
-    // const scripts = {
-    //   redeem: secureAccountData.multiSig.p2sh.redeem.output.toString("hex"),
-    //   witness: secureAccountData.multiSig.p2wsh.redeem.output.toString("hex"),
-    // };
-    // console.log(scripts);
+    // const { data } = await this.secureAccount.setupSecureAccount(
+    //   this.primaryMnemonic,
+    // );
+    // console.log(data);
 
     // STEP 2. Validating Secure Account Setup
-    const secret = "KZVXAKZVM4ZES4TPOFRTSOCIORETKQLC"; // logs from step 1
+    const secret = "IZMGUTLUF44UK42LGI4XG5TWJF5FCZCW"; // logs from step 1
     const walletID =
       "dd2631ee3c5a0ab4da603f3ada062ef32b3c5acccd69567d120e9830d5c94a9b4aa63c598ec96faf85f781f4ae9e34f899ed27db2b86c05d3e91399eb04d3eae";
-
     // const {
     //   setupSuccessful,
     // } = await this.secureAccount.validateSecureAccountSetup(
@@ -368,9 +355,9 @@ class SmokeTest {
       walletID,
     });
   }
-}    
+}
 
 ////// SMOKE TEST ZONE //////
-// const smokeTest = new SmokeTest();
-// // smokeTest.testSecureTransaction(parseInt(process.argv[2], 10));
-// smokeTest.testSecureAccountFlow(parseInt(process.argv[2], 10));
+//const smokeTest = new SmokeTest();
+// smokeTest.testSecureTransaction(parseInt(process.argv[2], 10));
+//smokeTest.testSecureAccountFlow(parseInt(process.argv[2], 10));
