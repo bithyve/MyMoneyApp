@@ -56,6 +56,7 @@ import CreateJointAccountScreen from "../../screens/DrawerScreen/JointAccountScr
 import CreatorJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/CreatorJointAccountScreen";
 import AcknowledgeJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/AcknowledgeJointAccountScreen";
 import MergeConfirmJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/MergeConfirmJointAccountScreen";
+import JointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/JointAccountScreen";
 
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -182,15 +183,19 @@ const JointAccountRouter = createStackNavigator(
     },
     CreatorJointAccountScreen: {
       screen: CreatorJointAccountScreen,
-      navigationOptions: {header:null}
+      navigationOptions: { header: null }
     },
-    AcknowledgeJointAccountScreen:{
+    AcknowledgeJointAccountScreen: {
       screen: AcknowledgeJointAccountScreen,
-      navigationOptions: {header:null}
+      navigationOptions: { header: null }
     },
-    MergeConfirmJointAccountScreen:{
+    MergeConfirmJointAccountScreen: {
       screen: MergeConfirmJointAccountScreen,
-      navigationOptions: {header:null}
+      navigationOptions: { header: null }
+    },
+    JointAccountScreen: {
+      screen: JointAccountScreen,
+      navigationOptions: { header: null }
     }
   },
   {
@@ -405,7 +410,7 @@ export const createRootNavigator = (
         },
         JointAccountRouter: {
           screen: JointAccountRouter,
-          navigationOptions: { header: null}
+          navigationOptions: { header: null }
         },
         //AccountDetailsOnboardingRouter
         AccountDetailsOnboardingRouter: {
@@ -527,14 +532,14 @@ export const createRootNavigator = (
         },
         JointAccountRouter: {
           screen: JointAccountRouter,
-          navigationOptions: { header: null}
+          navigationOptions: { header: null }
         },
         //AccountDetailsOnboardingRouter
         AccountDetailsOnboardingRouter: {
           screen: AccountDetailsOnboardingRouter,
           navigationOptions: { header: null }
         }
-      },  
+      },
       {
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"

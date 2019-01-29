@@ -81,6 +81,7 @@ export default class CreateJointAccountScreen extends React.Component {
             Toast.show("Confirm merge", Toast.SHORT);
             this.props.navigation.navigate("MergeConfirmJointAccountScreen", { JsonString: data.barcode })
         } else if (Joint.Typ == "ACK") {
+            this.acknowledgeAndStore(data.barcode)
         } else if (Joint == "IMP") {
             Toast.show("Imported succesfully", Toast.SHORT);
         }
@@ -128,6 +129,7 @@ export default class CreateJointAccountScreen extends React.Component {
                             Or
                         </Text>
                         <Button warning style={{ padding: '10%', alignSelf: 'center' }} onPress={() => this.openQRCodeScanner()}><Text> Merge </Text></Button>
+                        <Button warning style={{ padding: '10%', alignSelf: 'center' }} onPress={() => this.props.navigation.push("JointAccountScreen")}><Text> Joint Account </Text></Button>
                     </Content>
 
                 </ImageBackground>

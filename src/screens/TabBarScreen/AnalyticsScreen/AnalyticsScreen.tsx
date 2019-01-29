@@ -47,7 +47,6 @@ export default class AnalyticsScreen extends React.Component {
                         </Right>
                     </Header>
                     <Content>
-                 
                     </Content>
 
                 </ImageBackground>
