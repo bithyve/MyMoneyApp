@@ -9,7 +9,7 @@ import {
   Alert,
   ImageBackground,
   Dimensions,
-  Switch
+  Linking
 } from "react-native";
 import {
   Container,
@@ -22,18 +22,17 @@ import {
   Body,
   Text
 } from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import * as Animatable from "react-native-animatable";
 import Accordion from "react-native-collapsible/Accordion";
-import SafariView from "react-native-safari-view";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../../app/constants/Constants";
 var utils = require("../../../../app/constants/Utils");
 import renderIf from "../../../../app/constants/validation/renderIf";
-  
+
 export default class RecentTransactionsScreen extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       activeSections: [],
@@ -94,19 +93,10 @@ export default class RecentTransactionsScreen extends React.Component {
   };
 
   //TODO: func openHashDetails
-  openHashDetails(hashKey) {
-    SafariView.isAvailable()
-      .then(
-        SafariView.show({
-          url: "https://live.blockcypher.com/btc-testnet/tx/" + hashKey,
-          readerMode: true,
-          tintColor: colors.appColor,
-          barTintColor: "#fff"
-        })
-      )
-      .catch(error => {
-        // Fallback WebView code for iOS 8 and earlier
-      });
+  async openHashDetails(hashKey) {
+    this.props.navigation.push("TransactionDetailsWebViewScreen", {
+      url: "https://live.blockcypher.com/btc-testnet/tx/" + hashKey
+    });
   }
 
   renderContent(section, _, isActive) {

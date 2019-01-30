@@ -38,6 +38,7 @@ import QrcodeScannerScreen from "../../screens/DrawerScreen/SentAndReceiveeScree
 
 import AccountsDetailsScreen from "../../screens/DrawerScreen/AccountsDetailsScreen/AccountsDetailsScreen";
 import RecentTransactionsScreen from "../../screens/TabBarScreen/AccountsScreen/RecentTransactionsScreen/RecentTransactionsScreen";
+import TransactionDetailsWebViewScreen from "../../screens/TabBarScreen/AccountsScreen/RecentTransactionsScreen/TransactionDetailsWebViewScreen/TransactionDetailsWebViewScreen";
 
 //TODO: Secure Account
 import AccountDetailsOnboardingScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/AccountDetailsOnboardingScreen";
@@ -124,8 +125,31 @@ const AccountDetailsOnboardingRouter = createStackNavigator(
   }
 );
 
-//TODO: TabNavigator
+//TODO: StackNavigator:AccountStackNavigatorRouter
+const AccountStackNavigatorRouter = createStackNavigator(
+  {
+    AccountsScreen: {
+      screen: AccountsScreen,
+      navigationOptions: { header: null }
+    },
+    RecentTransactionsScreen: {
+      screen: RecentTransactionsScreen,
+      navigationOptions: { header: null }
+    },
+    TransactionDetailsWebViewScreen: {
+      screen: TransactionDetailsWebViewScreen,
+      navigationOptions: { header: null }
+    }
+  },
+  {
+    initialRouteName: "AccountsScreen"
+  }
+);
 
+
+
+
+//TODO: TabNavigator
 //TODO: TabNavigator:TabNavigator
 const TabNavigator = createBottomTabNavigator(
   {
@@ -147,9 +171,9 @@ const TabNavigator = createBottomTabNavigator(
           <Icon name="signal" size={20} color={tintColor} />
         )
       }
-    },
+    },   
     Accounts: {
-      screen: AccountsScreen,
+      screen: AccountStackNavigatorRouter,
       navigationOptions: {
         tabBarLabel: "Accounts",
         tabBarIcon: ({ tintColor }) => (
@@ -307,17 +331,12 @@ export const createRootNavigator = (
         screen: AccountsDetailsScreen,
         navigationOptions: { header: null }
       },
-      //RecentTransactionsScreen
-      RecentTransactionsScreen: {
-        screen: RecentTransactionsScreen,
-        navigationOptions: { header: null }
-      },
       //AccountDetailsOnboardingRouter
       AccountDetailsOnboardingRouter: {
         screen: AccountDetailsOnboardingRouter,
         navigationOptions: { header: null }
       }
-    },  
+    },
     {
       initialRouteName: signedIn ? "OnBoardingNavigator" : screenName
       // initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
+import * as Keychain from "react-native-keychain";
 import DropdownAlert from "react-native-dropdownalert";
 import Loader from "react-native-modal-loader";
 
@@ -157,11 +158,14 @@ export default class PasscodeConfirmScreen extends Component {
           );
           if (resultCreateAccount) {
             try {
-              AsyncStorage.setItem("@Passcode:key", code);
+              const username = "mymoney";
+              const password = code;
+              // Store the credentials
+              await Keychain.setGenericPassword(username, password);
               AsyncStorage.setItem(
                 "PasscodeCreateStatus",
                 JSON.stringify(true)
-              );
+              );  
             } catch (error) {
               // Error saving data
             }

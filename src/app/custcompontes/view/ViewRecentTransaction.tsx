@@ -86,9 +86,9 @@ export default class ViewRecentTransaction extends Component<Props, any> {
                       <Thumbnail
                         source={require("../../../assets/images/bitcoinLogo.jpg")}
                       />
-                    </Left>
+                    </Left>   
                     <Body>
-                      <Text style={styles.txtTransTitle}>
+                      <Text numberOfLines={1} style={styles.txtTransTitle}>
                         {item.transactionType}{" "}
                         <Text style={styles.txtConfimation}>
                           {item.confirmationType}{" "}
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     color: "#000"
   },
   txtTransTitle: {
+    flexDirection: "row",
     fontWeight: "bold",
     marginBottom: 5
   },

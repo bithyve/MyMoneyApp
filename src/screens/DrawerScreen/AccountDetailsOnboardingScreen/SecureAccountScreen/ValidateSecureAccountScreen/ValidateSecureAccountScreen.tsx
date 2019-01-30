@@ -9,7 +9,7 @@ import {
   Alert,
   ImageBackground,
   Dimensions,
-  Switch
+  AsyncStorage
 } from "react-native";
 import {
   Container,
@@ -103,6 +103,11 @@ export default class ValidateSecureAccountScreen extends React.Component {
         this.state.data.walletID
       );
       if (res.statusCode == 200) {
+        try {
+          AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
+        } catch (error) {
+          console.log(error);
+        }  
         if (res.data.setupSuccessful) {
           this.connection_SaveSecureAccount(
             fulldate,
@@ -148,7 +153,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
   }
 
   async connection_SaveSecureAccount(fulldate, address, sercureData) {
-    console.log({ sercureData });  
+    console.log({ sercureData });
     const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
       localDB.tableName.tblAccount,
       fulldate,

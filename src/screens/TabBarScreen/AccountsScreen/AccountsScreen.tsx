@@ -133,8 +133,12 @@ export default class AccountsScreen extends React.Component<any, any> {
       localDB.tableName.tblAccount
     );
 
+    console.log({ resultAccount });
+
     if (isNetwork && this.state.cardIndexNo != resultAccount.temp.length - 1) {
-      title = "Savings Recent Transactions";
+      title =
+        resultAccount.temp[this.state.cardIndexNo].accountType +
+        " Recent Transactions";
       const bal = await RegularAccount.getBalance(
         resultAccount.temp[this.state.cardIndexNo].address
       );

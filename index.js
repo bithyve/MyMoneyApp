@@ -3,7 +3,6 @@ import React from "react";
 import { AppRegistry } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { AsyncStorage, AppState } from "react-native";
-
 import App from "./App";
 import "./shim";
 import { name as appName } from "./app.json";
@@ -21,8 +20,13 @@ class MyMoney extends React.Component {
     };
   }
 
-  componentDidMount() {
-    AppState.addEventListener("change", this._handleAppStateChange);
+  async componentDidMount() {
+    try {
+      AppState.addEventListener("change", this._handleAppStateChange);
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+    } catch (error) {
+      // Error saving data
+    }
   }
 
   componentWillUnmount() {
@@ -30,15 +34,17 @@ class MyMoney extends React.Component {
   }
 
   _handleAppStateChange = async nextAppState => {
-    var value = await AsyncStorage.getItem("PasscodeCreateStatus");
-    let status = JSON.parse(value);
-    if (status) {
+    var status = JSON.parse(await AsyncStorage.getItem("PasscodeCreateStatus"));
+    let flag_BackgoundApp = JSON.parse(
+      await AsyncStorage.getItem("flag_BackgoundApp")
+    );
+    if (status && flag_BackgoundApp) {
       this.setState({ appState: AppState.currentState });
       if (this.state.appState.match(/inactive|background/)) {
         console.log({ status });
         this.setState({
           status: true
-        });  
+        });
         console.log("forgound = " + this.state.status, this.state.isStartPage);
       }
     }

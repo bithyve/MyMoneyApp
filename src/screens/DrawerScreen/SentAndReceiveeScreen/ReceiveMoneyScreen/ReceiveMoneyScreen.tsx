@@ -47,10 +47,10 @@ export default class ReceiveMoneyScreen extends React.Component {
   }
 
   //TODO: Func Copy they code
-  click_CopyAddress() {
-    Clipboard.setString(this.state.address);
+  click_CopyAddress = async () => {
+    await Clipboard.setString(this.state.address);
     Toast.show("Address copyed.!", Toast.SHORT);
-  }
+  };
 
   render() {
     let shareOptions = {

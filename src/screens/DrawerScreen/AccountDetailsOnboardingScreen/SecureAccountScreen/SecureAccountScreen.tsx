@@ -31,7 +31,7 @@ var utils = require("../../../../app/constants/Utils");
 import secureAccount from "../../../../bitcoin/services/SecureAccount";
 
 export default class SecureAccountScreen extends React.Component {
-  constructor(props) {
+  constructor(props:any) {
     super(props);
     this.state = {
       isLoading: false,

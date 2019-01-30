@@ -3,7 +3,7 @@ import { View, AsyncStorage, Image, StyleSheet, Text } from "react-native";
 import Loader from "react-native-modal-loader";
 import { colors } from "../../app/constants/Constants";
 import Singleton from "../../app/constants/Singleton";
-
+import * as Keychain from "react-native-keychain";
 interface Props {
   onComplited: Function;
 }
@@ -12,13 +12,12 @@ export default class EncryptionScreen extends Component<Props, any> {
   constructor(props: any) {
     super(props);
   }
-
   async componentDidMount() {
     let commonData = Singleton.getInstance();
     let value = await AsyncStorage.getItem("PasscodeCreateStatus");
     let status = JSON.parse(value);
-    var passcode = await AsyncStorage.getItem("@Passcode:key");
-    commonData.setPasscode(passcode);
+    const credentials = await Keychain.getGenericPassword();
+    commonData.setPasscode(credentials.password);
     setTimeout(() => {
       if (status) {
         this.props.onComplited(false, "PasscodeScreen");

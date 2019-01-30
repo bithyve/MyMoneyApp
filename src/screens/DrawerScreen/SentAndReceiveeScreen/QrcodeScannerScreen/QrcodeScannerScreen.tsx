@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
-  ImageBackground,
+  AsyncStorage,
   Clipboard,
   DeviveEventEmitter
 } from "react-native";
@@ -41,7 +41,7 @@ const options = {
 import { colors, images, localDB } from "../../../../app/constants/Constants";
 
 export default class QrcodeScannerScreen extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       address: ""
@@ -58,7 +58,7 @@ export default class QrcodeScannerScreen extends React.Component {
   onReadBarCodeByGalleryFailure() {
     Alert.alert("Note", "Not found barcode!");
   }
-
+  
   render() {
     return (
       <Container>
@@ -66,7 +66,7 @@ export default class QrcodeScannerScreen extends React.Component {
           <BarcodeScanner
             Title={"QRCode Scanner"}
             styles={styles.barcodeScanner}
-            cameraProps={{ captureAudio: false }}   
+            cameraProps={{ captureAudio: false }}
             onBack={() => this.props.navigation.goBack()}
             onBarCodeReadByGalleryStart={data =>
               this.onBarCodeRead.call(this, data)

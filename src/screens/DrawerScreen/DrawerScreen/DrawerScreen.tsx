@@ -17,7 +17,7 @@ import {
   Container,
   Header,
   Title,
-  Content,   
+  Content,
   Button,
   Left,
   Right,
@@ -31,6 +31,7 @@ import Dialog, {
   DialogContent,
   DialogButton
 } from "react-native-popup-dialog";
+import SCLAlertSimpleConfirmation from "../../../app/custcompontes/alert/SCLAlertSimpleConfirmation";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
@@ -39,12 +40,15 @@ import { colors, images, localDB } from "../../../app/constants/Constants";
 import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
 
 class DrawerScreen extends Component {
-  constructor(props) {
+  constructor(props:any) {
     super(props);
 
     this.state = {
-      menuBarList: []
+      menuBarList: [],
+      confirmPopupData: []
     };
+
+    this.click_Logout = this.click_Logout.bind(this);
   }
 
   //TODO: Page Life Cycle
@@ -58,7 +62,10 @@ class DrawerScreen extends Component {
   }
   //TODO: Func show logout popup
   click_Logout() {
-    Alert.alert("Working");
+    const navigateAction = NavigationActions.navigate({
+      routeName: "PasscodeScreen"
+    });    
+    this.props.navigation.dispatch(navigateAction);
     this.props.navigation.dispatch(DrawerActions.closeDrawer());
   }
 
@@ -71,7 +78,17 @@ class DrawerScreen extends Component {
       this.props.navigation.dispatch(navigateAction);
       this.props.navigation.dispatch(DrawerActions.closeDrawer());
     } else if (route == "LogoutScreen") {
-      this.click_Logout();
+      this.setState({  
+        confirmPopupData: [   
+          {
+            status: true,
+            icon: "check-circle",
+            title: "Confirmation",
+            subtitle: "Are you sure you want to log out?",
+            confirmTitle: "CONFIRM"
+          }   
+        ]
+      });
     } else {
       this.props.navigation.push(route);
       this.props.navigation.dispatch(DrawerActions.closeDrawer());
@@ -97,11 +114,26 @@ class DrawerScreen extends Component {
                     </View>
                   </TouchableOpacity>
                 )}
-                keyExtractor={(item,index) => index}
+                keyExtractor={(item, index) => index}
               />
             </View>
           </ScrollView>
         </ImageBackground>
+        <SCLAlertSimpleConfirmation
+          data={this.state.confirmPopupData}
+          click_Ok={(status: boolean) => {
+            if (status) {
+              this.click_Logout()
+            }
+            this.setState({
+              confirmPopupData: [
+                {
+                  status: false
+                }
+              ]
+            });
+          }}
+        />
       </Container>
     );
   }
@@ -116,7 +148,8 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     borderWidth: 0.5,
-    borderColor: "#d6d7da",
+    borderTopWidth: 0,
+    borderBottomColor: "#d6d7da",
     alignItems: "center"
   },
   txtMenuItem: {

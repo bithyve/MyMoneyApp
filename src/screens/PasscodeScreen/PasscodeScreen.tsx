@@ -13,7 +13,7 @@ import {
 import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
-
+import * as Keychain from "react-native-keychain";
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../app/constants/Constants";
 import utils from "../../app/constants/Utils";
@@ -33,14 +33,14 @@ export default class PasscodeScreen extends Component {
     this.state = {
       mnemonicValues: [],
       status: "choice",
-      pincode: null,
+      pincode: "",
       success: "Enter a PinCode",
       firstName: "",
       lastName: "",
       email: "",
       mobileNo: "",
       message: "Enter your PIN"
-    };
+    };   
   }
 
   //TODO: Page Life Cycle
@@ -49,10 +49,11 @@ export default class PasscodeScreen extends Component {
   }
 
   retrieveData = async () => {
-    try {
-      var passcodeValues = await AsyncStorage.getItem("@Passcode:key");
+    try {   
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+      const credentials = await Keychain.getGenericPassword();
       this.setState({
-        pincode: passcodeValues
+        pincode: credentials.password
       });
     } catch (error) {
       console.log(error);

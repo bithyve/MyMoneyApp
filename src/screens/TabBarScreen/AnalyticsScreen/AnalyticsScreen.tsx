@@ -35,7 +35,7 @@ export default class AnalyticsScreen extends React.Component {
                         </Left>
 
                         <Body style={{flex: 0,alignItems:'center'}}>
-                        <Title>Anant Tapadia</Title>
+                        <Title>My Money</Title>
                         </Body>
                         <Right>
                             <Button transparent>

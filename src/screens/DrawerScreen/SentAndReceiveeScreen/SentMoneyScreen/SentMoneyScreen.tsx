@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Animated,
   Dimensions,
-  Alert,
+  AsyncStorage,
   TextInput
 } from "react-native";
 import {
@@ -79,6 +79,29 @@ export default class SentMoneyScreen extends React.Component {
     });
   }
 
+  async componentDidMount() {
+    //TODO:User Deails read
+    this.willFocusSubscription = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        try {
+          AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
+        } catch (error) {
+          // Error saving data
+        }
+      }
+    );
+  }
+
+  async componentWillUnmount() {
+    try {
+      this.willFocusSubscription.remove();
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   //TODO: func validation
   validation(val, type) {
     if (type == "address") {
@@ -102,7 +125,7 @@ export default class SentMoneyScreen extends React.Component {
     if (
       this.state.recipientAddress.length < 0 ||
       this.state.amount.length < 0 ||
-      val == ""  
+      val == ""
     ) {
       this.setState({
         sentBtnColor: "gray",
@@ -115,7 +138,12 @@ export default class SentMoneyScreen extends React.Component {
   async click_SentMoney() {
     let isLoading = false;
     if (this.state.data.accountType == "Secure") {
-      this.setState({ isSecureAccountPopup: true });
+      try {
+        AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+        this.setState({ isSecureAccountPopup: true });
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       isLoading = true;
       this.setState({
@@ -176,7 +204,7 @@ export default class SentMoneyScreen extends React.Component {
               });
           }
         }
-      }
+      }   
     }
     this.setState({
       isLoading: isLoading
@@ -184,8 +212,12 @@ export default class SentMoneyScreen extends React.Component {
   }
 
   //TODO: func openQRCodeScanner
-  openQRCodeScanner() {
-    //  this.props.navigation.push('QrcodeScannerScreen');
+  async openQRCodeScanner() {
+    try {
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+    } catch (error) {
+      // Error saving data
+    }
     this.props.navigation.navigate("QrcodeScannerScreen", {
       onSelect: this.onSelect
     });
@@ -221,6 +253,11 @@ export default class SentMoneyScreen extends React.Component {
       childIndex: 0
     });
     if (res.statusCode == 200) {
+      try {
+        AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
+      } catch (error) {
+        console.log(error);
+      }
       const bal = await RegularAccount.getBalance(
         navigation.getParam("address")
       );
@@ -254,13 +291,27 @@ export default class SentMoneyScreen extends React.Component {
                 status: true,
                 icon: "frown",
                 title: "Oops",
-                subtitle: "Transaction Not Completed.",
+                subtitle: res.errorMessage,
                 goBackStatus: false
               }
             ]
           });
         }
       }
+    } else {
+      isLoading = false;
+      this.setState({
+        alertPopupData: [
+          {
+            theme: "danger",
+            status: true,
+            icon: "frown",
+            title: "Oops",
+            subtitle: "Transaction Not Completed.",
+            goBackStatus: false
+          }
+        ]
+      });
     }
     this.setState({
       isLoading: isLoading
@@ -319,6 +370,7 @@ export default class SentMoneyScreen extends React.Component {
               <Input
                 name={this.state.amount}
                 value={this.state.amount}
+                keyboardType={"numeric"}
                 placeholder="Amount (BTC)"
                 placeholderTextColor="#ffffff"
                 style={styles.input}
@@ -390,12 +442,14 @@ export default class SentMoneyScreen extends React.Component {
                     {this.state.recipientAddress}
                   </Text>
                 </View>
-
                 <View style={styles.view2FaInput}>
                   <TextInput
                     name={this.state.txt2FA}
                     value={this.state.txt2FA}
-                    keyboardType={"default"}
+                    ref="txtInpAccountBal"
+                    autoFocus={true}
+                    keyboardType={"numeric"}
+                    returnKeyType={"next"}
                     placeholder="2FA gauth token"
                     placeholderTextColor="#EA4336"
                     style={styles.input2FA}

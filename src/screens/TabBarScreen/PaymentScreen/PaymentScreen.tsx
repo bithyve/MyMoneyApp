@@ -36,13 +36,12 @@ import Dialog, {
   SlideAnimation,
   DialogTitle,
   DialogContent,
-  DialogButton  
+  DialogButton
 } from "react-native-popup-dialog";
 import { DotIndicator, SkypeIndicator } from "react-native-indicators";
-   
+
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
-
 
 export default class PaymentScreen extends React.Component {
   constructor(props) {
@@ -71,13 +70,13 @@ export default class PaymentScreen extends React.Component {
                   <Icon name="bars" size={25} color="#ffffff" />
                 </Button>
               </Left>
-              <Body style={{flex: 0,alignItems:'center'}}>
+              <Body style={{ flex: 0, alignItems: "center" }}>
                 <Title
                   adjustsFontSizeToFit={true}
                   numberOfLines={1}
                   style={styles.titleUserName}
                 >
-                  {this.state.fullName}
+                  My Money
                 </Title>
               </Body>
               <Right />

@@ -9,7 +9,8 @@ import {
   Alert,
   ImageBackground,
   Dimensions,
-  Clipboard
+  Clipboard,
+  AsyncStorage
 } from "react-native";
 import {
   Container,
@@ -59,11 +60,35 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
     });
   }
 
-  //TODO: Func
-  click_CopySecretKey() {
-    Clipboard.setString(this.state.state);
-    Toast.show("Secret key copyed.!", Toast.SHORT);
+  componentDidMount() {
+    this.setAppState(true);
   }
+
+  async setAppState(status: boolean) {
+    if (status) {   
+      try {   
+        AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+      } catch (error) {
+        // Error saving data
+      }  
+    } else {
+      try {
+        AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
+      } catch (error) {
+        // Error saving data
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.setAppState(false);
+  }
+
+  //TODO: Func
+  click_CopySecretKey = async () => {
+    await Clipboard.setString(this.state.secret);
+    Toast.show("Secret key copyed.!", Toast.SHORT);
+  };   
 
   render() {
     const { activeSections } = this.state;

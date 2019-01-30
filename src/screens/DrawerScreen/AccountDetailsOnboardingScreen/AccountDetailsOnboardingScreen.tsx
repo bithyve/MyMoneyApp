@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, AsyncStorage } from "react-native";
 import {
   Container,
   Header,
@@ -8,7 +8,7 @@ import {
   Button,
   Left,
   Right,
-  Body,
+  Body,   
   Text
 } from "native-base";
 //Custome Compontes
@@ -88,7 +88,15 @@ export default class AccountDetailsOnboardingScreen extends Component<
         ],
         type: type
       });
-    }  
+    }
+  }
+
+  async componentDidMount() {
+    try {
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+    } catch (error) {  
+      console.log(error);
+    }
   }
 
   //TODO: func click_Done
@@ -99,7 +107,7 @@ export default class AccountDetailsOnboardingScreen extends Component<
       //this.props.navigation.push("ValidateSecureAccountScreen");
     } else if (this.state.type == "Joint") {
       this.props.navigation.push("CreateJointAccountScreen");
-    } else {  
+    } else {
       this.props.navigation.push("ValidateSecureAccountScreen");
     }
   }

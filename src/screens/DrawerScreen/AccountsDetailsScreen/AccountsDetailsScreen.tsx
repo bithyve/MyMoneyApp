@@ -72,12 +72,13 @@ export default class AccountDetailsScreen extends React.Component<
       confirmPopupData: [],
       successOkPopupData: [],
       tranDetails: [],
-      arr_transferAccountList: [],
+      arr_transferAccountList: [],  
       refreshing: false,
       isLoading: false,
       isNoTranstion: false,
       //transfer
       isTransferBtn: false,
+      flag_sentBtnDisStatus: true,
       arr_TransferAccountData: []
     };
     isNetwork = utils.getNetwork();
@@ -144,10 +145,13 @@ export default class AccountDetailsScreen extends React.Component<
           }
         }
         this.setState({
-          arr_transferAccountList: resultAccount.temp
-        });
-        this.setState({
+          arr_transferAccountList: resultAccount.temp,
           isTransferBtn: true
+        });
+      }
+      if (parseFloat(this.state.data.balance) > 0) {
+        this.setState({
+          flag_sentBtnDisStatus: false
         });
       }
       const bal = await RegularAccount.getBalance(
@@ -334,53 +338,23 @@ export default class AccountDetailsScreen extends React.Component<
           </View>
 
           <View style={styles.viewFooter}>
-            <View
-              style={{
-                backgroundColor: colors.appColor,
-                flexDirection: "row",
-                paddingLeft: 20,
-                paddingRight: 10,
-                borderRadius: 5
-              }}
-            >
-              {renderIf(this.state.isTransferBtn)(
-                <Button
-                  transparent
-                  onPress={() => {
-                    if (isNetwork) {
-                      this.setState({
-                        transferAmountPopupDAta: [
-                          {
-                            status: true,
-                            subtitle:
-                              "From " +
-                              this.state.data.accountType.toLowerCase() +
-                              " to",
-                            data: this.state.arr_transferAccountList
-                          }
-                        ]
-                      });
-                    } else {
-                      this.dropdown.alertWithType(
-                        "info",
-                        "OH",
-                        "Sorry You're Not Connected to the Internet"
-                      );
-                    }
-                  }}
-                >
-                  <Icon name="exchange-alt" size={25} color="#ffffff" />
-                  <Text style={styles.txtTile}>TRANSFER</Text>
-                </Button>
-              )}
+            {renderIf(this.state.isTransferBtn)(
               <Button
-                transparent
+              style={styles.footerBtnAction}
+              warning
                 onPress={() => {
                   if (isNetwork) {
-                    this.props.navigation.push("SentMoneyScreen", {
-                      data: this.state.data,
-                      address: this.state.data.address,
-                      waletteData: this.state.waletteData
+                    this.setState({
+                      transferAmountPopupDAta: [
+                        {
+                          status: true,
+                          subtitle:
+                            "From " +
+                            this.state.data.accountType.toLowerCase() +
+                            " to",
+                          data: this.state.arr_transferAccountList
+                        }
+                      ]
                     });
                   } else {
                     this.dropdown.alertWithType(
@@ -391,21 +365,45 @@ export default class AccountDetailsScreen extends React.Component<
                   }
                 }}
               >
-                <Icon name="angle-up" size={25} color="#ffffff" />
-                <Text style={styles.txtTile}>Send</Text>
+                <Icon style={styles.footerBtnIcon} name="exchange-alt" size={25} color="#ffffff" />
+                <Text style={styles.txtTile}>TRANSFER</Text>
               </Button>
-              <Button
-                transparent
-                onPress={() =>
-                  this.props.navigation.push("ReceiveMoneyScreen", {
-                    address: this.state.data.address
-                  })
+            )}
+            <Button
+              warning
+              style={styles.footerBtnAction}
+              disabled={this.state.flag_sentBtnDisStatus}
+              onPress={() => {
+                if (isNetwork) {
+                  this.props.navigation.push("SentMoneyScreen", {
+                    data: this.state.data,
+                    address: this.state.data.address,
+                    waletteData: this.state.waletteData
+                  });
+                } else {
+                  this.dropdown.alertWithType(
+                    "info",
+                    "OH",
+                    "Sorry You're Not Connected to the Internet"
+                  );
                 }
-              >
-                <Icon name="angle-down" size={25} color="#ffffff" />
-                <Text style={styles.txtTile}>Receive</Text>
-              </Button>
-            </View>
+              }}
+            >
+              <Icon style={styles.footerBtnIcon} name="angle-up" size={25} color="#ffffff" />
+              <Text style={styles.txtTile}>Send</Text>
+            </Button>
+            <Button
+              style={styles.footerBtnAction}
+              warning
+              onPress={() =>
+                this.props.navigation.push("ReceiveMoneyScreen", {
+                  address: this.state.data.address
+                })
+              }
+            >
+              <Icon style={styles.footerBtnIcon} name="angle-down" size={25} color="#ffffff" />
+              <Text style={styles.txtTile}>Receive</Text>
+            </Button>
           </View>
         </Content>
         <SCLAlertTransferAccountAmount
@@ -580,5 +578,13 @@ const styles = StyleSheet.create({
   //PopupMenu
   text: {
     fontSize: 18
+  },
+  //Fotter Button 
+  footerBtnIcon:{
+    paddingLeft:10,
+  },
+  footerBtnAction:{
+    marginLeft:2,
+    marginRight: 2,
   }
 });
