@@ -40,14 +40,12 @@ import { colors, images, localDB } from "../../../app/constants/Constants";
 import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
 
 class DrawerScreen extends Component {
-  constructor(props:any) {
+  constructor(props: any) {
     super(props);
-
     this.state = {
-      menuBarList: [],
+      menuBarList: [],  
       confirmPopupData: []
     };
-
     this.click_Logout = this.click_Logout.bind(this);
   }
 
@@ -64,7 +62,7 @@ class DrawerScreen extends Component {
   click_Logout() {
     const navigateAction = NavigationActions.navigate({
       routeName: "PasscodeScreen"
-    });    
+    });
     this.props.navigation.dispatch(navigateAction);
     this.props.navigation.dispatch(DrawerActions.closeDrawer());
   }
@@ -78,15 +76,15 @@ class DrawerScreen extends Component {
       this.props.navigation.dispatch(navigateAction);
       this.props.navigation.dispatch(DrawerActions.closeDrawer());
     } else if (route == "LogoutScreen") {
-      this.setState({  
-        confirmPopupData: [   
+      this.setState({
+        confirmPopupData: [
           {
             status: true,
             icon: "check-circle",
             title: "Confirmation",
             subtitle: "Are you sure you want to log out?",
             confirmTitle: "CONFIRM"
-          }   
+          }
         ]
       });
     } else {
@@ -123,7 +121,7 @@ class DrawerScreen extends Component {
           data={this.state.confirmPopupData}
           click_Ok={(status: boolean) => {
             if (status) {
-              this.click_Logout()
+              this.click_Logout();
             }
             this.setState({
               confirmPopupData: [

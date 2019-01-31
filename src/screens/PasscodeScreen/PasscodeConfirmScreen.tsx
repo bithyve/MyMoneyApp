@@ -120,8 +120,6 @@ export default class PasscodeConfirmScreen extends Component {
     if (this.state.mnemonicValues.length > 0) {
       //mnemonic key
       var mnemonicValue = this.state.mnemonicValues;
-
-      console.log("mnemonic key =", mnemonicValue.toString());
       var priKeyValue = privateKey;
       //User Details Data
       const dateTime = Date.now();
@@ -134,9 +132,9 @@ export default class PasscodeConfirmScreen extends Component {
         const resultCreateWallet = await dbOpration.insertWallet(
           localDB.tableName.tblWallet,
           fulldate,
-          utils.encrypt(mnemonicValue.toString(), code),
-          utils.encrypt(priKeyValue, code),
-          utils.encrypt(address, code),
+          mnemonicValue,
+          priKeyValue,
+          address,
           "Primary"
         );
         if (resultCreateWallet) {
@@ -144,45 +142,47 @@ export default class PasscodeConfirmScreen extends Component {
             localDB.tableName.tblAccount,
             fulldate,
             address,
-            "BTC",
+            "BTC",   
             "Savings",
             ""
           );
-          const resultCreateAccount = await dbOpration.insertCreateAccount(
-            localDB.tableName.tblAccount,
-            fulldate,
-            "",
-            "",
-            "UnKnown",
-            ""
-          );
-          if (resultCreateAccount) {
-            try {
-              const username = "mymoney";
-              const password = code;
-              // Store the credentials
-              await Keychain.setGenericPassword(username, password);
-              AsyncStorage.setItem(
-                "PasscodeCreateStatus",
-                JSON.stringify(true)
-              );  
-            } catch (error) {
-              // Error saving data
+          if (resultCreateAccountSaving) {
+            const resultCreateAccount = await dbOpration.insertCreateAccount(
+              localDB.tableName.tblAccount,
+              fulldate,
+              "",   
+              "",
+              "UnKnown",
+              ""
+            );
+            if (resultCreateAccount) {
+              try {
+                const username = "mymoney";
+                const password = code;
+                // Store the credentials
+                await Keychain.setGenericPassword(username, password);
+                AsyncStorage.setItem(
+                  "PasscodeCreateStatus",
+                  JSON.stringify(true)
+                );
+              } catch (error) {
+                // Error saving data
+              }
+              this.setState({
+                success: "Ok"
+                //isLoading: false
+              });
+              const resetAction = StackActions.reset({
+                index: 0, // <-- currect active route from actions array
+                key: null,
+                actions: [
+                  NavigationActions.navigate({ routeName: "TabbarBottom" })
+                ]
+              });
+              this.props.navigation.dispatch(resetAction);
             }
-            this.setState({
-              success: "Ok"
-              //isLoading: false
-            });
-            const resetAction = StackActions.reset({
-              index: 0, // <-- currect active route from actions array
-              key: null,
-              actions: [
-                NavigationActions.navigate({ routeName: "TabbarBottom" })
-              ]
-            });
-            this.props.navigation.dispatch(resetAction);
           }
-        }
+        }  
       }
     }
   };

@@ -132,32 +132,32 @@ export default class AccountsScreen extends React.Component<any, any> {
     var resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
-
-    console.log({ resultAccount });
-
     if (isNetwork && this.state.cardIndexNo != resultAccount.temp.length - 1) {
       title =
         resultAccount.temp[this.state.cardIndexNo].accountType +
         " Recent Transactions";
+
       const bal = await RegularAccount.getBalance(
         resultAccount.temp[this.state.cardIndexNo].address
       );
-      let transation: [] = [];
-      let flag_noTrasation: boolean;
+
+      var transation: [] = [];
+      var flag_noTrasation: boolean;
       var resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
         localDB.tableName.tblTransaction,
         resultAccount.temp[this.state.cardIndexNo].address
       );
 
-      if (resultRecentTras.temp.length > 0) {
-        transation = resultRecentTras.temp;
-        flag_noTrasation = false;
-      } else {
-        transation = [];
-        flag_noTrasation = true;
-      }
-      tranDetails = transation;
-      isNoTranstion = flag_noTrasation;
+      // if (resultRecentTras.temp.length > 0) {
+      //   transation = resultRecentTras.temp;
+      //   flag_noTrasation = false;
+      // } else {
+      //   transation = [];
+      //   flag_noTrasation = true;
+      // }
+      // tranDetails = transation;
+      // isNoTranstion = flag_noTrasation;
+
       if (bal.statusCode == 200) {
         resultRecentTras = await RegularAccount.getTransactions(
           resultAccount.temp[this.state.cardIndexNo].address
@@ -170,13 +170,17 @@ export default class AccountsScreen extends React.Component<any, any> {
               resultRecentTras.address,
               lastUpdateDate
             );
+
             if (resultRecentTransaction) {
               resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
                 localDB.tableName.tblTransaction,
                 resultAccount.temp[this.state.cardIndexNo].address
               );
-
+  
+              console.log({ resultAccount });
+              console.log({ resultRecentTras });
               if (resultRecentTras.temp.length > 0) {
+                console.log({ resultRecentTras });
                 transation = resultRecentTras.temp;
                 flag_noTrasation = false;
               } else {
@@ -185,6 +189,8 @@ export default class AccountsScreen extends React.Component<any, any> {
               }
               tranDetails = transation;
               isNoTranstion = flag_noTrasation;
+
+              console.log({ tranDetails });
             }
           } else {
             isNoTranstion = true;
@@ -285,6 +291,7 @@ export default class AccountsScreen extends React.Component<any, any> {
     var resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
+
     if (resultAccount.temp[index].accountType != "UnKnown") {
       title = resultAccount.temp[index].accountType + " Recent Transactions";
     } else {
@@ -300,6 +307,7 @@ export default class AccountsScreen extends React.Component<any, any> {
 
         let transation: [] = [];
         let flag_noTrasation: boolean;
+
         var resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
           localDB.tableName.tblTransaction,
           resultAccount.temp[index].address
@@ -319,6 +327,9 @@ export default class AccountsScreen extends React.Component<any, any> {
           resultRecentTras = await RegularAccount.getTransactions(
             resultAccount.temp[index].address
           );
+
+          console.log({ resultRecentTras });
+
           if (resultRecentTras.statusCode == 200) {
             if (resultRecentTras.transactionDetails.length > 0) {
               const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -335,6 +346,7 @@ export default class AccountsScreen extends React.Component<any, any> {
                   resultAccount.temp[index].address
                 );
 
+                console.log({ resultRecentTras });
                 if (resultRecentTras.temp.length > 0) {
                   transation = resultRecentTras.temp;
                   flag_noTrasation = false;

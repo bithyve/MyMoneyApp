@@ -107,7 +107,7 @@ export default class ValidateSecureAccountScreen extends React.Component {
           AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
         } catch (error) {
           console.log(error);
-        }  
+        }
         if (res.data.setupSuccessful) {
           this.connection_SaveSecureAccount(
             fulldate,
@@ -153,14 +153,13 @@ export default class ValidateSecureAccountScreen extends React.Component {
   }
 
   async connection_SaveSecureAccount(fulldate, address, sercureData) {
-    console.log({ sercureData });
     const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
       localDB.tableName.tblAccount,
       fulldate,
       address,
       "BTC",
       "Secure",
-      sercureData
+      sercureData  
     );
     if (resultCreateAccount) {
       this.setState({

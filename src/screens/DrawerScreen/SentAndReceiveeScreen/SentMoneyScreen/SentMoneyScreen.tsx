@@ -160,9 +160,6 @@ export default class SentMoneyScreen extends React.Component {
         parseFloat(amountValue) * 1e8,
         this.state.walletJSON[0].privateKey
       );
-
-      console.log({ res });
-
       if (res.statusCode == 200) {
         const bal = await RegularAccount.getBalance(
           navigation.getParam("address")
@@ -204,7 +201,7 @@ export default class SentMoneyScreen extends React.Component {
               });
           }
         }
-      }   
+      }
     }
     this.setState({
       isLoading: isLoading
