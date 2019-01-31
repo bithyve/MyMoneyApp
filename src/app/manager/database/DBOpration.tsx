@@ -239,7 +239,7 @@ const readRecentTransactionAddressWise = (
           }
         } else {
           resolve({ temp });
-        }
+        }    
       });
     });
   });
