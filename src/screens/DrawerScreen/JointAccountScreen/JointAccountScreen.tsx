@@ -42,6 +42,7 @@ import { colors, images, localDB } from "../../../app/constants/Constants";
 var dbOpration = require("../../../app/manager/database/DBOpration");
 var utils = require("../../../app/constants/Utils");
 import renderIf from "../../../app/constants/validation/renderIf";
+import { AsyncStorage } from "react-native"
 
 let isNetwork;
 //import styles from './Styles';
@@ -56,9 +57,7 @@ export default class JointAccountScreen extends React.Component {
 		super(props);
 		StatusBar.setBackgroundColor(colors.appColor, true);
 		this.state = {
-			data: [],
-			waletteData: [],
-			tranDetails: [],
+			address: "test address",
 			refreshing: false,
 			isLoading: false,
 			isNoTranstion: false
@@ -66,134 +65,25 @@ export default class JointAccountScreen extends React.Component {
 		isNetwork = utils.getNetwork();
 	}
 
-	//TODO: Page Life Cycle
-	// componentWillMount() {
-	// 	const { navigation } = this.props;
-	// 	// console.log("data =" + JSON.stringify(navigation.getParam("data")));   
-	// 	// this.setState({
-	// 	//   data: navigation.getParam("data"),
-	// 	//   waletteData: navigation.getParam("privateKeyJson")[
-	// 	//     navigation.getParam("indexNo")
-	// 	//   ]
-	// 	// });
-	// }
+	readDataAndSetStates = async () => {
+		
+		try {
+			const value = await AsyncStorage.getItem("Joint");
+			if (value !== null) {
+				let Joint = JSON.parse(value)
+				this.setState({
+					address: Joint.Add
+				})
+				console.log("address",this.state.address)
+			}
+		} catch (error) {
+			// Error retrieving data
+		}
+	}
 
-	//   componentDidMount() {
-	//     this.willFocusSubscription = this.props.navigation.addListener(
-	//       "willFocus",
-	//       () => {
-	//         isNetwork = utils.getNetwork();
-	//         this.fetchloadData();
-	//       }
-	//     );
-	//   }
-
-	//   componentWillUnmount() {
-	//     this.willFocusSubscription.remove();
-	//   }
-
-	//TODO: func loadData
-	// async fetchloadData() {
-	// 	this.setState({
-	// 		isLoading: true
-	// 	});
-	// 	const dateTime = Date.now();
-	// 	const lastUpdateDate = Math.floor(dateTime / 1000);
-	// 	const { navigation } = this.props;
-	// 	const resultAccount = await dbOpration.readAccountTablesData(
-	// 		localDB.tableName.tblAccount
-	// 	);
-	// 	if (isNetwork) {
-	// 		const bal = await WalletService.getBalance(
-	// 			navigation.getParam("data").address
-	// 		);
-	// 		if (bal.statusCode == 200) {
-	// 			const resultRecentTras = await WalletService.getTransactions(
-	// 				navigation.getParam("data").address
-	// 			);
-	// 			if (resultRecentTras.statusCode == 200) {
-	// 				if (resultRecentTras.transactionDetails.length > 0) {
-	// 					const resultRecentTransaction = await dbOpration.insertTblTransation(
-	// 						localDB.tableName.tblTransaction,
-	// 						resultRecentTras.transactionDetails,
-	// 						resultRecentTras.address,
-	// 						lastUpdateDate
-	// 					);
-	// 					if (resultRecentTransaction) {
-	// 						this.fetchRecentTransaction(navigation.getParam("data").address);
-	// 					}
-	// 				} else {
-	// 					this.setState({
-	// 						isNoTranstion: true
-	// 					});
-	// 				}
-	// 				const resultUpdateTblAccount = await dbOpration.updateTableData(
-	// 					localDB.tableName.tblAccount,
-	// 					bal.final_balance / 1e8,
-	// 					navigation.getParam("data").address,
-	// 					lastUpdateDate
-	// 				);
-	// 				if (resultUpdateTblAccount) {
-	// 					this.setState({
-	// 						data: resultAccount.temp[navigation.getParam("indexNo")],
-	// 						isLoading: false
-	// 					});
-	// 				}
-	// 			} else {
-	// 				this.dropdown.alertWithType(
-	// 					"error",
-	// 					"OH!!",
-	// 					resultRecentTras.errorMessage
-	// 				);
-	// 			}
-	// 		}
-	// 	} else {
-	// 		this.fetchRecentTransaction(navigation.getParam("data").address);
-	// 		this.setState({
-	// 			data: resultAccount.temp[navigation.getParam("indexNo")],
-	// 			isLoading: false
-	// 		});
-	// 	}
-	// }
-
-	// //TODO: func fetchRecentTransaction
-	// async fetchRecentTransaction(address) {
-	// 	let transation;
-	// 	let flag_noTrasation;
-	// 	const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
-	// 		localDB.tableName.tblTransaction,
-	// 		address
-	// 	);
-	// 	if (resultRecentTras.temp.length > 0) {
-	// 		transation = resultRecentTras.temp;
-	// 		flag_noTrasation = false;
-	// 	} else {
-	// 		transation = [];
-	// 		flag_noTrasation = true;
-	// 	}
-	// 	this.setState({
-	// 		tranDetails: transation,
-	// 		isNoTranstion: flag_noTrasation
-	// 	});
-	// }
-
-	// //TODO: func refresh
-	// refresh() {
-	// 	this.setState({ refreshing: true });
-	// 	return new Promise(resolve => {
-	// 		setTimeout(() => {
-	// 			this.setState({ refreshing: false });
-	// 			this.fetchloadData();
-	// 			resolve();
-	// 		}, 1000);
-	// 	});
-	// }
-	// //TODO: func openRecentTrans
-	// openRecentTrans(item) {
-	// 	this.props.navigation.navigate("RecentTransactionsScreen", {
-	// 		transationDetails: item
-	// 	});
-	// }
+	componentWillMount(){
+		this.readDataAndSetStates()
+	}
 
 	render() {
 		return (
@@ -208,8 +98,8 @@ export default class JointAccountScreen extends React.Component {
 					// }
 				>
 					<ImageBackground
-						source={images.accounts["Savings"]}
-						style={styles["Savings"]}
+						source={images.accounts["Secure"]}
+						style={styles["Secure"]}
 						borderRadius={10}
 						imageStyle={{
 							resizeMode: "cover" // works only here!
@@ -245,11 +135,11 @@ export default class JointAccountScreen extends React.Component {
 						</View>
 						<View style={styles.viewBalInfo}>
 							<Text style={[styles.txtTile, styles.txtAccountType]}>
-								"Joint"
+								Joint 
 							</Text>
 							<View style={{ flexDirection: "row" }}>
 								<Text style={[styles.txtTile, styles.txtBalInfo]}>
-									1234
+									 0
 								</Text>
 								<Text style={[styles.txtTile, styles.txtBalInfo]}>
 									BTC
@@ -299,7 +189,7 @@ export default class JointAccountScreen extends React.Component {
 								transparent
 								onPress={() =>
 									this.props.navigation.push("ReceiveMoneyScreen", {
-										address: this.state.data.address
+										address: this.state.address
 									})
 								}
 							>

@@ -29,6 +29,18 @@ class WalletService {
     return keyPair.publicKey;
   }
 
+  public multisigTransaction = async (
+    senderAddress: string,
+    recipientAddress: string,
+    amount: number,
+    privateKey: string,
+    p2sh: any,
+    p2wsh: any,
+  ) => await this.bitcoin.multisigTransaction(senderAddress, recipientAddress, amount, privateKey, p2sh, p2wsh)
+
+  public completeMultisigTransaction = async (txHex: string, inputs: any, privateKey: string, p2sh: any, p2wsh: any) =>
+    await this.bitcoin.completeMultisigTransaction(txHex, inputs, privateKey, p2sh, p2wsh)
+
   public createMultiSig = (required: number, pubKeys: string[]) => {
     if (required <= 0 || required > pubKeys.length) {
       throw new Error("Inappropriate value for required param");

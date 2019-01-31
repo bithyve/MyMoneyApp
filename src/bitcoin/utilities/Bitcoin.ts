@@ -32,11 +32,11 @@ export default class Bitcoin {
     mnemonic: string,
     passphrase?: string,
   ): {
-    mnemonic: string;
-    keyPair: ECPair;
-    address: string;
-    privateKey: string;
-  } => {
+      mnemonic: string;
+      keyPair: ECPair;
+      address: string;
+      privateKey: string;
+    } => {
     // generates a HD-Wallet from the provided mnemonic-passphrase pair
 
     if (!bip39.validateMnemonic(mnemonic)) {
@@ -156,16 +156,16 @@ export default class Bitcoin {
     let totalReceived: number = 0;
     let totalSpent: number = 0;
 
-    console.log({inputs, outputs})
+    console.log({ inputs, outputs })
     inputs.forEach((input) => {
       const { addresses } = input;
-      if(addresses){
+      if (addresses) {
         addresses.forEach((address) => {
           if (address === walletAddress) {
             sent = true;
           }
         });
-      }  
+      }
     });
 
     outputs.forEach((output) => {
@@ -184,7 +184,7 @@ export default class Bitcoin {
       tx.totalReceived = totalReceived;
     }
 
-    console.log({tx})
+    console.log({ tx })
     return tx;
   }
 
@@ -206,9 +206,9 @@ export default class Bitcoin {
   public fetchTransactions = async (address: string): Promise<any> => {
     let res: AxiosResponse;
     try {
-      console.log({address});
+      console.log({ address });
       res = await this.fetchAddressInfo(address);
-      console.log({res});
+      console.log({ res });
     } catch (err) {
       return {
         statusCode: err.response.status,
@@ -218,7 +218,7 @@ export default class Bitcoin {
 
     const { final_n_tx, n_tx, unconfirmed_n_tx, txs } = res.data;
     txs.map((tx) => {
-      console.log({tx})
+      console.log({ tx })
       this.confirmationCat(this.categorizeTx(tx, address));
     });
 
@@ -327,6 +327,74 @@ export default class Bitcoin {
       address: p2sh.address,
     };
   }
+
+  //Alice side multisig transaction
+  public multisigTransaction = async (
+    senderAddress: string,
+    recipientAddress: string,
+    amount: number,
+    privateKey: string,
+    p2sh: any,
+    p2wsh: any,
+  ) => {
+    const balance = await this.checkBalance(senderAddress);
+    if (parseInt(balance.final_balance, 10) <= amount) {
+      // logic for fee inclusion can also be accomodated
+      throw new Error("Insufficient balance");
+    }
+
+    console.log("---- Creating Transaction ----");
+    const { inputs, txb } = await this.createTransaction(
+      senderAddress,
+      recipientAddress,
+      amount,
+    );
+
+    console.log("---- Transaction Created ----");
+
+    const keyPair = this.getKeyPair(privateKey);
+
+    const signedTxb = this.signTransaction(
+      inputs,
+      txb,
+      [keyPair],
+      p2sh.redeem.output,
+      p2wsh.redeem.output,
+    );
+    console.log(
+      "---- Transaction Signed by User (1st sig for 2/2 MultiSig)----",
+    );
+    const txHex = signedTxb.buildIncomplete().toHex();
+    console.log(txHex);
+    return txHex
+  }
+
+  //Bob side multisig transaction
+  public completeMultisigTransaction = async (txHex: string,inputs:any,privateKey: string,p2sh:any,p2wsh:any) => {
+    // reconstructing and signing the transaction from the txHex (executed @Server)
+    const regenTx = bitcoinJS.Transaction.fromHex(txHex);
+
+    const regenTxb: TransactionBuilder = bitcoinJS.TransactionBuilder.fromTransaction(
+      regenTx,
+      this.network,
+    );
+    const keyPair = this.getKeyPair(privateKey);
+    const regenSignTx = this.signTransaction(
+      inputs,
+      regenTxb,
+      [keyPair],
+      p2sh.redeem.output,
+      p2wsh.redeem.output,
+    );
+
+    const reHex = regenSignTx.build().toHex();
+    console.log("---- Transaction Signed ----");
+    console.log(reHex)
+    const res = await this.broadcastTransaction(reHex);
+    console.log("---- Transaction Broadcasted ----");
+    return reHex
+  }
+
 
   public fetchChainInfo = async (): Promise<any> => {
     // provides transation fee rate (satoshis/kilobyte)
