@@ -32,6 +32,7 @@ import Dialog, {
   DialogContent,
   DialogButton
 } from "react-native-popup-dialog";
+import Toast from "react-native-simple-toast";
 
 const required = value => (value ? undefined : "This is a required field.");
 const email = value =>
@@ -43,6 +44,7 @@ const email = value =>
 import { colors, images, localDB } from "../../../app/constants/Constants";
 var dbOpration = require("../../../app/manager/database/DBOpration");
 import renderIf from "../../../app/constants/validation/renderIf";
+import Share, { ShareSheet } from "react-native-share";
 
 //TODO: Wallets
 import WalletService from "../../../bitcoin/services/WalletService";
@@ -55,6 +57,7 @@ export default class JointAccountSentMoneyScreen extends React.Component {
       data: [],
       recipientAddress: "",
       amount: "",
+      hex: "",
       sentBtnColor: "gray",
       sentBtnStatus: true,
       isLoading: false,
@@ -67,26 +70,30 @@ export default class JointAccountSentMoneyScreen extends React.Component {
     try {
       const value = await AsyncStorage.getItem("Joint");
       if (value !== null) {
+        const resultWallet = await dbOpration.readTablesData(
+          localDB.tableName.tblWallet
+        );
+        const {
+          privateKey
+        } = await WalletService.importWallet(resultWallet.temp[0].privateKey);
         let Joint = JSON.parse(value)
         var recAddress = this.state.recipientAddress;
         var amountValue = this.state.amount;
-        const { inputs, txb } = await this.bitcoin.createTransaction(
-          senderAddress,
-          recipientAddress,
-          amount,
-        );
+        const { txhex } = await WalletService.multisigTransaction(Joint.Add, recAddress, amountValue, privateKey, Joint.p2sh, Joint.p2wsh)
+        console.log("Incomplete Transaction hex", txhex)
+        this.setState({
+          hex: txhex
+        });
+
       }
     } catch (error) {
+      Toast.show("Error", Toast.SHORT);
       // Error retrieving data
     }
   }
 
 
   componentWillMount() {
-    const { navigation } = this.props;
-    this.setState({
-      data: navigation.getParam("data")
-    });
   }
 
   //TODO: func validation
@@ -122,51 +129,52 @@ export default class JointAccountSentMoneyScreen extends React.Component {
   }
 
   //TODO: func click_SentMoney
-  async click_SentMoney() {
-    if (this.state.data.accountType == "Secure") {
-      this.setState({ isSecureAccountPopup: true });
-    } else {
-      this.setState({
-        isLoading: true
-      });
-      var recAddress = this.state.recipientAddress;
-      var amountValue = this.state.amount;
-      console.log("first amount=", amountValue);
-      const dateTime = Date.now();
-      const lastUpdateDate = Math.floor(dateTime / 1000);
-      const { navigation } = this.props;
-      console.log("address =  " + navigation.getParam("address"));
-      console.log("keypair = " + navigation.getParam("privateKey"));
-      const { success, txid } = await WalletService.transfer(
-        navigation.getParam("address"),
-        recAddress,
-        parseFloat(amountValue) * 1e8,
-        navigation.getParam("privateKey")
-      );
-      if (success) {
-        const bal = await WalletService.getBalance(
-          navigation.getParam("address")
-        );
-        if (bal) {
-          console.log("change bal = ", bal);
-          const resultUpdateTblAccount = await dbOpration.updateTableData(
-            localDB.tableName.tblAccount,
-            bal.final_balance / 1e8,
-            navigation.getParam("address"),
-            lastUpdateDate
-          );
-          if (resultUpdateTblAccount) {
-            setTimeout(() => {
-              this.setState({
-                isLoading: false
-              });
-              this.props.navigation.goBack();
-            }, 2000);
-          }
-        }
-      }
-    }
-  }
+  // async click_SentMoney() {
+  //   if (this.state.data.accountType == "Secure") {
+  //     this.setState({ isSecureAccountPopup: true });
+  //   } else {
+  //     this.setState({
+  //       isLoading: true
+  //     });
+  //     var recAddress = this.state.recipientAddress;
+  //     var amountValue = this.state.amount;
+  //     console.log("first amount=", amountValue);
+  //     const dateTime = Date.now();
+  //     const lastUpdateDate = Math.floor(dateTime / 1000);
+  //     const { navigation } = this.props;
+  //     console.log("address =  " + navigation.getParam("address"));
+  //     console.log("keypair = " + navigation.getParam("privateKey"));
+
+  //     const { success, txid } = await WalletService.transfer(
+  //       navigation.getParam("address"),
+  //       recAddress,
+  //       parseFloat(amountValue) * 1e8,
+  //       navigation.getParam("privateKey")
+  //     );
+  //     if (success) {
+  //       const bal = await WalletService.getBalance(
+  //         navigation.getParam("address")
+  //       );
+  //       if (bal) {
+  //         console.log("change bal = ", bal);
+  //         const resultUpdateTblAccount = await dbOpration.updateTableData(
+  //           localDB.tableName.tblAccount,
+  //           bal.final_balance / 1e8,
+  //           navigation.getParam("address"),
+  //           lastUpdateDate
+  //         );
+  //         if (resultUpdateTblAccount) {
+  //           setTimeout(() => {
+  //             this.setState({
+  //               isLoading: false
+  //             });
+  //             this.props.navigation.goBack();
+  //           }, 2000);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   //TODO: func openQRCodeScanner
   openQRCodeScanner() {
@@ -187,6 +195,12 @@ export default class JointAccountSentMoneyScreen extends React.Component {
   //   };
 
   render() {
+    let shareOptions = {
+      title: "Transaction Confirmation",
+      message: "Bithyveapp://joint/0",
+      url: "",
+      subject: "MyMoney" //  for email
+    };
     return (
       <Container>
         <ImageBackground source={images.appBackgound} style={styles.container}>
@@ -250,7 +264,9 @@ export default class JointAccountSentMoneyScreen extends React.Component {
               ]}
               full
               disabled={this.state.sentBtnStatus}
-              onPress={() => this.click_SentMoney()}
+              onPress={() => {
+                Share.open(shareOptions);
+              }}
             >
               <Text> SEND </Text>
             </Button>

@@ -10,7 +10,8 @@ import {
 	StatusBar,
 	Alert,
 	ImageBackground,
-	RefreshControl
+	RefreshControl,
+	Linking
 } from "react-native";
 import {
 	Container,
@@ -66,7 +67,7 @@ export default class JointAccountScreen extends React.Component {
 	}
 
 	readDataAndSetStates = async () => {
-		
+
 		try {
 			const value = await AsyncStorage.getItem("Joint");
 			if (value !== null) {
@@ -74,15 +75,38 @@ export default class JointAccountScreen extends React.Component {
 				this.setState({
 					address: Joint.Add
 				})
-				console.log("address",this.state.address)
+				console.log("address", this.state.address)
 			}
 		} catch (error) {
 			// Error retrieving data
 		}
 	}
 
-	componentWillMount(){
+	componentWillMount() {
 		this.readDataAndSetStates()
+	}
+
+	componentDidMount() {
+		if (Platform.OS === 'android') {
+			Linking.getInitialURL().then(url => {
+				this.navigate(url);
+			});
+		} else {
+			Linking.addEventListener('url', this.handleOpenURL);
+		}
+	}
+
+	handleOpenURL = (event) => { 
+		this.navigate(event.url);
+	}
+	navigate = (url) => { 
+		const { navigate } = this.props.navigation;
+		const route = url.replace(/.*?:\/\//g, '');
+		const hex = route.match(/\/([^\/]+)\/?$/)[1];
+		const routeName = route.split('/')[0];
+		if (routeName === 'joint') {
+			navigate('TransactionConfirmationScreen ', { hex: hex })
+		};
 	}
 
 	render() {
@@ -90,12 +114,12 @@ export default class JointAccountScreen extends React.Component {
 			<Container style={styles.container}>
 				<Content
 					contentContainerStyle={styles.container}
-					// refreshControl={
-					// 	<RefreshControl
-					// 		refreshing={this.state.refreshing}
-					// 		onRefresh={this.refresh.bind(this)}
-					// 	/>
-					// }
+				// refreshControl={
+				// 	<RefreshControl
+				// 		refreshing={this.state.refreshing}
+				// 		onRefresh={this.refresh.bind(this)}
+				// 	/>
+				// }
 				>
 					<ImageBackground
 						source={images.accounts["Secure"]}
@@ -135,11 +159,11 @@ export default class JointAccountScreen extends React.Component {
 						</View>
 						<View style={styles.viewBalInfo}>
 							<Text style={[styles.txtTile, styles.txtAccountType]}>
-								Joint 
+								Joint
 							</Text>
 							<View style={{ flexDirection: "row" }}>
 								<Text style={[styles.txtTile, styles.txtBalInfo]}>
-									 0
+									0
 								</Text>
 								<Text style={[styles.txtTile, styles.txtBalInfo]}>
 									BTC
@@ -168,11 +192,7 @@ export default class JointAccountScreen extends React.Component {
 								transparent
 								onPress={() => {
 									if (isNetwork) {
-										this.props.navigation.push("SentMoneyScreen", {
-											data: this.state.data,
-											address: this.state.data.address,
-											privateKey: this.state.waletteData.privateKey
-										});
+										this.props.navigation.push("JointAccountSentMoneyScreen");
 									} else {
 										this.dropdown.alertWithType(
 											"info",

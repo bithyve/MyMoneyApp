@@ -58,6 +58,7 @@ import AcknowledgeJointAccountScreen from "../../screens/DrawerScreen/JointAccou
 import MergeConfirmJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/MergeConfirmJointAccountScreen";
 import JointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/JointAccountScreen";
 import JointAccountSentMoneyScreen from "../../screens/DrawerScreen/JointAccountScreen/JointAccountSentMoneyScreen";
+import TransactionConfirmationScreen from "../../screens/DrawerScreen/JointAccountScreen/TransactionConfirmationScreen"
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
@@ -199,6 +200,10 @@ const JointAccountRouter = createStackNavigator(
     },
     JointAccountSentMoneyScreen: {
       screen: JointAccountSentMoneyScreen,
+      navigationOptions: { header: null }
+    },
+    TransactionConfirmationScreen: {
+      screen: TransactionConfirmationScreen,
       navigationOptions: { header: null }
     }
   },
