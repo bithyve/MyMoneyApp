@@ -1,24 +1,12 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  StatusBar,
-  Dimensions,
-  AsyncStorage,
-  Text,
-  TextInput
-} from "react-native";
-import { Container, Body, Footer } from "native-base";
+import { StyleSheet, View } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
-import CreateTables from "../../../app/manager/database/CreateTables";
-
+import CreateTables from "../../../app/manager/database/CreateTables";  
 //Custome Compontes
 import ViewOnBoarding from "../../../app/custcompontes/view/ViewOnBoarding";
-
 //Json Files
 import onBoardingData from "../../../assets/jsonfiles/onBoardingScreen/onBoardingScreen.json";
-
+   
 //TODO: Custome object
 import { images } from "../../../app/constants/Constants";
 

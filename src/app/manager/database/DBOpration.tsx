@@ -1,5 +1,5 @@
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import { localDB } from "../../../app/constants/Constants";
 var utils = require("../../../app/constants/Utils");
 import Singleton from "../../constants/Singleton";
 import "../../../assets/static/js/sugar.js";
@@ -30,9 +30,9 @@ const readTablesData = (tableName: any) => {
               data.address = utils.decrypt(data.address, passcode);
               data.privateKey = utils.decrypt(data.privateKey, passcode);
               data.mnemonic = utils.decrypt(data.mnemonic, passcode);
-              data.dateCreated = data.dateCreated;
-              data.lastUpdated = data.lastUpdated;
-              data.walletType = data.walletType;
+              data.dateCreated = utils.decrypt(data.dateCreated, passcode);
+              data.lastUpdated = utils.decrypt(data.lastUpdated, passcode);
+              data.walletType = utils.decrypt(data.walletType, passcode);
               temp.push(data);
             } else {
               temp.push(data);
@@ -231,7 +231,7 @@ const readRecentTransactionAddressWise = (
                   } else {
                     // resolve({ temp });
                   }
-                }   
+                }
               );
             } else {
               // resolve({ temp });
@@ -239,7 +239,7 @@ const readRecentTransactionAddressWise = (
           }
         } else {
           resolve({ temp });
-        }    
+        }
       });
     });
   });
@@ -379,7 +379,7 @@ const insertCreateAccount = (
           utils.encrypt(JSON.stringify(additionalInfo).toString(), passcode),
           fullDate
         ]
-      );
+      );  
       resolve(true);
     });
   });
@@ -414,52 +414,6 @@ const insertLastBeforeCreateAccount = (
     });
   });
 };
-
-//TODO: Insert tblTransaction
-// const insertTblTransation = (
-//   tblName,
-//   transactionDetails,
-//   address,
-//   fulldate
-// ) => {
-//   let bal;
-
-//   return new Promise((resolve, reject) => {
-//     db.transaction(function(txn) {
-//       //delete
-//       txn.executeSql(
-//         "DELETE FROM " + tblName + " WHERE accountAddress = '" + address + "'"
-//       );
-
-//       //insert
-//       for (let i = 0; i < transactionDetails.length; i++) {
-//         if (transactionDetails[i].transactionType == "Received") {
-//           bal = transactionDetails[i].totalReceived;
-//         } else {
-//           bal = transactionDetails[i].totalSpent;
-//         }
-//         txn.executeSql(
-//           "INSERT INTO " +
-//             tblName +
-//             "(dateCreated,accountAddress,transactionHash,balance,unit,fees,transactionType,confirmationType,lastUpdated) VALUES (:dateCreated,:accountAddress,:transactionHash,:balance,:unit,:fees,:transactionType,:confirmationType,:lastUpdated)",
-//           [
-//             utils.getUnixTimeDate(transactionDetails[i].received),
-//             address,
-//             transactionDetails[i].hash,
-//             bal,
-//             "BTC",
-//             transactionDetails[i].fees,
-//             transactionDetails[i].transactionType,
-//             transactionDetails[i].confirmationType,
-//             fulldate
-//           ]
-//         );
-//       }
-
-//       resolve(true);
-//     });
-//   });
-// };
 
 const insertTblTransation = (
   tblName: string,

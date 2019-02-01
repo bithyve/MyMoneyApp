@@ -1,16 +1,5 @@
 import React, { Component } from "react";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  WebView,
-  View,
-  Alert,
-  ImageBackground,
-  Dimensions,
-  Linking
-} from "react-native";
+import { StyleSheet, WebView, ImageBackground } from "react-native";
 import {
   Container,
   Header,
@@ -19,15 +8,11 @@ import {
   Button,
   Left,
   Right,
-  Body,
-  Text
+  Body
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Loader from "react-native-modal-loader";
-import {
-  colors,
-  images
-} from "../../../../../app/constants/Constants";
+import { colors, images } from "../../../../../app/constants/Constants";
 export default class TransactionDetailsWebViewScreen extends Component {
   constructor(props: any) {
     super(props);
@@ -86,7 +71,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1
   },
-  txtAppTitle:{
-    color:"#fff"
+  txtAppTitle: {
+    color: "#fff"
   }
 });

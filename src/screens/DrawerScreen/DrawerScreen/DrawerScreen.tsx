@@ -7,34 +7,16 @@ import {
   View,
   StyleSheet,
   ImageBackground,
-  Image,
   FlatList,
-  TouchableOpacity,
-  Dimensions,
-  Alert
+  TouchableOpacity
 } from "react-native";
-import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Button,
-  Left,
-  Right,
-  Thumbnail
-} from "native-base";
+import { Container } from "native-base";
 import { DrawerActions } from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Dialog, {
-  SlideAnimation,
-  DialogTitle,
-  DialogContent,
-  DialogButton
-} from "react-native-popup-dialog";
 import SCLAlertSimpleConfirmation from "../../../app/custcompontes/alert/SCLAlertSimpleConfirmation";
-
+   
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import { images } from "../../../app/constants/Constants";
 
 //TODO: Json Files
 import menuData from "../../../assets/jsonfiles/drawerScreen/leftMenuList.json";
@@ -43,7 +25,7 @@ class DrawerScreen extends Component {
   constructor(props: any) {
     super(props);
     this.state = {
-      menuBarList: [],  
+      menuBarList: [],
       confirmPopupData: []
     };
     this.click_Logout = this.click_Logout.bind(this);
@@ -164,5 +146,5 @@ const styles = StyleSheet.create({
 DrawerScreen.propTypes = {
   navigation: PropTypes.object
 };
-
+    
 export default DrawerScreen;

@@ -1,44 +1,7 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
-  AsyncStorage,
-  Clipboard,
-  DeviveEventEmitter
-} from "react-native";
-import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Button,
-  Left,
-  Right,
-  Footer,
-  FooterTab,
-  Body,
-  Text
-} from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
-import Toast from "react-native-simple-toast";
+import { StyleSheet, Alert } from "react-native";
+import { Container, Content } from "native-base";
 import BarcodeScanner from "react-native-barcode-scanners";
-import ImagePicker from "react-native-image-picker";
-const options = {
-  title: "Select Avatar",
-  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
-  storageOptions: {
-    skipBackup: true,
-    path: "images"
-  }
-};
-
-//TODO: Custome Pages
-import { colors, images, localDB } from "../../../../app/constants/Constants";
 
 export default class QrcodeScannerScreen extends React.Component {
   constructor(props: any) {
@@ -58,7 +21,7 @@ export default class QrcodeScannerScreen extends React.Component {
   onReadBarCodeByGalleryFailure() {
     Alert.alert("Note", "Not found barcode!");
   }
-  
+
   render() {
     return (
       <Container>
@@ -80,7 +43,7 @@ export default class QrcodeScannerScreen extends React.Component {
       </Container>
     );
   }
-}
+}   
 
 const styles = StyleSheet.create({
   container: {

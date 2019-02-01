@@ -2,15 +2,9 @@ import React from "react";
 import {
   Image,
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  TouchableHighlight,
   View,
-  Alert,
   ImageBackground,
-  Dimensions,
-  DatePickerIOS,
   TextInput
 } from "react-native";
 import {
@@ -22,8 +16,7 @@ import {
   Left,
   Right,
   Body,
-  Text,
-  Input
+  Text
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { SkypeIndicator } from "react-native-indicators";
@@ -31,11 +24,9 @@ import DropdownAlert from "react-native-dropdownalert";
 import { RkCard } from "react-native-ui-kitten";
 import DatePicker from "react-native-datepicker";
 import moment from "moment";
-   
-//TODO: Custome class  
-import { colors, images, localDB } from "../../../app/constants/Constants";
-var dbOpration = require("../../../app/manager/database/DBOpration");
-var utils = require("../../../app/constants/Utils");
+
+//TODO: Custome class
+import { colors, images } from "../../../app/constants/Constants";
 import renderIf from "../../../app/constants/validation/renderIf";
 
 export default class VaultAccountScreen extends React.Component {
@@ -58,7 +49,7 @@ export default class VaultAccountScreen extends React.Component {
       days: "0",
       daysText: "Total Days"
     });
-  }  
+  }
 
   //TODO: func changeDaysValue
   changeDaysValue(val) {
@@ -132,7 +123,7 @@ export default class VaultAccountScreen extends React.Component {
                 <View style={styles.viewDays}>
                   <Text style={{ flex: 3, alignSelf: "center" }}>
                     No. Days:
-                  </Text>  
+                  </Text>
                   <TextInput
                     name={this.state.days}
                     value={this.state.days}

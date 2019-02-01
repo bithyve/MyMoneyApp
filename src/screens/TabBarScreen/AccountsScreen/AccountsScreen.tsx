@@ -1,17 +1,12 @@
 import React from "react";
 import {
   View,
-  Alert,
   ImageBackground,
   Dimensions,
   StatusBar,
-  FlatList,
-  TouchableHighlight,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
   RefreshControl,
-  ScrollView,
   Platform
 } from "react-native";
 import {
@@ -36,19 +31,13 @@ import SCLAlertAccountTypes from "../../../app/custcompontes/alert/SCLAlertAccou
 import ViewRecentTransaction from "../../../app/custcompontes/view/ViewRecentTransaction";
 
 //TODO: Custome object
-import {
-  colors,
-  images,
-  localDB,
-  notification
-} from "../../../app/constants/Constants";
+import { colors, images, localDB } from "../../../app/constants/Constants";
 var dbOpration = require("../../../app/manager/database/DBOpration");
 var utils = require("../../../app/constants/Utils");
 import renderIf from "../../../app/constants/validation/renderIf";
 import Singleton from "../../../app/constants/Singleton";
 
-let isNetwork: boolean, passcode: string;
-const { width, height } = Dimensions.get("window");
+let isNetwork: boolean;
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
   "window"
 );
@@ -176,7 +165,7 @@ export default class AccountsScreen extends React.Component<any, any> {
                 localDB.tableName.tblTransaction,
                 resultAccount.temp[this.state.cardIndexNo].address
               );
-  
+
               console.log({ resultAccount });
               console.log({ resultRecentTras });
               if (resultRecentTras.temp.length > 0) {

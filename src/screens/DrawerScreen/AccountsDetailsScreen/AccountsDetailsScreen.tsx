@@ -1,34 +1,15 @@
 import React from "react";
 import {
-  Image,
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
-  FlatList,
   StatusBar,
-  Alert,
   ImageBackground,
   RefreshControl
 } from "react-native";
-import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Button,
-  Left,
-  Right,
-  Body,
-  Text,
-  List,
-  ListItem,
-  Thumbnail,
-  Footer
-} from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import {
+import { Container, Content, Button, Left, Right, Text } from "native-base";
+import Icon from "react-native-vector-icons/FontAwesome5";  
+import {  
   MenuProvider,
   Menu,
   MenuOptions,
@@ -43,7 +24,7 @@ var dbOpration = require("../../../app/manager/database/DBOpration");
 var utils = require("../../../app/constants/Utils");
 import renderIf from "../../../app/constants/validation/renderIf";
 
-let isNetwork;
+let isNetwork: boolean;
 //Custome Compontes
 import ViewRecentTransaction from "../../../app/custcompontes/view/ViewRecentTransaction";
 import SCLAlertTransferAccountAmount from "../../../app/custcompontes/alert/SCLAlertTransferAccountAmount";
@@ -72,7 +53,7 @@ export default class AccountDetailsScreen extends React.Component<
       confirmPopupData: [],
       successOkPopupData: [],
       tranDetails: [],
-      arr_transferAccountList: [],  
+      arr_transferAccountList: [],
       refreshing: false,
       isLoading: false,
       isNoTranstion: false,
@@ -340,8 +321,8 @@ export default class AccountDetailsScreen extends React.Component<
           <View style={styles.viewFooter}>
             {renderIf(this.state.isTransferBtn)(
               <Button
-              style={styles.footerBtnAction}
-              warning
+                style={styles.footerBtnAction}
+                warning
                 onPress={() => {
                   if (isNetwork) {
                     this.setState({
@@ -365,7 +346,12 @@ export default class AccountDetailsScreen extends React.Component<
                   }
                 }}
               >
-                <Icon style={styles.footerBtnIcon} name="exchange-alt" size={25} color="#ffffff" />
+                <Icon
+                  style={styles.footerBtnIcon}
+                  name="exchange-alt"
+                  size={25}
+                  color="#ffffff"
+                />
                 <Text style={styles.txtTile}>TRANSFER</Text>
               </Button>
             )}
@@ -389,7 +375,12 @@ export default class AccountDetailsScreen extends React.Component<
                 }
               }}
             >
-              <Icon style={styles.footerBtnIcon} name="angle-up" size={25} color="#ffffff" />
+              <Icon
+                style={styles.footerBtnIcon}
+                name="angle-up"
+                size={25}
+                color="#ffffff"
+              />
               <Text style={styles.txtTile}>Send</Text>
             </Button>
             <Button
@@ -401,7 +392,12 @@ export default class AccountDetailsScreen extends React.Component<
                 })
               }
             >
-              <Icon style={styles.footerBtnIcon} name="angle-down" size={25} color="#ffffff" />
+              <Icon
+                style={styles.footerBtnIcon}
+                name="angle-down"
+                size={25}
+                color="#ffffff"
+              />
               <Text style={styles.txtTile}>Receive</Text>
             </Button>
           </View>
@@ -579,12 +575,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18
   },
-  //Fotter Button 
-  footerBtnIcon:{
-    paddingLeft:10,
+  //Fotter Button
+  footerBtnIcon: {
+    paddingLeft: 10
   },
-  footerBtnAction:{
-    marginLeft:2,
-    marginRight: 2,
+  footerBtnAction: {
+    marginLeft: 2,
+    marginRight: 2
   }
 });

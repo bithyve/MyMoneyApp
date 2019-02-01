@@ -1,12 +1,9 @@
 import React from "react";
 import {
-  Image,
+  Image,  
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
-  Alert,
   ImageBackground,
   Dimensions,
   AsyncStorage
@@ -24,28 +21,24 @@ import {
   Input
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Toast from "react-native-simple-toast";
 import Loader from "react-native-modal-loader";
 
 //TODO: Custome Pages
 import {
   colors,
-  images,
-  localDB,
-  apiary
+  images,    
+  localDB
 } from "../../../../../app/constants/Constants";
 var dbOpration = require("../../../../../app/manager/database/DBOpration");
-import renderIf from "../../../../../app/constants/validation/renderIf";
-
-const { width, height } = Dimensions.get("screen");
-
+const { width } = Dimensions.get("screen");
+  
 //Custome Compontes
 import SCLAlertOk from "../../../../../app/custcompontes/alert/SCLAlertOk";
-
 //TODO: Wallets
 import RegularAccount from "../../../../../bitcoin/services/RegularAccount";
 //TODO: SecureAccount
 import secureAccount from "../../../../../bitcoin/services/SecureAccount";
+
 
 export default class ValidateSecureAccountScreen extends React.Component {
   constructor(props: any) {

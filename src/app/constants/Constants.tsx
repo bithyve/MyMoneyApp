@@ -113,6 +113,8 @@ var localDB = {
 var notification = {
   notifi_UserDetialsChange: "notifi_UserDetialsChange"
 };
+     
+
 
 export {
   errorMessage,

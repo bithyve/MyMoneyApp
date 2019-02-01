@@ -1,31 +1,14 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  AsyncStorage,
-  StatusBar,
-  Vibration,
-  KeyboardAvoidingView,
-  Dimensions
-} from "react-native";
+import { StyleSheet, Text, View, AsyncStorage, Dimensions } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
 import * as Keychain from "react-native-keychain";
+
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../app/constants/Constants";
+import { colors } from "../../app/constants/Constants";
 import utils from "../../app/constants/Utils";
-import SQLite from "react-native-sqlite-storage";
-var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
 
-//TODO: Wallets
-//var createWallet = require('../../bitcoin/services/wallet');
-import RegularAccount from "../../bitcoin/services/RegularAccount";
-import { string } from "prop-types";
-
-const { height, width } = Dimensions.get("window");
 export default class PasscodeScreen extends Component {
   constructor(props: any) {
     super(props);
@@ -40,7 +23,7 @@ export default class PasscodeScreen extends Component {
       email: "",
       mobileNo: "",
       message: "Enter your PIN"
-    };   
+    };
   }
 
   //TODO: Page Life Cycle
@@ -49,7 +32,7 @@ export default class PasscodeScreen extends Component {
   }
 
   retrieveData = async () => {
-    try {   
+    try {
       AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
       const credentials = await Keychain.getGenericPassword();
       this.setState({

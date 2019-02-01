@@ -1,5 +1,4 @@
 import moment from "moment";
-import { AsyncStorage } from "react-native";
 import ConnectivityTracker from "react-native-connectivity-tracker";
 let CryptoJS = require("crypto-js");
 

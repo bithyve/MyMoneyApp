@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, AsyncStorage } from "react-native";
+import { StyleSheet,AsyncStorage } from "react-native";
 import {
   Container,
   Header,
@@ -8,8 +8,7 @@ import {
   Button,
   Left,
   Right,
-  Body,   
-  Text
+  Body
 } from "native-base";
 //Custome Compontes
 import ViewOnBoarding from "../../../app/custcompontes/view/ViewOnBoarding";
@@ -100,15 +99,15 @@ export default class AccountDetailsOnboardingScreen extends Component<
   }
 
   //TODO: func click_Done
-
-  click_Done() {
+   
+  click_Done() {    
     if (this.state.type == "Secure") {
       this.props.navigation.push("SecureAccountScreen");
       //this.props.navigation.push("ValidateSecureAccountScreen");
     } else if (this.state.type == "Joint") {
       this.props.navigation.push("CreateJointAccountScreen");
-    } else {
-      this.props.navigation.push("ValidateSecureAccountScreen");
+    } else {   
+      this.props.navigation.push("VaultAccountScreen");
     }
   }
 

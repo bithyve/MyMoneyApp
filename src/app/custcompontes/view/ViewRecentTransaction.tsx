@@ -1,12 +1,6 @@
 import React, { Component } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome5";
 import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Button,
   Left,
   Right,
   Body,
@@ -17,12 +11,7 @@ import {
 } from "native-base";
 import { DotIndicator } from "react-native-indicators";
 
-import {
-  colors,
-  images,
-  localDB,
-  notification
-} from "../../constants/Constants";
+import { colors } from "../../constants/Constants";
 import renderIf from "../../constants/validation/renderIf";
 var utils = require("../../../app/constants/Utils");
 
@@ -86,7 +75,7 @@ export default class ViewRecentTransaction extends Component<Props, any> {
                       <Thumbnail
                         source={require("../../../assets/images/bitcoinLogo.jpg")}
                       />
-                    </Left>   
+                    </Left>
                     <Body>
                       <Text numberOfLines={1} style={styles.txtTransTitle}>
                         {item.transactionType}{" "}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { colors } from "../constants/Constants";
 import {
   createStackNavigator,
@@ -40,14 +40,14 @@ import AccountsDetailsScreen from "../../screens/DrawerScreen/AccountsDetailsScr
 import RecentTransactionsScreen from "../../screens/TabBarScreen/AccountsScreen/RecentTransactionsScreen/RecentTransactionsScreen";
 import TransactionDetailsWebViewScreen from "../../screens/TabBarScreen/AccountsScreen/RecentTransactionsScreen/TransactionDetailsWebViewScreen/TransactionDetailsWebViewScreen";
 
-//TODO: Secure Account
+//TODO:  Account
 import AccountDetailsOnboardingScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/AccountDetailsOnboardingScreen";
 import SecureAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/SecureAccountScreen";
 import SecureSecretKeyScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/SecureSecretKeyScreen/SecureSecretKeyScreen";
 import ValidateSecureAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/ValidateSecureAccountScreen/ValidateSecureAccountScreen";
 import CreateJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreateJointAccountScreen";
 import CreatorJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreatorJointAccountScreen";
-
+import VaultAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/VaultAccountScreen/VaultAccountScreen";
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
@@ -118,6 +118,10 @@ const AccountDetailsOnboardingRouter = createStackNavigator(
     CreatorJointAccountScreen: {
       screen: CreatorJointAccountScreen,
       navigationOptions: { header: null }
+    },
+    VaultAccountScreen: {
+      screen: VaultAccountScreen,  
+      navigationOptions: { header: null }
     }
   },
   {
@@ -146,9 +150,6 @@ const AccountStackNavigatorRouter = createStackNavigator(
   }
 );
 
-
-
-
 //TODO: TabNavigator
 //TODO: TabNavigator:TabNavigator
 const TabNavigator = createBottomTabNavigator(
@@ -171,7 +172,7 @@ const TabNavigator = createBottomTabNavigator(
           <Icon name="signal" size={20} color={tintColor} />
         )
       }
-    },   
+    },
     Accounts: {
       screen: AccountStackNavigatorRouter,
       navigationOptions: {

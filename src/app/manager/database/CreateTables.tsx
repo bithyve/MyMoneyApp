@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import SQLite from "react-native-sqlite-storage";
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import { localDB } from "../../../app/constants/Constants";
 
 export default class CreateTables extends Component {
   constructor(props) {

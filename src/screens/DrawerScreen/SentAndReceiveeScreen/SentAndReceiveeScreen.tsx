@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
-  ImageBackground,
-  Dimensions
-} from "react-native";
+import { Image, StyleSheet, View, Alert, ImageBackground } from "react-native";
 import {
   Container,
   Header,
@@ -17,7 +7,6 @@ import {
   Content,
   Button,
   Left,
-  Right,
   Body,
   Text,
   Card,
@@ -29,7 +18,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { colors, images, localDB } from "../../../app/constants/Constants";
 import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
-
+  
 //TODO: Wallets
 //var RegularAccount = require("../../../bitcoin/services/wallet");
 import RegularAccount from "../../../bitcoin/services/RegularAccount";
@@ -103,7 +92,7 @@ export default class SentAndReceiveeScreen extends React.Component {
               <Button
                 transparent
                 onPress={() => this.props.navigation.goBack()}
-              > 
+              >
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>
             </Left>
@@ -119,12 +108,12 @@ export default class SentAndReceiveeScreen extends React.Component {
                     style={styles.imgappIcon}
                     resizeMode="contain"
                     source={images.appIcon}
-                  />  
+                  />
                   <View style={styles.viewInline}>
                     <Text style={styles.txtBal}> {this.state.finalBal}</Text>
                     <Text style={styles.txtExcRate}>
-                      {" "}  
-                      {this.state.totalRec}  
+                      {" "}
+                      {this.state.totalRec}
                     </Text>
                   </View>
                 </View>
@@ -139,8 +128,8 @@ export default class SentAndReceiveeScreen extends React.Component {
                       address: this.state.addressKey,
                       privateKey: this.state.privateKey
                     })
-                  }     
-                >   
+                  }
+                >
                   <Text style={styles.txtButtonTitle}> SEND </Text>
                 </Button>
                 <Button
@@ -149,7 +138,7 @@ export default class SentAndReceiveeScreen extends React.Component {
                     this.props.navigation.push("ReceiveMoneyScreen", {
                       address: this.state.addressKey
                     })
-                  }  
+                  }
                 >
                   <Text style={styles.txtButtonTitle}> RECEIVE </Text>
                 </Button>

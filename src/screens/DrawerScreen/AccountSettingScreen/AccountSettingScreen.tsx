@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
-  ImageBackground
-} from "react-native";
+import { StyleSheet, ImageBackground } from "react-native";
 import {
   Container,
   Header,
@@ -21,10 +12,9 @@ import {
   Text
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
-   
+import { images } from "../../../app/constants/Constants";
+
 export default class AccountSettingScreen extends React.Component {
   render() {
     return (

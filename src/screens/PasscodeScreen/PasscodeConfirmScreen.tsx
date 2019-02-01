@@ -7,7 +7,6 @@ import {
   Text,
   View,
   AsyncStorage,
-  Dimensions,
   Animated
 } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
@@ -17,16 +16,14 @@ import DropdownAlert from "react-native-dropdownalert";
 import Loader from "react-native-modal-loader";
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../app/constants/Constants";
+import { colors, localDB } from "../../app/constants/Constants";
 var dbOpration = require("../../app/manager/database/DBOpration");
 var utils = require("../../app/constants/Utils");
 import renderIf from "../../app/constants/validation/renderIf";
 import Singleton from "../../app/constants/Singleton";
-let isNetwork;
 
 //TODO: RegularAccount
 import RegularAccount from "../../bitcoin/services/RegularAccount";
-const { height, width } = Dimensions.get("window");
 
 export default class PasscodeConfirmScreen extends Component {
   constructor(props) {
@@ -142,7 +139,7 @@ export default class PasscodeConfirmScreen extends Component {
             localDB.tableName.tblAccount,
             fulldate,
             address,
-            "BTC",   
+            "BTC",
             "Savings",
             ""
           );
@@ -150,7 +147,7 @@ export default class PasscodeConfirmScreen extends Component {
             const resultCreateAccount = await dbOpration.insertCreateAccount(
               localDB.tableName.tblAccount,
               fulldate,
-              "",   
+              "",
               "",
               "UnKnown",
               ""
@@ -182,7 +179,7 @@ export default class PasscodeConfirmScreen extends Component {
               this.props.navigation.dispatch(resetAction);
             }
           }
-        }  
+        }
       }
     }
   };

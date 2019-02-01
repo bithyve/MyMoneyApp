@@ -1,12 +1,8 @@
 import React from "react";
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  Alert,
   ImageBackground,
   Dimensions,
   Clipboard,
@@ -28,12 +24,7 @@ import { QRCode } from "react-native-custom-qr-codes";
 import Toast from "react-native-simple-toast";
 
 //TODO: Custome Pages
-import {
-  colors,
-  images,
-  msg,
-  apiary
-} from "../../../../../app/constants/Constants";
+import { colors, images, msg } from "../../../../../app/constants/Constants";
 
 export default class SecureSecretKeyScreen extends React.Component<any, any> {
   constructor(props: any) {
@@ -65,12 +56,12 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
   }
 
   async setAppState(status: boolean) {
-    if (status) {   
-      try {   
+    if (status) {
+      try {
         AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
       } catch (error) {
         // Error saving data
-      }  
+      }
     } else {
       try {
         AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
@@ -88,7 +79,7 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
   click_CopySecretKey = async () => {
     await Clipboard.setString(this.state.secret);
     Toast.show("Secret key copyed.!", Toast.SHORT);
-  };   
+  };
 
   render() {
     const { activeSections } = this.state;

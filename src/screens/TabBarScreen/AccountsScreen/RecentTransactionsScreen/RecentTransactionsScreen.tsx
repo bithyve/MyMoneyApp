@@ -1,15 +1,10 @@
 import React from "react";
 import {
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  Alert,
-  ImageBackground,
-  Dimensions,
-  Linking
+  ImageBackground
 } from "react-native";
 import {
   Container,
@@ -27,7 +22,7 @@ import * as Animatable from "react-native-animatable";
 import Accordion from "react-native-collapsible/Accordion";
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../../app/constants/Constants";
+import { colors, images } from "../../../../app/constants/Constants";
 var utils = require("../../../../app/constants/Utils");
 import renderIf from "../../../../app/constants/validation/renderIf";
 
@@ -226,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,1)"
   },
   inactive: {
-    backgroundColor: "rgba(245,252,255,1)"
+    backgroundColor: "rgba(245,252,255,1)",
   },
   //view:viewHashContent
   viewHashContent: {

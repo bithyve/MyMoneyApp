@@ -1,19 +1,15 @@
 import React from "react";
 import {
   Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Dimensions,
   View,
-  Alert,
   StatusBar,
   TouchableOpacity,
-  AsyncStorage,
   ImageBackground
 } from "react-native";
 import {
-  Container,  
+  Container,
   Header,
   Title,
   Content,
@@ -22,19 +18,17 @@ import {
   Right,
   Body,
   Text,
-  Footer,
-  CardItem
+  Footer
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import GridView from "react-native-super-grid";
 import Toast from "react-native-simple-toast";
-import { StackActions, NavigationActions } from "react-navigation";
-  
+
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import { images } from "../../../app/constants/Constants";
 
 export default class VerifyBackupPhraseScreen extends React.Component {
-  constructor(props) {
+  constructor(props:any) {
     super(props);
     StatusBar.setHidden(false);
     var verifyArray = [[]];

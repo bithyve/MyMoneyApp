@@ -17,6 +17,7 @@ import Style from "./style";
 import Moment from "moment";
 import renderIf from "../../src/constants/validation/renderIf";
 
+
 const FORMATS = {
   date: "YYYY-MM-DD",
   datetime: "YYYY-MM-DD HH:mm",
@@ -377,7 +378,7 @@ class DatePicker extends Component {
             style={[style]}
             underlayColor={"transparent"}
             onPress={this.onPressDate}
-            testID={testID}  
+            testID={testID}
           >
             <View style={[Style.dateTouchBody, customStyles.dateTouchBody]}>
               {!this.props.hideText ? (
@@ -401,7 +402,7 @@ class DatePicker extends Component {
               timeZoneOffsetInMinutes ? timeZoneOffsetInMinutes : null
             }
             locale={locale}
-          />  
+          />
         )}
       </View>
     );

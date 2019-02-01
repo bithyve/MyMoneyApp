@@ -1,12 +1,8 @@
 import React from "react";
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  Alert,
   ImageBackground,
   Clipboard,
   Dimensions
@@ -19,17 +15,15 @@ import {
   Button,
   Left,
   Right,
-  Footer,
-  FooterTab,
   Body,
   Text
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { QRCode } from "react-native-custom-qr-codes";
 import Toast from "react-native-simple-toast";
-import Share, { ShareSheet } from "react-native-share";
+import Share from "react-native-share";
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../../app/constants/Constants";
+import { colors, images } from "../../../../app/constants/Constants";
 
 export default class ReceiveMoneyScreen extends React.Component {
   constructor(props) {
@@ -165,5 +159,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.appColor,
     paddingLeft: 10,
     borderRadius: 10
-  }
+  }   
 });

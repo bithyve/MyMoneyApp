@@ -1,14 +1,8 @@
 import React from "react";
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
-  Alert,
   ImageBackground,
-  Dimensions,
   TouchableHighlight,
   StatusBar
 } from "react-native";
@@ -25,12 +19,9 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import GridView from "react-native-super-grid";
-
+  
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
-
-const { width, height } = Dimensions.get("screen");
-
+import { colors, images } from "../../../app/constants/Constants";
 export default class MoreScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -65,7 +56,7 @@ export default class MoreScreen extends React.Component {
               </Button>
             </Left>
 
-            <Body style={{flex: 0,alignItems:'center'}}>
+            <Body style={{ flex: 0, alignItems: "center" }}>
               <Title>My Money</Title>
             </Body>
             <Right>
@@ -93,7 +84,7 @@ export default class MoreScreen extends React.Component {
                     <Text style={styles.txtMenuList}>{item}</Text>
                   </View>
                 </TouchableHighlight>
-              )}    
+              )}
             />
           </Content>
         </ImageBackground>

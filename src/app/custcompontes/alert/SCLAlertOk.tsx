@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { FlatList } from "react-native";
 import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -15,21 +14,21 @@ export default class SCLAlertOk extends Component<Props, any> {
   render() {
     return (
       <SCLAlert
-        theme={this.props.data.length != 0 ? this.props.data[0].theme : null}   
+        theme={this.props.data.length != 0 ? this.props.data[0].theme : null}
         show={this.props.data.length != 0 ? this.props.data[0].status : false}
-        cancellable={false} 
+        cancellable={false}
         slideAnimationDuration={0}
         headerIconComponent={
           <Icon
             name={this.props.data.length != 0 ? this.props.data[0].icon : null}
-            size={50}  
+            size={50}
             color="#fff"
           />
-        }    
+        }
         title={this.props.data.length != 0 ? this.props.data[0].title : null}
         subtitle={
           this.props.data.length != 0 ? this.props.data[0].subtitle : null
-        }  
+        }
       >
         <SCLAlertButton
           theme={this.props.data.length != 0 ? this.props.data[0].theme : null}

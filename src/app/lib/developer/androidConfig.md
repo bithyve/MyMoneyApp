@@ -80,7 +80,7 @@ cd android
 1)settings.gradle (04/12/2018)
 include ':react-native-sqlite-storage'
 project(':react-native-sqlite-storage').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sqlite-storage/src/android')
-
+  
 2)android/app/build.gradle (04/12/2018)
 
 dependencies {
@@ -91,7 +91,7 @@ compile project(':react-native-sqlite-storage')
 import org.pgsqlite.SQLitePluginPackage;
 new SQLitePluginPackage(),
 
-==============> for BASE_MAP.Fill not a funcation <===============
+#==============> for BASE_MAP.Fill not a funcation <===============
 1)package.json<br>
 dependencies {
 

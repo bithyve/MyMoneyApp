@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { FlatList } from "react-native";
 import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
 import Icon from "react-native-vector-icons/FontAwesome5";
 

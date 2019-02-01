@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  View,
-  Alert,
-  ImageBackground,
-  Dimensions,
-  StatusBar,
-  FlatList,
-  TouchableHighlight,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  RefreshControl,
-  ScrollView
-} from "react-native";
+import { ImageBackground, StatusBar, StyleSheet } from "react-native";
 import {
   Container,
   Header,
@@ -21,30 +8,14 @@ import {
   Button,
   Left,
   Right,
-  Body,
-  Text,
-  List,
-  ListItem,
-  Thumbnail
+  Body
 } from "native-base";
-import { RkCard } from "react-native-ui-kitten";
-import { StackActions, NavigationActions } from "react-navigation";
-import Carousel, { Pagination } from "react-native-snap-carousel";
-import CardFlip from "react-native-card-flip";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Dialog, {
-  SlideAnimation,
-  DialogTitle,
-  DialogContent,
-  DialogButton
-} from "react-native-popup-dialog";
-import { DotIndicator, SkypeIndicator } from "react-native-indicators";
-
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import { colors, images } from "../../../app/constants/Constants";
 
 export default class PaymentScreen extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     StatusBar.setBackgroundColor(colors.appColor, true);
     this.state = {};
@@ -71,11 +42,7 @@ export default class PaymentScreen extends React.Component {
                 </Button>
               </Left>
               <Body style={{ flex: 0, alignItems: "center" }}>
-                <Title
-                  adjustsFontSizeToFit={true}
-                  numberOfLines={1}
-                  style={styles.titleUserName}
-                >
+                <Title adjustsFontSizeToFit={true} numberOfLines={1}>
                   My Money
                 </Title>
               </Body>

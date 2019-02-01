@@ -7617,6 +7617,13 @@ react-native-iphone-x-helper@^1.0.1, react-native-iphone-x-helper@^1.0.3:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.0.tgz#9f8a376eb00bc712115abff4420318a0063fa796"
   integrity sha512-xIeTo4s77wwKgBZLVRIZC9tM9/PkXS46Ul76NXmvmixEb3ZwqGdQesR3zRiLMOoIdfOURB6N9bba9po7+x9Bag==
 
+react-native-item-select@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-item-select/-/react-native-item-select-0.3.0.tgz#4966acce4465c27b2a781c229a3c061de90cf77c"
+  integrity sha512-2GMuNPJ8pQyE8uE+yyLX37kLccCpGiGvkuwzsPRYUSNpFCJ5CwnqdtwPsajqh4wTrevxYdnsHQRKzEjKD4vs/g==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-keyboard-aware-scroll-view@0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.8.0.tgz#00bcaa38c91323913bb7a733059ad2bc4875f88c"

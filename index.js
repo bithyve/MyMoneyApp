@@ -3,12 +3,11 @@ import React from "react";
 import { AppRegistry } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { AsyncStorage, AppState } from "react-native";
-import App from "./App";
 import "./shim";
 import { name as appName } from "./app.json";
 import { createRootNavigator } from "./src/app/router/router";
-// import EncryptionScreen from "../"
-import EncryptionScreen from "./src/screens/EncryptionScreen/EncryptionScreen";
+// import LaunchScreen from "../"
+import LaunchScreen from "./src/screens/LaunchScreen/LaunchScreen";
 
 class MyMoney extends React.Component {
   constructor(props) {
@@ -64,7 +63,7 @@ class MyMoney extends React.Component {
     console.log("first = " + this.state.status, this.state.isStartPage);
     const AppContainer = createAppContainer(Layout);
     return this.state.status ? (
-      <EncryptionScreen
+      <LaunchScreen    
         onComplited={(status: boolean, pageName: string) =>
           this.onComplited(status, pageName)
         }

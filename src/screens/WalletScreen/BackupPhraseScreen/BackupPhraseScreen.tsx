@@ -1,17 +1,10 @@
 import React from "react";
 import {
   Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Dimensions,
   View,
-  Alert,
   StatusBar,
-  TouchableOpacity,
-  Clipboard,
-  ToastAndroid,
-  AlertIOS,
   ImageBackground
 } from "react-native";
 import {
@@ -27,10 +20,10 @@ import {
   Footer
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Share, { ShareSheet } from "react-native-share";
+import Share from "react-native-share";
 
 //TODO: Custome Pages
-import { colors, images, localDB } from "../../../app/constants/Constants";
+import { images } from "../../../app/constants/Constants";
 
 //TODO: Wallets
 import RegularAccount from "../../../bitcoin/services/RegularAccount";
@@ -45,13 +38,9 @@ export default class BackupPhraseScreen extends React.Component {
     };
   }
 
-
-  
   componentWillMount() {
     this.getWalletsData();
   }
-
-
 
   async getWalletsData() {
     const { mnemonic, address, keyPair } = await RegularAccount.createWallet();
@@ -65,8 +54,6 @@ export default class BackupPhraseScreen extends React.Component {
       });
     }
   }
-
-
 
   onCancel() {
     this.setState({ visible: false });
@@ -103,7 +90,7 @@ export default class BackupPhraseScreen extends React.Component {
               </Button>
             </Left>
 
-            <Body style={{flex: 0,alignItems:'center'}}>
+            <Body style={{ flex: 0, alignItems: "center" }}>
               <Title
                 adjustsFontSizeToFit={true}
                 numberOfLines={1}

@@ -3,7 +3,6 @@ import { FlatList, StyleSheet, TextInput } from "react-native";
 import { SCLAlert, SCLAlertButton } from "react-native-scl-alert";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import DropdownAlert from "react-native-dropdownalert";
-import { number } from "prop-types";
 import { colors } from "../../constants/Constants";
 interface Props {
   status: boolean;

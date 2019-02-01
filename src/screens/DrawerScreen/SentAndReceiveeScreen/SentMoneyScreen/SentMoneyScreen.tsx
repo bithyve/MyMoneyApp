@@ -4,7 +4,6 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
-  Animated,
   Dimensions,
   AsyncStorage,
   TextInput
@@ -13,24 +12,19 @@ import {
   Container,
   Header,
   Title,
-  Content,
+  Content,   
   Button,
   Left,
   Right,
   Body,
   Text,
-  Input,
-  Form,
-  Item,
-  Label
+  Input
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Loader from "react-native-modal-loader";
 import Dialog, {
   SlideAnimation,
-  DialogTitle,
-  DialogContent,
-  DialogButton
+  DialogContent
 } from "react-native-popup-dialog";
 
 const required = value => (value ? undefined : "This is a required field.");
@@ -45,7 +39,6 @@ import SCLAlertOk from "../../../../app/custcompontes/alert/SCLAlertOk";
 //TODO: Custome Object
 import { colors, images, localDB } from "../../../../app/constants/Constants";
 var dbOpration = require("../../../../app/manager/database/DBOpration");
-import renderIf from "../../../../app/constants/validation/renderIf";
 
 //TODO: Wallets
 import RegularAccount from "../../../../bitcoin/services/RegularAccount";
