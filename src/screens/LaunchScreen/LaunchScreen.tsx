@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, AsyncStorage, Image, StyleSheet, Text } from "react-native";
-import Loader from "react-native-modal-loader";
 import { colors } from "../../app/constants/Constants";
 import Singleton from "../../app/constants/Singleton";
 import * as Keychain from "react-native-keychain";
@@ -8,7 +7,7 @@ interface Props {
   onComplited: Function;
 }
 
-export default class EncryptionScreen extends Component<Props, any> {
+export default class LaunchScreen extends Component<Props, any> {
   constructor(props: any) {
     super(props);
   }
