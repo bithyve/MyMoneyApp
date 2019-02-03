@@ -206,9 +206,14 @@ export default class JointAccountSentMoneyScreen extends React.Component {
     Toast.show("Copied !!", Toast.SHORT);
   }
 
+
+  //address scan functionality withdrawn on purpose
   onSelect = data => {
-    this.setState({
-      recipientAddress: data.barcode
+    // this.setState({
+    //   recipientAddress: data.barcode
+    // });
+    this.props.navigation.navigate("TransactionConfirmationScreen", {
+      json: data.barcode
     });
   };
 

@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import { Container, Header, Title, Content, Button, Left, Right, Body, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+var dbOpration = require("../../../app/manager/database/DBOpration");
+import WalletService from "../../../bitcoin/services/WalletService";
+import { AsyncStorage } from "react-native"
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
@@ -20,6 +22,55 @@ import { colors, images, localDB } from "../../../app/constants/Constants";
 
 
 export default class TransactionConfirmationScreen extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            recipientAddress: "No Address",
+            amount: "0",
+        };
+    }
+
+    componentWillMount() {
+        let trans = this.props.navigation.getParam('json')
+        var transaction = JSON.parse(trans)
+        this.setState({ recipientAddress: transaction.recipient })
+        this.setState({ amount: transaction.amount })
+
+    }
+
+    confirmSendMoney = async () => {
+
+        let trans = this.props.navigation.getParam('json')
+        var transaction = JSON.parse(trans)
+
+        try {
+            const value = await AsyncStorage.getItem("Joint");
+            if (value !== null) {
+              console.log("Initiated")
+              const resultWallet = await dbOpration.readTablesData(
+                localDB.tableName.tblWallet
+              );
+              console.log("Database read")
+      
+              var { privateKey } = await WalletService.importWallet(resultWallet.temp[0].mnemonic);
+              console.log("wallet imported", privateKey)
+              let Joint = JSON.parse(value)
+              console.log("json stringified")
+              var recAddress = this.state.recipientAddress;
+              var amountValue = this.state.amount;
+              console.log(Joint.Add, recAddress, amountValue, privateKey, Joint.p2sh, Joint.p2wsh)
+              const { reHex} = await WalletService.completeMultisigTransaction(transaction.hex,transaction.inputs,privateKey, Joint.p2sh, Joint.p2wsh)
+              console.log("Complete Transaction hex", reHex)
+
+            }
+          } catch (error) {
+            Toast.show(JSON.stringify(error), Toast.SHORT);
+            // Error retrieving data
+          }
+        }
+    }
+
+
     render() {
         return (
             <Container>
@@ -43,8 +94,12 @@ export default class TransactionConfirmationScreen extends React.Component {
                     </Header>
                     <Content>
                         <Text>
-                            This is Confirm Transaction Screen of Joint Account {this.props.navigation.getParam('id')}
+                            Do you want to send {this.state.amount} to {this.state.recipientAddress} ?
                         </Text>
+                        <Button
+                            onPress={() => { this.confirmSendMoney() }}>
+                            <Text> CONFIRM </Text>
+                        </Button>
                     </Content>
 
                 </ImageBackground>

@@ -344,12 +344,15 @@ export default class Bitcoin {
     }
 
     console.log("---- Creating Transaction ----");
+    try{
     const { inputs, txb } = await this.createTransaction(
       senderAddress,
       recipientAddress,
       amount,
     );
-
+    }catch(error){
+      console.log(error)
+    }
     console.log("---- Transaction Created ----");
 
     const keyPair = this.getKeyPair(privateKey);
