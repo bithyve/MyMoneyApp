@@ -366,11 +366,11 @@ export default class Bitcoin {
     );
     const txHex = signedTxb.buildIncomplete().toHex();
     console.log(txHex);
-    return txHex
+    return { txHex, inputs }
   }
 
   //Bob side multisig transaction
-  public completeMultisigTransaction = async (txHex: string,inputs:any,privateKey: string,p2sh:any,p2wsh:any) => {
+  public completeMultisigTransaction = async (txHex: string, inputs: any, privateKey: string, p2sh: any, p2wsh: any) => {
     // reconstructing and signing the transaction from the txHex (executed @Server)
     const regenTx = bitcoinJS.Transaction.fromHex(txHex);
 

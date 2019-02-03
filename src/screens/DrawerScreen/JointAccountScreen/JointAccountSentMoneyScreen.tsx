@@ -33,6 +33,7 @@ import Dialog, {
   DialogButton
 } from "react-native-popup-dialog";
 import Toast from "react-native-simple-toast";
+import { QRCode } from "react-native-custom-qr-codes";
 
 const required = value => (value ? undefined : "This is a required field.");
 const email = value =>
@@ -66,29 +67,44 @@ export default class JointAccountSentMoneyScreen extends React.Component {
     };
   }
 
+
+
   sendMoney = async () => {
 
     try {
       const value = await AsyncStorage.getItem("Joint");
       if (value !== null) {
+        console.log("Initiated")
         const resultWallet = await dbOpration.readTablesData(
           localDB.tableName.tblWallet
         );
-        const {
-          privateKey
-        } = await WalletService.importWallet(resultWallet.temp[0].privateKey);
+        console.log("Database read")
+
+        var { privateKey } = await WalletService.importWallet(resultWallet.temp[0].mnemonic);
+        console.log("wallet imported", privateKey)
         let Joint = JSON.parse(value)
+        console.log("json stringified")
         var recAddress = this.state.recipientAddress;
         var amountValue = this.state.amount;
-        const { txhex } = await WalletService.multisigTransaction(Joint.Add, recAddress, amountValue, privateKey, Joint.p2sh, Joint.p2wsh)
-        console.log("Incomplete Transaction hex", txhex)
+        console.log(Joint.Add, recAddress, amountValue, privateKey, Joint.p2sh, Joint.p2wsh)
+        const { txHex, inputs } = await WalletService.multisigTransaction(Joint.Add, recAddress, amountValue, privateKey, Joint.p2sh, Joint.p2wsh)
+        console.log("Incomplete Transaction hex", txHex)
         this.setState({
-          hex: txhex
+          hex: txHex
+        });
+        let Transaction = {
+          inputs: inputs,
+          recipient: recAddress,
+          amount: amountValue,
+          hex: txHex,
+        }
+        this.setState({
+          JsonString: JSON.stringify(Transaction)
         });
 
       }
     } catch (error) {
-      Toast.show("Error", Toast.SHORT);
+      Toast.show(JSON.stringify(error), Toast.SHORT);
       // Error retrieving data
     }
   }
@@ -185,6 +201,11 @@ export default class JointAccountSentMoneyScreen extends React.Component {
     });
   }
 
+  click_CopyAddress() {
+    Clipboard.setString(this.state.JsonString);
+    Toast.show("Copied !!", Toast.SHORT);
+  }
+
   onSelect = data => {
     this.setState({
       recipientAddress: data.barcode
@@ -266,7 +287,7 @@ export default class JointAccountSentMoneyScreen extends React.Component {
               full
               disabled={this.state.sentBtnStatus}
               onPress={() => {
-                Share.open(shareOptions);
+                this.sendMoney()
               }}
             >
               <Text> SEND </Text>
@@ -276,6 +297,23 @@ export default class JointAccountSentMoneyScreen extends React.Component {
               onPress={() => { this.openQRCodeScanner() }}>
               <Text> SCAN </Text>
             </Button>
+            <View style={styles.viewShowQRcode}>
+              <QRCode
+                logo={images.appIcon}
+                content={this.state.JsonString}
+                size={Dimensions.get("screen").width - 40}
+                codeStyle="square"
+                outerEyeStyle="square"
+                innerEyeStyle="square"
+                //linearGradient={['rgb(255,0,0)','rgb(0,255,255)']}
+                padding={1}
+              />
+              <TouchableOpacity onPress={() => this.click_CopyAddress()}>
+                <Text style={styles.txtBarcode} note>
+                  {this.state.JsonString}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </Content>
 
           <Dialog
@@ -398,6 +436,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#000000",
     color: "#ffffff"
+  },
+  txtBarcode: {
+    marginTop: 40,
+    marginBottom: 20,
+    fontSize: 16,
+    textAlign: "center"
+  },
+  viewShowQRcode: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
   },
   loading: {
     position: "absolute",
