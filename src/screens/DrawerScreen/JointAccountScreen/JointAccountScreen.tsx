@@ -86,7 +86,7 @@ export default class JointAccountScreen extends React.Component {
 		this.readDataAndSetStates()
 	}
 
-	componentDidMount() {
+	componentDidMount() { // B
 		if (Platform.OS === 'android') {
 			Linking.getInitialURL().then(url => {
 				this.navigate(url);
@@ -96,16 +96,20 @@ export default class JointAccountScreen extends React.Component {
 		}
 	}
 
-	handleOpenURL = (event) => { 
+	componentWillUnmount() { // C
+		Linking.removeEventListener('url', this.handleOpenURL);
+	}
+	handleOpenURL = (event) => { // D
 		this.navigate(event.url);
 	}
-	navigate = (url) => { 
+	navigate = (url) => { // E
 		const { navigate } = this.props.navigation;
 		const route = url.replace(/.*?:\/\//g, '');
-		const hex = route.match(/\/([^\/]+)\/?$/)[1];
+		const id = route.match(/\/([^\/]+)\/?$/)[1];
 		const routeName = route.split('/')[0];
+
 		if (routeName === 'joint') {
-			navigate('TransactionConfirmationScreen ', { hex: hex })
+			navigate('TransactionConfirmationScreen', { id })
 		};
 	}
 

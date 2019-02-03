@@ -31,6 +31,7 @@ export default class CreateJointAccountScreen extends React.Component {
             JsonString: "empty"
         });
     }
+    
     openQRCodeScanner() {
         //  this.props.navigation.push('QrcodeScannerScreen');
         this.props.navigation.navigate("QrcodeScannerScreen", {

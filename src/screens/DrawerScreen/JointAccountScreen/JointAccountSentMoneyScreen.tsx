@@ -59,6 +59,7 @@ export default class JointAccountSentMoneyScreen extends React.Component {
       amount: "",
       hex: "",
       sentBtnColor: "gray",
+      JsonString: "No Data",
       sentBtnStatus: true,
       isLoading: false,
       isSecureAccountPopup: false
@@ -197,7 +198,7 @@ export default class JointAccountSentMoneyScreen extends React.Component {
   render() {
     let shareOptions = {
       title: "Transaction Confirmation",
-      message: "Bithyveapp://joint/0",
+      message: "Bithyveapp://joint/susmitlavania",
       url: "",
       subject: "MyMoney" //  for email
     };
@@ -269,6 +270,11 @@ export default class JointAccountSentMoneyScreen extends React.Component {
               }}
             >
               <Text> SEND </Text>
+            </Button>
+            <Button style={[
+              styles.btnSent]}
+              onPress={() => { this.openQRCodeScanner() }}>
+              <Text> SCAN </Text>
             </Button>
           </Content>
 

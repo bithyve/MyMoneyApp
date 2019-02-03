@@ -27,24 +27,24 @@ export default class TransactionConfirmationScreen extends React.Component {
                     source={images.appBackgound}
                     style={styles.container}
                 >
-  
+
                     <Header transparent>
-                    <Left>
+                        <Left>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name='chevron-left' size={25} color="#ffffff" />
                             </Button>
                         </Left>
 
-                        <Body style={{flex: 0,alignItems:'center'}}>
+                        <Body style={{ flex: 0, alignItems: 'center' }}>
                             <Title adjustsFontSizeToFit={true}
                                 numberOfLines={1} style={styles.titleUserName}>Confirm Transaction</Title>
                         </Body>
-                       <Right></Right>
+                        <Right></Right>
                     </Header>
                     <Content>
                         <Text>
-                            This is Confirm Transaction Screen of Joint Account
-              </Text>
+                            This is Confirm Transaction Screen of Joint Account {this.props.navigation.getParam('id')}
+                        </Text>
                     </Content>
 
                 </ImageBackground>
@@ -60,5 +60,5 @@ const styles = StyleSheet.create({
     },
     titleUserName: {
         color: "#ffffff"
-      },
+    },
 });
