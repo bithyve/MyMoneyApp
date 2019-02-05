@@ -8,8 +8,8 @@ import {
   RefreshControl
 } from "react-native";
 import { Container, Content, Button, Left, Right, Text } from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome5";  
-import {  
+import Icon from "react-native-vector-icons/FontAwesome5";
+import {
   MenuProvider,
   Menu,
   MenuOptions,
@@ -23,6 +23,7 @@ import { colors, images, localDB } from "../../../app/constants/Constants";
 var dbOpration = require("../../../app/manager/database/DBOpration");
 var utils = require("../../../app/constants/Utils");
 import renderIf from "../../../app/constants/validation/renderIf";
+import moment from "moment";
 
 let isNetwork: boolean;
 //Custome Compontes
@@ -33,6 +34,7 @@ import SCLAlertOk from "../../../app/custcompontes/alert/SCLAlertOk";
 
 //TODO: Wallets
 import RegularAccount from "../../../bitcoin/services/RegularAccount";
+import jointAccount from "../../../bitcoin/services/JointAccount";
 
 interface Props {}
 
@@ -58,7 +60,7 @@ export default class AccountDetailsScreen extends React.Component<
       isLoading: false,
       isNoTranstion: false,
       //transfer
-      isTransferBtn: false,
+      flag_TransferBtn: false,
       flag_sentBtnDisStatus: true,
       arr_TransferAccountData: []
     };
@@ -70,9 +72,7 @@ export default class AccountDetailsScreen extends React.Component<
     const { navigation } = this.props;
     let data = navigation.getParam("data");
     let walletsData = navigation.getParam("walletsData");
-
-    console.log({ data });
-
+    console.log({ data, walletsData });
     this.setState({
       data: data,
       waletteData: walletsData
@@ -93,6 +93,16 @@ export default class AccountDetailsScreen extends React.Component<
     this.willFocusSubscription.remove();
   }
 
+  date_diff_indays(date1, date2) {
+    dt1 = new Date(date1);
+    dt2 = new Date(date2);
+    return Math.floor(
+      (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+        Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+        (1000 * 60 * 60 * 24)
+    );
+  }
+
   //TODO: func loadData
   async fetchloadData() {
     const { navigation } = this.props;
@@ -103,12 +113,11 @@ export default class AccountDetailsScreen extends React.Component<
       navigation.getParam("data").accountType + " Recent Transactions";
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
-
     var resultAccount = await dbOpration.readAccountTablesData(
       localDB.tableName.tblAccount
     );
     if (isNetwork) {
-      //TODO: for transfer btn and details
+      //TODO: for transfer and sent btn disable and enable details
       if (
         resultAccount.temp.length > 2 &&
         parseFloat(this.state.data.balance) > 0
@@ -125,16 +134,51 @@ export default class AccountDetailsScreen extends React.Component<
             break;
           }
         }
+        var isTransBtnStatus: boolean = false;
+        if (this.state.data.accountType != "Vault") {
+          isTransBtnStatus = true;
+        } else {
+          let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+          let validDate = moment(
+            utils.getUnixToDateFormat(additionalInfo.validDate)
+          );
+          var start = moment(new Date()).format("DD-MM-YYYY");
+          var end = moment(validDate).format("DD-MM-YYYY");
+          let diffDays: number = parseInt(this.date_diff_indays(start, end));
+
+          console.log({ diffDays });
+
+          if (diffDays <= 0) {
+            isTransBtnStatus = true;
+          }
+        }
         this.setState({
           arr_transferAccountList: resultAccount.temp,
-          isTransferBtn: true
+          flag_TransferBtn: isTransBtnStatus
         });
       }
       if (parseFloat(this.state.data.balance) > 0) {
-        this.setState({
-          flag_sentBtnDisStatus: false
-        });
+        if (this.state.data.accountType != "Vault") {
+          this.setState({
+            flag_sentBtnDisStatus: false
+          });
+        } else {
+          let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+          let validDate = moment(
+            utils.getUnixToDateFormat(additionalInfo.validDate)
+          );
+          var start = moment(new Date()).format("DD-MM-YYYY");
+          var end = moment(validDate).format("DD-MM-YYYY");
+          let diffDays: number = parseInt(this.date_diff_indays(start, end));
+          if (diffDays <= 0) {
+            this.setState({
+              flag_sentBtnDisStatus: false
+            });
+          }
+        }
       }
+
+      //TODO: Account Bal checking
       const bal = await RegularAccount.getBalance(
         navigation.getParam("data").address
       );
@@ -249,6 +293,29 @@ export default class AccountDetailsScreen extends React.Component<
     });
   }
 
+  //TODO: func connection_BarcodeRead
+  onSelect = async data => {
+    const txHex = data.barcode;
+    console.log(JSON.stringify(this.state.waletteData));
+    let privateKey = this.state.waletteData[0].privateKey;
+
+    const res = await jointAccount.authorizeJointTxn(txHex, privateKey);
+    if (res.statusCode == 200) {
+      this.setState({
+        successOkPopupData: [
+          {
+            theme: "success",
+            status: true,
+            icon: "smile",
+            title: "Success",
+            subtitle: "Transaction Successfully Completed.",
+            goBackStatus: true
+          }
+        ]
+      });
+    }
+  };
+
   render() {
     return (
       <Container style={styles.container}>
@@ -278,24 +345,38 @@ export default class AccountDetailsScreen extends React.Component<
                   <Icon name="chevron-left" size={25} color="#ffffff" />
                 </Button>
               </Left>
-              <Right>
-                <MenuProvider>
-                  <Menu style={{ marginTop: 10, color: "#ffffff" }}>
-                    <MenuTrigger
-                      customStyles={{
-                        triggerText: { fontSize: 18, color: "#fff" }
+              {renderIf(this.state.data.accountType == "Joint")(
+                <Right>
+                  <MenuProvider>
+                    <Menu
+                      style={{
+                        marginTop: 10,
+                        color: "#ffffff",
+                        marginRight: 10
                       }}
-                      text="options"
-                    />
-                    <MenuOptions customStyles={{ optionText: styles.text }}>
-                      <MenuOption onSelect={() => alert(`Save`)} text="Save" />
-                      <MenuOption onSelect={() => alert(`Delete`)}>
-                        <Text style={{ color: "red" }}>Delete</Text>
-                      </MenuOption>
-                    </MenuOptions>
-                  </Menu>
-                </MenuProvider>
-              </Right>
+                    >
+                      <MenuTrigger
+                        customStyles={{
+                          triggerText: { fontSize: 18, color: "#fff" }
+                        }}
+                        text="options"
+                      />
+                      <MenuOptions
+                        customStyles={{ optionText: styles.menuOptions }}
+                      >
+                        <MenuOption
+                          onSelect={() => {
+                            this.props.navigation.push("QrcodeScannerScreen", {
+                              onSelect: this.onSelect
+                            });
+                          }}
+                          text="Authorize Transaction"
+                        />
+                      </MenuOptions>
+                    </Menu>
+                  </MenuProvider>
+                </Right>
+              )}
             </View>
             <View style={styles.viewBalInfo}>
               <Text style={[styles.txtTile, styles.txtAccountType]}>
@@ -319,7 +400,7 @@ export default class AccountDetailsScreen extends React.Component<
           </View>
 
           <View style={styles.viewFooter}>
-            {renderIf(this.state.isTransferBtn)(
+            {renderIf(this.state.flag_TransferBtn)(
               <Button
                 style={styles.footerBtnAction}
                 warning
@@ -386,11 +467,14 @@ export default class AccountDetailsScreen extends React.Component<
             <Button
               style={styles.footerBtnAction}
               warning
-              onPress={() =>
+              onPress={() => {
+                let data = {};
+                data.address = this.state.data.address;
                 this.props.navigation.push("ReceiveMoneyScreen", {
-                  address: this.state.data.address
-                })
-              }
+                  page: "SentAndReceiveScreen",
+                  data: data
+                });
+              }}
             >
               <Icon
                 style={styles.footerBtnIcon}
@@ -455,17 +539,19 @@ export default class AccountDetailsScreen extends React.Component<
             });
           }}
         />
+
         <SCLAlertOk
           data={this.state.successOkPopupData}
-          click_Ok={(status: boolean) =>
+          click_Ok={(status: boolean) => {
+            this.fetchloadData();
             this.setState({
               successOkPopupData: [
                 {
                   status: false
-                }
+                }   
               ]
-            })
-          }
+            });
+          }}
         />
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </Container>
@@ -487,6 +573,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Secure,
     width: "100%"
   },
+  Vault: {
+    flex: 1,
+    backgroundColor: colors.Vault,
+    width: "100%"
+  },
+  Joint: {
+    flex: 1,
+    backgroundColor: colors.Joint,
+    width: "100%"
+  },
   viewBackBtn: {
     flex: 2,
     flexDirection: "row",
@@ -496,7 +592,6 @@ const styles = StyleSheet.create({
   viewBalInfo: {
     flex: 5,
     flexDirection: "column",
-
     padding: 15
   },
   //txtbal info
@@ -582,5 +677,10 @@ const styles = StyleSheet.create({
   footerBtnAction: {
     marginLeft: 2,
     marginRight: 2
+  },
+  //menuoption
+  menuOptions: {
+    fontSize: 14,
+    marginRight: 60
   }
 });

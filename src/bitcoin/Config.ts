@@ -3,14 +3,14 @@ import bitcoinJS, { Network } from "bitcoinjs-lib";
 class Config {
   public ENVIRONMENT: string;
   public NETWORK: Network;
-  public WALLET_XPUB_PATH: string = "m/2147483651/2147483649/1/";
-  public BH_XPUB_PATH: string = "m/0/0/0/0/2147483649/";
+  public WALLET_XPUB_PATH: string = "2147483651/2147483649/";
+  public DERIVATION_BRANCH: string = "1";
   public BREADTH: number = 5;
+  public BH_SERVER = {
+    DEV: "http://localhost:3000",
+    PROD: "https://prime-sign-230407.appspot.com"
+  };
   public API_URLS = {
-    BH_SERVER: {
-      DEV: "http://localhost:3000",
-      PROD: "https://bh-server-alpha.herokuapp.com",
-    },
     TESTNET: {
       BASE: "https://api.blockcypher.com/v1/btc/test3",
       BALANCE_CHECK: "https://testnet.blockchain.info/balance?active=",
@@ -19,12 +19,12 @@ class Config {
       TX_DECODE: "https://testnet-api.smartbit.com.au/v1/blockchain/decodetx",
       TX_FETCH: {
         URL: "https://testnet.blockchain.info/rawaddr/",
-        LIMIT: "?limit=",
+        LIMIT: "?limit="
       },
       FUND: {
         URL: "https://api.blockcypher.com/v1/btc/test3/faucet?token=",
-        TOKEN: "0d55b026eb934aa8b4de8a11bdcc16f1",
-      },
+        TOKEN: "0d55b026eb934aa8b4de8a11bdcc16f1"
+      }
     },
     MAINNET: {
       BASE: "https://api.blockcypher.com/v1/btc/main",
@@ -34,9 +34,9 @@ class Config {
       TX_DECODE: "https://api.smartbit.com.au/v1/blockchain/decodetx",
       TX_FETCH: {
         URL: "https://blockchain.info/rawaddr/",
-        LIMIT: "?limit=",
-      },
-    },
+        LIMIT: "?limit="
+      }
+    }
   };
 
   constructor(env: string) {
@@ -52,7 +52,7 @@ class Config {
     } else {
       throw new Error("Please specify an apt environment(PROD||DEV)");
     }
-  }
-}
+  };
+}  
 
 export default new Config("DEV");

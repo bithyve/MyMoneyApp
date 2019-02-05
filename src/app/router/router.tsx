@@ -7,7 +7,6 @@ import {
 } from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import LoginScreen from "../../screens/LoginScreen/LoginScreen";
 //OnBoarding
 import OnBoardingScreen from "../../screens/WalletScreen/OnBoardingScreen/OnBoardingScreen";
 import BackupPhraseScreen from "../../screens/WalletScreen/BackupPhraseScreen/BackupPhraseScreen";
@@ -46,7 +45,8 @@ import SecureAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboar
 import SecureSecretKeyScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/SecureSecretKeyScreen/SecureSecretKeyScreen";
 import ValidateSecureAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/SecureAccountScreen/ValidateSecureAccountScreen/ValidateSecureAccountScreen";
 import CreateJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreateJointAccountScreen";
-import CreatorJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/CreatorJointAccountScreen";
+import MergeConfirmJointAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/JointAccountScreen/MergeConfirmJointAccountScreen";
+
 import VaultAccountScreen from "../../screens/DrawerScreen/AccountDetailsOnboardingScreen/VaultAccountScreen/VaultAccountScreen";
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
@@ -79,16 +79,29 @@ const OnBoardingRouter = createStackNavigator(
   }
 );
 
-//TODO: StackNavigator:LoginRouter
-const LoginRouter = createStackNavigator(
+//TODO: StackNavigator: JointAccountStackRouter
+
+const JointAccountStackRouter = createStackNavigator(
   {
-    Login: {
-      screen: LoginScreen,
+    CreateJointAccountScreen: {
+      screen: CreateJointAccountScreen,
       navigationOptions: { header: null }
-    }
+    },
+    ReceiveMoneyScreen: {
+      screen: ReceiveMoneyScreen,
+      navigationOptions: { header: null }
+    },
+    QrcodeScannerScreen: {
+      screen: QrcodeScannerScreen,
+      navigationOptions: { header: null }
+    },
+    MergeConfirmJointAccountScreen: {
+      screen: MergeConfirmJointAccountScreen,
+      navigationOptions: { header: null }
+    }         
   },
   {
-    initialRouteName: "Login"
+    initialRouteName: "CreateJointAccountScreen"
   }
 );
 
@@ -112,15 +125,11 @@ const AccountDetailsOnboardingRouter = createStackNavigator(
       navigationOptions: { header: null }
     },
     CreateJointAccountScreen: {
-      screen: CreateJointAccountScreen,
-      navigationOptions: { header: null }
-    },
-    CreatorJointAccountScreen: {
-      screen: CreatorJointAccountScreen,
+      screen: JointAccountStackRouter,
       navigationOptions: { header: null }
     },
     VaultAccountScreen: {
-      screen: VaultAccountScreen,  
+      screen: VaultAccountScreen,
       navigationOptions: { header: null }
     }
   },

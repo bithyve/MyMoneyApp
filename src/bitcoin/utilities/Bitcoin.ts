@@ -303,10 +303,8 @@ export default class Bitcoin {
 
   public generateMultiSig = (required: number, pubKeys: any[]) => {
     // generic multiSig address generator
-
     // if (!network) network = bitcoinJS.networks.bitcoin;
     const pubkeys = pubKeys.map((hex) => Buffer.from(hex, "hex"));
-
     const p2ms = bitcoinJS.payments.p2ms({
       m: required,
       pubkeys,
@@ -391,6 +389,7 @@ export default class Bitcoin {
     senderAddress: string,
     recipientAddress: string,
     amount: number,
+    nSequence?: number,
   ): Promise<{ inputs: object[]; txb: TransactionBuilder }> => {
     const inputUTXOs = await this.fetchUnspentOutputs(senderAddress);
     const outputUTXOs = [{ address: recipientAddress, value: amount }];
@@ -413,7 +412,7 @@ export default class Bitcoin {
       this.network,
     );
 
-    inputs.forEach((input) => txb.addInput(input.txId, input.vout));
+    inputs.forEach((input) => txb.addInput(input.txId, input.vout, nSequence));
     outputs.forEach((output) => {
       // Outputs may have been added that needs an
       // output address/script (generating change)
@@ -519,7 +518,7 @@ export default class Bitcoin {
     } catch (err) {
       return {
         statusCode: err.response.status,
-        errorMessage: err.response.data.err,
+        errorMessage: err.response.data.error.message,
       };
     }
   }
@@ -545,29 +544,21 @@ export default class Bitcoin {
     }
   }
 
-  public cltvCheckSigOutput(aQ: ECPair, bQ: ECPair, lockTime: any): Buffer {
+  public cltvCheckSigOutput = (keyPair, lockTime) => {
     return bitcoinJS.script.compile([
-      bitcoinJS.opcodes.OP_IF,
       bitcoinJS.script.number.encode(lockTime),
       bitcoinJS.opcodes.OP_CHECKLOCKTIMEVERIFY,
       bitcoinJS.opcodes.OP_DROP,
-
-      bitcoinJS.opcodes.OP_ELSE,
-      bQ.publicKey,
-      bitcoinJS.opcodes.OP_CHECKSIGVERIFY,
-      bitcoinJS.opcodes.OP_ENDIF,
-
-      aQ.publicKey,
+      keyPair.publicKey,
       bitcoinJS.opcodes.OP_CHECKSIG,
     ]);
   }
 
   public createTLC = async (
-    keyPair1: ECPair,
-    keyPair2: ECPair,
+    keyPair: ECPair,
     time: number,
     blockHeight: number,
-  ): Promise<string> => {
+  ): Promise<any> => {
     let lockTime: any;
     if (time && blockHeight) {
       throw new Error("You can't specify time and block height together");
@@ -580,23 +571,25 @@ export default class Bitcoin {
       throw new Error("Please specify time or block height");
     }
 
-    const redeemScript = this.cltvCheckSigOutput(keyPair1, keyPair2, lockTime);
-    // const { address } = bitcoinJS.payments.p2sh({
-    //  redeem: { output: redeemScript, network: regtest },
-    //  network: regtest });
-    const { address } = bitcoinJS.payments.p2sh({
-      redeem: bitcoinJS.payments.p2wsh({
-        redeem: { output: redeemScript },
-        network: this.network,
-      }),
+    const redeemScript = this.cltvCheckSigOutput(keyPair, lockTime);
+    console.log({ redeemScript });
+
+    console.log({ redeemScript: redeemScript.toString("hex") });
+
+    const p2sh = bitcoinJS.payments.p2sh({
+      redeem: { output: redeemScript, network: this.network },
       network: this.network,
     });
 
-    return address;
+    return {
+      address: p2sh.address,
+      lockTime,
+    };
   }
 }
+
 class SmokeTest {
-  private bitcoin: Bitcoin;
+  public bitcoin: Bitcoin;
   constructor() {
     this.bitcoin = new Bitcoin();
   }
@@ -630,13 +623,15 @@ class SmokeTest {
       p2sh.redeem.output,
     );
 
-    const txHex = txb.build().toHex();
+    const txn = txb.build();
+    console.log(txn);
+    const txHex = txn.toHex();
     console.log("Transaction Hex", txHex);
     const res = await this.bitcoin.broadcastTransaction(txHex);
     console.log(res);
   }
 
-  public testnetMSigWithTxn = async () => {
+  public testnetMSigAssets = async () => {
     const privateKeys = [
       this.bitcoin.generateTestnetKeys(this.bitcoin.rng1),
       this.bitcoin.generateTestnetKeys(this.bitcoin.rng2),
@@ -673,8 +668,8 @@ class SmokeTest {
     return { txnObj, keyPairs, multiSig };
   }
 
-  public testnetMultiSigTxn = async (): Promise<void> => {
-    const { txnObj, keyPairs, multiSig } = await this.testnetMSigWithTxn();
+  public testingMultiSigTransaction = async (): Promise<void> => {
+    const { txnObj, keyPairs, multiSig } = await this.testnetMSigAssets();
 
     const txb = this.bitcoin.signTransaction(
       txnObj.inputs,
@@ -694,25 +689,83 @@ class SmokeTest {
   // testnetTxn();
   // testnetMultiSigTxn();
 
-  public testingTimelocks = async () => {
-    const chainInfo = await this.bitcoin.fetchChainInfo();
-    console.log("Current block height:", chainInfo);
-    const lockTime = bip65.encode({ blocks: chainInfo.height + 5 });
+  public testingTimelocks = async (numberOfBlocks: number) => {
+    const privateKey = this.bitcoin.generateTestnetKeys(this.bitcoin.rng1);
 
-    const alice = bitcoinJS.ECPair.fromWIF(
-      "cScfkGjbzzoeewVWmU2hYPUHeVGJRDdFt7WhmrVVGkxpmPP8BHWe",
-      this.bitcoin.network,
-    );
-    const bob = bitcoinJS.ECPair.fromWIF(
-      "cMkopUXKWsEzAjfa1zApksGRwjVpJRB3831qM9W4gKZsLwjHXA9x",
-      this.bitcoin.network,
-    );
+    const keyPair = this.bitcoin.getKeyPair(privateKey);
 
-    const redeemScript = this.bitcoin.cltvCheckSigOutput(alice, bob, lockTime);
-    const { address } = bitcoinJS.payments.p2sh({
-      redeem: { output: redeemScript, network: this.bitcoin.network },
+    const { address, lockTime } = await this.bitcoin.createTLC(
+      keyPair,
+      null,
+      numberOfBlocks,
+    );
+    return { address, lockTime, privateKey };
+  }
+
+  public transferFromTLC = async (
+    senderAddress: string,
+    recipientAddress: string,
+    amount: number,
+    lockTime: number,
+    privateKey: string,
+  ) => {
+    const { final_balance } = await this.bitcoin.checkBalance(senderAddress);
+    const { height } = await this.bitcoin.fetchChainInfo();
+    console.log({ height, lockTime, balance: final_balance });
+
+    if (final_balance < amount + 1000) {
+      console.log(
+        "Not enough balance to accomodate for the transfer amount and mining fee",
+      );
+      return;
+    }
+    if (height < lockTime) {
+      // considering that we are only using block height based timelocks
+      console.log(
+        `${lockTime - height} block(s) remaining for the UTXO to be spendable`,
+      );
+      return;
+    }
+
+    const { txb, inputs } = await this.bitcoin.createTransaction(
+      senderAddress,
+      recipientAddress,
+      amount,
+      0xfffffffe,
+    );
+    console.log("---- Transaction Created ----");
+
+    const keyPair1 = this.bitcoin.getKeyPair(privateKey);
+
+    txb.setLockTime(lockTime);
+    const tx = txb.buildIncomplete();
+    const redeemScript = this.bitcoin.cltvCheckSigOutput(keyPair1, lockTime);
+
+    console.log({ redeemScript: redeemScript.toString("hex") });
+    const hashType = bitcoinJS.Transaction.SIGHASH_ALL;
+    const signatureHash = tx.hashForSignature(0, redeemScript, hashType);
+
+    const unlockingScript = bitcoinJS.script.compile([
+      bitcoinJS.script.signature.encode(keyPair1.sign(signatureHash), hashType),
+    ]);
+
+    const redeemScriptSig = bitcoinJS.payments.p2sh({
+      redeem: {
+        input: unlockingScript,
+        output: redeemScript,
+        network: this.bitcoin.network,
+      },
       network: this.bitcoin.network,
-    });
+    }).input;
+    tx.setInputScript(0, redeemScriptSig);
+
+    console.log("---- Transaction Signed ----");
+    console.log(tx);
+    const txHex = tx.toHex();
+    console.log({ txHex });
+    const res = await this.bitcoin.broadcastTransaction(txHex);
+    console.log("---- Transaction Broadcasted ----");
+    return res;
   }
 
   public testingPartialTxn = async () => {
@@ -844,7 +897,7 @@ class SmokeTest {
     // none of the present api's, as can be seen from the error thrown below,
     // seems to work therefore we'll be using our own testnet to broadcast the raw txn.
 
-    const { txnObj, keyPairs, multiSig } = await this.testnetMSigWithTxn();
+    const { txnObj, keyPairs, multiSig } = await this.testnetMSigAssets();
 
     const txb = this.bitcoin.signTransaction(
       txnObj.inputs,
@@ -998,26 +1051,26 @@ class SmokeTest {
 // smokeTest.testnetTxn();
 // smokeTest.testnetMultiSigTxn();
 
-///// TESTING PARTIALLY BUILT TXNS /////
-
-// const smokeTest = new SmokeTest();
-// smokeTest.testingPartialTxn();
-
-// const bitcoin = new Bitcoin();
-// bitcoin
-//   .fetchUnspentOutputs("2NFb3TpSctXBdax6pJaPaAuJG9tKzuihCrz")
-//   .then(console.log);
-// bitcoin
-//   .fetchTransactionDetails(
-//     "b0a51b5bc6197a568cba195009acde9f943de36a57bb1a8d1a71ba5c17edf6d9",
-//   )
-//   .then(console.log);
-
-// const smokeTest = new SmokeTest();
-// for (let pointer = 0; pointer < config.BREADTH; pointer++) {
-//   smokeTest.recoverableMultiSigs(pointer);
-// }
-
 // const smokeTest = new SmokeTest();
 // // // smokeTest.testingCollabTxn();
 // smokeTest.testingServerless2FACollabTxn();
+
+// const smokeTest = new SmokeTest();
+// smokeTest.testingTimelocks(parseInt(process.argv[2], 10)).then(console.log);
+
+// const transferDetails = {
+//   senderAddress: "2NF1MwdvMXsEJVhStqeCLuQrGQwJjeZGJum",
+//   recipientAddress: "2N4qBb5f1KyfbpHxtLM86QgbZ7qcxsFf9AL",
+//   amount: 6000,
+//   lockTime: 1454597,
+//   privateKey1: "cRgnQe9MUu1JznntrLaoQpB476M8PURvXVQB5R2eqms5GBJesMcu",
+// };
+// smokeTest
+//   .transferFromTLC(
+//     transferDetails.senderAddress,
+//     transferDetails.recipientAddress,
+//     transferDetails.amount,
+//     transferDetails.lockTime,
+//     transferDetails.privateKey1,
+//   )
+//   .then(console.log);

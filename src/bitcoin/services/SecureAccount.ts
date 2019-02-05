@@ -5,8 +5,7 @@ import crypto from "crypto";
 import config from "../Config";
 import Bitcoin from "../utilities/Bitcoin";
 
-const { BH_SERVER } = config.API_URLS;
-
+const SERVER = config.BH_SERVER.PROD;
 class SecureAccount {
   public bitcoin: Bitcoin;
   constructor() {
@@ -18,28 +17,34 @@ class SecureAccount {
     return recoveryMnemonic;
   }
 
-  public getRecoverableXPub = (mnemonic: string, childIndex: number = 0) => {
+  public getRecoverableXKey = (
+    mnemonic: string,
+    path: string,
+    priv?: boolean,
+  ) => {
     const seed = bip39.mnemonicToSeed(mnemonic);
     const root = bip32.fromSeed(seed, this.bitcoin.network);
-    const path = config.WALLET_XPUB_PATH + childIndex;
-    const xpub = root
-      .derivePath(path)
-      .neutered()
-      .toBase58();
-    return xpub;
+    if (!priv) {
+      const xpub = root
+        .derivePath("m/" + path)
+        .neutered()
+        .toBase58();
+      return xpub;
+    } else {
+      const xpriv = root.derivePath("m/" + path).toBase58();
+      return xpriv;
+    }
   }
 
-  public getXpriv = (mnemonic: string, childIndex: number = 0) => {
-    const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bip32.fromSeed(seed, this.bitcoin.network);
-    const path = config.WALLET_XPUB_PATH + childIndex;
-    const xpriv = root.derivePath(path).toBase58();
-    return xpriv;
-  }
+  // public deriveChildXKey = (extendedKey: string, childIndex: number) => {
+  //   const xKey = bip32.fromBase58(extendedKey, this.bitcoin.network);
+  //   const childXKey = xKey.derivePath("m/" + childIndex);
+  //   return childXKey.toBase58();
+  // }
 
-  public deriveChildXKey = (extendedKey: string, childIndex: number = 0) => {
+  public deriveChildXKey = (extendedKey: string, childIndex: number) => {
     const xKey = bip32.fromBase58(extendedKey, this.bitcoin.network);
-    const childXKey = xKey.derivePath("m/" + childIndex);
+    const childXKey = xKey.derive(childIndex);
     return childXKey.toBase58();
   }
 
@@ -48,17 +53,11 @@ class SecureAccount {
     return xKey.publicKey.toString("hex");
   }
 
-  public getAssets = async (
-    primaryMnemonic: string,
-    childIndex: number = 0,
-  ) => {
+  public getAssets = async (primaryMnemonic: string, path: string) => {
     const recoveryMnemonic = await this.getRecoveryMnemonic();
-
-    const primaryXpub = this.getRecoverableXPub(primaryMnemonic, childIndex);
-    const primaryXpriv = this.getXpriv(primaryMnemonic);
-
-    const recoveryXpub = this.getRecoverableXPub(recoveryMnemonic, childIndex);
-
+    const primaryXpub = this.getRecoverableXKey(primaryMnemonic, path);
+    const primaryXpriv = this.getRecoverableXKey(primaryMnemonic, path, true);
+    const recoveryXpub = this.getRecoverableXKey(recoveryMnemonic, path);
     const hash = crypto.createHash("sha512");
     const seed = bip39.mnemonicToSeed(primaryMnemonic);
     hash.update(seed);
@@ -77,33 +76,32 @@ class SecureAccount {
     };
   }
 
-  public createSecureMultiSig = ({ xpubs }, bhXpub: string) => {
-    const childPrimaryPub = this.getPub(xpubs.primary);
-    const childRecoveryPub = this.getPub(xpubs.recovery);
-    const childBHPub = this.getPub(this.deriveChildXKey(bhXpub));
-    const pubs = [childPrimaryPub, childRecoveryPub, childBHPub];
+  public createSecureMultiSig = (
+    { xpubs },
+    bhXpub: string,
+    childIndex: number = 0,
+  ) => {
+    const childPrimaryPub = this.getPub(
+      this.deriveChildXKey(xpubs.primary, childIndex),
+    );
+    const childRecoveryPub = this.getPub(
+      this.deriveChildXKey(xpubs.recovery, childIndex),
+    );
+    const childBHPub = this.getPub(this.deriveChildXKey(bhXpub, childIndex));
+
+    // public keys should be aligned in the following way: [bhPub, primaryPub, recoveryPub]
+    // for generating ga_recovery based recoverable multiSigs
+    const pubs = [childBHPub, childPrimaryPub, childRecoveryPub];
+    console.log({ pubs });
     const multiSig = this.bitcoin.generateMultiSig(2, pubs);
 
     return multiSig;
   }
 
   public setupSecureAccount = async (primaryMnemonic) => {
-    const assets = await this.getAssets(primaryMnemonic);
     let res;
     try {
-      res = await axios.get(BH_SERVER.PROD + "/setup2FA");
-      const initMultiSig = this.createSecureMultiSig(assets, res.data.bhXpub);
-      const multiSig = {
-        scripts: {
-          redeem: initMultiSig.p2sh.redeem.output.toString("hex"),
-          witness: initMultiSig.p2wsh.redeem.output.toString("hex"),
-        },
-        address: initMultiSig.address,
-      };
-      return {
-        statusCode: res.status,
-        data: { ...assets, setupData: res.data, multiSig },
-      };
+      res = await axios.get(SERVER + "/setup2FA");
     } catch (err) {
       console.log("An error occured:", err);
       return {
@@ -111,6 +109,27 @@ class SecureAccount {
         errorMessage: err.response.data,
       };
     }
+
+    const bhXpub = bip32.fromBase58(res.data.bhXpub, this.bitcoin.network);
+    let path: string;
+    if (bhXpub.index === 0) {
+      path = config.DERIVATION_BRANCH;
+    } else {
+      path = config.WALLET_XPUB_PATH + config.DERIVATION_BRANCH;
+    }
+    const assets = await this.getAssets(primaryMnemonic, path);
+    const initMultiSig = this.createSecureMultiSig(assets, res.data.bhXpub);
+    const multiSig = {
+      scripts: {
+        redeem: initMultiSig.p2sh.redeem.output.toString("hex"),
+        witness: initMultiSig.p2wsh.redeem.output.toString("hex"),
+      },
+      address: initMultiSig.address,
+    };
+    return {
+      statusCode: res.status,
+      data: { ...assets, setupData: res.data, multiSig },
+    };
   }
 
   public validateSecureAccountSetup = async (
@@ -119,7 +138,7 @@ class SecureAccount {
     walletID: string,
   ) => {
     try {
-      const res = await axios.post(BH_SERVER.PROD + "/validate2FASetup", {
+      const res = await axios.post(SERVER + "/validate2FASetup", {
         token,
         secret,
         walletID,
@@ -153,10 +172,10 @@ class SecureAccount {
     walletID: string;
     childIndex: number;
   }) => {
-    // const balance = await this.bitcoin.checkBalance(senderAddress);
+    // const balance = await this.bitcoin.checkBalance(senderAddress); //disabled due to latency
     // console.log({ balance });
-    // if (parseInt(balance.final_balance, 10) <= amount) {
-    //   // logic for fee inclusion can also be accomodated
+    // if (parseInt(balance.final_balance, 10) <= amount + 1000) {
+    //   // TODO: accomodate logic for fee inclusion
     //   throw new Error("Insufficient balance");
     // }
 
@@ -168,11 +187,11 @@ class SecureAccount {
     );
 
     console.log("---- Transaction Created ----");
-
+    const keyPair = this.deriveChildXKey(primaryXpriv, childIndex);
     const signedTxb = this.bitcoin.signTransaction(
       inputs,
       txb,
-      [bip32.fromBase58(primaryXpriv, this.bitcoin.network)],
+      [bip32.fromBase58(keyPair, this.bitcoin.network)],
       Buffer.from(scripts.redeem, "hex"),
       Buffer.from(scripts.witness, "hex"),
     );
@@ -184,7 +203,7 @@ class SecureAccount {
 
     let res: AxiosResponse;
     try {
-      res = await axios.post(BH_SERVER.PROD + "/secureTranasction", {
+      res = await axios.post(SERVER + "/secureTranasction", {
         walletID,
         token,
         txHex,
@@ -292,26 +311,6 @@ class SmokeTest {
     };
   }
 
-  // public testSecureTransaction = async (token: number) => {
-  //   const {
-  //     multiSig,
-  //     primaryChildXpriv,
-  //     pointer,
-  //     walletID,
-  //   } = this.getTestMultiSig();
-
-  //   this.secureAccount.secureTransaction({
-  //     senderAddress: multiSig.address,
-  //     recipientAddress: "2N4qBb5f1KyfbpHxtLM86QgbZ7qcxsFf9AL",
-  //     amount: 4500,
-  //     primaryXpriv: primaryChildXpriv,
-  //     multiSig,
-  //     token,
-  //     childIndex: pointer,
-  //     walletID,
-  //   });
-  // }
-
   public testSecureAccountFlow = async (token?: number) => {
     // STEP 1. Setting up a Secure Account
     // const { data } = await this.secureAccount.setupSecureAccount(
@@ -320,27 +319,25 @@ class SmokeTest {
     // console.log(data);
 
     // STEP 2. Validating Secure Account Setup
-    const secret = "IZMGUTLUF44UK42LGI4XG5TWJF5FCZCW"; // logs from step 1
+    const secret = "OZHUK4ZZNIXWSNZUJVYC623CM5HTOWLJ"; // logs from step 1
     const walletID =
       "dd2631ee3c5a0ab4da603f3ada062ef32b3c5acccd69567d120e9830d5c94a9b4aa63c598ec96faf85f781f4ae9e34f899ed27db2b86c05d3e91399eb04d3eae";
-    // const {
-    //   setupSuccessful,
-    // } = await this.secureAccount.validateSecureAccountSetup(
+    // const { data } = await this.secureAccount.validateSecureAccountSetup(
     //   token,
     //   secret,
     //   walletID,
     // );
-    // console.log({ setupSuccessful });
+    // console.log(data);
 
     // STEP 3. Perform a secure transaction (pre fund the multiSig)
 
     const multiSig = {
-      address: "2N6gXd8pP11inu7zg9nCDPhzE6PKDkv9vMP",
+      address: "2N51XR9PEC6Ezdok4VjsM98ooGs4wNKpAHZ",
       scripts: {
         redeem:
-          "00207387ad8382818f7e22e53cc4306ddbcaf20ab2cc75737989aae9a7accf244a2d",
+          "00207d6a274a3e905111eb2121d79bbc8fe7e665feecebc524ea7827a55783d159da",
         witness:
-          "522103fd74cc5d84670c2c824cc0baf9d54a0192381b755da4fba63d3369642ab368fa2103b8a377bcf4bf80b78cc6a0acaba6f2024c045d84acbe008c0b5ff1e953251d092102c63ffb98b4b9f36f60795e93da604f78e2d1dedcea709f46baf63a78338992b953ae",
+          "522102d3812ea3ae76b90ac4fd2b848fef2ec50ddf7100aad145690ff2adddc6512a882103fd74cc5d84670c2c824cc0baf9d54a0192381b755da4fba63d3369642ab368fa2103f3c2c391d2070865479c144de2ddeb5073dbe853acffd3cce114a414807f716f53ae",
       },
     };
     const res = await this.secureAccount.secureTransaction({
@@ -348,16 +345,16 @@ class SmokeTest {
       recipientAddress: "2N4qBb5f1KyfbpHxtLM86QgbZ7qcxsFf9AL",
       amount: 4500,
       primaryXpriv:
-        "tprv8iyKeMegiswEQ9BNpEW7BRVyNGbjPGPBM7BwCs2qsPMK6v1CFfDhj86FnCe9kSiRbb8xjKp6PgXy2goLKajZSyNp71zkLjFFUpo6gwZFfgh",
+        "tprv8gC86VUCsCShN6nKpgsAXQpW8c7n1gRaeajChkira5pKZgqmdBTz9Tni3X7xE1fkbT5qEWpfuYAizFuQnUQ5nq6LiK1GCCQUJhq4t8cvfVV",
       scripts: multiSig.scripts,
       token,
       childIndex: 0,
       walletID,
     });
+    console.log(res);
   }
 }
 
-////// SMOKE TEST ZONE //////
-//const smokeTest = new SmokeTest();
-// smokeTest.testSecureTransaction(parseInt(process.argv[2], 10));
-//smokeTest.testSecureAccountFlow(parseInt(process.argv[2], 10));
+// ////// SMOKE TEST ZONE //////
+// const smokeTest = new SmokeTest();
+// smokeTest.testSecureAccountFlow(parseInt(process.argv[2], 10));

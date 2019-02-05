@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, AsyncStorage } from "react-native";
 import { Container, Content } from "native-base";
 import BarcodeScanner from "react-native-barcode-scanners";
 
@@ -12,10 +12,22 @@ export default class QrcodeScannerScreen extends React.Component {
   }
 
   onBarCodeRead(res: any) {
-    //this.props.navigation.goBack();
-    const { navigation } = this.props;
-    navigation.goBack();
-    navigation.state.params.onSelect({ barcode: res.data });
+    try {
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+      const { navigation } = this.props;
+      navigation.goBack();
+      navigation.state.params.onSelect({ barcode: res.data });
+    } catch (error) {
+      console.log(error);
+    }
+  }   
+
+  async componentWillUnmount() {
+    try {
+      AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   onReadBarCodeByGalleryFailure() {
@@ -43,7 +55,7 @@ export default class QrcodeScannerScreen extends React.Component {
       </Container>
     );
   }
-}   
+}
 
 const styles = StyleSheet.create({
   container: {

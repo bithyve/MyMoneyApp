@@ -132,11 +132,12 @@ export default class AccountsScreen extends React.Component<any, any> {
 
       var transation: [] = [];
       var flag_noTrasation: boolean;
-      var resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
-        localDB.tableName.tblTransaction,
-        resultAccount.temp[this.state.cardIndexNo].address
-      );
 
+      // var resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+      //   localDB.tableName.tblTransaction,
+      //   resultAccount.temp[this.state.cardIndexNo].address
+      // );
+      // console.log({ resultRecentTras });
       // if (resultRecentTras.temp.length > 0) {
       //   transation = resultRecentTras.temp;
       //   flag_noTrasation = false;
@@ -166,10 +167,7 @@ export default class AccountsScreen extends React.Component<any, any> {
                 resultAccount.temp[this.state.cardIndexNo].address
               );
 
-              console.log({ resultAccount });
-              console.log({ resultRecentTras });
               if (resultRecentTras.temp.length > 0) {
-                console.log({ resultRecentTras });
                 transation = resultRecentTras.temp;
                 flag_noTrasation = false;
               } else {
@@ -178,8 +176,6 @@ export default class AccountsScreen extends React.Component<any, any> {
               }
               tranDetails = transation;
               isNoTranstion = flag_noTrasation;
-
-              console.log({ tranDetails });
             }
           } else {
             isNoTranstion = true;
@@ -317,8 +313,6 @@ export default class AccountsScreen extends React.Component<any, any> {
             resultAccount.temp[index].address
           );
 
-          console.log({ resultRecentTras });
-
           if (resultRecentTras.statusCode == 200) {
             if (resultRecentTras.transactionDetails.length > 0) {
               const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -335,7 +329,6 @@ export default class AccountsScreen extends React.Component<any, any> {
                   resultAccount.temp[index].address
                 );
 
-                console.log({ resultRecentTras });
                 if (resultRecentTras.temp.length > 0) {
                   transation = resultRecentTras.temp;
                   flag_noTrasation = false;
@@ -667,6 +660,18 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     backgroundColor: colors.Secure,
+    borderRadius: 10
+  },
+  Vault: {
+    flex: 1,
+    height: "100%",
+    backgroundColor: colors.Vault,
+    borderRadius: 10
+  },
+  Joint: {
+    flex: 1,
+    height: "100%",  
+    backgroundColor: colors.Joint,
     borderRadius: 10
   },
   //TODO: swip card:Body or Content

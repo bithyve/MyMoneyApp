@@ -9,6 +9,8 @@ import { createRootNavigator } from "./src/app/router/router";
 // import LaunchScreen from "../"
 import LaunchScreen from "./src/screens/LaunchScreen/LaunchScreen";
 
+
+
 class MyMoney extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +19,7 @@ class MyMoney extends React.Component {
       isStartPage: "OnBoardingNavigator",
       appState: AppState.currentState
     };
-  }
+  }  
 
   async componentDidMount() {
     try {

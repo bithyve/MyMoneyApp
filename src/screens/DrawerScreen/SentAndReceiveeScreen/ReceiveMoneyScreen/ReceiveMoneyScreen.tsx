@@ -22,27 +22,70 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { QRCode } from "react-native-custom-qr-codes";
 import Toast from "react-native-simple-toast";
 import Share from "react-native-share";
+import Loader from "react-native-modal-loader";
 //TODO: Custome Pages
-import { colors, images } from "../../../../app/constants/Constants";
+import { colors, images, localDB } from "../../../../app/constants/Constants";
+
+var dbOpration = require("../../../../app/manager/database/DBOpration");
+
+//TODO: VaultAccount
+import jointAccount from "../../../../bitcoin/services/JointAccount";
 
 export default class ReceiveMoneyScreen extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
-      address: ""
+      qrcodedata: "",
+      isLoading: false
     };
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const { navigation } = this.props;
+    let page = navigation.getParam("page");
+    let data = navigation.getParam("data");
+    console.log({ page, data });
+    let address: string;
+    if (page == "SentAndReceiveScreen") {
+      address = data.address;
+    } else if (page == "CreateJointAccountScreen") {
+      this.createJointAccount();
+    } else if (page == "MergeConfirmJointAccountScreen") {
+      let dataJson = JSON.parse(data);
+      console.log({ dataJson });
+      console.log(JSON.stringify(dataJson));
+      address = data;
+    } else if (page == "SentMoneyScreen") {
+      address = data;
+    }
+
     this.setState({
-      address: navigation.getParam("address")
+      qrcodedata: address
+    });
+  }
+
+  async createJointAccount() {
+    const { navigation } = this.props;
+    let data = navigation.getParam("data");
+    let address: string;
+    const resultWallet = await dbOpration.readTablesData(
+      localDB.tableName.tblWallet
+    );
+    let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
+
+    const details = {
+      creator: data.name,
+      walletName: data.walletName
+    };
+    let res = jointAccount.initiateJointAccount(mnemonic, details);
+    this.setState({
+      qrcodedata: res
     });
   }
 
   //TODO: Func Copy they code
   click_CopyAddress = async () => {
-    await Clipboard.setString(this.state.address);
+    await Clipboard.setString(this.state.qrcodedata);
     Toast.show("Address copyed.!", Toast.SHORT);
   };
 
@@ -63,7 +106,16 @@ export default class ReceiveMoneyScreen extends React.Component {
             <Left>
               <Button
                 transparent
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => {
+                  if (
+                    this.props.navigation.getParam("page") ==
+                    "MergeConfirmJointAccountScreen"
+                  ) {
+                    this.props.navigation.navigate("TabbarBottom");
+                  } else {
+                    this.props.navigation.goBack();
+                  }
+                }}
               >
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>
@@ -73,33 +125,31 @@ export default class ReceiveMoneyScreen extends React.Component {
                 adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.titleUserName}
-              >
-                Receive
-              </Title>
+              />
             </Body>
             <Right />
           </Header>
           <Content
             contentContainerStyle={styles.container}
             scrollEnabled={false}
+            padder
           >
             <View style={styles.viewShowQRcode}>
               <QRCode
                 logo={images.appIcon}
-                content={this.state.address}
+                content={this.state.qrcodedata}
                 size={Dimensions.get("screen").width - 40}
                 codeStyle="square"
-                outerEyeStyle="square"
+                outerEyeStyle="square"   
                 innerEyeStyle="square"
-                //linearGradient={['rgb(255,0,0)','rgb(0,255,255)']}
                 padding={1}
               />
               <TouchableOpacity onPress={() => this.click_CopyAddress()}>
-                <Text style={styles.txtBarcode} note>
-                  {this.state.address}
-                </Text>
+                <Text style={styles.txtBarcode} numberOfLines={4} note>   
+                  {this.state.qrcodedata}
+                </Text>   
               </TouchableOpacity>
-            </View>
+            </View>  
             <View style={styles.viewShareButtonMain}>
               <View style={styles.viewSahreBtn}>
                 <Button
@@ -115,6 +165,7 @@ export default class ReceiveMoneyScreen extends React.Component {
             </View>
           </Content>
         </ImageBackground>
+        <Loader loading={this.state.isLoading} color={colors.appColor} />
       </Container>
     );
   }
@@ -159,5 +210,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.appColor,
     paddingLeft: 10,
     borderRadius: 10
-  }   
+  }
 });

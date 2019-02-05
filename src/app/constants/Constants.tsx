@@ -28,11 +28,12 @@ var colors = {
   white: "#ffffff",
   Saving: "#E6A620",
   Secure: "#30A2F3",
+  Vault: "#679F37",
+  Joint: "#660000",
   placeholder: "#5F5F5F"
 };
 
 const assetsImages = "../../assets/images/";
-
 var images = {
   appBackgound: require(assetsImages + "icon/mainBackgoundImage.png"),
   //appBackgound: require(assetsImages + 'icon/slideMenuImage.jpg'),
@@ -53,8 +54,8 @@ var images = {
   },
   verifyBackupPhraseScreen: {
     verifyBackupPhraseLogo: require(assetsImages +
-      "verifyBackupPhraseScreen/correctOrder.png")  
-  },  
+      "verifyBackupPhraseScreen/correctOrder.png")
+  },
   paymentScreen: {
     cardSideBitcon: require(assetsImages + "paymentScreen/bitcoin1.jpg"),
     cardSideBitcon1: require(assetsImages + "paymentScreen/bitcoin2.png")
@@ -62,8 +63,8 @@ var images = {
   accounts: {
     Savings: require(assetsImages + "accountTypesCard/Savings.png"),
     Secure: require(assetsImages + "accountTypesCard/Secure.png"),
-    vault: require(assetsImages + "accountTypesCard/Savings.png"),
-    joint: require(assetsImages + "accountTypesCard/Savings.png"),
+    Vault: require(assetsImages + "accountTypesCard/Savings.png"),
+    Joint: require(assetsImages + "accountTypesCard/Secure.png"),
     unknown: require(assetsImages + "accountTypesCard/Savings.png")
   },
   accountDetailsOnBoarding: {
@@ -113,8 +114,6 @@ var localDB = {
 var notification = {
   notifi_UserDetialsChange: "notifi_UserDetialsChange"
 };
-     
-
 
 export {
   errorMessage,

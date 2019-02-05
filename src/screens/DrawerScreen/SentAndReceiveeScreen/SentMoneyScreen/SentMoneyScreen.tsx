@@ -12,7 +12,7 @@ import {
   Container,
   Header,
   Title,
-  Content,   
+  Content,
   Button,
   Left,
   Right,
@@ -45,6 +45,8 @@ import RegularAccount from "../../../../bitcoin/services/RegularAccount";
 
 //TODO: SecureAccount
 import secureAccount from "../../../../bitcoin/services/SecureAccount";
+import vaultAccount from "../../../../bitcoin/services/VaultAccount";
+import jointAccount from "../../../../bitcoin/services/JointAccount";
 
 export default class SentMoneyScreen extends React.Component {
   constructor() {
@@ -66,6 +68,9 @@ export default class SentMoneyScreen extends React.Component {
     const { navigation } = this.props;
     let data = navigation.getParam("data");
     let walletJSON = navigation.getParam("waletteData");
+
+    console.log({ data, walletJSON });
+
     this.setState({
       data: data,
       walletJSON: walletJSON
@@ -90,6 +95,9 @@ export default class SentMoneyScreen extends React.Component {
     try {
       this.willFocusSubscription.remove();
       AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(false));
+      this.setState({
+        isLoading: false
+      });
     } catch (error) {
       console.log(error);
     }
@@ -136,6 +144,30 @@ export default class SentMoneyScreen extends React.Component {
         this.setState({ isSecureAccountPopup: true });
       } catch (error) {
         console.log(error);
+      }
+    } else if (this.state.data.accountType == "Vault") {
+      let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+      let res = await vaultAccount.transfer(
+        this.state.data.address,
+        this.state.recipientAddress,
+        parseFloat(this.state.amount) * 1e8,
+        additionalInfo.lockTime,
+        additionalInfo.privateKey
+      );  
+    } else if (this.state.data.accountType == "Joint") {
+      const { navigation } = this.props;
+      const resJointAccount = await jointAccount.initJointTxn({
+        senderAddress: navigation.getParam("address"),
+        recipientAddress: this.state.recipientAddress,
+        amount: parseFloat(this.state.amount) * 1e8,
+        privateKey: this.state.walletJSON[0].privateKey,
+        scripts: JSON.parse(this.state.data.additionalInfo)
+      });
+      if (resJointAccount.statusCode == 200) {
+        this.props.navigation.push("ReceiveMoneyScreen", {
+          page: "SentMoneyScreen",
+          data: resJointAccount.data
+        });
       }
     } else {
       isLoading = true;
@@ -469,6 +501,8 @@ export default class SentMoneyScreen extends React.Component {
             </DialogContent>
           </Dialog>
         </ImageBackground>
+
+
         <SCLAlertOk
           data={this.state.alertPopupData}
           click_Ok={(status: boolean) => {

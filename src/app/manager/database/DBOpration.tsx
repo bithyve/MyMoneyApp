@@ -136,10 +136,16 @@ const readTableAcccountType = async (
                         temp.splice(i, 1);
                         break;
                       }
+                  } else if (data2.name == "Vault") {
+                    // for (var i = 0; i < temp.length; i++)
+                    //   if (temp[i].name === "Vault") {
+                    //     temp.splice(i, 1);
+                    //     break;
+                    //   }      
                   } else if (data2.name == "Joint") {
                     for (var i = 0; i < temp.length; i++)
                       if (temp[i].name === "Joint") {
-                        temp.splice(i, 1);
+                        temp.splice(i, 1);  
                         break;
                       }
                   }
@@ -152,7 +158,7 @@ const readTableAcccountType = async (
       });
     });
   });
-};
+};  
 
 //TODO: Select Recent Transaciton Address Wise
 const readRecentTransactionAddressWise = (
@@ -379,7 +385,7 @@ const insertCreateAccount = (
           utils.encrypt(JSON.stringify(additionalInfo).toString(), passcode),
           fullDate
         ]
-      );  
+      );
       resolve(true);
     });
   });

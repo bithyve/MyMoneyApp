@@ -26,11 +26,16 @@ import { RkCard } from "react-native-ui-kitten";
 import DatePicker from "react-native-datepicker";
 import moment from "moment";
 import ReactNativeItemSelect from "react-native-item-select";
-
+//Custome Compontes
+import SCLAlertOk from "../../../../app/custcompontes/alert/SCLAlertOk";
 //TODO: Custome class
-import { colors, images } from "../../../../app/constants/Constants";
+import { colors, images, localDB } from "../../../../app/constants/Constants";
 import renderIf from "../../../../app/constants/validation/renderIf";
 var utils = require("../../../../app/constants/Utils");
+var dbOpration = require("../../../../app/manager/database/DBOpration");
+
+//TODO: VaultAccount
+import vaultAccount from "../../../../bitcoin/services/VaultAccount";
 
 export default class VaultAccountScreen extends React.Component {
   constructor(props: any) {
@@ -40,48 +45,14 @@ export default class VaultAccountScreen extends React.Component {
       date: moment(new Date()).format("DD-MM-YYYY"),
       days: "0",
       periodType: "",
-      isPeriodTypeDialog: false
+      alertPopupData: [],
+      isPeriodTypeDialog: false,
+      data: [
+        { months: "3 Months", days: "30 days" },
+        { months: "6 Months", days: "60 days" },
+        { months: "9 Months", days: "180 days" }
+      ]
     };
-    this.changeDateAndroid = this.changeDateAndroid.bind(this);
-  }
-
-  //TODO: Page Life Cycle
-  componentDidMount() {
-    this.setState({
-      date: moment(new Date()).format("DD-MM-YYYY"),
-      days: "0",
-      daysText: "Total Days"
-    });
-  }
-
-  //TODO: func changeDaysValue
-  changeDaysValue(val) {
-    let newDate = this.addDays(new Date(), val);
-    this.setState({
-      date: moment(newDate).format("DD-MM-YYYY"),
-      days: val
-    });
-  }
-
-  handleDatePicked = date => {
-    let start = moment(this.addDays(date, 1), "DD-MM-YYYY");
-    let end = moment(new Date(), "DD-MM-YYYY");
-    let diff = Math.round((start - end) / (1000 * 60 * 60 * 24));
-    console.log("change date =" + diff);
-    this.setState({
-      date: moment(date).format("DD-MM-YYYY"),
-      days: diff.toString()
-    });
-  };
-
-  changeDateAndroid(date) {
-    let start = moment(date, "DD-MM-YYYY");
-    let end = moment(new Date(), "DD-MM-YYYY");
-    let diff = Math.round((start - end) / (1000 * 60 * 60 * 24));
-    this.setState({
-      date: date,
-      days: diff.toString()
-    });
   }
 
   addDays(theDate, days) {
@@ -89,12 +60,71 @@ export default class VaultAccountScreen extends React.Component {
   }
 
   //TODO: func click_CreateVaultAccout
-  click_CreateVaultAccout(item: any) {
+  async click_CreateVaultAccout(item: any) {
     let newDate = this.addDays(new Date(), item.days.slice(0, 2));
     let unitDate = utils.getUnixTimeDate(newDate);
     let data = {};
     data.validDate = unitDate;
+    data.sec = item.days.slice(0, 2) * 24 * 60 * 60;
+    const resultWallet = await dbOpration.readTablesData(
+      localDB.tableName.tblWallet
+    );
+    let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
+    const dateTime = Date.now();
+    const fulldate = Math.floor(dateTime / 1000);
+    const blocks = parseInt(data.sec / (3600 * 10));
+    const res = await vaultAccount.createTLC(mnemonic, null, blocks);
+    let data1 = {};
+    data1.sec = item.days.slice(0, 2) * 24 * 60 * 60;
+    data1.validDate = unitDate;
+    data1.lockTime = res.lockTime;
+    data1.privateKey = res.privateKey;
+    this.connection_VaultAccount(fulldate, res.address, data1);
+  }
 
+  async connection_VaultAccount(fulldate, address, data) {
+    const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
+      localDB.tableName.tblAccount,
+      fulldate,
+      address,
+      "BTC",
+      "Vault",
+      data
+    );
+    if (resultCreateAccount) {
+      this.setState({
+        isLoading: false,
+        alertPopupData: [
+          {
+            theme: "success",
+            status: true,
+            icon: "smile",
+            title: "Success",
+            subtitle: "Vault account Created.",
+            goBackStatus: true
+          }
+        ]
+      });
+    }
+  }
+
+  //TODO: changeDate
+  async changeDate(date: any) {
+    let hexDate = utils.getUnixTimeDate(date);
+    const resultWallet = await dbOpration.readTablesData(
+      localDB.tableName.tblWallet
+    );
+    let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
+    const dateTime = Date.now();
+    const fulldate = Math.floor(dateTime / 1000);
+    const blocks = -30000; //parseInt(data.sec / (3600 * 10));
+    const res = await vaultAccount.createTLC(mnemonic, null, blocks);
+    let data1 = {};
+    data1.sec = -30000; //item.days.slice(0, 2) * 24 * 60 * 60;
+    data1.validDate = hexDate; //unitDate;
+    data1.lockTime = res.lockTime;
+    data1.privateKey = res.privateKey;
+    this.connection_VaultAccount(fulldate, res.address, data1);
   }
 
   render() {
@@ -103,11 +133,7 @@ export default class VaultAccountScreen extends React.Component {
       color: "#696969",
       fontWeight: "bold"
     };
-    const data = [
-      { months: "3 Months", days: "30 days" },
-      { months: "6 Months", days: "60 days" },
-      { months: "9 Months", days: "180 days" }
-    ];
+
     return (
       <Container>
         <Content contentContainerStyle={styles.container} scrollEnabled={true}>
@@ -140,20 +166,47 @@ export default class VaultAccountScreen extends React.Component {
               </Text>
             </View>
 
+            <DatePicker
+              style={{ width: "96%" }}
+              date={this.state.date}
+              mode="date"
+              max
+              placeholder="select date"
+              format="DD-MM-YYYY"
+              maxDate={new Date()}
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: "absolute",
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  marginLeft: 36
+                }
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date: any) => {
+                this.changeDate(date);
+              }}
+            />
             <View style={styles.viewSelectPeriod}>
+              <Text style={{ textAlign: "center" }}>OR</Text>
               <ReactNativeItemSelect
-                data={data}
+                data={this.state.data}
                 countPerRow={3}
                 multiselect={false}
                 submitBtnTitle="CREATE"
-                styles={{  
+                styles={{
                   btn: {
                     backgroundColor: "#2196F3",
                     marginTop: 20,
                     height: 40
                   },
                   disabledBtn: { backgroundColor: "#2196F3" },
-                  btnTxt:{fontSize:18},
+                  btnTxt: { fontSize: 18 },
                   tickTxt: { backgroundColor: "#2196F3" },
                   activeItemBoxHighlight: { borderColor: "#2196F3" }
                 }}
@@ -167,6 +220,9 @@ export default class VaultAccountScreen extends React.Component {
                 )}
                 onSubmit={(item: string) => this.click_CreateVaultAccout(item)}
               />
+              <Text style={{ color: "red", textAlign: "center" }}>
+                Note: If before date add to select datepicker
+              </Text>
             </View>
           </ImageBackground>
         </Content>
@@ -176,6 +232,21 @@ export default class VaultAccountScreen extends React.Component {
           </View>
         )}
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
+        <SCLAlertOk
+          data={this.state.alertPopupData}
+          click_Ok={(status: boolean) => {
+            status
+              ? this.props.navigation.navigate("TabbarBottom")
+              : console.log(status),
+              this.setState({
+                alertPopupData: [
+                  {
+                    status: false
+                  }
+                ]
+              });
+          }}
+        />
       </Container>
     );
   }
@@ -190,7 +261,7 @@ const styles = StyleSheet.create({
   },
   //View:logoSecureAccount
   logoSecureAccount: {
-    flex: 4,
+    flex: 2,
     alignItems: "center"
   },
   secureLogo: {
@@ -208,7 +279,7 @@ const styles = StyleSheet.create({
   },
   //view:viewSelectPeriod
   viewSelectPeriod: {
-    flex: 4,
+    flex: 2,
     padding: 10
   }
 });

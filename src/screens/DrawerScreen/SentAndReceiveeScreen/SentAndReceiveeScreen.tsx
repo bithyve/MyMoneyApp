@@ -13,12 +13,12 @@ import {
   CardItem
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+  
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
 import SQLite from "react-native-sqlite-storage";
 var db = SQLite.openDatabase(localDB.dbName, "1.0", "MyMoney Database", 200000);
-  
+
 //TODO: Wallets
 //var RegularAccount = require("../../../bitcoin/services/wallet");
 import RegularAccount from "../../../bitcoin/services/RegularAccount";
@@ -134,11 +134,14 @@ export default class SentAndReceiveeScreen extends React.Component {
                 </Button>
                 <Button
                   style={styles.btnSentAndRec}
-                  onPress={() =>
+                  onPress={() => {
+                    let jsonData = {};
+                    jsonData.address = this.state.addressKey;
                     this.props.navigation.push("ReceiveMoneyScreen", {
-                      address: this.state.addressKey
-                    })
-                  }
+                      page: "SentAndReceiveScreen",
+                      data: jsonData    
+                    });   
+                  }}
                 >
                   <Text style={styles.txtButtonTitle}> RECEIVE </Text>
                 </Button>
