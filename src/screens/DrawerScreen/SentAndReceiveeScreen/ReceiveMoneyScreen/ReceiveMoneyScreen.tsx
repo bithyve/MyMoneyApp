@@ -19,7 +19,8 @@ import {
   Text
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { QRCode } from "react-native-custom-qr-codes";
+//import { QRCode } from "react-native-custom-qr-codes";
+import QRCode from "react-native-qrcode";
 import Toast from "react-native-simple-toast";
 import Share from "react-native-share";
 import Loader from "react-native-modal-loader";
@@ -27,7 +28,6 @@ import Loader from "react-native-modal-loader";
 import { colors, images, localDB } from "../../../../app/constants/Constants";
 
 var dbOpration = require("../../../../app/manager/database/DBOpration");
-
 //TODO: VaultAccount
 import jointAccount from "../../../../bitcoin/services/JointAccount";
 
@@ -35,12 +35,12 @@ export default class ReceiveMoneyScreen extends React.Component {
   constructor(props: any) {
     super(props);
     this.state = {
-      qrcodedata: "",
+      qrcodedata: "mymoney",
       isLoading: false
     };
   }
 
-  async componentWillMount() {
+  componentDidMount() {
     const { navigation } = this.props;
     let page = navigation.getParam("page");
     let data = navigation.getParam("data");
@@ -57,7 +57,9 @@ export default class ReceiveMoneyScreen extends React.Component {
       address = data;
     } else if (page == "SentMoneyScreen") {
       address = data;
-    }
+    } else if (page == "AccountDetailsScreen") {
+      address = data;
+    }    
 
     this.setState({
       qrcodedata: address
@@ -136,20 +138,17 @@ export default class ReceiveMoneyScreen extends React.Component {
           >
             <View style={styles.viewShowQRcode}>
               <QRCode
-                logo={images.appIcon}
-                content={this.state.qrcodedata}
-                size={Dimensions.get("screen").width - 40}
-                codeStyle="square"
-                outerEyeStyle="square"   
-                innerEyeStyle="square"
-                padding={1}
+                value={this.state.qrcodedata}
+                size={Dimensions.get("screen").width - 70}
+                bgColor="black"
+                fgColor="white"
               />
               <TouchableOpacity onPress={() => this.click_CopyAddress()}>
-                <Text style={styles.txtBarcode} numberOfLines={4} note>   
+                <Text style={styles.txtBarcode} numberOfLines={4} note>
                   {this.state.qrcodedata}
-                </Text>   
+                </Text>
               </TouchableOpacity>
-            </View>  
+            </View>
             <View style={styles.viewShareButtonMain}>
               <View style={styles.viewSahreBtn}>
                 <Button

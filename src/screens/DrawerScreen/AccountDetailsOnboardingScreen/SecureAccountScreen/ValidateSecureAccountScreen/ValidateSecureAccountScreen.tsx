@@ -150,7 +150,8 @@ export default class ValidateSecureAccountScreen extends React.Component {
       localDB.tableName.tblAccount,
       fulldate,
       address,
-      "BTC",
+      "BTC",  
+      "Secure",
       "Secure",
       sercureData  
     );

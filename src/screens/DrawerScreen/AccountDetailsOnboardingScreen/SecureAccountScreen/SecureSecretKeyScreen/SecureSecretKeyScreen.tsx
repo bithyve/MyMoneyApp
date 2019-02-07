@@ -20,7 +20,8 @@ import {
   Text
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { QRCode } from "react-native-custom-qr-codes";
+//import { QRCode } from "react-native-custom-qr-codes";
+import QRCode from "react-native-qrcode";
 import Toast from "react-native-simple-toast";
 
 //TODO: Custome Pages
@@ -38,7 +39,7 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { navigation } = this.props;
     let data = navigation.getParam("data");
 
@@ -49,9 +50,6 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
       secret: data.setupData.secret,
       bhXpub: data.setupData.bhXpub
     });
-  }
-
-  componentDidMount() {
     this.setAppState(true);
   }
 
@@ -76,9 +74,9 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
   }
 
   //TODO: Func
-  click_CopySecretKey = async () => {
-    await Clipboard.setString(this.state.secret);
-    Toast.show("Secret key copyed.!", Toast.SHORT);
+  click_CopySecretKey = async (text: string) => {
+    await Clipboard.setString(text);
+    Toast.show("copied.!", Toast.SHORT);
   };
 
   render() {
@@ -100,33 +98,70 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
                 adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.titleUserName}
-              />
+              />   
             </Body>
             <Right />
           </Header>
           <Content
             contentContainerStyle={styles.container}
-            scrollEnabled={false}
+            scrollEnabled={true}
             padder
           >
             <View style={styles.viewSecretKey}>
               <QRCode
-                logo={images.appIcon}
-                logoSize={60}
-                content={this.state.qrData}
-                size={Dimensions.get("screen").width / 2}
-                codeStyle="square"
-                outerEyeStyle="square"
-                innerEyeStyle="square"
-                padding={1}
+                value={this.state.qrData}
+                size={200}
+                bgColor="black"
+                fgColor="white"
               />
               <Text style={[styles.txtSecretKeyTitle]}>Secret</Text>
-              <TouchableOpacity onPress={() => this.click_CopySecretKey()}>
+              <TouchableOpacity
+                onPress={() => this.click_CopySecretKey(this.state.secret)}
+              >
                 <Text>{this.state.secret}</Text>
               </TouchableOpacity>
               <Text style={styles.txtStaticMsg} note>
                 {msg.secretKeyMsg}
               </Text>
+              <Text style={{ textAlign: "center", marginTop: 10 }}>
+                Please keep the following details safe with you as they are
+                crucial for recovery of the secure account (and we won't be
+                storing it).
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginTop: 7,
+                  fontWeight: "bold",
+                  textDecorationLine: "underline"
+                }}
+              >
+                Recovery Mnemonic:
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  this.click_CopySecretKey(this.state.data.recoveryMnemonic)
+                }
+              >
+                <Text style={{ textAlign: "center" }}>
+                  {this.state.data.recoveryMnemonic}
+                </Text>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginTop: 7,
+                  fontWeight: "bold",
+                  textDecorationLine: "underline"
+                }}
+              >
+                BitHyve Xpub:
+              </Text>
+              <TouchableOpacity
+                onPress={() => this.click_CopySecretKey(this.state.bhXpub)}
+              >
+                <Text style={{ textAlign: "center" }}>{this.state.bhXpub}</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.createAccountBtn}>
               <Button
@@ -168,11 +203,11 @@ const styles = StyleSheet.create({
     color: "#fff"
   },
   viewSecretKey: {
-    flex: 2,
+    flex: 6,
     alignItems: "center"
   },
   txtSecretKeyTitle: {
-    paddingTop: 15,
+    paddingTop: 5,
     marginBottom: 10,
     fontSize: 22,
     textDecorationLine: "underline"
@@ -183,6 +218,6 @@ const styles = StyleSheet.create({
   },
   //createAccountBtn
   createAccountBtn: {
-    flex: 1
+    flex: 0.5
   }
 });

@@ -5,7 +5,8 @@ class Config {
   public NETWORK: Network;
   public WALLET_XPUB_PATH: string = "2147483651/2147483649/";
   public DERIVATION_BRANCH: string = "1";
-  public BREADTH: number = 5;
+  public TOKEN: string; //please enter your blockcypher token here;
+  public BREADTH: number = 5;  
   public BH_SERVER = {
     DEV: "http://localhost:3000",
     PROD: "https://prime-sign-230407.appspot.com"
@@ -53,6 +54,6 @@ class Config {
       throw new Error("Please specify an apt environment(PROD||DEV)");
     }
   };
-}  
+}
 
 export default new Config("DEV");

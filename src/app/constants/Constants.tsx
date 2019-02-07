@@ -40,9 +40,9 @@ var images = {
   appIcon: require(assetsImages + "appLogo.png"),
   slideMenuIcon: require(assetsImages + "icon/slideMenuImage.jpg"),
   onBoardingScreen: {
-    onB1: require(assetsImages + "onBoardingScreen/onB1.png"),
-    onB2: require(assetsImages + "onBoardingScreen/onB2.png"),
-    onB3: require(assetsImages + "onBoardingScreen/onB3.png")
+    onB1: require(assetsImages + "onBoardingScreen/onB3.png"),
+    onB2: require(assetsImages + "onBoardingScreen/secureAccount.jpeg"),
+    onB3: require(assetsImages + "onBoardingScreen/Selfsovereign.jpeg")
   },
   loginScreen: {
     backgoundImage: require(assetsImages + "loginscreen/loginBackgound.jpg"),
@@ -70,19 +70,26 @@ var images = {
   accountDetailsOnBoarding: {
     secureAccount: {
       img1: require(assetsImages +
-        "accountDetailsOnBoarding/secureAccount/secure01.png"),
+        "accountDetailsOnBoarding/secureAccount/sec01.jpg"),
       img2: require(assetsImages +
-        "accountDetailsOnBoarding/secureAccount/secure02.png"),
+        "accountDetailsOnBoarding/secureAccount/sec02.png"),
       img3: require(assetsImages +
-        "accountDetailsOnBoarding/secureAccount/secure03.png")
+        "accountDetailsOnBoarding/secureAccount/sec03.png")
+    },
+    jointAccount: {
+      img1: require(assetsImages +
+        "accountDetailsOnBoarding/jointAccount/joint01.jpg"),
+      img2: require(assetsImages +
+        "accountDetailsOnBoarding/secureAccount/sec02.png"),  
+      img3: require(assetsImages +
+        "accountDetailsOnBoarding/jointAccount/joint03.jpg")
     },
     vaultAccount: {
       img1: require(assetsImages +
-        "accountDetailsOnBoarding/vaultAccount/vault01.png"),
+        "accountDetailsOnBoarding/vaultAccount/vault001.png"),
       img2: require(assetsImages +
-        "accountDetailsOnBoarding/vaultAccount/vault02.png"),
-      img3: require(assetsImages +
-        "accountDetailsOnBoarding/vaultAccount/vault03.png")
+        "accountDetailsOnBoarding/vaultAccount/vault02.png"),  
+     
     }
   },
   secureAccount: {

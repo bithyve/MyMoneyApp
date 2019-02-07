@@ -22,7 +22,7 @@ import {
 } from "native-base";
 import { RkCard } from "react-native-ui-kitten";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import Icon from "react-native-vector-icons/FontAwesome5";   
 import { SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
 
@@ -90,6 +90,7 @@ export default class AccountsScreen extends React.Component<any, any> {
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
       () => {
+        console.log(this.state.cardIndexNo);
         isNetwork = utils.getNetwork();
         this.connnection_FetchData();
       }
@@ -147,9 +148,9 @@ export default class AccountsScreen extends React.Component<any, any> {
       // }
       // tranDetails = transation;
       // isNoTranstion = flag_noTrasation;
-
-      if (bal.statusCode == 200) {
-        resultRecentTras = await RegularAccount.getTransactions(
+  
+      if (bal.statusCode == 200) {  
+        var resultRecentTras = await RegularAccount.getTransactions(
           resultAccount.temp[this.state.cardIndexNo].address
         );
         if (resultRecentTras.statusCode == 200) {
@@ -261,6 +262,7 @@ export default class AccountsScreen extends React.Component<any, any> {
 
   //TODO: func getSwapCardDetails
   async getSwapCardDetails(index: number) {
+    console.log(index);
     let isLoading1: boolean = true;
     let isNoTranstion: boolean = false;
     let tranDetails: [] = [];
@@ -285,34 +287,35 @@ export default class AccountsScreen extends React.Component<any, any> {
     }
 
     if (resultAccount.temp[index].address != "") {
+      console.log(resultAccount.temp[index].address);
       if (isNetwork) {
         const bal = await RegularAccount.getBalance(
           resultAccount.temp[index].address
         );
-
         let transation: [] = [];
         let flag_noTrasation: boolean;
 
-        var resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
-          localDB.tableName.tblTransaction,
-          resultAccount.temp[index].address
-        );
+        // var resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+        //   localDB.tableName.tblTransaction,
+        //   resultAccount.temp[index].address
+        // );
 
-        if (resultRecentTras.temp.length > 0) {
-          transation = resultRecentTras.temp;
-          flag_noTrasation = false;
-        } else {
-          transation = [];
-          flag_noTrasation = true;
-        }
-        tranDetails = transation;
-        isNoTranstion = flag_noTrasation;
+        // if (resultRecentTras.temp.length > 0) {
+        //   transation = resultRecentTras.temp;
+        //   flag_noTrasation = false;
+        // } else {
+        //   transation = [];
+        //   flag_noTrasation = true;
+        // }
+        // tranDetails = transation;
+        // isNoTranstion = flag_noTrasation;
 
         if (bal.statusCode == 200) {
-          resultRecentTras = await RegularAccount.getTransactions(
+          console.log({ bal });
+          var resultRecentTras = await RegularAccount.getTransactions(
             resultAccount.temp[index].address
           );
-
+          console.log({ resultRecentTras });
           if (resultRecentTras.statusCode == 200) {
             if (resultRecentTras.transactionDetails.length > 0) {
               const resultRecentTransaction = await dbOpration.insertTblTransation(
@@ -328,7 +331,6 @@ export default class AccountsScreen extends React.Component<any, any> {
                   localDB.tableName.tblTransaction,
                   resultAccount.temp[index].address
                 );
-
                 if (resultRecentTras.temp.length > 0) {
                   transation = resultRecentTras.temp;
                   flag_noTrasation = false;
@@ -483,9 +485,19 @@ export default class AccountsScreen extends React.Component<any, any> {
               >
                 <View rkCardContent style={styles.cardHeader}>
                   <Text style={[styles.cardText, styles.cardTitle]}>
-                    {item.accountType}
+                    {item.accountName}
                   </Text>
-                  <Text style={[styles.cardText, styles.cardAmount]}>
+                  {renderIf(item.accountType == "Joint")(
+                    <Text style={[styles.cardText]}>Joint Account</Text>
+                  )}
+
+                  <Text
+                    style={[
+                      styles.cardText,
+                      styles.cardAmount,
+                      { marginTop: 10 }
+                    ]}
+                  >
                     {item.balance} {item.unit}
                   </Text>
                 </View>
@@ -670,7 +682,7 @@ const styles = StyleSheet.create({
   },
   Joint: {
     flex: 1,
-    height: "100%",  
+    height: "100%",
     backgroundColor: colors.Joint,
     borderRadius: 10
   },

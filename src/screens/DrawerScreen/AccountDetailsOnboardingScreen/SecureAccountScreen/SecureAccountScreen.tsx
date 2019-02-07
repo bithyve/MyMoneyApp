@@ -81,7 +81,7 @@ export default class SecureAccountScreen extends React.Component {
               </Left>
               <Body style={{ flex: 0, alignItems: "center" }}>
                 <Title />
-              </Body>
+              </Body>   
               <Right />
             </Header>
 
@@ -92,10 +92,7 @@ export default class SecureAccountScreen extends React.Component {
               />
               <Text style={styles.txtTitle}>Secure Account</Text>
               <Text style={styles.txtNote}>
-                First of all, you need to realize that there’s a huge difference
-                between a blockchain and cryptocurrencies. Blockchain is a
-                technology which is used to create crypto money like bitcoin or
-                ethereum.
+                
               </Text>
             </View>
             <View style={styles.createAccountBtn}>

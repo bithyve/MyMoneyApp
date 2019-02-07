@@ -29,7 +29,7 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Toast from "react-native-simple-toast";
-
+let flag_createJoinAccount: boolean = true;
 var dbOpration = require("../../../../app/manager/database/DBOpration");
 
 //TODO: Custome Pages
@@ -45,7 +45,7 @@ export default class CreateJointAccountScreen extends React.Component {
     super(props);
     this.state = {
       name: "",
-      walletName: "",
+      accountName: "",
       flag_createAccountBtnStatus: true,
       alertPopupData: []
     };
@@ -92,11 +92,18 @@ export default class CreateJointAccountScreen extends React.Component {
       mnemonic,
       details
     );
-    this.connection_CreateJointAccount(
-      fulldate,
-      resJointAccountCreate.multiSig.address,
-      resJointAccountCreate.multiSig.scripts
-    );
+    const additionalInfo = {  
+      scripts: resJointAccountCreate.multiSig.scripts,  
+      jointData: JSON.parse(resJointAccountCreate.creationJSON) 
+    };
+    if (flag_createJoinAccount) {
+      this.connection_CreateJointAccount(
+        fulldate,
+        resJointAccountCreate.multiSig.address,
+        additionalInfo
+      );   
+      flag_createJoinAccount = false;
+    }
   }
 
   async connection_CreateJointAccount(
@@ -105,11 +112,13 @@ export default class CreateJointAccountScreen extends React.Component {
     data: any
   ) {
     console.log("create account");
+    console.log({ data });
     const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
       localDB.tableName.tblAccount,
       fulldate,
       address,
       "BTC",
+      this.state.accountName,
       "Joint",
       data
     );
@@ -156,17 +165,17 @@ export default class CreateJointAccountScreen extends React.Component {
       });
     } else {
       this.setState({
-        walletName: text
+        accountName: text
       });
     }
-    if (this.state.name.length > 0 && this.state.walletName.length > 0) {
+    if (this.state.name.length > 0 && this.state.accountName.length > 0) {
       this.setState({
         flag_createAccountBtnStatus: false
       });
     }
     if (
       this.state.name.length < 0 ||
-      this.state.walletName.length < 0 ||
+      this.state.accountName.length < 0 ||
       text == ""
     ) {
       this.setState({
@@ -219,9 +228,7 @@ export default class CreateJointAccountScreen extends React.Component {
                 source={images.secureAccount.secureLogo}
               />
               <Text style={styles.txtTitle}>Joint Account</Text>
-              <Text style={styles.txtLorem}>
-             
-              </Text>
+              <Text style={styles.txtLorem} />
             </View>
 
             <View style={styles.jointAccountInput}>
@@ -235,13 +242,13 @@ export default class CreateJointAccountScreen extends React.Component {
                 onChangeText={text => this.validationText(text, "name")}
               />
               <Input
-                name={this.state.walletName}
-                value={this.state.walletName}
+                name={this.state.accountName}
+                value={this.state.accountName}
                 placeholder="Enter account name"
                 keyboardType={"default"}
                 placeholderTextColor={Platform.OS == "ios" ? "#000" : "#000"}
                 style={styles.input}
-                onChangeText={text => this.validationText(text, "walletName")}
+                onChangeText={text => this.validationText(text, "accountName")}
               />
               <Button
                 full
@@ -255,14 +262,14 @@ export default class CreateJointAccountScreen extends React.Component {
                 onPress={() => {
                   let data = {};
                   data.name = this.state.name;
-                  data.walletName = this.state.walletName;
+                  data.walletName = this.state.accountName;
                   this.props.navigation.push("ReceiveMoneyScreen", {
                     page: "CreateJointAccountScreen",
                     data: data
                   });
                 }}
               >
-                <Text style={{ color: "#ffffff" }}>Create</Text>
+                <Text style={{ color: "#ffffff" }}>Initiate</Text>
               </Button>
               <Text
                 style={{

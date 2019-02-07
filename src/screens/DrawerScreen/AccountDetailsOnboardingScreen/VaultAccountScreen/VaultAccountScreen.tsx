@@ -89,6 +89,7 @@ export default class VaultAccountScreen extends React.Component {
       address,
       "BTC",
       "Vault",
+      "Vault",
       data
     );
     if (resultCreateAccount) {
@@ -160,9 +161,7 @@ export default class VaultAccountScreen extends React.Component {
               />
               <Text style={styles.txtTitle}>Vault Account</Text>
               <Text style={styles.txtLorem}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s.
+                
               </Text>
             </View>
 
@@ -221,7 +220,7 @@ export default class VaultAccountScreen extends React.Component {
                 onSubmit={(item: string) => this.click_CreateVaultAccout(item)}
               />
               <Text style={{ color: "red", textAlign: "center" }}>
-                Note: If before date add to select datepicker
+              
               </Text>
             </View>
           </ImageBackground>

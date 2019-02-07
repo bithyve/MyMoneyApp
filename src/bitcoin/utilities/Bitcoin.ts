@@ -158,9 +158,13 @@ export default class Bitcoin {
   public fetchAddressInfo = async (address: string): Promise<any> => {
     // fetches information corresponding to the  supplied address (including txns)
     if (this.network === bitcoinJS.networks.testnet) {
-      return await axios.get(`${TESTNET.BASE}/addrs/${address}/full`);
+      return await axios.get(
+        `${TESTNET.BASE}/addrs/${address}/full?token=${config.TOKEN}`,
+      );
     } else {
-      return await axios.get(`${MAINNET.BASE}/addrs/${address}/full`);
+      return await axios.get(
+        `${MAINNET.BASE}/addrs/${address}/full?token=${config.TOKEN}`,
+      );
     }
   }
 
@@ -303,8 +307,10 @@ export default class Bitcoin {
 
   public generateMultiSig = (required: number, pubKeys: any[]) => {
     // generic multiSig address generator
+
     // if (!network) network = bitcoinJS.networks.bitcoin;
     const pubkeys = pubKeys.map((hex) => Buffer.from(hex, "hex"));
+
     const p2ms = bitcoinJS.payments.p2ms({
       m: required,
       pubkeys,
@@ -333,17 +339,17 @@ export default class Bitcoin {
       p2sh,
       address: p2sh.address,
     };
-  }
+  }    
 
   public fetchChainInfo = async (): Promise<any> => {
     // provides transation fee rate (satoshis/kilobyte)
     // bitcoinfees endpoint: https://bitcoinfees.earn.com/api/v1/fees/recommended (provides time estimates)
 
     if (this.network === bitcoinJS.networks.testnet) {
-      const { data } = await axios.get(TESTNET.BASE);
+      const { data } = await axios.get(`${TESTNET.BASE}?token=${config.TOKEN}`);
       return data;
     } else {
-      const { data } = await axios.get(MAINNET.BASE);
+      const { data } = await axios.get(`${MAINNET.BASE}?token=${config.TOKEN}`);
       return data;
     }
   }
@@ -377,10 +383,14 @@ export default class Bitcoin {
 
   public fetchTransactionDetails = async (txHash: string): Promise<any> => {
     if (this.network === bitcoinJS.networks.testnet) {
-      const { data } = await axios.get(`${TESTNET.BASE}/txs/${txHash}`);
+      const { data } = await axios.get(
+        `${TESTNET.BASE}/txs/${txHash}?token=${config.TOKEN}`,
+      );
       return data;
     } else {
-      const { data } = await axios.get(`${MAINNET.BASE}/txs/${txHash}`);
+      const { data } = await axios.get(
+        `${MAINNET.BASE}/txs/${txHash}?token=${config.TOKEN}`,
+      );
       return data;
     }
   }
@@ -542,6 +552,43 @@ export default class Bitcoin {
       const { data } = await axios.post(MAINNET.TX_DECODE, { hex: txHash });
       console.log(JSON.stringify(data, null, 4));
     }
+  }
+
+  public recoverInputsFromTxHex = async (txHex: string) => {
+    const regenTx: Transaction = bitcoinJS.Transaction.fromHex(txHex);
+    const recoveredInputs = [];
+    await Promise.all(
+      regenTx.ins.map(async (inp) => {
+        const txId = inp.hash
+          .toString("hex")
+          .match(/.{2}/g)
+          .reverse()
+          .join("");
+        const vout = inp.index;
+        const data = await this.fetchTransactionDetails(txId);
+        const value = data.outputs[vout].value;
+        recoveredInputs.push({ txId, vout, value });
+      }),
+    );
+    return recoveredInputs;
+  }
+
+  public fromOutputScript = (output, network) => {
+    try {
+      return bitcoinJS.payments.p2pkh({ output, network }).address;
+    } catch (e) {}
+    try {
+      return bitcoinJS.payments.p2sh({ output, network }).address;
+    } catch (e) {}
+
+    try {
+      return bitcoinJS.payments.p2wpkh({ output, network }).address;
+    } catch (e) {}
+    try {
+      return bitcoinJS.payments.p2wsh({ output, network }).address;
+    } catch (e) {}
+
+    throw new Error(output + " has no matching Address");
   }
 
   public cltvCheckSigOutput = (keyPair, lockTime) => {

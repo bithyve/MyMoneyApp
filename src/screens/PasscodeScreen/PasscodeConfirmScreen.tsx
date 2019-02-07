@@ -141,6 +141,7 @@ export default class PasscodeConfirmScreen extends Component {
             address,
             "BTC",
             "Savings",
+            "Savings",
             ""
           );
           if (resultCreateAccountSaving) {
@@ -149,6 +150,7 @@ export default class PasscodeConfirmScreen extends Component {
               fulldate,
               "",
               "",
+              "UnKnown",
               "UnKnown",
               ""
             );

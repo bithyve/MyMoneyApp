@@ -319,7 +319,7 @@ class SmokeTest {
     // console.log(data);
 
     // STEP 2. Validating Secure Account Setup
-    const secret = "OZHUK4ZZNIXWSNZUJVYC623CM5HTOWLJ"; // logs from step 1
+    const secret = "NEZDIY3ILJJHU4CHJFKFSODVOJYFOOLN"; // logs from step 1
     const walletID =
       "dd2631ee3c5a0ab4da603f3ada062ef32b3c5acccd69567d120e9830d5c94a9b4aa63c598ec96faf85f781f4ae9e34f899ed27db2b86c05d3e91399eb04d3eae";
     // const { data } = await this.secureAccount.validateSecureAccountSetup(
@@ -332,12 +332,12 @@ class SmokeTest {
     // STEP 3. Perform a secure transaction (pre fund the multiSig)
 
     const multiSig = {
-      address: "2N51XR9PEC6Ezdok4VjsM98ooGs4wNKpAHZ",
+      address: "2Mxtfze6MDr5biqYvATbff768mEcZkeFzkT",
       scripts: {
         redeem:
-          "00207d6a274a3e905111eb2121d79bbc8fe7e665feecebc524ea7827a55783d159da",
+          "00209d117d8d1fc27e5234ecdba6e86277eb015cf10aa7403631421711be5147a437",
         witness:
-          "522102d3812ea3ae76b90ac4fd2b848fef2ec50ddf7100aad145690ff2adddc6512a882103fd74cc5d84670c2c824cc0baf9d54a0192381b755da4fba63d3369642ab368fa2103f3c2c391d2070865479c144de2ddeb5073dbe853acffd3cce114a414807f716f53ae",
+          "522102d3812ea3ae76b90ac4fd2b848fef2ec50ddf7100aad145690ff2adddc6512a882103fd74cc5d84670c2c824cc0baf9d54a0192381b755da4fba63d3369642ab368fa2103cf13ab640dcc69f797e3267f55eac44e06fb16fd6da3cf6b8f1a325bc15b1c3853ae",
       },
     };
     const res = await this.secureAccount.secureTransaction({

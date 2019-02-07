@@ -80,9 +80,10 @@ const readAccountTablesData = (tableName: string) => {
                 data.id = data.id;
                 data.dateCreated = utils.decrypt(data.dateCreated, passcode);
                 data.lastUpdated = utils.decrypt(data.lastUpdated, passcode);
+                data.accountName = utils.decrypt(data.accountName, passcode);
                 data.accountType = utils.decrypt(data.accountType, passcode);
                 data.address = utils.decrypt(data.address, passcode);
-                data.additionalInfo = utils.decrypt(
+                data.additionalInfo = utils.decrypt(   
                   data.additionalInfo,
                   passcode
                 );
@@ -137,15 +138,15 @@ const readTableAcccountType = async (
                         break;
                       }
                   } else if (data2.name == "Vault") {
-                    // for (var i = 0; i < temp.length; i++)
-                    //   if (temp[i].name === "Vault") {
-                    //     temp.splice(i, 1);
-                    //     break;
-                    //   }      
+                    for (var i = 0; i < temp.length; i++)
+                      if (temp[i].name === "Vault") {
+                        // temp.splice(i, 1);
+                        break;
+                      }
                   } else if (data2.name == "Joint") {
                     for (var i = 0; i < temp.length; i++)
                       if (temp[i].name === "Joint") {
-                        temp.splice(i, 1);  
+                        // temp.splice(i, 1);
                         break;
                       }
                   }
@@ -158,7 +159,7 @@ const readTableAcccountType = async (
       });
     });
   });
-};  
+};
 
 //TODO: Select Recent Transaciton Address Wise
 const readRecentTransactionAddressWise = (
@@ -210,7 +211,7 @@ const readRecentTransactionAddressWise = (
                       data.dateCreated = utils.decrypt(
                         results.rows.item(i).dateCreated,
                         passcode
-                      );
+                      );  
                       data.fees = utils.decrypt(
                         results.rows.item(i).fees,
                         passcode
@@ -365,6 +366,7 @@ const insertCreateAccount = (
   date: string,
   address: string,
   unit: string,
+  accountName: string,
   accountType: string,
   additionalInfo: any
 ) => {
@@ -375,12 +377,13 @@ const insertCreateAccount = (
       txn.executeSql(
         "INSERT INTO " +
           tblName +
-          "(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
+          "(dateCreated,address,balance,unit,accountName,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountName,:accountType,:additionalInfo,:lastUpdated)",
         [
           fullDate,
           utils.encrypt(address.toString(), passcode),
           utils.encrypt("0.0", passcode),
           utils.encrypt(unit.toString(), passcode),
+          utils.encrypt(accountName.toString(), passcode),
           utils.encrypt(accountType.toString(), passcode),
           utils.encrypt(JSON.stringify(additionalInfo).toString(), passcode),
           fullDate
@@ -396,6 +399,7 @@ const insertLastBeforeCreateAccount = (
   fulldate: string,
   address: string,
   unit: string,
+  accountName: string,
   accountType: string,
   additionalInfo: any
 ) => {
@@ -405,6 +409,7 @@ const insertLastBeforeCreateAccount = (
     let add = utils.encrypt(address.toString(), passcode);
     let amount = utils.encrypt("0.0", passcode);
     let unitvalue = utils.encrypt(unit.toString(), passcode);
+    let accountNameValue = utils.encrypt(accountName.toString(), passcode);
     let accountTypesValue = utils.encrypt(accountType.toString(), passcode);
     let moreInfo = utils.encrypt(
       JSON.stringify(additionalInfo).toString(),
@@ -413,8 +418,17 @@ const insertLastBeforeCreateAccount = (
 
     db.transaction(function(txn) {
       txn.executeSql(
-        "INSERT INTO tblAccount(dateCreated,address,balance,unit,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountType,:additionalInfo,:lastUpdated)",
-        [date, add, amount, unitvalue, accountTypesValue, moreInfo, date]
+        "INSERT INTO tblAccount(dateCreated,address,balance,unit,accountName,accountType,additionalInfo,lastUpdated) VALUES (:dateCreated,:address,:balance,:unit,:accountName,:accountType,:additionalInfo,:lastUpdated)",
+        [
+          date,
+          add,
+          amount,
+          unitvalue,
+          accountNameValue,
+          accountTypesValue,
+          moreInfo,
+          date
+        ]
       );
       resolve(true);
     });

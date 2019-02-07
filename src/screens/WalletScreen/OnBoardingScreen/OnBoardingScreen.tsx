@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
-import CreateTables from "../../../app/manager/database/CreateTables";  
+import CreateTables from "../../../app/manager/database/CreateTables";
 //Custome Compontes
 import ViewOnBoarding from "../../../app/custcompontes/view/ViewOnBoarding";
 //Json Files
 import onBoardingData from "../../../assets/jsonfiles/onBoardingScreen/onBoardingScreen.json";
-   
+
 //TODO: Custome object
 import { images } from "../../../app/constants/Constants";
 
@@ -38,27 +38,26 @@ export default class OnBoardingScreen extends React.Component<any, any> {
   }
 
   render() {
-    const data = [
+    const data = [   
       {
-        backgroundColor: "#FFD900",
+        backgroundColor: "#fff",
         image: images.onBoardingScreen.onB1,
-        title: "The Future of Money",
-        subtitle:
-          "We are passionate about open blockchains and the potential it offers for the world of finance. Contact us to know more. "
+        title: "SOUND MONEY. SIMPLIFIED",
+        subtitle: ""
       },
       {
-        backgroundColor: "#FFD900",
+        backgroundColor: "#fff",
         image: images.onBoardingScreen.onB2,
-        title: "How You’re Protected",
+        title: "Secure",
         subtitle:
           "While money needs to be smart, more importantly it needs to be secure. We are very keen to use the best industry standards in software delivery and cryptography to ensure this."
       },
       {
-        backgroundColor: "#FFD900",
+        backgroundColor: "#fff",
         image: images.onBoardingScreen.onB3,
-        title: "Why Us?",
+        title: "Self-sovereign",
         subtitle:
-          "If you are interested in open blockchains which are permission less and smart contracts built on them then this is where you belong. Please contact us for further details."
+          "Our wallets are non-custodial and a user always has the control of their keys."
       }
     ];
     return (

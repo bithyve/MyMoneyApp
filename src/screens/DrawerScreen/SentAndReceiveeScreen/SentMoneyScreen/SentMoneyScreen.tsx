@@ -146,6 +146,9 @@ export default class SentMoneyScreen extends React.Component {
         console.log(error);
       }
     } else if (this.state.data.accountType == "Vault") {
+      const { navigation } = this.props;
+      const dateTime = Date.now();
+      const lastUpdateDate = Math.floor(dateTime / 1000);
       let additionalInfo = JSON.parse(this.state.data.additionalInfo);
       let res = await vaultAccount.transfer(
         this.state.data.address,
@@ -153,15 +156,61 @@ export default class SentMoneyScreen extends React.Component {
         parseFloat(this.state.amount) * 1e8,
         additionalInfo.lockTime,
         additionalInfo.privateKey
-      );  
+      );
+      if (res.statusCode == 200) {
+        const bal = await RegularAccount.getBalance(
+          navigation.getParam("address")
+        );
+        if (bal) {
+          const resultUpdateTblAccount = await dbOpration.updateTableData(
+            localDB.tableName.tblAccount,
+            bal.final_balance / 1e8,
+            navigation.getParam("address"),
+            lastUpdateDate
+          );
+          if (resultUpdateTblAccount) {
+            (isLoading = false),
+              this.setState({
+                alertPopupData: [
+                  {
+                    theme: "success",
+                    status: true,
+                    icon: "smile",
+                    title: "Success",
+                    subtitle: "Transaction Successfully Completed.",
+                    goBackStatus: true
+                  }
+                ]
+              });
+          } else {
+            (isLoading = false),
+              this.setState({
+                alertPopupData: [
+                  {
+                    theme: "danger",
+                    status: true,
+                    icon: "frown",
+                    title: "Oops",
+                    subtitle: "Transaction Not Completed.",
+                    goBackStatus: false
+                  }
+                ]
+              });
+          }
+        }
+      }
     } else if (this.state.data.accountType == "Joint") {
       const { navigation } = this.props;
+      let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+      console.log({ additionalInfo });
+      let scripts = additionalInfo.scripts;
+
       const resJointAccount = await jointAccount.initJointTxn({
         senderAddress: navigation.getParam("address"),
         recipientAddress: this.state.recipientAddress,
         amount: parseFloat(this.state.amount) * 1e8,
         privateKey: this.state.walletJSON[0].privateKey,
-        scripts: JSON.parse(this.state.data.additionalInfo)
+        scripts: scripts
       });
       if (resJointAccount.statusCode == 200) {
         this.props.navigation.push("ReceiveMoneyScreen", {
@@ -334,13 +383,12 @@ export default class SentMoneyScreen extends React.Component {
           }
         ]
       });
-    }
+    }  
     this.setState({
-      isLoading: isLoading
+      isLoading: isLoading  
     });
-
     this.setState({ isSecureAccountPopup: false });
-  }
+  }    
 
   render() {
     return (
@@ -351,11 +399,11 @@ export default class SentMoneyScreen extends React.Component {
               <Button
                 transparent
                 onPress={() => this.props.navigation.goBack()}
-              >
+              >  
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>
             </Left>
-
+  
             <Body>
               <Title
                 adjustsFontSizeToFit={true}
@@ -501,7 +549,6 @@ export default class SentMoneyScreen extends React.Component {
             </DialogContent>
           </Dialog>
         </ImageBackground>
-
 
         <SCLAlertOk
           data={this.state.alertPopupData}

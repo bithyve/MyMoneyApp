@@ -21,17 +21,17 @@ export default class CreateTables extends Component {
           localDB.tableName.tblWallet +
           " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,mnemonic TEXT,privateKey TEXT,address TEXT,walletType TEXT,lastUpdated TEXT)",
         []
-      );
+      );   
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS " +
           localDB.tableName.tblAccountType +
           " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,name TEXT,lastUpdated TEXT)",
         []
-      );
-      txn.executeSql(
-        "CREATE TABLE IF NOT EXISTS " +
-          localDB.tableName.tblAccount +
-          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,address TEXT,balance TEXT,unit TEXT,accountType TEXT,additionalInfo TEXT,lastUpdated TEXT,FOREIGN KEY(accountType) REFERENCES tblAccountType(name))",
+      );   
+      txn.executeSql(   
+        "CREATE TABLE IF NOT EXISTS " +  
+          localDB.tableName.tblAccount +   
+          " (id  INTEGER PRIMARY KEY AUTOINCREMENT,dateCreated TEXT,address TEXT,balance TEXT,unit TEXT,accountName TEXT,accountType TEXT,additionalInfo TEXT,lastUpdated TEXT,FOREIGN KEY(accountType) REFERENCES tblAccountType(name))",
         []
       );
       txn.executeSql(
