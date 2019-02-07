@@ -64,7 +64,7 @@ export default class App extends Component {
   //TODO: App Check forgound,backgound,active
 
   _handleAppStateChange = async nextAppState => {
-    //if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+   
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === "active"
