@@ -16,7 +16,7 @@ class Config {
       },
       FUND: {
         URL: "https://api.blockcypher.com/v1/btc/test3/faucet?token=",
-        TOKEN: "0d55b026eb934aa8b4de8a11bdcc16f1",
+        TOKEN: "",
       },
     },
     MAINNET: {
