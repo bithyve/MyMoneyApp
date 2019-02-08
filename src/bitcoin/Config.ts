@@ -6,7 +6,7 @@ class Config {
   public WALLET_XPUB_PATH: string = "2147483651/2147483649/";
   public DERIVATION_BRANCH: string = "1";
   public TOKEN: string; //please enter your blockcypher token here;
-  public BREADTH: number = 5;  
+  public BREADTH: number = 5;
   public BH_SERVER = {
     DEV: "http://localhost:3000",
     PROD: "https://prime-sign-230407.appspot.com"

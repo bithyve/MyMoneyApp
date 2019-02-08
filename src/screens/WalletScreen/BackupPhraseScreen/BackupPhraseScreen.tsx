@@ -61,12 +61,12 @@ export default class BackupPhraseScreen extends React.Component {
   onOpen() {
     this.setState({ visible: true });
   }
-
+  
   render() {
     const textSecurityKey = this.state.mnemonicValues.map((type, index) => (
       <Text key={index} style={styles.secrityChar}>
         {" "}
-        {type}{" "}
+        {type}{" "}   
       </Text>
     ));
     var numanicKey = this.state.mnemonicValues.toString();

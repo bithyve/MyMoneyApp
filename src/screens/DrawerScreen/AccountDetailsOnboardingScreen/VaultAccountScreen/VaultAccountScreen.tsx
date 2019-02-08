@@ -128,12 +128,24 @@ export default class VaultAccountScreen extends React.Component {
     this.connection_VaultAccount(fulldate, res.address, data1);
   }
 
+  //TODO: func
+  _onChange = (item) => {
+       // the full item as defined in the list of items is passed to the onChange handler to give full
+       // flexibility on what to do...
+   }
+
+
   render() {
     const textStyle = {
       textAlign: "center",
       color: "#696969",
       fontWeight: "bold"
     };
+
+    const items = [
+               { key: 0, label: 'Fruits', value:'some value' },
+               { key: 1, label: 'Fruits', value:{this: "could", be:"anything"} },
+           ];
 
     return (
       <Container>
@@ -161,7 +173,7 @@ export default class VaultAccountScreen extends React.Component {
               />
               <Text style={styles.txtTitle}>Vault Account</Text>
               <Text style={styles.txtLorem}>
-                
+
               </Text>
             </View>
 
@@ -219,9 +231,6 @@ export default class VaultAccountScreen extends React.Component {
                 )}
                 onSubmit={(item: string) => this.click_CreateVaultAccout(item)}
               />
-              <Text style={{ color: "red", textAlign: "center" }}>
-              
-              </Text>
             </View>
           </ImageBackground>
         </Content>

@@ -11,6 +11,7 @@ import LaunchScreen from "./src/screens/LaunchScreen/LaunchScreen";
 
 
 
+
 class MyMoney extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,9 @@ class MyMoney extends React.Component {
       isStartPage: "OnBoardingNavigator",
       appState: AppState.currentState
     };
-  }  
+  }
+
+  
 
   async componentDidMount() {
     try {
@@ -65,7 +68,7 @@ class MyMoney extends React.Component {
     console.log("first = " + this.state.status, this.state.isStartPage);
     const AppContainer = createAppContainer(Layout);
     return this.state.status ? (
-      <LaunchScreen    
+      <LaunchScreen
         onComplited={(status: boolean, pageName: string) =>
           this.onComplited(status, pageName)
         }

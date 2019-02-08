@@ -4,9 +4,9 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  Dimensions,
   Clipboard,
-  AsyncStorage
+  AsyncStorage,
+  ScrollView
 } from "react-native";
 import {
   Container,
@@ -17,12 +17,13 @@ import {
   Left,
   Right,
   Body,
-  Text
+  Text,
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 //import { QRCode } from "react-native-custom-qr-codes";
 import QRCode from "react-native-qrcode";
 import Toast from "react-native-simple-toast";
+
 
 //TODO: Custome Pages
 import { colors, images, msg } from "../../../../../app/constants/Constants";
@@ -38,6 +39,8 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
       mnemonic: null
     };
   }
+
+
 
   componentDidMount() {
     const { navigation } = this.props;
@@ -81,6 +84,7 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
 
   render() {
     const { activeSections } = this.state;
+  
     return (
       <Container>
         <ImageBackground
@@ -98,7 +102,7 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
                 adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.titleUserName}
-              />   
+              />
             </Body>
             <Right />
           </Header>
@@ -107,63 +111,68 @@ export default class SecureSecretKeyScreen extends React.Component<any, any> {
             scrollEnabled={true}
             padder
           >
-            <View style={styles.viewSecretKey}>
-              <QRCode
-                value={this.state.qrData}
-                size={200}
-                bgColor="black"
-                fgColor="white"
-              />
-              <Text style={[styles.txtSecretKeyTitle]}>Secret</Text>
-              <TouchableOpacity
-                onPress={() => this.click_CopySecretKey(this.state.secret)}
-              >
-                <Text>{this.state.secret}</Text>
-              </TouchableOpacity>
-              <Text style={styles.txtStaticMsg} note>
-                {msg.secretKeyMsg}
+
+          <View  style={styles.viewSecretKey}>
+            <ScrollView contentContainerStyle={{alignItems:'center'}} >
+            <QRCode
+              value={this.state.qrData}
+              size={200}
+              bgColor="black"
+              fgColor="white"
+            />
+            <Text style={[styles.txtSecretKeyTitle]}>Secret</Text>
+            <TouchableOpacity
+              onPress={() => this.click_CopySecretKey(this.state.secret)}
+            >
+              <Text>{this.state.secret}</Text>
+            </TouchableOpacity>
+            <Text style={styles.txtStaticMsg} note>
+              {msg.secretKeyMsg}
+            </Text>
+            <Text style={{ textAlign: "center", marginTop: 10 }}>
+              Please keep the following details safe with you as they are
+              crucial for recovery of the secure account (and we won't be
+              storing it).
+          </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                marginTop: 7,
+                fontWeight: "bold",
+                textDecorationLine: "underline"
+              }}
+            >
+              Recovery Mnemonic:
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                this.click_CopySecretKey(this.state.data.recoveryMnemonic)
+              }
+            >
+              <Text style={{ textAlign: "center" }}>
+                {this.state.data.recoveryMnemonic}
               </Text>
-              <Text style={{ textAlign: "center", marginTop: 10 }}>
-                Please keep the following details safe with you as they are
-                crucial for recovery of the secure account (and we won't be
-                storing it).
-              </Text>
-              <Text
-                style={{
-                  textAlign: "center",
-                  marginTop: 7,
-                  fontWeight: "bold",
-                  textDecorationLine: "underline"
-                }}
-              >
-                Recovery Mnemonic:
-              </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  this.click_CopySecretKey(this.state.data.recoveryMnemonic)
-                }
-              >
-                <Text style={{ textAlign: "center" }}>
-                  {this.state.data.recoveryMnemonic}
-                </Text>
-              </TouchableOpacity>
-              <Text
-                style={{
-                  textAlign: "center",
-                  marginTop: 7,
-                  fontWeight: "bold",
-                  textDecorationLine: "underline"
-                }}
-              >
-                BitHyve Xpub:
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.click_CopySecretKey(this.state.bhXpub)}
-              >
-                <Text style={{ textAlign: "center" }}>{this.state.bhXpub}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.createAccountBtn}>
+            </TouchableOpacity>
+            <Text
+              style={{
+                textAlign: "center",
+                marginTop: 7,
+                fontWeight: "bold",
+                textDecorationLine: "underline"
+              }}
+            >
+              BitHyve Xpub:
+            </Text>
+            <TouchableOpacity
+              onPress={() => this.click_CopySecretKey(this.state.bhXpub)}
+            >
+              <Text style={{ textAlign: "center" }}>{this.state.bhXpub}</Text>
+            </TouchableOpacity>
+        </ScrollView>
+          </View>
+
+
+            <View style={styles.viewcreateAccountBtn}>
               <Button
                 transparent
                 style={{
@@ -203,7 +212,7 @@ const styles = StyleSheet.create({
     color: "#fff"
   },
   viewSecretKey: {
-    flex: 6,
+    flex: 10,
     alignItems: "center"
   },
   txtSecretKeyTitle: {
@@ -216,8 +225,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     textAlign: "center"
   },
-  //createAccountBtn
-  createAccountBtn: {
-    flex: 0.5
+  //view:createAccountBtn
+  viewcreateAccountBtn: {
+    flex: 1,
+    justifyContent:'center'
+
   }
 });

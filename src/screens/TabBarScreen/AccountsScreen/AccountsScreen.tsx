@@ -22,7 +22,7 @@ import {
 } from "native-base";
 import { RkCard } from "react-native-ui-kitten";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import Icon from "react-native-vector-icons/FontAwesome5";   
+import Icon from "react-native-vector-icons/FontAwesome5";
 import { SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
 
@@ -148,8 +148,8 @@ export default class AccountsScreen extends React.Component<any, any> {
       // }
       // tranDetails = transation;
       // isNoTranstion = flag_noTrasation;
-  
-      if (bal.statusCode == 200) {  
+
+      if (bal.statusCode == 200) {
         var resultRecentTras = await RegularAccount.getTransactions(
           resultAccount.temp[this.state.cardIndexNo].address
         );
