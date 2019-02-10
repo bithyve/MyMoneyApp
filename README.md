@@ -46,3 +46,9 @@ rn-nodeify --install --hack
 Please feel free to open a pull requests and issues with bugfixes and suggestions.
 
 ## License
+
+[MIT](LICENSE)
+
+## Responsible Disclosure
+
+Found a critical bug / vulnerability? Please email thecryptobee@bithyve.com with a description and PoC if possible, Thanks!
