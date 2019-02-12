@@ -6,7 +6,8 @@ import {
   View,
   ImageBackground,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  Alert
 } from "react-native";
 import {
   Container,
@@ -26,6 +27,8 @@ import { RkCard } from "react-native-ui-kitten";
 import DatePicker from "react-native-datepicker";
 import moment from "moment";
 import ReactNativeItemSelect from "react-native-item-select";
+import { TagSelect } from "react-native-tag-select";
+import Loader from "react-native-modal-loader";
 //Custome Compontes
 import SCLAlertOk from "../../../../app/custcompontes/alert/SCLAlertOk";
 //TODO: Custome class
@@ -37,6 +40,8 @@ var dbOpration = require("../../../../app/manager/database/DBOpration");
 //TODO: VaultAccount
 import vaultAccount from "../../../../bitcoin/services/VaultAccount";
 
+//TODO:flags
+let flag_SelectType: boolean = null;
 export default class VaultAccountScreen extends React.Component {
   constructor(props: any) {
     super(props);
@@ -47,41 +52,69 @@ export default class VaultAccountScreen extends React.Component {
       periodType: "",
       alertPopupData: [],
       isPeriodTypeDialog: false,
-      data: [
-        { months: "3 Months", days: "30 days" },
-        { months: "6 Months", days: "60 days" },
-        { months: "9 Months", days: "180 days" }
-      ]
+      flag_createBtnstatus: true
     };
   }
 
+  componentWillUnmount() {
+    this.setState({
+      isLoading: false
+    });
+  }
+
+  //TODO: func click_createVaultAccount
+  async click_createVaultAccount() {
+    this.setState({
+      isLoading: true
+    });
+    if (flag_SelectType) {
+      let itemsValues = JSON.stringify(this.tag.itemsSelected);
+      let parseItemVaues = JSON.parse(itemsValues);
+      console.log({ parseItemVaues });
+      let days = parseItemVaues[0].days;
+      let newDate = this.addDays(new Date(), days);
+      let unitDate = utils.getUnixTimeDate(newDate);
+      let data = {};
+      data.validDate = unitDate;
+      data.sec = days * 24 * 60 * 60;
+      const resultWallet = await dbOpration.readTablesData(
+        localDB.tableName.tblWallet
+      );
+      let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
+      const dateTime = Date.now();
+      const fulldate = Math.floor(dateTime / 1000);
+      const blocks = parseInt(data.sec / (3600 * 10));
+      const res = await vaultAccount.createTLC(mnemonic, null, blocks);
+      let data1 = {};
+      data1.sec = days * 24 * 60 * 60;
+      data1.validDate = unitDate;
+      data1.lockTime = res.lockTime;
+      data1.privateKey = res.privateKey;
+      this.connection_VaultAccount(fulldate, res.address, data1);
+    } else {
+      let hexDate = utils.getUnixTimeDate(this.state.date);
+      const resultWallet = await dbOpration.readTablesData(
+        localDB.tableName.tblWallet
+      );
+      let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
+      const dateTime = Date.now();
+      const fulldate = Math.floor(dateTime / 1000);
+      const blocks = -30000; //parseInt(data.sec / (3600 * 10));
+      const res = await vaultAccount.createTLC(mnemonic, null, blocks);
+      let data1 = {};
+      data1.sec = -30000; //days * 24 * 60 * 60;
+      data1.validDate = hexDate; //unitDate;
+      data1.lockTime = res.lockTime;
+      data1.privateKey = res.privateKey;
+      this.connection_VaultAccount(fulldate, res.address, data1);
+    }
+  }
+
+  //TODO: func add days
   addDays(theDate, days) {
     return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
   }
-
-  //TODO: func click_CreateVaultAccout
-  async click_CreateVaultAccout(item: any) {
-    let newDate = this.addDays(new Date(), item.days.slice(0, 2));
-    let unitDate = utils.getUnixTimeDate(newDate);
-    let data = {};
-    data.validDate = unitDate;
-    data.sec = item.days.slice(0, 2) * 24 * 60 * 60;
-    const resultWallet = await dbOpration.readTablesData(
-      localDB.tableName.tblWallet
-    );
-    let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
-    const dateTime = Date.now();
-    const fulldate = Math.floor(dateTime / 1000);
-    const blocks = parseInt(data.sec / (3600 * 10));
-    const res = await vaultAccount.createTLC(mnemonic, null, blocks);
-    let data1 = {};
-    data1.sec = item.days.slice(0, 2) * 24 * 60 * 60;
-    data1.validDate = unitDate;
-    data1.lockTime = res.lockTime;
-    data1.privateKey = res.privateKey;
-    this.connection_VaultAccount(fulldate, res.address, data1);
-  }
-
+  //TODO: insert db vault account
   async connection_VaultAccount(fulldate, address, data) {
     const resultCreateAccount = await dbOpration.insertLastBeforeCreateAccount(
       localDB.tableName.tblAccount,
@@ -109,44 +142,12 @@ export default class VaultAccountScreen extends React.Component {
     }
   }
 
-  //TODO: changeDate
-  async changeDate(date: any) {
-    let hexDate = utils.getUnixTimeDate(date);
-    const resultWallet = await dbOpration.readTablesData(
-      localDB.tableName.tblWallet
-    );
-    let mnemonic = resultWallet.temp[0].mnemonic.replace(/,/g, " ");
-    const dateTime = Date.now();
-    const fulldate = Math.floor(dateTime / 1000);
-    const blocks = -30000; //parseInt(data.sec / (3600 * 10));
-    const res = await vaultAccount.createTLC(mnemonic, null, blocks);
-    let data1 = {};
-    data1.sec = -30000; //item.days.slice(0, 2) * 24 * 60 * 60;
-    data1.validDate = hexDate; //unitDate;
-    data1.lockTime = res.lockTime;
-    data1.privateKey = res.privateKey;
-    this.connection_VaultAccount(fulldate, res.address, data1);
-  }
-
-  //TODO: func
-  _onChange = (item) => {
-       // the full item as defined in the list of items is passed to the onChange handler to give full
-       // flexibility on what to do...
-   }
-
-
   render() {
-    const textStyle = {
-      textAlign: "center",
-      color: "#696969",
-      fontWeight: "bold"
-    };
-
-    const items = [
-               { key: 0, label: 'Fruits', value:'some value' },
-               { key: 1, label: 'Fruits', value:{this: "could", be:"anything"} },
-           ];
-
+    const data = [
+      { id: 1, label: "3 Months (90 days)", days: 90 },
+      { id: 2, label: "6 Months (180 days)", days: 180 },
+      { id: 3, label: "9 Months (270 days)", days: 270 }
+    ];
     return (
       <Container>
         <Content contentContainerStyle={styles.container} scrollEnabled={true}>
@@ -156,7 +157,11 @@ export default class VaultAccountScreen extends React.Component {
           >
             <Header transparent>
               <Left>
-                <Button transparent onPress={() => this.props.navigation.pop()}>
+                <Button
+                  transparent
+                  style={{ width: 50 }}
+                  onPress={() => this.props.navigation.pop()}
+                >
                   <Icon name="chevron-left" size={25} color="#ffffff" />
                 </Button>
               </Left>
@@ -165,80 +170,85 @@ export default class VaultAccountScreen extends React.Component {
               </Body>
               <Right />
             </Header>
-
             <View style={styles.logoSecureAccount}>
               <Image
                 style={styles.secureLogo}
                 source={images.secureAccount.secureLogo}
               />
               <Text style={styles.txtTitle}>Vault Account</Text>
-              <Text style={styles.txtLorem}>
-
-              </Text>
+              <Text style={styles.txtLorem} />
+            </View>
+            <View style={styles.viewDatePicekr}>
+              <DatePicker
+                style={{ width: "96%", borderColor: "red" }}
+                date={this.state.date}
+                mode="date"
+                max
+                placeholder="select date"
+                format="DD-MM-YYYY"
+                maxDate={new Date()}
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0
+                  },
+                  dateInput: {
+                    marginLeft: 36
+                  }
+                }}
+                onDateChange={(date: any) => {
+                  flag_SelectType = false;
+                  this.setState({
+                    flag_createBtnstatus: false,
+                    date: date
+                  });
+                  //this.changeDate(date);
+                }}
+              />
             </View>
 
-            <DatePicker
-              style={{ width: "96%" }}
-              date={this.state.date}
-              mode="date"
-              max
-              placeholder="select date"
-              format="DD-MM-YYYY"
-              maxDate={new Date()}
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: "absolute",
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
-                dateInput: {
-                  marginLeft: 36
-                }
-                // ... You can check the source to find the other keys.
-              }}
-              onDateChange={(date: any) => {
-                this.changeDate(date);
-              }}
-            />
             <View style={styles.viewSelectPeriod}>
-              <Text style={{ textAlign: "center" }}>OR</Text>
-              <ReactNativeItemSelect
-                data={this.state.data}
-                countPerRow={3}
-                multiselect={false}
-                submitBtnTitle="CREATE"
-                styles={{
-                  btn: {
-                    backgroundColor: "#2196F3",
-                    marginTop: 20,
-                    height: 40
-                  },
-                  disabledBtn: { backgroundColor: "#2196F3" },
-                  btnTxt: { fontSize: 18 },
-                  tickTxt: { backgroundColor: "#2196F3" },
-                  activeItemBoxHighlight: { borderColor: "#2196F3" }
+              <Text style={{ textAlign: "center", marginBottom: 10 }}>OR</Text>
+              <TagSelect
+                theme="danger"
+                containerStyle={{ marginLeft: 20 }}
+                onItemPress={() => {
+                  flag_SelectType = true;
+                  this.setState({
+                    flag_createBtnstatus: false
+                  });
                 }}
-                itemComponent={item => (
-                  <View>
-                    <Text style={{ textStyle, fontSize: 20 }}>
-                      {item.months}
-                    </Text>
-                    <Text style={{ textStyle }}>{item.days}</Text>
-                  </View>
-                )}
-                onSubmit={(item: string) => this.click_CreateVaultAccout(item)}
+                itemStyle={{
+                  height: 50,
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                data={data}
+                max={1}
+                ref={(tag: any) => {
+                  this.tag = tag;
+                }}
+                onMaxError={() => {
+                  console.log("Ops", "Max reached");
+                }}
               />
+            </View>
+            <View style={styles.viewFotterBtn}>
+              <Button
+                full
+                disabled={this.state.flag_createBtnstatus}
+                onPress={() => this.click_createVaultAccount()}
+              >
+                <Text>Create</Text>
+              </Button>
             </View>
           </ImageBackground>
         </Content>
-        {renderIf(this.state.isLoading)(
-          <View style={styles.loading}>
-            <SkypeIndicator color={colors.appColor} />
-          </View>
-        )}
+        <Loader loading={this.state.isLoading} color={colors.appColor} />
         <DropdownAlert ref={ref => (this.dropdown = ref)} />
         <SCLAlertOk
           data={this.state.alertPopupData}
@@ -269,7 +279,7 @@ const styles = StyleSheet.create({
   },
   //View:logoSecureAccount
   logoSecureAccount: {
-    flex: 2,
+    flex: 3,
     alignItems: "center"
   },
   secureLogo: {
@@ -288,6 +298,10 @@ const styles = StyleSheet.create({
   //view:viewSelectPeriod
   viewSelectPeriod: {
     flex: 2,
-    padding: 10
-  }
+    padding: 10,
+    alignItems: "center"
+  },
+  viewDatePicekr: {},
+  //view:viewFotterBtn
+  viewFotterBtn: {}
 });

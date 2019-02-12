@@ -83,321 +83,361 @@ export default class AccountDetailsScreen extends React.Component<
 
   //TODO: Page Life Cycle
   componentWillMount() {
-    const { navigation } = this.props;
-    let data = navigation.getParam("data");
-    let walletsData = navigation.getParam("walletsData");
-    console.log({ data, walletsData });
-    this.setState({
-      data: data,
-      waletteData: walletsData
-    });
+    try {
+      const { navigation } = this.props;
+      let data = navigation.getParam("data");
+      let walletsData = navigation.getParam("walletsData");
+      console.log({ data, walletsData });
+      this.setState({
+        data: data,
+        waletteData: walletsData
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   componentDidMount() {
-    this.willFocusSubscription = this.props.navigation.addListener(
-      "willFocus",
-      () => {
-        isNetwork = utils.getNetwork();
-        this.fetchloadData();
-      }
-    );
+    try {
+      this.willFocusSubscription = this.props.navigation.addListener(
+        "willFocus",
+        () => {
+          isNetwork = utils.getNetwork();
+          this.fetchloadData();
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    try {
+      this.setState({
+        isLoading: false
+      });
+      this.willFocusSubscription.remove();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  date_diff_indays(date1, date2) {
-    dt1 = new Date(date1);
-    dt2 = new Date(date2);
-    return Math.floor(
-      (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
-        Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
-        (1000 * 60 * 60 * 24)
-    );
+  date_diff_indays(date1: any, date2: any) {
+    try {
+      let dt1 = new Date(date1);
+      let dt2 = new Date(date2);
+      return Math.floor(
+        (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+          Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+          (1000 * 60 * 60 * 24)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //TODO: func loadData
   async fetchloadData() {
-    const { navigation } = this.props;
-    let isLoading: boolean = true;
-    let isNoTranstion: boolean = false;
-    let tranDetails: [] = [];
-    let title: string =
-      navigation.getParam("data").accountType + " Recent Transactions";
-    const dateTime = Date.now();
-    const lastUpdateDate = Math.floor(dateTime / 1000);
-    var resultAccount = await dbOpration.readAccountTablesData(
-      localDB.tableName.tblAccount
-    );
-    if (isNetwork) {
-      //TODO: for transfer and sent btn disable and enable details
-      if (
-        resultAccount.temp.length > 2 &&
-        parseFloat(this.state.data.balance) > 0
-      ) {
-        var resultAccount = await dbOpration.readAccountTablesData(
-          localDB.tableName.tblAccount
-        );
-        resultAccount.temp.pop();
-        for (var i = 0; i < resultAccount.temp.length; i++) {
-          if (
-            resultAccount.temp[i].accountType === this.state.data.accountType
-          ) {
-            resultAccount.temp.splice(i, 1);
-            break;
+    try {
+      const { navigation } = this.props;
+      let isLoading: boolean = true;
+      let isNoTranstion: boolean = false;
+      let tranDetails: [] = [];
+      let title: string =
+        navigation.getParam("data").accountType + " Recent Transactions";
+      const dateTime = Date.now();
+      const lastUpdateDate = Math.floor(dateTime / 1000);
+      var resultAccount = await dbOpration.readAccountTablesData(
+        localDB.tableName.tblAccount
+      );
+      if (isNetwork) {
+        //TODO: for transfer and sent btn disable and enable details
+        if (
+          resultAccount.temp.length > 2 &&
+          parseFloat(this.state.data.balance) > 0
+        ) {
+          var resultAccount = await dbOpration.readAccountTablesData(
+            localDB.tableName.tblAccount
+          );
+          resultAccount.temp.pop();
+          for (var i = 0; i < resultAccount.temp.length; i++) {
+            if (
+              resultAccount.temp[i].accountType === this.state.data.accountType
+            ) {
+              resultAccount.temp.splice(i, 1);
+              break;
+            }
           }
-        }
-        var isTransBtnStatus: boolean = false;
-        if (this.state.data.accountType != "Vault") {
-          isTransBtnStatus = true;
-        } else {
-          let additionalInfo = JSON.parse(this.state.data.additionalInfo);
-          let validDate = moment(
-            utils.getUnixToDateFormat(additionalInfo.validDate)
-          );
-          var start = moment(new Date()).format("DD-MM-YYYY");
-          var end = moment(validDate).format("DD-MM-YYYY");
-          let diffDays: number = parseInt(this.date_diff_indays(start, end));
+          var isTransBtnStatus: boolean = false;
+          if (this.state.data.accountType != "Vault") {
+            isTransBtnStatus = true;
+          } else {
+            let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+            let validDate = moment(
+              utils.getUnixToDateFormat(additionalInfo.validDate)
+            );
+            var start = moment(new Date()).format("DD-MM-YYYY");
+            var end = moment(validDate).format("DD-MM-YYYY");
+            let diffDays: number = parseInt(this.date_diff_indays(start, end));
 
-          console.log({ diffDays });
+            console.log({ diffDays });
 
-          if (diffDays <= 0) {
-            isTransBtnStatus = false; //old code true
-          }  
-        }
+            if (diffDays <= 0) {
+              isTransBtnStatus = false; //old code true
+            }
+          }
 
-        let tempData = resultAccount.temp;
-        console.log({ tempData });
+          let tempData = resultAccount.temp;
+          console.log({ tempData });
 
-        this.setState({
-          arr_transferAccountList: resultAccount.temp,
-          flag_TransferBtn: isTransBtnStatus
-        });
-      }
-      if (parseFloat(this.state.data.balance) > 0) {
-        if (this.state.data.accountType != "Vault") {
           this.setState({
-            flag_sentBtnDisStatus: false
+            arr_transferAccountList: resultAccount.temp,
+            flag_TransferBtn: isTransBtnStatus
           });
-        } else {
-          let additionalInfo = JSON.parse(this.state.data.additionalInfo);
-          let validDate = moment(
-            utils.getUnixToDateFormat(additionalInfo.validDate)
-          );
-          var start = moment(new Date()).format("DD-MM-YYYY");
-          var end = moment(validDate).format("DD-MM-YYYY");
-          let diffDays: number = parseInt(this.date_diff_indays(start, end));
-          if (diffDays <= 0) {
+        }
+        if (parseFloat(this.state.data.balance) > 0) {
+          if (this.state.data.accountType != "Vault") {
             this.setState({
               flag_sentBtnDisStatus: false
             });
-          }
-        }
-      }
-
-      //TODO: Account Bal checking
-      const bal = await RegularAccount.getBalance(
-        navigation.getParam("data").address
-      );
-      if (bal.statusCode == 200) {
-        const resultRecentTras = await RegularAccount.getTransactions(
-          navigation.getParam("data").address
-        );
-        if (resultRecentTras.statusCode == 200) {
-          if (resultRecentTras.transactionDetails.length > 0) {
-            const resultRecentTransaction = await dbOpration.insertTblTransation(
-              localDB.tableName.tblTransaction,
-              resultRecentTras.transactionDetails,
-              resultRecentTras.address,
-              lastUpdateDate
-            );
-            if (resultRecentTransaction) {
-              let transation;
-              let flag_noTrasation;
-              const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
-                localDB.tableName.tblTransaction,
-                navigation.getParam("data").address
-              );
-              if (resultRecentTras.temp.length > 0) {
-                transation = resultRecentTras.temp;
-                flag_noTrasation = false;
-              } else {
-                transation = [];
-                flag_noTrasation = true;
-              }
-              tranDetails = transation;
-              isNoTranstion = flag_noTrasation;
-            }
           } else {
-            isNoTranstion = true;
-          }
-          const resultUpdateTblAccount = await dbOpration.updateTableData(
-            localDB.tableName.tblAccount,
-            bal.final_balance / 1e8,
-            navigation.getParam("data").address,
-            lastUpdateDate
-          );
-          if (resultUpdateTblAccount) {
-            resultAccount = await dbOpration.readAccountTablesData(
-              localDB.tableName.tblAccount
+            let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+            let validDate = moment(
+              utils.getUnixToDateFormat(additionalInfo.validDate)
             );
-            if (resultAccount.temp.length > 0) {
-              isLoading = false;
+            var start = moment(new Date()).format("DD-MM-YYYY");
+            var end = moment(validDate).format("DD-MM-YYYY");
+            let diffDays: number = parseInt(this.date_diff_indays(start, end));
+            if (diffDays <= 0) {
               this.setState({
-                data: resultAccount.temp[navigation.getParam("indexNo")]
+                flag_sentBtnDisStatus: false
               });
             }
           }
-        } else {
-          this.dropdown.alertWithType(
-            "error",
-            "OH",
-            resultRecentTras.errorMessage
-          );
         }
-      }
-    } else {
-      isLoading = false;
-      let transation;
-      let flag_noTrasation;
-      const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
-        localDB.tableName.tblTransaction,
-        navigation.getParam("data").address
-      );
-      if (resultRecentTras.temp.length > 0) {
-        transation = resultRecentTras.temp;
-        flag_noTrasation = false;
+
+        //TODO: Account Bal checking
+        const bal = await RegularAccount.getBalance(
+          navigation.getParam("data").address
+        );
+        if (bal.statusCode == 200) {
+          const resultRecentTras = await RegularAccount.getTransactions(
+            navigation.getParam("data").address
+          );
+          if (resultRecentTras.statusCode == 200) {
+            if (resultRecentTras.transactionDetails.length > 0) {
+              const resultRecentTransaction = await dbOpration.insertTblTransation(
+                localDB.tableName.tblTransaction,
+                resultRecentTras.transactionDetails,
+                resultRecentTras.address,
+                lastUpdateDate
+              );
+              if (resultRecentTransaction) {
+                let transation;
+                let flag_noTrasation;
+                const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+                  localDB.tableName.tblTransaction,
+                  navigation.getParam("data").address
+                );
+                if (resultRecentTras.temp.length > 0) {
+                  transation = resultRecentTras.temp;
+                  flag_noTrasation = false;
+                } else {
+                  transation = [];
+                  flag_noTrasation = true;
+                }
+                tranDetails = transation;
+                isNoTranstion = flag_noTrasation;
+              }
+            } else {
+              isNoTranstion = true;
+            }
+            const resultUpdateTblAccount = await dbOpration.updateTableData(
+              localDB.tableName.tblAccount,
+              bal.final_balance / 1e8,
+              navigation.getParam("data").address,
+              lastUpdateDate
+            );
+            if (resultUpdateTblAccount) {
+              resultAccount = await dbOpration.readAccountTablesData(
+                localDB.tableName.tblAccount
+              );
+              if (resultAccount.temp.length > 0) {
+                isLoading = false;
+                this.setState({
+                  data: resultAccount.temp[navigation.getParam("indexNo")]
+                });
+              }
+            }
+          } else {
+            this.dropdown.alertWithType(
+              "error",
+              "OH",
+              resultRecentTras.errorMessage
+            );
+          }
+        }
       } else {
-        transation = [];
-        flag_noTrasation = true;
+        isLoading = false;
+        let transation;
+        let flag_noTrasation;
+        const resultRecentTras = await dbOpration.readRecentTransactionAddressWise(
+          localDB.tableName.tblTransaction,
+          navigation.getParam("data").address
+        );
+        if (resultRecentTras.temp.length > 0) {
+          transation = resultRecentTras.temp;
+          flag_noTrasation = false;
+        } else {
+          transation = [];
+          flag_noTrasation = true;
+        }
+        tranDetails = transation;
+        isNoTranstion = flag_noTrasation;
+
+        this.setState({
+          data: resultAccount.temp[navigation.getParam("indexNo")]
+        });
       }
-      tranDetails = transation;
-      isNoTranstion = flag_noTrasation;
 
       this.setState({
-        data: resultAccount.temp[navigation.getParam("indexNo")]
+        recentTransactionData: [
+          {
+            title,
+            isLoading1: isLoading,
+            isNoTranstion,
+            tranDetails
+          }
+        ]
       });
+    } catch (error) {
+      console.log(error);
     }
-
-    this.setState({
-      recentTransactionData: [
-        {
-          title,
-          isLoading1: isLoading,
-          isNoTranstion,
-          tranDetails
-        }
-      ]
-    });
   }
 
   //TODO: func refresh
   refresh() {
-    this.setState({ refreshing: true });
-    return new Promise(resolve => {
-      setTimeout(() => {
-        this.setState({ refreshing: false });
-        this.fetchloadData();
-        resolve();
-      }, 1000);
-    });
+    try {
+      this.setState({ refreshing: true });
+      return new Promise(resolve => {
+        setTimeout(() => {
+          this.setState({ refreshing: false });
+          this.fetchloadData();
+          resolve();
+        }, 1000);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //TODO: func openRecentTrans
-  openRecentTrans(item) {
-    this.props.navigation.navigate("RecentTransactionsScreen", {
-      transationDetails: item
-    });
+  openRecentTrans(item: any) {
+    try {
+      this.props.navigation.navigate("RecentTransactionsScreen", {
+        transationDetails: item
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //TODO: func connection_BarcodeRead
   onSelect = async data => {
-    const txHex = data.barcode;
-
-    let res = await jointAccount.recoverTxnDetails(txHex);
-    console.log({ res });
-    let additionalInfo = JSON.parse(this.state.data.additionalInfo);
-    let jointData = additionalInfo.jointData;
-    this.setState({
-      transactionHax: txHex,
-      arr_ConfirmJointAccountAuthorise: [
-        {
-          status: true,
-          icon: "check-circle",
-          title: "Confirmation",
-          subtitle: `${
-            jointData.cn
-          } has initiated the following transaction from ${
-            jointData.wn
-          } joint accounts`,
-          form: res.from,
-          to: res.to,
-          amount: res.amount,
-          transFee: res.txnFee,
-          confirmTitle: "AUTHORISE"
-        }
-      ]
-    });
+    try {
+      const txHex = data.barcode;
+      let res = await jointAccount.recoverTxnDetails(txHex);
+      console.log({ res });
+      let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+      let jointData = additionalInfo.jointData;
+      this.setState({
+        transactionHax: txHex,
+        arr_ConfirmJointAccountAuthorise: [
+          {
+            status: true,
+            icon: "check-circle",
+            title: "Confirmation",
+            subtitle: `${
+              jointData.cn
+            } has initiated the following transaction from ${
+              jointData.wn
+            } joint accounts`,
+            form: res.from,
+            to: res.to,
+            amount: res.amount,
+            transFee: res.txnFee,
+            confirmTitle: "AUTHORISE"
+          }
+        ]
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //TODO: func connection_SentJointAccountMoney
   async connection_SentJointAccountMoney() {
-    let privateKey = this.state.waletteData[0].privateKey;
-
-    console.log(privateKey, this.state.transactionHax);
-
-    const res = await jointAccount.authorizeJointTxn(
-      this.state.transactionHax,
-      privateKey
-    );
-    console.log({ res });
-    if (res.statusCode == 200) {
-      this.setState({
-        successOkPopupData: [
-          {
-            theme: "success",
-            status: true,
-            icon: "smile",
-            title: "Success",
-            subtitle: "Transaction Successfully Completed.",
-            goBackStatus: true
-          }
-        ]
-      });
+    try {
+      let privateKey = this.state.waletteData[0].privateKey;
+      console.log(privateKey, this.state.transactionHax);
+      const res = await jointAccount.authorizeJointTxn(
+        this.state.transactionHax,
+        privateKey
+      );
+      console.log({ res });
+      if (res.statusCode == 200) {
+        this.setState({
+          successOkPopupData: [
+            {
+              theme: "success",
+              status: true,
+              icon: "smile",
+              title: "Success",
+              subtitle: "Transaction Successfully Completed.",
+              goBackStatus: true
+            }
+          ]
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
   //TODO: func click_SecureAccountSendMoney
   async click_SecureAccountSendMoney() {
-    let additionalInfo = JSON.parse(this.state.data.additionalInfo);
-    console.log({ additionalInfo });
-    const transfer = this.state.securetransfer;
-    const res = await secureAccount.secureTransaction({
-      senderAddress: transfer.senderAddress,
-      recipientAddress: transfer.recipientAddress,
-      amount: transfer.amount,
-      primaryXpriv: additionalInfo.xpriv.primary,
-      scripts: additionalInfo.multiSig.scripts,
-      token: this.state.txt2FA,
-      walletID: additionalInfo.walletID,
-      childIndex: 0
-    });
-
-    if (res.statusCode == 200) {
-      this.setState({
-        flag_SecureAccountPopup: false,
-        successOkPopupData: [
-          {
-            theme: "success",
-            status: true,
-            icon: "smile",
-            title: "Success",
-            subtitle: "Amount Transfer successfully.",
-            goBackStatus: false
-          }
-        ]
+    try {
+      let additionalInfo = JSON.parse(this.state.data.additionalInfo);
+      console.log({ additionalInfo });
+      const transfer = this.state.securetransfer;
+      const res = await secureAccount.secureTransaction({
+        senderAddress: transfer.senderAddress,
+        recipientAddress: transfer.recipientAddress,
+        amount: transfer.amount,
+        primaryXpriv: additionalInfo.xpriv.primary,
+        scripts: additionalInfo.multiSig.scripts,
+        token: this.state.txt2FA,
+        walletID: additionalInfo.walletID,
+        childIndex: 0
       });
+
+      if (res.statusCode == 200) {
+        this.setState({
+          flag_SecureAccountPopup: false,
+          successOkPopupData: [
+            {
+              theme: "success",
+              status: true,
+              icon: "smile",
+              title: "Success",
+              subtitle: "Amount Transfer successfully.",
+              goBackStatus: false
+            }
+          ]
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -411,7 +451,7 @@ export default class AccountDetailsScreen extends React.Component<
               refreshing={this.state.refreshing}
               onRefresh={this.refresh.bind(this)}
             />
-          }  
+          }
         >
           <ImageBackground
             source={images.accounts[this.state.data.accountType]}
@@ -608,7 +648,7 @@ export default class AccountDetailsScreen extends React.Component<
                     transferAmountPopupDAta: [
                       {
                         status: false
-                      }   
+                      }
                     ],
                     successOkPopupData: [
                       {

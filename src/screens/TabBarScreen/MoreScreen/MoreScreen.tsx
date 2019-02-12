@@ -10,7 +10,7 @@ import {
   Container,
   Header,
   Title,
-  Content,
+  Content,  
   Button,
   Left,
   Right,
@@ -19,7 +19,7 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import GridView from "react-native-super-grid";
-  
+
 //TODO: Custome Pages
 import { colors, images } from "../../../app/constants/Constants";
 export default class MoreScreen extends React.Component {
