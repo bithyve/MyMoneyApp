@@ -22,19 +22,11 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Loader from "react-native-modal-loader";
-import Dialog, {
-  SlideAnimation,
-  DialogContent
-} from "react-native-popup-dialog";
-
-const required = value => (value ? undefined : "This is a required field.");
-const email = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,5}$/i.test(value)
-    ? "Please provide a valid email address."
-    : undefined;
+import DropdownAlert from "react-native-dropdownalert";
 
 //Custome Compontes
 import SCLAlertOk from "../../../../app/custcompontes/alert/SCLAlertOk";
+import DialogSecureAccountAuthentication from "../../../../app/custcompontes/dialog/DialogSecureAccountAuthentication";
 
 //TODO: Custome Object
 import { colors, images, localDB } from "../../../../app/constants/Constants";
@@ -60,7 +52,8 @@ export default class SentMoneyScreen extends React.Component {
       sentBtnColor: "gray",
       sentBtnStatus: true,
       isLoading: false,
-      isSecureAccountPopup: false
+      isSecureAccountPopup: false,
+      arr_SecureAuthPopupData: []
     };
   }
 
@@ -141,7 +134,16 @@ export default class SentMoneyScreen extends React.Component {
     if (this.state.data.accountType == "Secure") {
       try {
         AsyncStorage.setItem("flag_BackgoundApp", JSON.stringify(true));
-        this.setState({ isSecureAccountPopup: true });
+        this.setState({
+          arr_SecureAuthPopupData: [
+            {
+              visible: true,
+              amount: this.state.amount,
+              fee: "0.001",
+              secureRecipientAddress: this.state.recipientAddress
+            }
+          ]
+        });
       } catch (error) {
         console.log(error);
       }
@@ -301,14 +303,10 @@ export default class SentMoneyScreen extends React.Component {
   };
 
   //TODO: func click
-  async click_SecureAccountSendMoney() {
-    let isLoading = true;
-    this.setState({
-      isLoading: isLoading
-    });
+  async click_SecureAccountSendMoney(txt2fa: string) {
     var mnemonic = this.state.walletJSON[0].mnemonic.replace(/,/g, " ");
     var amountValue = this.state.amount;
-    var tokenNo = this.state.txt2FA;
+    var tokenNo = txt2fa;
     const dateTime = Date.now();
     const lastUpdateDate = Math.floor(dateTime / 1000);
     const { navigation } = this.props;
@@ -340,8 +338,8 @@ export default class SentMoneyScreen extends React.Component {
           lastUpdateDate
         );
         if (resultUpdateTblAccount) {
-          isLoading = false;
           this.setState({
+            isLoading: false,
             alertPopupData: [
               {
                 theme: "success",
@@ -354,8 +352,8 @@ export default class SentMoneyScreen extends React.Component {
             ]
           });
         } else {
-          isLoading = false;
           this.setState({
+            isLoading: false,
             alertPopupData: [
               {
                 theme: "danger",
@@ -370,8 +368,8 @@ export default class SentMoneyScreen extends React.Component {
         }
       }
     } else {
-      isLoading = false;
       this.setState({
+        isLoading: false,
         alertPopupData: [
           {
             theme: "danger",
@@ -383,12 +381,8 @@ export default class SentMoneyScreen extends React.Component {
           }
         ]
       });
-    }  
-    this.setState({
-      isLoading: isLoading  
-    });
-    this.setState({ isSecureAccountPopup: false });
-  }    
+    }
+  }
 
   render() {
     return (
@@ -399,11 +393,11 @@ export default class SentMoneyScreen extends React.Component {
               <Button
                 transparent
                 onPress={() => this.props.navigation.goBack()}
-              >  
+              >
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>
             </Left>
-  
+
             <Body>
               <Title
                 adjustsFontSizeToFit={true}
@@ -461,95 +455,38 @@ export default class SentMoneyScreen extends React.Component {
             </Button>
           </Content>
 
-          <Dialog
-            width={Dimensions.get("screen").width - 30}
-            visible={this.state.isSecureAccountPopup}
-            onTouchOutside={() => {
-              this.setState({ isSecureAccountPopup: false });
+          <DialogSecureAccountAuthentication
+            data={this.state.arr_SecureAuthPopupData}
+            click_Sent={(txt2fa: string) => {
+              if (txt2fa.length != 6) {
+                this.dropdown.alertWithType(
+                  "error",
+                  "OH",
+                  "Please enter token."
+                );
+              } else {
+                this.setState({
+                  isLoading: true,
+                  arr_SecureAuthPopupData: [
+                    {
+                      visible: false
+                    }
+                  ]
+                });
+                this.click_SecureAccountSendMoney(txt2fa);
+              }
             }}
-            dialogAnimation={
-              new SlideAnimation({
-                slideFrom: "bottom"
+            click_Cancel={() =>
+              this.setState({
+                arr_SecureAuthPopupData: [
+                  {
+                    visible: false
+                  }
+                ]
               })
             }
-            dialogStyle={styles.dialogSecureAccount}
-          >
-            <DialogContent containerStyle={styles.dialogContainerSecureAccount}>
-              <View style={styles.accountTypePopUP}>
-                <Text style={[styles.txtTitle, { fontSize: 20 }]}>
-                  New Transaction
-                </Text>
-
-                <View style={styles.viewFeeShow}>
-                  <View style={[styles.viewLineText]}>
-                    <Text style={[styles.txtTitle, { flex: 1 }]}>Amount:</Text>
-                    <Text
-                      style={[styles.txtTitle, { flex: 1, fontWeight: "bold" }]}
-                    >
-                      $ {this.state.amount}
-                    </Text>
-                  </View>
-                  <View style={[styles.viewLineText]}>
-                    <Text style={[styles.txtTitle, { flex: 1 }]}>Fee:</Text>
-                    <Text
-                      style={[styles.txtTitle, { flex: 1, fontWeight: "bold" }]}
-                    >
-                      $ 0.001
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.viewReceipint}>
-                  <Text style={[styles.txtTitle, { fontSize: 18 }]}>
-                    Recipient:
-                  </Text>
-                  <Text
-                    style={[
-                      styles.txtTitle,
-                      { textAlign: "center", fontSize: 18, fontWeight: "bold" }
-                    ]}
-                  >
-                    {this.state.recipientAddress}
-                  </Text>
-                </View>
-                <View style={styles.view2FaInput}>
-                  <TextInput
-                    name={this.state.txt2FA}
-                    value={this.state.txt2FA}
-                    ref="txtInpAccountBal"
-                    autoFocus={true}
-                    keyboardType={"numeric"}
-                    returnKeyType={"next"}
-                    placeholder="2FA gauth token"
-                    placeholderTextColor="#EA4336"
-                    style={styles.input2FA}
-                    onChangeText={val => this.setState({ txt2FA: val })}
-                    onChange={val => this.setState({ txt2FA: val })}
-                  />
-                </View>
-                <View style={styles.viewBtn}>
-                  <Button
-                    transparent
-                    danger
-                    onPress={() =>
-                      this.setState({ isSecureAccountPopup: false })
-                    }
-                  >
-                    <Text>CANCEL</Text>
-                  </Button>
-                  <Button
-                    transparent
-                    danger
-                    onPress={() => this.click_SecureAccountSendMoney()}
-                  >
-                    <Text>SEND</Text>
-                  </Button>
-                </View>
-              </View>
-            </DialogContent>
-          </Dialog>
+          />
         </ImageBackground>
-
         <SCLAlertOk
           data={this.state.alertPopupData}
           click_Ok={(status: boolean) => {
@@ -563,6 +500,7 @@ export default class SentMoneyScreen extends React.Component {
               });
           }}
         />
+        <DropdownAlert ref={ref => (this.dropdown = ref)} />
         <Loader loading={this.state.isLoading} color={colors.appColor} />
       </Container>
     );

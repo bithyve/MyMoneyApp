@@ -1,3 +1,5 @@
+import Config from "react-native-config";
+
 //Message
 var errorMessage = {
   cancel: "CANCEL",
@@ -23,7 +25,7 @@ var errorValidationMessage = {
 
 //Colors
 var colors = {
-  appColor: "#F5951D",
+  appColor: "#F5951D", //Config.APP_COLOR,
   black: "#000000",
   white: "#ffffff",
   Saving: "#E6A620",
@@ -80,7 +82,7 @@ var images = {
       img1: require(assetsImages +
         "accountDetailsOnBoarding/jointAccount/joint01.jpg"),
       img2: require(assetsImages +
-        "accountDetailsOnBoarding/secureAccount/sec02.png"),  
+        "accountDetailsOnBoarding/secureAccount/sec02.png"),
       img3: require(assetsImages +
         "accountDetailsOnBoarding/jointAccount/joint03.jpg")
     },
@@ -88,8 +90,7 @@ var images = {
       img1: require(assetsImages +
         "accountDetailsOnBoarding/vaultAccount/vault001.png"),
       img2: require(assetsImages +
-        "accountDetailsOnBoarding/vaultAccount/vault02.png"),  
-     
+        "accountDetailsOnBoarding/vaultAccount/vault02.png")
     }
   },
   secureAccount: {

@@ -51,9 +51,8 @@ export default class MergeConfirmJointAccountScreen extends React.Component {
   }
 
   componentWillMount() {
-    let jointDetails = JSON.parse(
-      this.props.navigation.getParam("jointDetails")
-    );
+    console.log(this.props.navigation.getParam("data"));
+    let jointDetails = JSON.parse(this.props.navigation.getParam("data"));
     console.log({ jointDetails });
     this.setState({
       data: jointDetails
@@ -89,7 +88,7 @@ export default class MergeConfirmJointAccountScreen extends React.Component {
     const dateTime = Date.now();
     const fulldate = Math.floor(dateTime / 1000);
     const details = {
-      jointDetails: this.props.navigation.getParam("jointDetails"),
+      jointDetails: this.props.navigation.getParam("data"),
       merger: this.state.name
     };
     const resultWallet = await dbOpration.readTablesData(
@@ -101,15 +100,15 @@ export default class MergeConfirmJointAccountScreen extends React.Component {
     this.setState({
       ackJSON: jointAccount.ackDetails(restJointAccount.mergeJSON)
     });
-    const additionalInfo = {  
-      scripts: restJointAccount.multiSig.scripts,  
+    const additionalInfo = {
+      scripts: restJointAccount.multiSig.scripts,
       jointData: JSON.parse(restJointAccount.mergeJSON)
-    };   
+    };
     this.connection_CreateJointAccount(
       fulldate,
       restJointAccount.multiSig.address,
       additionalInfo
-    );  
+    );
   }
 
   async connection_CreateJointAccount(
@@ -173,7 +172,7 @@ export default class MergeConfirmJointAccountScreen extends React.Component {
                 style={styles.logoMerge}
                 source={images.secureAccount.secureLogo}
               />
-              <Text style={styles.txtTitle}>   
+              <Text style={styles.txtTitle}>
                 Do you want to have a joint account, {this.state.data.wn}, with{" "}
                 {this.state.data.cn}?
               </Text>

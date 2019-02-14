@@ -78,6 +78,13 @@ export default class CreateJointAccountScreen extends React.Component {
 
   //TODO: func selfCreateJointAccount
 
+  componentWillMount() {
+    let qrCodeData = this.props.navigation.getParam("data");
+    if (qrCodeData != "") {
+      this.selfCreateJointAccount(qrCodeData);
+    }
+  }
+
   async selfCreateJointAccount(data: any) {
     const dateTime = Date.now();
     const fulldate = Math.floor(dateTime / 1000);
@@ -92,16 +99,16 @@ export default class CreateJointAccountScreen extends React.Component {
       mnemonic,
       details
     );
-    const additionalInfo = {  
-      scripts: resJointAccountCreate.multiSig.scripts,  
-      jointData: JSON.parse(resJointAccountCreate.creationJSON) 
+    const additionalInfo = {
+      scripts: resJointAccountCreate.multiSig.scripts,
+      jointData: JSON.parse(resJointAccountCreate.creationJSON)
     };
     if (flag_createJoinAccount) {
       this.connection_CreateJointAccount(
         fulldate,
         resJointAccountCreate.multiSig.address,
         additionalInfo
-      );   
+      );
       flag_createJoinAccount = false;
     }
   }
@@ -146,7 +153,7 @@ export default class CreateJointAccountScreen extends React.Component {
     let jointDetails = JSON.parse(data.barcode);
     if (jointDetails.typ == "conf") {
       this.props.navigation.push("MergeConfirmJointAccountScreen", {
-        jointDetails: data.barcode
+        data: data.barcode
       });
     } else if (jointDetails.typ == "ack") {
       this.selfCreateJointAccount(data.barcode);
@@ -206,7 +213,7 @@ export default class CreateJointAccountScreen extends React.Component {
             <Left>
               <Button
                 transparent
-                onPress={() => this.props.navigation.goBack(null)}
+                onPress={() => this.props.navigation.goBack()}
               >
                 <Icon name="chevron-left" size={25} color="#ffffff" />
               </Button>

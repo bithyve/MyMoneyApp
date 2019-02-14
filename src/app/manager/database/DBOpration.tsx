@@ -83,7 +83,7 @@ const readAccountTablesData = (tableName: string) => {
                 data.accountName = utils.decrypt(data.accountName, passcode);
                 data.accountType = utils.decrypt(data.accountType, passcode);
                 data.address = utils.decrypt(data.address, passcode);
-                data.additionalInfo = utils.decrypt(   
+                data.additionalInfo = utils.decrypt(
                   data.additionalInfo,
                   passcode
                 );
@@ -211,7 +211,7 @@ const readRecentTransactionAddressWise = (
                       data.dateCreated = utils.decrypt(
                         results.rows.item(i).dateCreated,
                         passcode
-                      );  
+                      );
                       data.fees = utils.decrypt(
                         results.rows.item(i).fees,
                         passcode

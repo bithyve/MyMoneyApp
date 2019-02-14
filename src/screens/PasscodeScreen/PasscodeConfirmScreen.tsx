@@ -2,13 +2,7 @@
  * Created by dungtran on 8/20/17.
  */
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  AsyncStorage,
-  Animated
-} from "react-native";
+import { StyleSheet, Text, View, AsyncStorage, Animated } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
 import * as Keychain from "react-native-keychain";
@@ -271,8 +265,7 @@ export default class PasscodeConfirmScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#FFD900"
+    alignItems: "center"
   },
   cardContainer: {
     flex: 1

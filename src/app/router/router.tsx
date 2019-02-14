@@ -98,7 +98,7 @@ const JointAccountStackRouter = createStackNavigator(
     MergeConfirmJointAccountScreen: {
       screen: MergeConfirmJointAccountScreen,
       navigationOptions: { header: null }
-    }         
+    }
   },
   {
     initialRouteName: "CreateJointAccountScreen"
@@ -344,6 +344,15 @@ export const createRootNavigator = (
       //AccountDetailsOnboardingRouter
       AccountDetailsOnboardingRouter: {
         screen: AccountDetailsOnboardingRouter,
+        navigationOptions: { header: null }
+      },
+      //For DeepLinking
+      MergeConfirmJointAccountScreen: {
+        screen: MergeConfirmJointAccountScreen,
+        navigationOptions: { header: null }
+      },
+      CreateJointAccountScreen: {
+        screen: CreateJointAccountScreen,
         navigationOptions: { header: null }
       }
     },

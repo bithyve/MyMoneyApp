@@ -59,7 +59,7 @@ export default class ReceiveMoneyScreen extends React.Component {
       address = data;
     } else if (page == "AccountDetailsScreen") {
       address = data;
-    }    
+    }
 
     this.setState({
       qrcodedata: address
@@ -91,13 +91,42 @@ export default class ReceiveMoneyScreen extends React.Component {
     Toast.show("Address copyed.!", Toast.SHORT);
   };
 
+  //TODO: func click_SentQrCode
+  click_SentQrCode() {
+    const { navigation } = this.props;
+    let page = navigation.getParam("page");
+    var shareOptions;
+    if (page == "CreateJointAccountScreen") {
+      shareOptions = {
+        title: "Address",
+        message:
+          "https://mobile.cmshuawei.com/jointAccountCreate/MergeConfirmJointAccountScreen/" +
+          this.state.qrcodedata,
+        url: "\nhttps://bithyve.com/",
+        subject: "MyMoney" //  for email
+      };
+    } else if (page == "MergeConfirmJointAccountScreen") {
+      shareOptions = {
+        title: "Address",
+        message:
+          "https://mobile.cmshuawei.com/CreateJointAccountScreen/" +
+          this.state.qrcodedata,
+        url: "\nhttps://bithyve.com/",
+        subject: "MyMoney" //  for email
+      };
+    } else {
+      shareOptions = {
+        title: "Address",
+        message: this.state.qrcodedata,
+        url: "\nhttps://bithyve.com/",
+        subject: "MyMoney" //  for email
+      };
+    }
+
+    Share.open(shareOptions);
+  }
+
   render() {
-    let shareOptions = {
-      title: "Address",
-      message: this.state.address,
-      url: "\nhttps://bithyve.com/",
-      subject: "MyMoney" //  for email
-    };
     return (
       <Container>
         <ImageBackground
@@ -154,7 +183,7 @@ export default class ReceiveMoneyScreen extends React.Component {
                 <Button
                   transparent
                   onPress={() => {
-                    Share.open(shareOptions);
+                    this.click_SentQrCode();
                   }}
                 >
                   <Icon name="share-square" size={25} color="#ffffff" />

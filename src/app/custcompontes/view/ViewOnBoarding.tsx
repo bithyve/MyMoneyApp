@@ -14,7 +14,7 @@ export default class ViewOnBoarding extends Component<Props, any> {
   }
 
   //TODO: renderItem
-  renderItem(item: any) {  
+  renderItem(item: any) {
     let i: number;
     let swipItem: any[] = [];
     for (i = 0; i < item.length; i++) {
@@ -22,7 +22,7 @@ export default class ViewOnBoarding extends Component<Props, any> {
         backgroundColor: item[i].backgroundColor,
         image: (
           <Image
-            style={{ width: 240, height: 240}}
+            style={{ width: 240, height: 240 }}
             resizeMode="contain"
             source={item[i].image}
           />

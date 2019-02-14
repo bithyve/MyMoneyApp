@@ -19,10 +19,8 @@ import {
   MenuTrigger
 } from "react-native-popup-menu";
 import DropdownAlert from "react-native-dropdownalert";
-import Dialog, {
-  SlideAnimation,
-  DialogContent
-} from "react-native-popup-dialog";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Loader from "react-native-modal-loader";
 
 //TODO: Custome Pages
 import { colors, images, localDB } from "../../../app/constants/Constants";
@@ -38,6 +36,8 @@ import SCLAlertTransferAccountAmount from "../../../app/custcompontes/alert/SCLA
 import SCLAlertSimpleConfirmation from "../../../app/custcompontes/alert/SCLAlertSimpleConfirmation";
 import SCLAlertOk from "../../../app/custcompontes/alert/SCLAlertOk";
 import SCLAlertJointAccountAuthoriseConfirmation from "../../../app/custcompontes/alert/SCLAlertJointAccountAuthoriseConfirmation";
+import BackButton from "../../../app/custcompontes/buttons/BackButton";
+import DialogSecureAccountAuthentication from "../../../app/custcompontes/dialog/DialogSecureAccountAuthentication";
 
 //TODO: Wallets
 import RegularAccount from "../../../bitcoin/services/RegularAccount";
@@ -71,14 +71,17 @@ export default class AccountDetailsScreen extends React.Component<
       flag_sentBtnDisStatus: true,
       arr_TransferAccountData: [],
       arr_ConfirmJointAccountAuthorise: [],
+      arr_SecureAuthPopupData: [],
       transactionHax: "",
       flag_SecureAccountPopup: false,
       txt2FA: "",
       secureAmount: "",
       secureRecipientAddress: "",
-      securetransfer: {}
+      securetransfer: {},
+      selectedAccountType: ""
     };
     isNetwork = utils.getNetwork();
+    this.baseState = this.state;
   }
 
   //TODO: Page Life Cycle
@@ -113,9 +116,7 @@ export default class AccountDetailsScreen extends React.Component<
 
   componentWillUnmount() {
     try {
-      this.setState({
-        isLoading: false
-      });
+      this.setState(this.baseState);
       this.willFocusSubscription.remove();
     } catch (error) {
       console.log(error);
@@ -405,25 +406,32 @@ export default class AccountDetailsScreen extends React.Component<
   }
 
   //TODO: func click_SecureAccountSendMoney
-  async click_SecureAccountSendMoney() {
+  async click_SecureAccountSendMoney(txt2fa: string) {
     try {
       let additionalInfo = JSON.parse(this.state.data.additionalInfo);
       console.log({ additionalInfo });
       const transfer = this.state.securetransfer;
+
+      console.log(
+        transfer.senderAddress,
+        transfer.recipientAddress,
+        transfer.amount
+      );
+
       const res = await secureAccount.secureTransaction({
         senderAddress: transfer.senderAddress,
         recipientAddress: transfer.recipientAddress,
         amount: transfer.amount,
         primaryXpriv: additionalInfo.xpriv.primary,
         scripts: additionalInfo.multiSig.scripts,
-        token: this.state.txt2FA,
+        token: txt2fa,
         walletID: additionalInfo.walletID,
         childIndex: 0
       });
-
+      console.log({ res });
       if (res.statusCode == 200) {
         this.setState({
-          flag_SecureAccountPopup: false,
+          isLoading: false,
           successOkPopupData: [
             {
               theme: "success",
@@ -431,6 +439,20 @@ export default class AccountDetailsScreen extends React.Component<
               icon: "smile",
               title: "Success",
               subtitle: "Amount Transfer successfully.",
+              goBackStatus: false
+            }
+          ]
+        });
+      } else {
+        this.setState({
+          successOkPopupData: [
+            {
+              theme: "danger",
+              status: true,
+              icon: "frown",
+              title: "Oops",
+              subtitle:
+                "Invalid token number.Please enter correct token number.",
               goBackStatus: false
             }
           ]
@@ -463,12 +485,7 @@ export default class AccountDetailsScreen extends React.Component<
           >
             <View style={styles.viewBackBtn}>
               <Left>
-                <Button
-                  transparent
-                  onPress={() => this.props.navigation.goBack()}
-                >
-                  <Icon name="chevron-left" size={25} color="#ffffff" />
-                </Button>
+                <BackButton click_Done={() => this.props.navigation.goBack()} />
               </Left>
               {renderIf(this.state.data.accountType == "Joint")(
                 <Right>
@@ -526,7 +543,6 @@ export default class AccountDetailsScreen extends React.Component<
               openRecentTrans={(val: any) => this.openRecentTrans(val)}
             />
           </View>
-
           <View style={styles.viewFooter}>
             {renderIf(this.state.flag_TransferBtn)(
               <Button
@@ -637,31 +653,27 @@ export default class AccountDetailsScreen extends React.Component<
                 privateKey
               };
               if (this.state.data.accountType == "Savings") {
-                const res = await RegularAccount.transfer(
-                  transfer.senderAddress,
-                  transfer.recipientAddress,
-                  transfer.amount,
-                  transfer.privateKey
-                );
-                if (res.statusCode == 200) {
-                  this.setState({
-                    transferAmountPopupDAta: [
-                      {
-                        status: false
-                      }
-                    ],
-                    successOkPopupData: [
-                      {
-                        theme: "success",
-                        status: true,
-                        icon: "smile",
-                        title: "Success",
-                        subtitle: "Amount Transfer successfully.",
-                        goBackStatus: false
-                      }
-                    ]
-                  });
-                }
+                this.setState({
+                  selectedAccountType: "Savings",
+                  securetransfer: transfer,
+                  transferAmountPopupDAta: [
+                    {
+                      status: false
+                    }
+                  ],
+                  confirmPopupData: [
+                    {
+                      status: true,
+                      icon: "check-circle",
+                      title: "Confirmation",
+                      subtitle:
+                        "Are you sure Saving account to " +
+                        accountType +
+                        " account transfer amount.",
+                      confirmTitle: "CONFIRM"
+                    }
+                  ]
+                });
               } else if (this.state.data.accountType == "Vault") {
                 // let additionalInfo = JSON.parse(this.state.data.additionalInfo);
                 // const locktime = additionalInfo.lockTime;
@@ -676,57 +688,36 @@ export default class AccountDetailsScreen extends React.Component<
               } else if (this.state.data.accountType == "Secure") {
                 this.setState({
                   securetransfer: transfer,
+                  selectedAccountType: "Secure",
                   transferAmountPopupDAta: [
                     {
                       status: false
                     }
                   ],
-                  secureAmount: amount,
-                  secureRecipientAddress: address,
-                  flag_SecureAccountPopup: true
+                  confirmPopupData: [
+                    {
+                      status: true,
+                      icon: "check-circle",
+                      title: "Confirmation",
+                      subtitle:
+                        "Are you sure Saving account to " +
+                        accountType +
+                        " account transfer amount.",
+                      confirmTitle: "CONFIRM"
+                    }
+                  ]
                 });
               } else if (this.state.data.accountType == "Joint") {
-                const additionalInfo = JSON.parse(
-                  this.state.data.additionalInfo
-                );
-                console.log({ additionalInfo });
-                const scripts = additionalInfo.scripts;
-                const res = await jointAccount.initJointTxn({
-                  senderAddress: transfer.senderAddress,
-                  recipientAddress: transfer.recipientAddress,
-                  amount: transfer.amount,
-                  privateKey,
-                  scripts
-                });
                 this.setState({
+                  securetransfer: transfer,
+                  selectedAccountType: "Joint",
                   transferAmountPopupDAta: [
                     {
                       status: false
                     }
                   ]
                 });
-                this.props.navigation.push("ReceiveMoneyScreen", {
-                  page: "AccountDetailsScreen",
-                  data: res.data
-                });
               }
-
-              // this.setState({
-              //   transferAmountPopupDAta: [
-              //     {
-              //       status: false
-              //     }
-              //   ],
-              //   confirmPopupData: [
-              //     {
-              //       status: true,
-              //       icon: "check-circle",
-              //       title: "Confirmation",
-              //       subtitle: msg,
-              //       confirmTitle: "CONFIRM"
-              //     }
-              //   ]
-              // });
             }}
             onError={error => {
               this.dropdown.alertWithType("error", "OH", error);
@@ -734,21 +725,7 @@ export default class AccountDetailsScreen extends React.Component<
           />
           <SCLAlertSimpleConfirmation
             data={this.state.confirmPopupData}
-            click_Ok={(status: boolean) => {
-              if (status) {
-                this.setState({
-                  successOkPopupData: [
-                    {
-                      theme: "success",
-                      status: true,
-                      icon: "smile",
-                      title: "Success",
-                      subtitle: "Amount Transfer successfully.",
-                      goBackStatus: false
-                    }
-                  ]
-                });
-              }
+            click_Ok={async (status: boolean) => {
               this.setState({
                 confirmPopupData: [
                   {
@@ -756,9 +733,67 @@ export default class AccountDetailsScreen extends React.Component<
                   }
                 ]
               });
+              if (status) {
+                if (this.state.selectedAccountType == "Savings") {
+                  const transfer = this.state.securetransfer;
+                  this.setState({
+                    isLoading: true
+                  });
+                  const res = await RegularAccount.transfer(
+                    transfer.senderAddress,
+                    transfer.recipientAddress,
+                    transfer.amount,
+                    transfer.privateKey
+                  );
+                  if (res.statusCode == 200) {
+                    this.setState({
+                      isLoading: false,
+                      successOkPopupData: [
+                        {
+                          theme: "success",
+                          status: true,
+                          icon: "smile",
+                          title: "Success",
+                          subtitle: "Amount Transfer successfully.",
+                          goBackStatus: false
+                        }
+                      ]
+                    });
+                  }
+                } else if (this.state.selectedAccountType == "Secure") {
+                  console.log("its working");
+                  const transfer = this.state.securetransfer;
+                  this.setState({
+                    arr_SecureAuthPopupData: [
+                      {
+                        visible: true,
+                        amount: transfer.amount,
+                        fee: "0.001",
+                        secureRecipientAddress: transfer.recipientAddress
+                      }
+                    ]
+                  });
+                } else if (this.state.selectedAccountType == "Joint") {
+                  const transfer = this.state.securetransfer;
+                  const additionalInfo = JSON.parse(
+                    this.state.data.additionalInfo
+                  );
+                  const scripts = additionalInfo.scripts;
+                  const res = await jointAccount.initJointTxn({
+                    senderAddress: transfer.senderAddress,
+                    recipientAddress: transfer.recipientAddress,
+                    amount: transfer.amount,
+                    privateKey: transfer.privateKey,
+                    scripts
+                  });
+                  this.props.navigation.push("ReceiveMoneyScreen", {
+                    page: "AccountDetailsScreen",
+                    data: res.data
+                  });
+                }
+              }
             }}
           />
-
           <SCLAlertJointAccountAuthoriseConfirmation
             data={this.state.arr_ConfirmJointAccountAuthorise}
             click_Ok={(status: boolean) => {
@@ -774,7 +809,6 @@ export default class AccountDetailsScreen extends React.Component<
               });
             }}
           />
-
           <SCLAlertOk
             data={this.state.successOkPopupData}
             click_Ok={(status: boolean) => {
@@ -788,95 +822,39 @@ export default class AccountDetailsScreen extends React.Component<
               });
             }}
           />
-          <DropdownAlert ref={ref => (this.dropdown = ref)} />
-
-          <Dialog
-            width={Dimensions.get("screen").width - 30}
-            visible={this.state.flag_SecureAccountPopup}
-            onTouchOutside={() => {
-              this.setState({ flag_SecureAccountPopup: false });
+          <DialogSecureAccountAuthentication
+            data={this.state.arr_SecureAuthPopupData}
+            click_Sent={(txt2fa: string) => {
+              if (txt2fa.length != 6) {
+                this.dropdown.alertWithType(
+                  "error",
+                  "OH",
+                  "Please enter token."
+                );
+              } else {
+                this.setState({
+                  isLoading: true,
+                  arr_SecureAuthPopupData: [
+                    {
+                      visible: false
+                    }
+                  ]
+                });
+                this.click_SecureAccountSendMoney(txt2fa);
+              }
             }}
-            dialogAnimation={
-              new SlideAnimation({
-                slideFrom: "bottom"
+            click_Cancel={() =>
+              this.setState({
+                arr_SecureAuthPopupData: [
+                  {
+                    visible: false
+                  }
+                ]
               })
             }
-            dialogStyle={styles.dialogSecureAccount}
-          >
-            <DialogContent containerStyle={styles.dialogContainerSecureAccount}>
-              <View style={styles.accountTypePopUP}>
-                <Text style={[styles.txtTitle, { fontSize: 20 }]}>
-                  New Transaction
-                </Text>
-
-                <View style={styles.viewFeeShow}>
-                  <View style={[styles.viewLineText]}>
-                    <Text style={[styles.txtTitle, { flex: 1 }]}>Amount:</Text>
-                    <Text
-                      style={[styles.txtTitle, { flex: 1, fontWeight: "bold" }]}
-                    >
-                      $ {this.state.secureAmount}
-                    </Text>
-                  </View>
-                  <View style={[styles.viewLineText]}>
-                    <Text style={[styles.txtTitle, { flex: 1 }]}>Fee:</Text>
-                    <Text
-                      style={[styles.txtTitle, { flex: 1, fontWeight: "bold" }]}
-                    >
-                      $ 0.001
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.viewReceipint}>
-                  <Text style={[styles.txtTitle, { fontSize: 18 }]}>
-                    Recipient:
-                  </Text>
-                  <Text
-                    style={[
-                      styles.txtTitle,
-                      { textAlign: "center", fontSize: 18, fontWeight: "bold" }
-                    ]}
-                  >
-                    {this.state.secureRecipientAddress}
-                  </Text>
-                </View>
-                <View style={styles.view2FaInput}>
-                  <TextInput
-                    name={this.state.txt2FA}
-                    value={this.state.txt2FA}
-                    ref="txtInpAccountBal"
-                    autoFocus={true}
-                    keyboardType={"numeric"}
-                    returnKeyType={"next"}
-                    placeholder="2FA gauth token"
-                    placeholderTextColor="#EA4336"
-                    style={styles.input2FA}
-                    onChangeText={val => this.setState({ txt2FA: val })}
-                    onChange={val => this.setState({ txt2FA: val })}
-                  />
-                </View>
-                <View style={styles.viewBtn}>
-                  <Button
-                    transparent
-                    danger
-                    onPress={() =>
-                      this.setState({ flag_SecureAccountPopup: false })
-                    }
-                  >
-                    <Text>CANCEL</Text>
-                  </Button>
-                  <Button
-                    transparent
-                    danger
-                    onPress={() => this.click_SecureAccountSendMoney()}
-                  >
-                    <Text>SEND</Text>
-                  </Button>
-                </View>
-              </View>
-            </DialogContent>
-          </Dialog>
+          />
+          <DropdownAlert ref={ref => (this.dropdown = ref)} />
+          <Loader loading={this.state.isLoading} color={colors.appColor} />
         </Content>
       </Container>
     );
@@ -943,14 +921,6 @@ const styles = StyleSheet.create({
     flex: 0.2,
     alignItems: "center"
   },
-  //Loading
-  loading: {
-    marginLeft: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    alignContent: "center"
-  },
   txtRecentTran: {
     fontWeight: "bold",
     fontSize: 25,
@@ -1010,39 +980,5 @@ const styles = StyleSheet.create({
   menuOptions: {
     fontSize: 14,
     marginRight: 60
-  },
-  //popup
-  dialogSecureAccount: {
-    borderRadius: 5,
-    backgroundColor: "#1F1E25"
-  },
-  dialogContainerSecureAccount: {},
-  accountTypePopUP: {
-    padding: 10,
-    marginTop: 20
-  },
-  viewFeeShow: {
-    marginTop: 20,
-    marginBottom: 10
-  },
-  viewLineText: {
-    flexDirection: "row"
-  },
-  viewReceipint: {},
-  view2FaInput: {
-    marginTop: 20
-  },
-  input2FA: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#EA4336",
-    color: "#EA4336",
-    fontSize: 18
-  },
-  //view:Button
-  viewBtn: {
-    flexDirection: "row",
-    marginTop: 20,
-    alignItems: "center",
-    justifyContent: "flex-end"
   }
 });

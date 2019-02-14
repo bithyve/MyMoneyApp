@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  View,
-  ImageBackground,
-  TextInput,
-  TouchableHighlight,
-  Alert
-} from "react-native";
+import { Image, StyleSheet, View, ImageBackground } from "react-native";
 import {
   Container,
   Header,
@@ -21,21 +12,20 @@ import {
   Text
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { SkypeIndicator } from "react-native-indicators";
 import DropdownAlert from "react-native-dropdownalert";
-import { RkCard } from "react-native-ui-kitten";
 import DatePicker from "react-native-datepicker";
 import moment from "moment";
-import ReactNativeItemSelect from "react-native-item-select";
 import { TagSelect } from "react-native-tag-select";
 import Loader from "react-native-modal-loader";
 //Custome Compontes
 import SCLAlertOk from "../../../../app/custcompontes/alert/SCLAlertOk";
 //TODO: Custome class
 import { colors, images, localDB } from "../../../../app/constants/Constants";
-import renderIf from "../../../../app/constants/validation/renderIf";
 var utils = require("../../../../app/constants/Utils");
 var dbOpration = require("../../../../app/manager/database/DBOpration");
+
+//TODO: Custome Component
+import BackButton from "../../../../app/custcompontes/buttons/BackButton";
 
 //TODO: VaultAccount
 import vaultAccount from "../../../../bitcoin/services/VaultAccount";
@@ -157,13 +147,7 @@ export default class VaultAccountScreen extends React.Component {
           >
             <Header transparent>
               <Left>
-                <Button
-                  transparent
-                  style={{ width: 50 }}
-                  onPress={() => this.props.navigation.pop()}
-                >
-                  <Icon name="chevron-left" size={25} color="#ffffff" />
-                </Button>
+                <BackButton click_Done={() => this.props.navigation.goBack()} />
               </Left>
               <Body style={{ flex: 0, alignItems: "center" }}>
                 <Title />

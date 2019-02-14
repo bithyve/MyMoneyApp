@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { View, AsyncStorage, Image, StyleSheet, Text } from "react-native";
+import {
+  View,
+  AsyncStorage,
+  Image,
+  StyleSheet,
+  Text,
+  Alert
+} from "react-native";
+
 import { colors } from "../../app/constants/Constants";
 import Singleton from "../../app/constants/Singleton";
 import * as Keychain from "react-native-keychain";

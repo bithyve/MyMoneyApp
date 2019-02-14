@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
 import CreateTables from "../../../app/manager/database/CreateTables";
 //Custome Compontes
@@ -8,10 +8,10 @@ import ViewOnBoarding from "../../../app/custcompontes/view/ViewOnBoarding";
 import onBoardingData from "../../../assets/jsonfiles/onBoardingScreen/onBoardingScreen.json";
 
 //TODO: Custome object
-import { images } from "../../../app/constants/Constants";
+import { colors, images } from "../../../app/constants/Constants";
 
 export default class OnBoardingScreen extends React.Component<any, any> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       data: []
@@ -38,7 +38,7 @@ export default class OnBoardingScreen extends React.Component<any, any> {
   }
 
   render() {
-    const data = [   
+    const data = [
       {
         backgroundColor: "#fff",
         image: images.onBoardingScreen.onB1,
@@ -62,6 +62,9 @@ export default class OnBoardingScreen extends React.Component<any, any> {
     ];
     return (
       <View style={styles.container}>
+        <Text style={{ marginTop: 20, color: colors.appColor, fontSize: 30 }}>
+          Color{" "}
+        </Text>
         <ViewOnBoarding data={data} click_Done={() => this.click_Done()} />
         <CreateTables />
       </View>
@@ -71,7 +74,6 @@ export default class OnBoardingScreen extends React.Component<any, any> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#ffffff"
+    flex: 1
   }
 });

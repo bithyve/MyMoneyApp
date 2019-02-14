@@ -4,7 +4,7 @@ import { StackActions, NavigationActions } from "react-navigation";
 import CodeInput from "react-native-confirmation-code-input";
 import DropdownAlert from "react-native-dropdownalert";
 import * as Keychain from "react-native-keychain";
-
+import Singleton from "../../app/constants/Singleton";
 //TODO: Custome Pages
 import { colors } from "../../app/constants/Constants";
 import utils from "../../app/constants/Utils";
@@ -58,14 +58,26 @@ export default class PasscodeScreen extends Component {
   }
 
   onSuccess = (code: string) => {
+    let commonData = Singleton.getInstance();
+    let pageName = commonData.getRootViewController();
+    let deepLinkingUrl = commonData.getDeepLinkingUrl();
+    console.log({ pageName, deepLinkingUrl });
     const resultEncrypt = utils.encrypt(code, code);
     console.log({ resultEncrypt });
     const resetAction = StackActions.reset({
       index: 0, // <-- currect active route from actions array
       key: null,
-      actions: [NavigationActions.navigate({ routeName: "TabbarBottom" })]
+      actions: [
+        NavigationActions.navigate({
+          routeName: pageName,
+          params: {
+            data: deepLinkingUrl
+          }
+        })
+      ]
     });
     this.props.navigation.dispatch(resetAction);
+    commonData.setRootViewController("TabbarBottom");
   };
 
   render() {
@@ -109,8 +121,7 @@ let styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFD900"
+    justifyContent: "center"
   },
   txtText: {
     color: colors.appColor,

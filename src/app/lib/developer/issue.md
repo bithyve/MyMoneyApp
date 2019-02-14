@@ -100,7 +100,7 @@ yarn add asyncstorage-down
 
 npm run issuemodel
 
-
 ## Android icons not show
+
 Open android/app/build.gradle and add the following:  
-   apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
