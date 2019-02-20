@@ -1,0 +1,768 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+MERGED from [:react-native-push-notification] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-push-notification/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-config] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-config/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-keychain] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-keychain/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-16:12
+MERGED from [:react-native-sqlite-storage] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-sqlite-storage/src/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-vector-icons] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-vector-icons/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-16:12
+MERGED from [:react-native-tcp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-tcp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-svg] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-svg/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-splash-screen] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-splash-screen/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-14:12
+MERGED from [:react-native-spinkit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-spinkit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-16:12
+MERGED from [:react-native-share] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-share/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-randombytes] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-randombytes/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-15:12
+MERGED from [:react-native-material-kit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-material-kit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:react-native-image-resizer] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-resizer/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-23:12
+MERGED from [:react-native-gesture-handler] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-gesture-handler/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-fs] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-fs/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-22:12
+MERGED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-18:12
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:2:1-15:12
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:17:1-31:12
+MERGED from [com.google.firebase:firebase-core:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-core-16.0.1.aar/2c75324e76e6abaadf9fdeaa6a19b199/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:17:1-28:12
+MERGED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:2:1-41:12
+MERGED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:17:1-37:12
+MERGED from [com.facebook.conceal:conceal:1.1.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/conceal-1.1.3.aar/3cb5a48c2d3c2aa294fe73078fd52fa9/AndroidManifest.xml:7:1-16:12
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:17:1-28:12
+MERGED from [com.google.android.gms:play-services-vision:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-15.0.2.aar/951cda69ab582c7e3417374083a14350/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:17:1-34:12
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:17:1-55:12
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:17:1-28:12
+MERGED from [com.google.android.gms:play-services-vision-common:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-15.0.2.aar/b170ca04edc4812578625c74f06f372c/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:17:1-40:12
+MERGED from [com.google.android.gms:play-services-clearcut:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-clearcut-15.0.1.aar/125c6cbd94ca67eae39772e8c047e1fb/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-flags:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-flags-15.0.1.aar/8fe869ab6cc57649e676c97892330458/AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.gms:play-services-phenotype:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-phenotype-15.0.1.aar/fab313130aba67cb117a55fe7952287f/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-ads-identifier:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-ads-identifier-15.0.1.aar/f73fa2befd2cc0728b3c93dc71fc9972/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:17:1-59:12
+MERGED from [com.google.firebase:firebase-iid-interop:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-interop-16.0.1.aar/fb60f0ae3e5448d53e294016c56abe7c/AndroidManifest.xml:2:1-10:12
+MERGED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:17:1-29:12
+MERGED from [com.google.android.gms:play-services-stats:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-stats-16.0.1.aar/09071b620cddad36503270488bdd3a4a/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:2:1-17:12
+MERGED from [com.google.firebase:firebase-measurement-connector:17.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-17.0.1.aar/3b228b9a2c6a9783d9fc97bbe1e85579/AndroidManifest.xml:17:1-25:12
+MERGED from [com.google.android.gms:play-services-tasks:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-tasks-16.0.1.aar/80986dfd8b205b97c1d2a284203b4ebd/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:17:1-31:12
+MERGED from [com.github.ybq:Android-SpinKit:1.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/Android-SpinKit-1.1.0.aar/93245122288b976db66219f86e45e533/AndroidManifest.xml:2:1-10:12
+MERGED from [com.google.android.gms:play-services-measurement-base:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-measurement-base-16.0.0.aar/40ae2fa9c7083da9d88ac009a03cfa54/AndroidManifest.xml:17:1-24:12
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:17:1-30:12
+MERGED from [com.facebook.fresco:fresco:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/fresco-1.10.0.aar/2cbd104d1e13939dd23dab312119b434/AndroidManifest.xml:2:1-9:12
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/0aa4903e8bf4b1dda4e6c3e0495b605d/AndroidManifest.xml:2:1-9:12
+MERGED from [com.facebook.fresco:drawee:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/drawee-1.10.0.aar/6ec8b95db0504fbc20fae49f2683a62e/AndroidManifest.xml:2:1-9:12
+MERGED from [com.facebook.fresco:imagepipeline:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-1.10.0.aar/1260888df114e695f2f75bafe9515bcc/AndroidManifest.xml:2:1-9:12
+MERGED from [com.facebook.fresco:imagepipeline-base:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-base-1.10.0.aar/c551e3a669a326d2981a56aeb5400a38/AndroidManifest.xml:2:1-9:12
+MERGED from [com.facebook.soloader:soloader:0.5.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/soloader-0.5.1.aar/f8928e41ecb3662229157cfe9f2e6796/AndroidManifest.xml:2:1-13:12
+MERGED from [org.webkit:android-jsc:r236355] /Users/developer/.gradle/caches/transforms-1/files-1.1/android-jsc-r236355.aar/2f686615ecc234efd6460f35e246009b/AndroidManifest.xml:2:1-11:12
+MERGED from [com.facebook.fresco:fbcore:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/fbcore-1.10.0.aar/41343170bccd2418c82a9fb173899e56/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+	package
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:2:5-26
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:1-67:12
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:1:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:4:5-67
+MERGED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-67
+MERGED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-67
+MERGED from [:react-native-tcp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-tcp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-67
+MERGED from [:react-native-tcp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-tcp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-67
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-67
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-67
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:24:5-67
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:22:5-67
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:22:5-67
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:23:5-67
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:24:5-67
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:23:5-67
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:4:22-64
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:5:5-77
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:11:5-78
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:11:5-78
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:5:22-75
+uses-permission#android.permission.CAMERA
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:6:6-66
+MERGED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:9:5-65
+MERGED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:9:5-65
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:6:23-63
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:7:2-77
+MERGED from [:react-native-share] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-share/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-81
+MERGED from [:react-native-share] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-share/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-81
+MERGED from [:react-native-fs] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-fs/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-81
+MERGED from [:react-native-fs] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-fs/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-81
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:7:19-75
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:8:1-64
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:24:5-68
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:24:5-68
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:25:5-68
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:24:5-68
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:24:5-68
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:8:18-61
+permission#com.mymoney.permission.C2D_MESSAGE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:9:1-11:47
+	android:protectionLevel
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:11:9-44
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:10:9-58
+uses-permission#com.mymoney.permission.C2D_MESSAGE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:12:5-74
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:12:22-71
+uses-permission#android.permission.VIBRATE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:13:5-66
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:13:22-63
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:14:5-80
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:14:22-78
+application
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:17:5-65:19
+MERGED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-14:19
+MERGED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-14:19
+MERGED from [:react-native-splash-screen] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-splash-screen/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-12:19
+MERGED from [:react-native-splash-screen] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-splash-screen/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-12:19
+MERGED from [:react-native-spinkit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-spinkit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-14:19
+MERGED from [:react-native-spinkit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-spinkit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-14:19
+MERGED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-21:19
+MERGED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-21:19
+MERGED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-20:19
+MERGED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-20:19
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:13:5-20
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:13:5-20
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:25:5-29:19
+MERGED from [com.google.firebase:firebase-core:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-core-16.0.1.aar/2c75324e76e6abaadf9fdeaa6a19b199/AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-core:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-core-16.0.1.aar/2c75324e76e6abaadf9fdeaa6a19b199/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:26:5-20
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:26:5-20
+MERGED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:22:5-35:19
+MERGED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:22:5-35:19
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-vision:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-15.0.2.aar/951cda69ab582c7e3417374083a14350/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-vision:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-15.0.2.aar/951cda69ab582c7e3417374083a14350/AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:26:5-32:19
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:26:5-32:19
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:28:5-53:19
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:28:5-53:19
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:26:5-20
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:26:5-20
+MERGED from [com.google.android.gms:play-services-vision-common:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-15.0.2.aar/b170ca04edc4812578625c74f06f372c/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-vision-common:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-15.0.2.aar/b170ca04edc4812578625c74f06f372c/AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:28:5-38:19
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:28:5-38:19
+MERGED from [com.google.android.gms:play-services-clearcut:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-clearcut-15.0.1.aar/125c6cbd94ca67eae39772e8c047e1fb/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-clearcut:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-clearcut-15.0.1.aar/125c6cbd94ca67eae39772e8c047e1fb/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-phenotype:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-phenotype-15.0.1.aar/fab313130aba67cb117a55fe7952287f/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-phenotype:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-phenotype-15.0.1.aar/fab313130aba67cb117a55fe7952287f/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-ads-identifier:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-ads-identifier-15.0.1.aar/f73fa2befd2cc0728b3c93dc71fc9972/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-ads-identifier:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-ads-identifier-15.0.1.aar/f73fa2befd2cc0728b3c93dc71fc9972/AndroidManifest.xml:22:5-20
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:28:5-57:19
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:28:5-57:19
+MERGED from [com.google.firebase:firebase-iid-interop:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-interop-16.0.1.aar/fb60f0ae3e5448d53e294016c56abe7c/AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.firebase:firebase-iid-interop:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-interop-16.0.1.aar/fb60f0ae3e5448d53e294016c56abe7c/AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-stats:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-stats-16.0.1.aar/09071b620cddad36503270488bdd3a4a/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-stats:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-stats-16.0.1.aar/09071b620cddad36503270488bdd3a4a/AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:9:5-15:19
+MERGED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:9:5-15:19
+MERGED from [com.google.firebase:firebase-measurement-connector:17.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-17.0.1.aar/3b228b9a2c6a9783d9fc97bbe1e85579/AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.firebase:firebase-measurement-connector:17.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-17.0.1.aar/3b228b9a2c6a9783d9fc97bbe1e85579/AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.android.gms:play-services-tasks:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-tasks-16.0.1.aar/80986dfd8b205b97c1d2a284203b4ebd/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-tasks:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-tasks-16.0.1.aar/80986dfd8b205b97c1d2a284203b4ebd/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:25:5-29:19
+MERGED from [com.google.android.gms:play-services-measurement-base:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-measurement-base-16.0.0.aar/40ae2fa9c7083da9d88ac009a03cfa54/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-measurement-base:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-measurement-base-16.0.0.aar/40ae2fa9c7083da9d88ac009a03cfa54/AndroidManifest.xml:22:5-20
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:24:5-28:19
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:24:5-28:19
+MERGED from [com.facebook.soloader:soloader:0.5.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/soloader-0.5.1.aar/f8928e41ecb3662229157cfe9f2e6796/AndroidManifest.xml:11:5-20
+MERGED from [com.facebook.soloader:soloader:0.5.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/soloader-0.5.1.aar/f8928e41ecb3662229157cfe9f2e6796/AndroidManifest.xml:11:5-20
+	android:supportsRtl
+		ADDED from [:react-native-spinkit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-spinkit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:9-35
+	android:label
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:19:7-39
+	android:icon
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:20:7-41
+	android:allowBackup
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:21:7-34
+	android:theme
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:22:7-38
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:18:7-38
+activity#com.mymoney.MainActivity
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:23:7-38:18
+	android:label
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:25:9-41
+	android:windowSoftInputMode
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:27:9-51
+	android:configChanges
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:26:9-79
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:24:9-37
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:28:9-31:25
+action#android.intent.action.MAIN
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:29:13-65
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:29:21-62
+category#android.intent.category.LAUNCHER
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:30:13-73
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:30:23-70
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:prime-sign-230407.appspot.com+data:scheme:https
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:32:9-37:17
+	android:label
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:32:24-59
+action#android.intent.action.VIEW
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:33:3-55
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:33:11-52
+category#android.intent.category.DEFAULT
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:34:3-62
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:34:13-59
+category#android.intent.category.BROWSABLE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:35:3-64
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:35:13-61
+data
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:36:3-79
+	android:host
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:36:32-76
+	android:scheme
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:36:9-31
+activity#com.facebook.react.devsupport.DevSettingsActivity
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:39:7-84
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:39:17-81
+receiver#com.google.android.gms.gcm.GcmReceiver
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:42:7-50:22
+	android:exported
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:44:14-37
+	android:permission
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:45:14-74
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:43:14-67
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:com.mymoney
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:46:13-49:29
+action#com.google.android.c2dm.intent.RECEIVE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:47:15-79
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:47:23-76
+category#com.mymoney
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:48:15-54
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:48:25-51
+receiver#com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:51:11-112
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:51:21-109
+service#com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:52:11-120
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:52:20-118
+service#com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:53:11-59:21
+	android:exported
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:55:15-39
+	android:name
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:54:15-109
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE
+ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml:56:15-58:31
+uses-sdk
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+MERGED from [:react-native-push-notification] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-push-notification/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-push-notification] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-push-notification/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-config] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-config/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-config] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-config/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-keychain] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-keychain/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-keychain] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-keychain/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-sqlite-storage] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-sqlite-storage/src/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-sqlite-storage] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-sqlite-storage/src/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-vector-icons] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-vector-icons/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-vector-icons] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-vector-icons/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-tcp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-tcp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-tcp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-tcp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-svg] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-svg/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-svg] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-svg/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-splash-screen] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-splash-screen/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-splash-screen] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-splash-screen/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-spinkit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-spinkit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-spinkit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-spinkit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-share] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-share/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-share] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-share/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-randombytes] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-randombytes/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-randombytes] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-randombytes/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-material-kit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-material-kit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-44
+MERGED from [:react-native-material-kit] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-material-kit/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-44
+MERGED from [:react-native-image-resizer] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-resizer/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-image-resizer] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-resizer/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-gesture-handler] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-gesture-handler/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-gesture-handler] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-gesture-handler/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-fs] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-fs/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-fs] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-fs/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.react:react-native:0.57.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/react-native-0.57.8.aar/2241d3224e35465acb34f8984869d9d9/AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:21:5-23:78
+MERGED from [com.google.firebase:firebase-core:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-core-16.0.1.aar/2c75324e76e6abaadf9fdeaa6a19b199/AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-core:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-core-16.0.1.aar/2c75324e76e6abaadf9fdeaa6a19b199/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:20:5-44
+MERGED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:7:5-9:41
+MERGED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:7:5-9:41
+MERGED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:20:5-44
+MERGED from [com.facebook.conceal:conceal:1.1.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/conceal-1.1.3.aar/3cb5a48c2d3c2aa294fe73078fd52fa9/AndroidManifest.xml:12:5-14:41
+MERGED from [com.facebook.conceal:conceal:1.1.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/conceal-1.1.3.aar/3cb5a48c2d3c2aa294fe73078fd52fa9/AndroidManifest.xml:12:5-14:41
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-15.0.2.aar/951cda69ab582c7e3417374083a14350/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-vision:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-15.0.2.aar/951cda69ab582c7e3417374083a14350/AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-vision-common:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-15.0.2.aar/b170ca04edc4812578625c74f06f372c/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-vision-common:15.0.2] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-15.0.2.aar/b170ca04edc4812578625c74f06f372c/AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-clearcut:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-clearcut-15.0.1.aar/125c6cbd94ca67eae39772e8c047e1fb/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-clearcut:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-clearcut-15.0.1.aar/125c6cbd94ca67eae39772e8c047e1fb/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-flags:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-flags-15.0.1.aar/8fe869ab6cc57649e676c97892330458/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-flags:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-flags-15.0.1.aar/8fe869ab6cc57649e676c97892330458/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-phenotype:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-phenotype-15.0.1.aar/fab313130aba67cb117a55fe7952287f/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-phenotype:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-phenotype-15.0.1.aar/fab313130aba67cb117a55fe7952287f/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-identifier:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-ads-identifier-15.0.1.aar/f73fa2befd2cc0728b3c93dc71fc9972/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-ads-identifier:15.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-ads-identifier-15.0.1.aar/f73fa2befd2cc0728b3c93dc71fc9972/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid-interop:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-interop-16.0.1.aar/fb60f0ae3e5448d53e294016c56abe7c/AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-iid-interop:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-interop-16.0.1.aar/fb60f0ae3e5448d53e294016c56abe7c/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-stats:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-stats-16.0.1.aar/09071b620cddad36503270488bdd3a4a/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-stats:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-stats-16.0.1.aar/09071b620cddad36503270488bdd3a4a/AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.firebase:firebase-measurement-connector:17.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-17.0.1.aar/3b228b9a2c6a9783d9fc97bbe1e85579/AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-measurement-connector:17.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-17.0.1.aar/3b228b9a2c6a9783d9fc97bbe1e85579/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tasks:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-tasks-16.0.1.aar/80986dfd8b205b97c1d2a284203b4ebd/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-tasks:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-tasks-16.0.1.aar/80986dfd8b205b97c1d2a284203b4ebd/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:21:5-23:58
+MERGED from [com.github.ybq:Android-SpinKit:1.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/Android-SpinKit-1.1.0.aar/93245122288b976db66219f86e45e533/AndroidManifest.xml:6:5-8:41
+MERGED from [com.github.ybq:Android-SpinKit:1.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/Android-SpinKit-1.1.0.aar/93245122288b976db66219f86e45e533/AndroidManifest.xml:6:5-8:41
+MERGED from [com.google.android.gms:play-services-measurement-base:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-measurement-base-16.0.0.aar/40ae2fa9c7083da9d88ac009a03cfa54/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-measurement-base:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-measurement-base-16.0.0.aar/40ae2fa9c7083da9d88ac009a03cfa54/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:20:5-22:41
+MERGED from [com.facebook.fresco:fresco:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/fresco-1.10.0.aar/2cbd104d1e13939dd23dab312119b434/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fresco:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/fresco-1.10.0.aar/2cbd104d1e13939dd23dab312119b434/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/0aa4903e8bf4b1dda4e6c3e0495b605d/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/0aa4903e8bf4b1dda4e6c3e0495b605d/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:drawee:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/drawee-1.10.0.aar/6ec8b95db0504fbc20fae49f2683a62e/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:drawee:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/drawee-1.10.0.aar/6ec8b95db0504fbc20fae49f2683a62e/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-1.10.0.aar/1260888df114e695f2f75bafe9515bcc/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-1.10.0.aar/1260888df114e695f2f75bafe9515bcc/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-base-1.10.0.aar/c551e3a669a326d2981a56aeb5400a38/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/imagepipeline-base-1.10.0.aar/c551e3a669a326d2981a56aeb5400a38/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.soloader:soloader:0.5.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/soloader-0.5.1.aar/f8928e41ecb3662229157cfe9f2e6796/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.soloader:soloader:0.5.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/soloader-0.5.1.aar/f8928e41ecb3662229157cfe9f2e6796/AndroidManifest.xml:7:5-9:41
+MERGED from [org.webkit:android-jsc:r236355] /Users/developer/.gradle/caches/transforms-1/files-1.1/android-jsc-r236355.aar/2f686615ecc234efd6460f35e246009b/AndroidManifest.xml:7:5-9:41
+MERGED from [org.webkit:android-jsc:r236355] /Users/developer/.gradle/caches/transforms-1/files-1.1/android-jsc-r236355.aar/2f686615ecc234efd6460f35e246009b/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.fresco:fbcore:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/fbcore-1.10.0.aar/41343170bccd2418c82a9fb173899e56/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:1.10.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/fbcore-1.10.0.aar/41343170bccd2418c82a9fb173899e56/AndroidManifest.xml:5:5-7:41
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/android/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.USE_FINGERPRINT
+ADDED from [:react-native-keychain] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-keychain/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-74
+	android:name
+		ADDED from [:react-native-keychain] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-keychain/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:22-71
+activity#com.proyecto26.inappbrowser.ChromeTabsManagerActivity
+ADDED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:9-13:20
+	android:name
+		ADDED from [:react-native-inappbrowser-reborn] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-inappbrowser-reborn/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:19-87
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:5-79
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:5-79
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:5-79
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:23:5-79
+MERGED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:23:5-79
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:24:5-79
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:22:5-79
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:5-76
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:5-76
+MERGED from [:react-native-os] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-os/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:5-76
+	android:name
+		ADDED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:22-73
+uses-permission#android.permission.CHANGE_WIFI_MULTICAST_STATE
+ADDED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:14:5-86
+	android:name
+		ADDED from [:react-native-udp] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-udp/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:14:22-83
+provider#com.imagepicker.FileProvider
+ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:9-20:20
+	android:grantUriPermissions
+		ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:16:13-47
+	android:authorities
+		ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:14:13-60
+	android:exported
+		ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:15:13-37
+	android:name
+		ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:13-56
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:17:13-19:58
+	android:resource
+		ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:19:17-55
+	android:name
+		ADDED from [:react-native-image-picker] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-image-picker/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:18:17-67
+receiver#com.learnium.RNDeviceInfo.RNDeviceReceiver
+ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:9-19:20
+	android:enabled
+		ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:14:13-35
+	android:exported
+		ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:15:13-36
+	android:name
+		ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:13-70
+intent-filter#action:name:com.android.vending.INSTALL_REFERRER
+ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:16:13-18:29
+action#com.android.vending.INSTALL_REFERRER
+ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:17:17-79
+	android:name
+		ADDED from [:react-native-device-info] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-device-info/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:17:25-76
+uses-feature#android.hardware.camera
+ADDED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-13:36
+	android:required
+		ADDED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:9-33
+	android:name
+		ADDED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:9-47
+uses-feature#android.hardware.camera.autofocus
+ADDED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:14:5-16:36
+	android:required
+		ADDED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:16:9-33
+	android:name
+		ADDED from [:react-native-camera] /Users/developer/Documents/appasaheb4/project/react-native/MyMoneyApp/node_modules/react-native-camera/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:15:9-57
+meta-data#android.support.VERSION
+ADDED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:customtabs:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/customtabs-26.1.0.aar/60849cbba6fcdbc886e2426826f0cc71/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:exifinterface:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/exifinterface-26.1.0.aar/06a61c8ab5a17e475aa192fff4e1600e/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/796c0468be62c17ef42aa774add73711/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/ad4fd45e923876875ac11b4ab1d84c5b/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-v4:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/32049582d0587a007cc3ce001de70c49/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/4fc2d00467510c312a0fe62ea200e489/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/35ad379314ef11586fcf5c8fac891c6d/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1bfcf0e8dfdfbd4f4d882dc0d64c3999/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/ea7b885e6bdadd1ab457ed33032b3bcb/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-compat:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/e90a5753312ef039fefe26df3becf9cd/AndroidManifest.xml:26:9-28:38
+	android:value
+		ADDED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:28:13-35
+	android:name
+		ADDED from [com.android.support:appcompat-v7:26.1.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/b6b8a8a7f73bae32f11d9f6c5fed79d8/AndroidManifest.xml:27:13-51
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:23:5-82
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:23:5-82
+MERGED from [com.google.android.gms:play-services-iid:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.0.aar/6d12f7123344f74dad6b8862e9939a4e/AndroidManifest.xml:23:5-82
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:26:5-82
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:26:5-82
+	android:name
+		ADDED from [com.google.android.gms:play-services-gcm:16.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.0.0.aar/c076bc7d45574da94f470a6fc1a18515/AndroidManifest.xml:23:22-79
+uses-permission#com.sec.android.provider.badge.permission.READ
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:19:5-86
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:19:22-83
+uses-permission#com.sec.android.provider.badge.permission.WRITE
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:20:5-87
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:20:22-84
+uses-permission#com.htc.launcher.permission.READ_SETTINGS
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:23:5-81
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:23:22-78
+uses-permission#com.htc.launcher.permission.UPDATE_SHORTCUT
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:24:5-83
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:24:22-80
+uses-permission#com.sonyericsson.home.permission.BROADCAST_BADGE
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:27:5-88
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:27:22-85
+uses-permission#com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:28:5-92
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:28:22-89
+uses-permission#com.anddoes.launcher.permission.UPDATE_COUNT
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:31:5-84
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:31:22-81
+uses-permission#com.majeur.launcher.permission.UPDATE_BADGE
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:34:5-83
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:34:22-80
+uses-permission#com.huawei.android.launcher.permission.CHANGE_BADGE
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:37:5-91
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:37:22-88
+uses-permission#com.huawei.android.launcher.permission.READ_SETTINGS
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:38:5-92
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:38:22-89
+uses-permission#com.huawei.android.launcher.permission.WRITE_SETTINGS
+ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:39:5-93
+	android:name
+		ADDED from [me.leolin:ShortcutBadger:1.1.8] /Users/developer/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.8.aar/cf8a6648ee685005d82e8530731ba0b9/AndroidManifest.xml:39:22-90
+service#com.google.firebase.messaging.FirebaseMessagingService
+ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:28:9-34:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:30:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:29:13-82
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:31:13-33:29
+	android:priority
+		ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:31:28-51
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:32:17-78
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:17.3.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-messaging-17.3.4.aar/1721a474e3e301d6db4984e2291f4a81/AndroidManifest.xml:32:25-75
+service#com.google.firebase.components.ComponentDiscoveryService
+ADDED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:27:9-31:19
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:29:9-35:19
+MERGED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:29:9-35:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:27:18-89
+meta-data#com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar
+ADDED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:28:13-30:85
+	android:value
+		ADDED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:30:17-82
+	android:name
+		ADDED from [com.google.firebase:firebase-measurement-connector-impl:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-measurement-connector-impl-16.0.1.aar/69ebebd4e3e342f35852ce00f99ac77e/AndroidManifest.xml:29:17-139
+uses-permission#com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:26:5-110
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:26:5-110
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:26:5-110
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:26:22-107
+receiver#com.google.android.gms.measurement.AppMeasurementReceiver
+ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:29:9-33:20
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:31:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:32:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:30:13-85
+receiver#com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver
+ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:34:9-42:20
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:29:9-37:20
+MERGED from [com.google.firebase:firebase-analytics-impl:16.1.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-impl-16.1.1.aar/b797085fbd85e9cedb5c0b4de0d02ee4/AndroidManifest.xml:29:9-37:20
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:36:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:37:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:38:13-69
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:35:13-100
+service#com.google.android.gms.measurement.AppMeasurementService
+ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:44:9-47:40
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:46:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:47:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:45:13-84
+service#com.google.android.gms.measurement.AppMeasurementJobService
+ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:48:9-52:72
+	android:enabled
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:50:13-35
+	android:exported
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:51:13-37
+	android:permission
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:52:13-69
+	android:name
+		ADDED from [com.google.firebase:firebase-analytics:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-analytics-16.0.1.aar/4ec207852736e8c06e3e4bb4f12825ac/AndroidManifest.xml:49:13-87
+meta-data#com.google.firebase.components:com.google.firebase.iid.Registrar
+ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:32:13-34:85
+	android:value
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:34:17-82
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:33:17-96
+receiver#com.google.firebase.iid.FirebaseInstanceIdReceiver
+ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:37:9-44:20
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:39:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:40:13-73
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:38:13-78
+service#com.google.firebase.iid.FirebaseInstanceIdService
+ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:50:9-56:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:52:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:51:13-77
+intent-filter#action:name:com.google.firebase.INSTANCE_ID_EVENT
+ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:53:13-55:29
+	android:priority
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:53:28-51
+action#com.google.firebase.INSTANCE_ID_EVENT
+ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:54:17-80
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:17.0.4] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-iid-17.0.4.aar/533439018c24e4e88280384b953ae8c9/AndroidManifest.xml:54:25-77
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:23:9-26:75
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:25:13-37
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:26:13-72
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/272ac84b4988e95cb8613c3e6f33762d/AndroidManifest.xml:24:13-79
+provider#com.google.firebase.provider.FirebaseInitProvider
+ADDED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:10:9-14:39
+	android:authorities
+		ADDED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:12:13-72
+	android:exported
+		ADDED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:13:13-37
+	android:initOrder
+		ADDED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:14:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-common:16.0.3] /Users/developer/.gradle/caches/transforms-1/files-1.1/firebase-common-16.0.3.aar/e375833191d48d4b2a3b4f44d2582d97/AndroidManifest.xml:11:13-77
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:23:9-25:69
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:25:13-66
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:16.0.1] /Users/developer/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/2c2dcdd60f59a8bf933e023ed3e4407e/AndroidManifest.xml:24:13-58
+meta-data#android.arch.lifecycle.VERSION
+ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:25:9-27:47
+	android:value
+		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:27:13-44
+	android:name
+		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/developer/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/4d0fc6719c738120efed669c79480a6c/AndroidManifest.xml:26:13-58
