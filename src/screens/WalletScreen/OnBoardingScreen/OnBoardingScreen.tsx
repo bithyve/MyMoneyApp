@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { StackActions, NavigationActions } from "react-navigation";
 import CreateTables from "../../../app/manager/database/CreateTables";
+import PushController from "../../../app/manager/Notification/PushController";
 //Custome Compontes
 import ViewOnBoarding from "../../../app/custcompontes/view/ViewOnBoarding";
 //Json Files
@@ -67,6 +68,7 @@ export default class OnBoardingScreen extends React.Component<any, any> {
         </Text>
         <ViewOnBoarding data={data} click_Done={() => this.click_Done()} />
         <CreateTables />
+        <PushController />
       </View>
     );
   }

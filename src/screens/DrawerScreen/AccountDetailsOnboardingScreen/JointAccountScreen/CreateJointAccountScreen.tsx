@@ -80,6 +80,7 @@ export default class CreateJointAccountScreen extends React.Component {
 
   componentWillMount() {
     let qrCodeData = this.props.navigation.getParam("data");
+    console.log({ qrCodeData });
     if (qrCodeData != "") {
       this.selfCreateJointAccount(qrCodeData);
     }

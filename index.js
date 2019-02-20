@@ -31,7 +31,7 @@ export default class MyMoney extends React.Component {
       Linking.addEventListener("url", this.handleUrl);
 
       DeepLinking.addRoute(
-        "/mobile.cmshuawei.com/jointAccountCreate",
+        "/prime-sign-230407.appspot.com/jointAccountCreate",
         response => {
           // bithyve://jointAccountCreate
           console.log({
@@ -40,7 +40,7 @@ export default class MyMoney extends React.Component {
         }
       );
       DeepLinking.addRoute(
-        "/mobile.cmshuawei.com/jointAccountCreate/:script",
+        "/prime-sign-230407.appspot.com/ja/:script",
         response => {
           // bithyve:///jointAccountCreate/pageName
           let res = response;
@@ -51,13 +51,18 @@ export default class MyMoney extends React.Component {
         }
       );
       DeepLinking.addRoute(
-        "/mobile.cmshuawei.com/jointAccountCreate/:pageName/:script",
+        "/prime-sign-230407.appspot.com/ja/:pageName/:script",
         response => {
           // bithyve://jointAccountCreate/pageName/100
           console.log({
             response
           });
-          let pageName = response.pageName;
+          var pageName;
+          if (response.pageName == "mck") {
+            pageName = "MergeConfirmJointAccountScreen";
+          } else if (response.pageName == "ca") {
+            pageName = "CreateJointAccountScreen";
+          }
           commonData.setRootViewController(pageName);
           commonData.setDeepLinkingUrl(response.script);
         }

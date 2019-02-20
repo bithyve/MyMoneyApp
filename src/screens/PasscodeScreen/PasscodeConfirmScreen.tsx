@@ -57,7 +57,7 @@ export default class PasscodeConfirmScreen extends Component {
     });
   }
 
-  onCheckPincode(code) {
+  onCheckPincode(code: any) {
     this.setState({
       status: "confirm",
       pincode: code,
@@ -103,8 +103,10 @@ export default class PasscodeConfirmScreen extends Component {
     const {
       mnemonic,
       address,
-      privateKey
+      privateKey,
+      keyPair
     } = await RegularAccount.createWallet();
+    const publicKey = keyPair.publicKey.toString("hex");
     this.setState({
       mnemonicValues: mnemonic.split(" ")
     });
@@ -126,6 +128,7 @@ export default class PasscodeConfirmScreen extends Component {
           mnemonicValue,
           priKeyValue,
           address,
+          publicKey,
           "Primary"
         );
         if (resultCreateWallet) {
