@@ -29,7 +29,6 @@ export default class MyMoney extends React.Component {
       let commonData = Singleton.getInstance();
       DeepLinking.addScheme("https://");
       Linking.addEventListener("url", this.handleUrl);
-
       DeepLinking.addRoute(
         "/prime-sign-230407.appspot.com/jointAccountCreate",
         response => {
@@ -43,6 +42,7 @@ export default class MyMoney extends React.Component {
         "/prime-sign-230407.appspot.com/ja/:script",
         response => {
           // bithyve:///jointAccountCreate/pageName
+
           let res = response;
           console.log({
             res

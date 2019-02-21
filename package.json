@@ -21,7 +21,12 @@
     "test": "npm run unit && npm run jest && npm run lint",
     "jest": "node node_modules/jest/bin/jest.js",
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ --fix",
-    "unit": "./node_modules/.bin/mocha tests/**/*.js"
+    "unit": "./node_modules/.bin/mocha tests/**/*.js",
+    "android-dev": "ENVFILE=.env.dev react-native run-android",
+    "android-staging": "ENVFILE=.env.staging react-native run-android",
+    "android-prod": "ENVFILE=.env.prod react-native run-android",
+    "build-android-prod": "export ENVFILE=.env.prod && cd android && ./gradlew assembleRelease && cd ..",
+    "env": "ENVFILE=.env.dev"
   },
   "dependencies": {
     "@babel/preset-env": "^7.2.3",

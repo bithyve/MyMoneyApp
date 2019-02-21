@@ -25,14 +25,14 @@ var errorValidationMessage = {
 
 //Colors
 var colors = {
-  appColor: "#F5951D", //Config.APP_COLOR,
-  black: "#000000",
-  white: "#ffffff",
-  Saving: "#E6A620",
-  Secure: "#30A2F3",
-  Vault: "#679F37",
-  Joint: "#660000",
-  placeholder: "#5F5F5F"
+  appColor: Config.COLOR_APP,
+  black: Config.COLOR_BLACK,
+  white: Config.COLOR_WHITE,
+  Saving: Config.COLOR_SAVING,
+  Secure: Config.COLOR_SECURE,
+  Vault: Config.COLOR_VAULT,
+  Joint: Config.COLOR_VAULT,
+  placeholder: Config.COLOR_PLACEHOLDER
 };
 
 const assetsImages = "../../assets/images/";
@@ -97,14 +97,6 @@ var images = {
     secureLogo: require(assetsImages + "secureAccount/secureAccountLogo.png"),
     validationKey: require(assetsImages + "secureAccount/validationKey.png")
   }
-};
-
-//Rest Full Api
-const domain = "https://bh-server-alpha.herokuapp.com/";
-var apiary = {
-  setup2fa: domain + "setup2fa",
-  validate2fasetup: domain + "validate2fasetup",
-  urlquestionAndAnswer: domain + "questionAndAnswer"
 };
 
 //Local Database

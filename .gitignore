@@ -1,1 +1,10 @@
+*
+!.gitignore
 /node_modules
+/.env.dev  
+
+
+#ios
+
+
+#android
