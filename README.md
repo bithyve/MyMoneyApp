@@ -1,3 +1,7 @@
+UPDATE: This repo is an alpha version of the [Hexa Wallet](https://github.com/thecryptobee/MyMoneyApp). Future development will continue there.
+
+![alt text](./disclaimer.jpg "This is not the Wallet you are looking for")
+
 # MyMoneyApp
 
 The alpha version of BitHyve's MyMoneyApp
