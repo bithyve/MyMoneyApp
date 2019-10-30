@@ -54,7 +54,11 @@ import VaultAccountScreen from "../../screens/DrawerScreen/VaultAccountScreen/Va
 //Joint Account Screens
 import CreateJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/CreateJointAccountScreen";
 import CreatorJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/CreatorJointAccountScreen";
-
+import AcknowledgeJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/AcknowledgeJointAccountScreen";
+import MergeConfirmJointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/MergeConfirmJointAccountScreen";
+import JointAccountScreen from "../../screens/DrawerScreen/JointAccountScreen/JointAccountScreen";
+import JointAccountSentMoneyScreen from "../../screens/DrawerScreen/JointAccountScreen/JointAccountSentMoneyScreen";
+import TransactionConfirmationScreen from "../../screens/DrawerScreen/JointAccountScreen/TransactionConfirmationScreen"
 //Right DrawerScreen
 import NotificationScreen from "../../screens/DrawerScreen/NotificationScreen/NotificationScreen";
 
@@ -180,7 +184,27 @@ const JointAccountRouter = createStackNavigator(
     },
     CreatorJointAccountScreen: {
       screen: CreatorJointAccountScreen,
-      navigationOptions: {header:null}
+      navigationOptions: { header: null }
+    },
+    AcknowledgeJointAccountScreen: {
+      screen: AcknowledgeJointAccountScreen,
+      navigationOptions: { header: null }
+    },
+    MergeConfirmJointAccountScreen: {
+      screen: MergeConfirmJointAccountScreen,
+      navigationOptions: { header: null }
+    },
+    JointAccountScreen: {
+      screen: JointAccountScreen,
+      navigationOptions: { header: null }
+    },
+    JointAccountSentMoneyScreen: {
+      screen: JointAccountSentMoneyScreen,
+      navigationOptions: { header: null }
+    },
+    TransactionConfirmationScreen: {
+      screen: TransactionConfirmationScreen,
+      navigationOptions: { header: null }
     }
   },
   {
@@ -395,7 +419,7 @@ export const createRootNavigator = (
         },
         JointAccountRouter: {
           screen: JointAccountRouter,
-          navigationOptions: { header: null}
+          navigationOptions: { header: null }
         },
         //AccountDetailsOnboardingRouter
         AccountDetailsOnboardingRouter: {
@@ -517,14 +541,14 @@ export const createRootNavigator = (
         },
         JointAccountRouter: {
           screen: JointAccountRouter,
-          navigationOptions: { header: null}
+          navigationOptions: { header: null }
         },
         //AccountDetailsOnboardingRouter
         AccountDetailsOnboardingRouter: {
           screen: AccountDetailsOnboardingRouter,
           navigationOptions: { header: null }
         }
-      },  
+      },
       {
         initialRouteName: signedIn ? "TabbarBottom" : "PasscodeConfirmScreen"
         //  initialRouteName: signedIn ? "OnBoardingNavigator" : "OnBoardingNavigator"
